@@ -1,0 +1,116 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block content %}
+    <!-- Content Row -->
+    <div class="row">
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2 dash-card1">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 font-weight-bold text-white">20</div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                Total plants</div>
+
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-tree fa-2x text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2 dash-card2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 font-weight-bold text-white">20.54 acres</div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                Total Gardening area
+                            </div>
+
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-earth-americas fa-2x text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2 dash-card3">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 mr-3 font-weight-bold text-white">
+                                <i class="fas fa-donate fa-trophy"></i>
+                                Winner</div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">My Ranking
+                            </div>
+
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-earth-americas fa-2x text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2 dash-card5">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 font-weight-bold text-white">Balance</div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                <img src="{% static 'user_dashboard/images/coin.png' %}">5000
+                                </div>
+
+                            </div>
+                            <div class="col-auto">
+                                <i class="fa-solid fa-coins fa-2x text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Row -->
+
+            <!-- Content Row -->
+            <div class="row">
+
+                <!-- Content Column -->
+                <div class="col-lg-6 mb-4">
+
+                    <!-- Project Card Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">
+                                My Activity</h6>
+                        </div>
+                        <div class="card-body">
+                            <img
+                                src="{% static 'user_dashboard/images/line-charts.png' %}"
+                                class="img-fluid"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 mb-4">
+                        <div class="card leaderbaord mb-4">
+                            <img src="{% static 'user_dashboard/images/board.png' %}"></div>
+                        </div>
+                    </div>
+                {% endblock content %}

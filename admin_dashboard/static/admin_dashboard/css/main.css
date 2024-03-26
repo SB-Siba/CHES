@@ -1,0 +1,120 @@
+.side-nav{
+    background-color: #1F782B!important;
+}
+.sidebar-brand{
+    background-color: #fff;
+}
+.fa-bell{
+    color: #81CC2A;
+}
+.sidebar-dark .nav-item .nav-link{
+    color: #fff;
+    font-weight: 600;
+}
+
+.sidebar-dark .nav-item.active .nav-link {
+    color: #fff;
+    background-color: #14453B;
+}
+.sidebar-dark .nav-item.active .nav-link i{
+    color: #FFD600;
+}
+.sidebar-dark .nav-item .nav-link i{
+    color: #FFD600;
+    font-weight: 600;
+}
+.dash-card1{
+background-color: #1E295B;
+}
+
+.dash-card2{
+    background-color: #15A085;
+}
+
+.dash-card3{
+    background-color: #F39C13;
+}
+.dash-card4{
+    background-color: #7C51F4;
+}
+.dash-card5{
+    background-color: #2980B9;
+}
+.dash-card6{
+    background-color: #F50909;
+}
+.dash-card7{
+    background-color: #8E44AD;
+}
+.dash-card8{
+    background-color: #F46D87;
+}
+
+/* admin_dash - User Dashboard */
+.admin_dash .search_sec{
+    width: 37%;
+    float: right;
+}
+.admin_dash .search_sec .table_search_box{
+    display: flex;
+}
+.admin_dash .search_sec .table_search_box .selects{
+    margin-right:12px;
+}
+
+.form-control {
+    height: 50px;
+    border-radius: 0;
+    border: 1px solid #1f782b;
+}
+
+.qry-sub{
+    border-radius: 0px;
+    border: 1px solid #1f782b;
+    padding: 0 20px;
+}
+.qry-sub i{
+    counter-reset: #1f782b;
+    
+}
+.new-user-btn{
+    background-color: #14453B;
+    border: 1px solid;
+    margin-bottom: 20px;
+    color: #fff;
+    border-radius: 0px;
+    padding: 16px 30px;
+    font-weight: 600;
+}
+
+.table-light tbody+tbody, .table-light td, .table-light th, .table-light thead th {
+    border-color: #fbfcfd;
+    background-color: #1f782b;
+    color: #fff;
+}
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background-color: #fff;
+    padding: 33px 12px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.admin_dash .search_sec {
+    width: 37%;
+    float: right;
+    margin-bottom: 2rem;
+}
+.table td, .table th {
+    padding: 13px;
+    vertical-align: top;
+    border-top: 1px solid #e3e6f0;
+}
+.page-wapper{
+    height: 100vh;
+}
+.add-new-title{
+    color: #000;
+    font-weight: 600;
+}
