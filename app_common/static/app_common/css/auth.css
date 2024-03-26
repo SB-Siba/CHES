@@ -1,0 +1,64 @@
+.body{
+    background-color: #505050;
+}
+.login{
+    width: 29%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 4rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.login h3 {
+    text-align: center;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    font-size: 46px;
+    text-transform: capitalize;
+    color: #086b39;
+    font-family: archivo black;
+}
+.login h2 {
+    color: #198754;
+}
+.auth_reg_logo {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.form-control {
+    border-radius: 50px!important;
+    border: 1px solid #81CC2A!important;
+    padding: 14px!important;
+}
+.log_btn {
+    background-color: #198754;
+    border: 1px solid;
+    margin-bottom: 20px;
+    color: #fff;
+    border-radius: 50px;
+    padding: 16px 30px;
+    font-weight: 600;
+    width: 100%;
+    margin-top: 1rem;
+}
+label {
+    margin-left: 10px;
+    font-size: 19px;
+    text-transform: capitalize;
+    font-weight: 500;
+    font-family: auto;
+    padding-bottom: 8px;
+}
+form p{
+    text-align: center;
+}
+form p b{
+    color: #f50400;
+}

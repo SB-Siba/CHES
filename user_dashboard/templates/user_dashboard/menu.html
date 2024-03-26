@@ -1,0 +1,92 @@
+  {% load static %}
+  <!-- Sidebar -->
+    <ul class="navbar-nav sidebar side-nav sidebar-dark accordion" id="accordionSidebar">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-text mx-3"><img src="{% static 'user_dashboard/images/green-logo.png' %}" class="mt-5"/></div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="#">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
+        </li>
+
+        
+        <!-- Nav Item - Charts -->
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fa-solid fa-tree"></i>
+                <span>Gardening Profile</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fa-solid fa-wallet"></i>
+                <span> Green Wallet</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Tables -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Activity</span>
+            </a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="#">
+                        <i class="fa-solid fa-angles-right"></i>
+                            <span> Add Activity</span>
+                    </a>
+                    <a class="collapse-item" href="#">
+                        <i class="fa-solid fa-angles-right"></i>
+                            <span>Activity List</span>
+                    </a>
+                    <a class="collapse-item" href="#">
+                        <i class="fa-solid fa-angles-right"></i>
+                            <span>Equiment's List</span>
+                    </a>
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fa-solid fa-tree"></i>
+                <span>Plants in My Garden</span></a>
+        </li>
+
+
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fa-solid fa-headset"></i>
+                <span>Help & Support</span></a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Privacy Policy</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span></a>
+        </li>
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+            
+
+    </ul>
+  <!-- End of Sidebar -->

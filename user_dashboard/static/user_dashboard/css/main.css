@@ -1,0 +1,51 @@
+.side-nav{
+    background-color: #1F782B!important;
+}
+.sidebar-brand{
+    background-color: #fff;
+}
+.fa-bell{
+    color: #81CC2A;
+}
+.sidebar-dark .nav-item .nav-link{
+    color: #fff;
+    font-weight: 600;
+}
+
+.sidebar-dark .nav-item.active .nav-link {
+    color: #fff;
+    background-color: #14453B;
+}
+.sidebar-dark .nav-item.active .nav-link i{
+    color: #FFD600;
+}
+.sidebar-dark .nav-item .nav-link i{
+    color: #FFD600;
+    font-weight: 600;
+}
+.dash-card1{
+background-color: #1E295B;
+}
+
+.dash-card2{
+    background-color: #15A085;
+}
+
+.dash-card3{
+    background-color: #8E44AD;
+}
+.dash-card4{
+    background-color: #7C51F4;
+}
+.dash-card5{
+   background-color: #F39C13;
+}
+.dash-card6{
+    background-color: #F50909;
+}
+.dash-card7{
+    background-color: #8E44AD;
+}
+.dash-card8{
+    background-color: #F46D87;
+}
