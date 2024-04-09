@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     "admin_dashboard",
     "user_dashboard",
     'whitenoise.runserver_nostatic',
+    'channels',
+    'chatapp',
 ]
 
 MIDDLEWARE = [
@@ -73,24 +75,24 @@ WSGI_APPLICATION = "project.wsgi.application"
 
 
 
-DATABASES = {
-    'default': {
-
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "cehs",
-        'USER': "postgres",
-        'PASSWORD': "root",
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': "cehs",
+#         'USER': "postgres",
+#         'PASSWORD': "root",
+#         'HOST': 'localhost',
+#         'PORT': '',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # Password validation
@@ -130,6 +132,9 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATIC_ROOT = os.path.join(str(BASE_DIR) + '/staticfiles/')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

@@ -1,0 +1,77 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block title %}Room List{% endblock title %}
+{% block content %}
+    <div class="page-wapper">
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="search_sec">
+               
+            <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
+                {% csrf_token %}
+                <div class="table_search_box">
+
+                    <select class="form-control selects" name="search_by" aria-label="Default select example">
+                        <option value="email">Email</option>
+                        <option value="contact">Contact</option>
+                    </select>
+    
+                    <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query" required/>
+    
+                    <button class="btn qry-sub" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+
+                </div>
+            </form>
+
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">User-ID</th>
+                        <th scope="col">Ful Name</th>
+                        <th scope="col">E-Mail</th>
+                        <th scope="col">Area</th>
+                        <th scope="col">Total Plants</th>
+                        <th scope="col">Unique Plants</th>
+                        <th scope="col">Garden Image</th>
+                        <th scope="col">Quiz Answers</th>
+                        <th scope="col">Action</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user,garden_user in data %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.full_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ garden_user.garden_area }}</td>
+                        <td>{{ garden_user.number_of_plants }}</td>
+                        <td>{{ garden_user.number_of_unique_plants }}</td>
+                        <td><img src="{{ garden_user.garden_image.url }}" alt="Garden Image" style="height: 50px; width: 50px;"></td>
+                        <td><a href="{% url 'admin_dashboard:quizanswers' user.id %}">View</a></td>
+                        <td>
+                            <div class="d-flex justify-content-arround">
+                                <a href="{% url 'admin_dashboard:approve_user' user.id %}">
+                                    <span class="btn btn-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+                                </a>
+                                <a href="{% url 'admin_dashboard:reject_user' user.id %}">
+                                    <span class="btn btn-danger mx-1"><i class="fa fa-ban" aria-hidden="true"></i></span>
+                                </a>
+                            </div>
+                        </td>
+                       
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+<script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
+{% endblock js %}

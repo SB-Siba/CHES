@@ -1,0 +1,72 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block title %}Gardening Details{% endblock title %}
+{% block content %}
+    <div class="page-wapper">
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="search_sec">
+               
+            <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
+                {% csrf_token %}
+                <div class="table_search_box">
+
+                    <select class="form-control selects" name="search_by" aria-label="Default select example">
+                        <option value="email">Email</option>
+                        <option value="contact">Contact</option>
+                    </select>
+    
+                    <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query" required/>
+    
+                    <button class="btn qry-sub" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+
+                </div>
+            </form>
+
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">User-ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Garden Area</th>
+                        <th scope="col">Total Plants</th>
+                        <th scope="col">Unique Plants</th>
+                        <th scope="col">Garden Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ gardening_data.user.id }}</td>
+                        <td>{{ gardening_data.user.full_name }}</td>
+                        <td>
+                            {{ gardening_data.garden_area }}
+                        </td>
+                        <td>
+                            {{ gardening_data.number_of_plants }}
+                        </td>
+                        <td>
+                            {{ gardening_data.number_of_unique_plants }}
+                        </td>
+                        <td>
+                            <img src="{{ gardening_data.garden_image.url }}" alt="Garden Image" style="height: 50px; width: 50px; border-radius: 5%;" class="zoom">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
+    </div>
+
+
+
+
+<!-- wallet balance add modal -->
+
+
+{% endblock content %}
+{% block js %}
+<script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
+{% endblock js %}

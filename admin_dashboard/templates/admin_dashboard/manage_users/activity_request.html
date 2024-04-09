@@ -1,0 +1,91 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block title %}Activity Request List{% endblock title %}
+
+{% block content %}
+    <div class="page-wapper">
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="search_sec">
+               
+            <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
+                {% csrf_token %}
+                <div class="table_search_box">
+
+                    <select class="form-control selects" name="search_by" aria-label="Default select example">
+                        <option value="email">Email</option>
+                        <option value="contact">Contact</option>
+                    </select>
+    
+                    <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query" required/>
+    
+                    <button class="btn qry-sub" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+
+                </div>
+            </form>
+
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Request-ID</th>
+                        <th scope="col">User</th>
+                        <th scope="col">activity_content</th>
+                        <th scope="col">activity_image</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a_request in activity_request_obj %}
+                    <tr>
+                        <td>{{ a_request.id }}</td>
+                        <td>{{ a_request.user }}</td>
+                        <td>{{ a_request.activity_content }}</td>
+                        <td><img src="{{ a_request.activity_image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class="zoom"></td>
+                        <td>
+                            <div class="d-flex justify-content-arround">
+                                <a href="{% url 'admin_dashboard:approveactivity' a_request.id %}">
+                                    <span class="btn btn-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+                                </a>
+                                <span class="btn btn-danger mx-1" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-ban" aria-hidden="true"></i></span>
+                            </div>
+                        </td>
+                       
+                    </tr>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Give Reason</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                             <form action="{% url 'admin_dashboard:rejectpactivity' %}" method="post">
+                                {% csrf_token %}
+                                <input name="user_id" value="{{a_request.id}}" type="number" class="form-control" hidden/>
+                                <input name="reason" type="text" class="form-control"/>
+                                <div style="text-align: center;">
+                                    <button class="btn btn-outline-success mt-2" type="submit">
+                                        Add Reason
+                                    </button>
+                                </div>
+                             </form>
+                            </div>
+                           
+                          </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+<script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
+{% endblock js %}

@@ -21,6 +21,8 @@
     <!-- Custom styles for this template-->
     <link href="{% static 'admin_dashboard/css/sb-admin-2.min.css'%}" rel="stylesheet">
     <link href="{% static 'admin_dashboard/css/main.css'%}" rel="stylesheet">
+    <link href="{% static 'admin_dashboard/css/image_hover.css'%}" rel="stylesheet">
+
 
 </head>
 
@@ -119,7 +121,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Deepak Kumar</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{request.user}}</span>
                                 <img class="img-profile rounded-circle"
                                     src="{% static 'admin_dashboard/img/undraw_profile.svg'%}">
                             </a>
@@ -139,7 +141,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -198,7 +200,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="{% url 'app_common:logout' %}">Logout</a>
                 </div>
             </div>
         </div>
@@ -207,7 +209,7 @@
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'admin_dashboard/vendor/jquery/jquery.min.js'%}"></script>
     <script src="{% static 'admin_dashboard/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
-    <script src="path/to/chartjs/dist/chart.umd.js'%}"></script>
+    <script src="path/to/chartjs/dist/chart.umd.js"></script>
     
     <!-- Core plugin JavaScript-->
     <script src="{% static 'admin_dashboard/vendor/jquery-easing/jquery.easing.min.js'%}"></script>

@@ -1,0 +1,7 @@
+.zoom {
+    transition: transform 0.9s; /* Add transition effect for smooth zoom */
+}
+
+.zoom:hover {
+    transform: scale(4.5); /* Increase the scale for zoom effect */
+}

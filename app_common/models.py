@@ -4,6 +4,8 @@ from django.contrib.auth.hashers import make_password
 
 from .manager import MyAccountManager
 from helpers import utils
+from django.core.validators import MinLengthValidator
+
 
 class AdminIncome(models.Model):
     amount = models.FloatField(default = 0.0)
@@ -22,38 +24,158 @@ class TempUser(models.Model):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
+
+
+
 class User(AbstractBaseUser, PermissionsMixin):
-    name = models.CharField(null=True, blank = True, max_length = 255)
-    username = models.CharField(max_length = 255,null=True,blank=True)
-    email = models.EmailField(null=True, blank = True, unique = True)
+    CITIES = (
+        ("Bhubaneswar","Bhubaneswar"),
+        ("Cuttack","Cuttack"),
+        ("Brahmapur","Brahmapur"),
+        ("Puri","Puri"),
+        ("Balasore","Balasore"),
+    )
+    full_name = models.CharField(max_length = 255,null=True,blank=True)
+    email = models.EmailField(null=True, blank = True,unique = True)
     password = models.TextField(null=True,blank=True)
     contact = models.CharField(max_length= 10, null=True, blank=True)
+    address = models.JSONField(null=True, blank=True)
+    city = models.CharField(max_length=20, choices=CITIES,null=True,blank=True)
+    quiz_score = models.IntegerField(default = 0,null= True, blank= True)
+
+    user_image = models.ImageField(upload_to='userprofie/',null=True, blank=True)
+
+    is_approved = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
     wallet = models.FloatField(default=0.0)
+    coins = models.PositiveBigIntegerField(default=0,null=True,blank=True)
+
+    total_income = models.FloatField(default=0.0)
+    total_invest = models.FloatField(default=0.0)
+
+    facebook_link = models.URLField(null=True,blank=True, max_length=2048)
+    instagram_link = models.URLField(null=True,blank=True, max_length=2048)
+    twitter_link = models.URLField(null=True,blank=True, max_length=2048)
+    youtube_link = models.URLField(null=True,blank=True, max_length=2048)
 
     # we are storing some extra data in the meta data field
     meta_data = models.JSONField(default= dict, null=True, blank = True)
 
-    USERNAME_FIELD = "email"	
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["password"]
 
     objects = MyAccountManager()
 
     def __str__(self):
-        return self.username
+        return self.email
+
+    def get_rank(self):
+        higher_scores_count = User.objects.filter(coins__gt=self.coins).count()
+        return higher_scores_count + 1
+
+class GaredenQuizModel(models.Model):
+    user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)
+    questionANDanswer = models.JSONField(null= False, blank= False) 
+
+class GardeningProfile(models.Model):
+    user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)
+    garden_area = models.BigIntegerField(default = 0,null= True, blank= True)
+    number_of_plants = models.BigIntegerField(default = 0,null= True, blank= True)
+    number_of_unique_plants = models.BigIntegerField(default = 0,null= True, blank= True)
+    garden_image = models.ImageField(upload_to='garden/',null=True, blank=True)
+
+
+class GardeningProfileUpdateRequest(models.Model):
+    user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)
+    garden_area = models.BigIntegerField(default = 0,null= True, blank= True)
+    number_of_plants = models.BigIntegerField(default = 0,null= True, blank= True)
+    number_of_unique_plants = models.BigIntegerField(default = 0,null= True, blank= True)
+    garden_image = models.ImageField(upload_to='garden/',null=True, blank=True)
+    changes = models.TextField(null= False, blank= False) 
+
+class GardeningProfileUpdateReject(models.Model):
+    user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)
+    gardening_profile_update_id = models.BigIntegerField(null=True,blank=True)
+    reason = models.CharField(max_length = 250,null = True,blank = True)
+
+class UserActivity(models.Model):
+    ACCEPTREJECT = (
+        ("approved","approved"),
+        ("rejected","rejected"),
+        ("pending","pending")
+    )
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null= True, blank= True)
+    activity_title = models.CharField(max_length=250,blank=True,null=True,default="No Title")
+    activity_content = models.TextField(null=True,blank=True)
+    activity_image = models.ImageField(upload_to='activity/',null=True, blank=True)
+    date_time = models.DateTimeField(auto_now_add=True)
+    is_accepted = models.CharField(max_length=10, choices= ACCEPTREJECT, default='pending')
+    reject_reason = models.TextField(null=True, blank=True)
+    # activity_edit = 
+
+# class UserActivityRequest(models.Model):
+#     user = models.ForeignKey(User,on_delete=models.CASCADE,null= True, blank= True)
+#     activity_content = models.TextField(null=True,blank=True)
+#     activity_image = models.ImageField(upload_to='activity/',null=True, blank=True)
+
+# class UserActivityReject(models.Model):
+#     user = models.ForeignKey(User,on_delete=models.CASCADE,null= True, blank= True)
+#     activity_content_id = models.BigIntegerField(null=True,blank=True)
+#     reason = models.CharField(max_length = 250,null = True,blank = True)
 
 class Wallet_Trasnsaction_History(models.Model):
 
     user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)
-    user_pk = models.CharField(null = True, blank= True, max_length= 255)
     history = models.JSONField(default= dict)
 
-    def save(self, *args, **kwargs):
-        if not self.user_pk:
-            self.user_pk = self.user.id
-        super().save(*args, **kwargs)
 
+
+
+class User_Query(models.Model):
+    user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
+    full_name = models.CharField(max_length=250,null=False, blank= False)
+    email = models.EmailField(null=False, blank=False)
+    subject = models.CharField(max_length=250, null=False, blank=False)
+    message = models.TextField(null=False, blank=False)
+    date_sent = models.DateTimeField(auto_now_add=True)
+    is_solve = models.BooleanField(default = False)
+
+
+class SellProduce(models.Model):
+    APPROVEREJECT = (
+        ("approved","approved"),
+        ("rejected","rejected"),
+        ("pending","pending")
+    )
+    SI_UNIT_CHOICES = [
+        ('Kilogram', 'Kilogram'),
+        ('Gram', 'Gram'),
+        ('Liter', 'Liter'),
+    ]
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null= True, blank= True)
+    product_name = models.CharField(max_length=250,blank=True,null=True,default="No Title")
+    product_image = models.ImageField(upload_to='productforsell/',null=True, blank=True)
+    product_quantity = models.FloatField(default=0.0,null=True,blank=True)
+    SI_units = models.CharField(max_length=20, choices=SI_UNIT_CHOICES,default="Kilogram")
+    ammount_in_green_points = models.PositiveIntegerField(default=0,null=True,blank=True)
+    date_time = models.DateTimeField(auto_now_add=True)
+    is_approved = models.CharField(max_length=10, choices= APPROVEREJECT, default='pending')
+    reject_reason = models.TextField(null=True, blank=True)
+
+class ProduceBuy(models.Model):
+    SI_UNIT_CHOICES = [
+        ('Kilogram', 'Kilogram'),
+        ('Gram', 'Gram'),
+        ('Liter', 'Liter'),
+    ]
+    seller = models.ForeignKey(User,on_delete=models.CASCADE,related_name='selling_user',null=True,blank=False)
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE , related_name='buying_user',null=True,blank=False)
+    sell_produce = models.CharField(max_length=250, blank=True, null=True)
+    product_quantity = models.FloatField(default=0.0,null=True,blank=True)
+    SI_units = models.CharField(max_length=20, choices=SI_UNIT_CHOICES,default="Kilogram")
+    ammount_in_green_points = models.PositiveIntegerField(default=0,null=True,blank=True)
+    date_time = models.DateTimeField(auto_now_add=True)

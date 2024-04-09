@@ -1,6 +1,6 @@
 {% extends 'admin_dashboard/starter.html' %}
 {% load static %}
-{% block title %}Room List{% endblock title %}
+{% block title %}User List{% endblock title %}
 {% block content %}
     <div class="page-wapper">
         {% include 'app_common/snippets/alert.html' %}
@@ -36,21 +36,21 @@
                 <thead class="table-light">
                     <tr>
                         <th scope="col">User-ID</th>
-                        <th scope="col">UserName</th>
-                        <th scope="col">Contact</th>
+                        <th scope="col">Name</th>
                         <th scope="col">Wallet Balance</th>
+                        <th scope="col">Gardening Details</th>
                         <th scope="col">Active Status</th>
                         <th scope="col">Last Login</th>
-                        <th></th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in user_list %}
                     <tr>
                         <td>{{ user.id }}</td>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.contact }}</td>
+                        <td>{{ user.full_name }}</td>
                         <td>{{ user.wallet }}</td>
+                        <td><a href="{% url 'admin_dashboard:gardening_details' user.id %}">Gardening Details</a></td>
                         <td>{{ user.is_active }}</td>
                         <td>{{ user.last_login }}</td>
                         <td>
@@ -60,7 +60,9 @@
                             <a href="{% url 'admin_dashboard:user_update' user.id %}">
                                 <i class="fa-regular fa-pen-to-square" style="color: #8400db;"></i>
                             </a>
-                           
+                            <a href="{% url 'admin_dashboard:delete_user' user.id %}">
+                                <i class="fa fa-trash text-danger" aria-hidden="true"></i>
+                            </a>
                         </td>
                        
                     </tr>
