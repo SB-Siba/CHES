@@ -5,6 +5,23 @@ app_name = 'user_dashboard'
 
 urlpatterns = [
     path('', views.UserDashboard.as_view(), name = "user_dashboard"),
+    path('userprofile', views.UserProfile.as_view(), name = "userprofile"),
+    path('gardeningprofile', views.GardeningProfie.as_view(), name = "gardeningprofile"),
+    path('userprofileupdate', views.UpdateProfileView.as_view(), name = "userprofileupdate"),
+    path('gardeningprofileupdate', views.UpdateGardeningProfileView.as_view(), name = "gardeningprofileupdate"),
+    path('addactivity', views.AddActivityRequest.as_view(), name = "addactivity"),
+    path('activitylist', views.ActivityList.as_view(), name = "activitylist"),
+
+    path('walletpage', views.WalletView.as_view(), name = "walletpage"),
+    path('privacypolicy', views.PrivacyPolicyPage.as_view(), name = "privacypolicy"),
+    path('servicepage', views.ServicePage.as_view(), name = "servicepage"),
+    path('contactpage', views.ContactePage.as_view(), name = "contactpage"),
+
+    path('sellproduce', views.SellProduceView.as_view(), name = "sellproduce"),
+    path('allsellrequests', views.AllSellRequests.as_view(), name = "allsellrequests"),
+
+    path('greencommerceproducts', views.GreenCommerceProductCommunity.as_view(), name = "greencommerceproducts"),
+    path('producebuy/<int:prod_id>', views.ProduceBuyView.as_view(), name = "producebuy"),
 
 ]
 

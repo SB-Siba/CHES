@@ -3,7 +3,7 @@
     <ul class="navbar-nav sidebar side-nav sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'user_dashboard:user_dashboard' %}">
             <div class="sidebar-brand-text mx-3"><img src="{% static 'user_dashboard/images/green-logo.png' %}" class="mt-5"/></div>
         </a>
 
@@ -12,23 +12,69 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{% url 'user_dashboard:user_dashboard' %}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a>
+                <span>User Dashboard</span></a>
         </li>
 
         
         <!-- Nav Item - Charts -->
         <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fa-solid fa-tree"></i>
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                aria-expanded="true" aria-controls="collapseTwo">
+                <img src="{% static 'user_dashboard\img\gc.png' %}" class="text-info" alt="" style="height: 15px;">
+                <span>Green Commerce</span>
+            </a>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="{% url 'user_dashboard:sellproduce' %}">
+                        <img src="{% static 'user_dashboard\img\sell.png' %}" class="text-info" alt="" style="height: 15px;">
+                            <span>Sell Produce</span>
+                    </a>
+                    <a class="collapse-item" href="{% url 'user_dashboard:greencommerceproducts' %}">
+                        <img src="{% static 'user_dashboard\img\buy.png' %}" class="text-info" alt="" style="height: 15px;">
+                            <span>Buy From Community</span>
+                    </a>
+                    <a class="collapse-item" href="#">
+                        <img src="{% static 'user_dashboard\img\s_cart.png' %}" class="text-info" alt="" style="height: 15px;">
+                            <span>My Orders</span>
+                    </a>
+                    <a class="collapse-item" href="{% url 'user_dashboard:allsellrequests' %}">
+                        <img src="{% static 'user_dashboard\img\request.png' %}" class="text-info" alt="" style="height: 15px;">
+                            <span>Requests For Sell</span>
+                    </a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
+                aria-expanded="true" aria-controls="collapseTwo">
+                <img src="{% static 'user_dashboard\img\gardening.png' %}" class="text-info" alt="" style="height: 15px;">
                 <span>Gardening Profile</span>
+            </a>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="{% url 'user_dashboard:gardeningprofile' %}">
+                        <img src="{% static 'user_dashboard\img\gardener.png' %}" class="text-info" alt="" style="height: 15px;">
+                            <span>Profile</span>
+                    </a>
+                    <a class="collapse-item" href="{% url 'user_dashboard:gardeningprofile' %}">
+                        <img src="{% static 'user_dashboard\img\park.png' %}" class="text-info" alt="" style="height: 15px;">
+                            <span>Plants in My Garden</span>
+                    </a>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'user_dashboard:walletpage' %}">
+                <i class="fa-solid fa-wallet"></i>
+                <span> Green Wallet</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{% url 'chat:all_messages' %}">
                 <i class="fa-solid fa-wallet"></i>
-                <span> Green Wallet</span>
+                <span> Messages</span>
             </a>
         </li>
 
@@ -41,44 +87,28 @@
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="#">
-                        <i class="fa-solid fa-angles-right"></i>
+                    <a class="collapse-item" href="{% url 'user_dashboard:addactivity' %}">
+                        <i class="far fa-plus-square text-success"></i>
                             <span> Add Activity</span>
                     </a>
-                    <a class="collapse-item" href="#">
-                        <i class="fa-solid fa-angles-right"></i>
+                    <a class="collapse-item" href="{% url 'user_dashboard:activitylist' %}">
+                        <i class="far fa-list-alt text-success"></i>
                             <span>Activity List</span>
-                    </a>
-                    <a class="collapse-item" href="#">
-                        <i class="fa-solid fa-angles-right"></i>
-                            <span>Equiment's List</span>
                     </a>
                 </div>
             </div>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fa-solid fa-tree"></i>
-                <span>Plants in My Garden</span></a>
-        </li>
-
-
-        <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{% url 'user_dashboard:contactpage' %}">
                 <i class="fa-solid fa-headset"></i>
                 <span>Help & Support</span></a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{% url 'user_dashboard:privacypolicy' %}">
                 <i class="fa-solid fa-shield-halved"></i>
                 <span>Privacy Policy</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Logout</span></a>
         </li>
 
         <!-- Sidebar Toggler (Sidebar) -->

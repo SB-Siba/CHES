@@ -1,0 +1,34 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Activity List{% endblock title %}
+
+{% block content %}
+<div class="page-wapper">
+    {% include 'app_common/snippets/alert.html' %}
+    
+    <div class="table-responsive">
+        <table class="table table-hover table-nowrap">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Activity-ID</th>
+                    <th scope="col">Activity Content</th>
+                    <th scope="col">Activity Image</th>
+                    <th scope="col">Date And Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in activities %}
+                <tr>
+                    <td>{{ activity.id }}</td>
+                    <td>{{ activity.activity_content }}</td>
+                    <td><img src="{{ activity.activity_image.url }}" alt="Garden Image" style="height: 50px; width: 50px;"></td>
+                    <td>{{ activity.date_time }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% include 'app_common/snippets/pagination.html' %}
+    </div>
+</div>
+{% endblock content %}

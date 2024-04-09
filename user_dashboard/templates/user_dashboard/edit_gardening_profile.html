@@ -1,0 +1,19 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Gardening Profile{% endblock title %}
+
+{% block content %}
+<div class="container mt-3" style="width: 60%;">
+    <form method="post" action="" class="p-4" enctype="multipart/form-data">
+        {% include 'app_common/snippets/alert.html' %}
+        {% csrf_token %}
+        {{form.as_p}}
+        <div style="text-align:center;">
+            <button class="btn-block btn-lg btn-outline-success" type="submit">
+                Update Data
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

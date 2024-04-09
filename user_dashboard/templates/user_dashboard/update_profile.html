@@ -1,0 +1,17 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}User Profile{% endblock title %}
+
+{% block content %}
+<div class="container mt-3" style="width: 60%;">
+  <form method="post" action="" class="p-4" enctype="multipart/form-data">
+    {% include 'app_common/snippets/alert.html' %}
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit" class="btn-block btn-success btn-lg text-center">
+        Update Profile
+    </button>
+</form>
+</div>
+{% endblock content %}

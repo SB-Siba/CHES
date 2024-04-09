@@ -8,7 +8,7 @@ urlpatterns = [
     path("", include("app_common.urls")),
     path("admin_dashboard/", include("admin_dashboard.urls")),
     path("user_dashboard/", include("user_dashboard.urls")),
-
+    path("chat/", include("chatapp.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

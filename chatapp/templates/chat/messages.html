@@ -1,0 +1,88 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}compose message{% endblock title %}
+
+{% block content %}
+<section>
+    <div class="container py-5">
+  
+      <div class="row">
+  
+        <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0">  
+          <div class="card">
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    {% for time, message in all_messages %}
+                        <div class="d-flex justify-content-start">
+                        {% if message.sender == user %}
+                          {% if message.recipient.user_image %}
+                              <img src="{{message.recipient.user_image.url}}" alt="avatar"
+                              class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60" height="60">
+                          {% else %}
+                              <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-2.webp" alt="avatar"
+                              class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
+                          {% endif %}
+                          <!-- recipient -->
+                          <li class="mx-3 mt-2">
+                              <p class="fw-bold mb-0">
+                              <a href="#" class="recipient-name uuuser" data-recipient="{{ message.recipient.full_name }}">{{ message.recipient.full_name }}</a>
+                              </p>
+                              <p class="small text-muted">{{ message.content }} <small>({{ time }})</small></p>
+                          </li>
+                          </div>
+                          <hr style="font-size: 10px; color: black;">
+                        {% else %}
+                          {% if message.sender.user_image %}
+                              <img src="{{message.sender.user_image.url}}" alt="avatar"
+                              class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60" height="60">
+                          {% else %}
+                              <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-2.webp" alt="avatar"
+                              class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
+                          {% endif %}
+                          <!-- recipient -->
+                          <li class="mx-3 mt-2">
+                              <p class="fw-bold mb-0">
+                              <a href="#" class="sender-name uuuser" data-sender="{{ message.sender.full_name }}">{{ message.sender.full_name }}</a>
+                              </p>
+                              <p class="small text-muted">{{ message.content }} <small>({{ time }})</small></p>
+                          </li>
+                          </div>
+                          <hr style="font-size: 10px; color: black;">
+                        {% endif %}
+                    {% endfor %}
+                  </ul>
+            </div>
+          </div>
+  
+        </div>
+  
+        <div class="col-md-6 col-lg-7 col-xl-8">
+  
+          <ul class="list-unstyled">
+            <div class="messages-container" style='max-height: 300px; overflow-y: auto;'>
+
+            </div>
+            <form class="w-100 msg_Form">
+              {% csrf_token %}
+                <li class="mb-3 row">
+                    <input type="hidden" id="recipientFullName" name="recipient_full_name" value="">
+                    <div class="form-outline col-md-7 col-lg-9 col-9">
+                      {% csrf_token %}
+                      {{ form.as_p }}
+                    </div>
+                    <div class="col-md-5 col-lg-3 col-3">
+                      <button type="submit" class="btn btn-info btn-rounded w-100">Send</button>
+                    </div>
+                  </li>
+            </form>
+            
+          </ul>
+  
+        </div>
+  
+      </div>
+  
+    </div>
+</section>
+{% endblock content %}

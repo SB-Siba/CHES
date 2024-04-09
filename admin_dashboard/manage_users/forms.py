@@ -24,11 +24,11 @@ class UserEdit(forms.ModelForm):
 
     class Meta:
         model = models.User
-        fields =["username","contact","wallet","is_game_organizer","is_active"]
+        fields =["full_name","contact","wallet","is_game_organizer","is_active"]
 
 
-    username = forms.CharField(max_length=255, label='Enter UserName')
-    username.widget.attrs.update({'class': 'form-control','type':'username',"required":"required"})
+    full_name = forms.CharField(max_length=255, label='Enter Full Name')
+    full_name.widget.attrs.update({'class': 'form-control','type':'text',"required":"required"})
 
     contact = forms.CharField(max_length=255, label='Contact Number')
     contact.widget.attrs.update({'class': 'form-control','type':'number',"required":"required"})
