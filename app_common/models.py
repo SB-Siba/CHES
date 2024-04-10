@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import make_password
 
 from .manager import MyAccountManager
 from helpers import utils
-from django.core.validators import MinLengthValidator
+from django.utils import timezone
 
 
 class AdminIncome(models.Model):
@@ -115,23 +115,6 @@ class UserActivity(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
     is_accepted = models.CharField(max_length=10, choices= ACCEPTREJECT, default='pending')
     reject_reason = models.TextField(null=True, blank=True)
-    # activity_edit = 
-
-# class UserActivityRequest(models.Model):
-#     user = models.ForeignKey(User,on_delete=models.CASCADE,null= True, blank= True)
-#     activity_content = models.TextField(null=True,blank=True)
-#     activity_image = models.ImageField(upload_to='activity/',null=True, blank=True)
-
-# class UserActivityReject(models.Model):
-#     user = models.ForeignKey(User,on_delete=models.CASCADE,null= True, blank= True)
-#     activity_content_id = models.BigIntegerField(null=True,blank=True)
-#     reason = models.CharField(max_length = 250,null = True,blank = True)
-
-class Wallet_Trasnsaction_History(models.Model):
-
-    user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)
-    history = models.JSONField(default= dict)
-
 
 
 
@@ -155,16 +138,38 @@ class SellProduce(models.Model):
         ('Kilogram', 'Kilogram'),
         ('Gram', 'Gram'),
         ('Liter', 'Liter'),
+        ('Units', 'Units'),
     ]
     user = models.ForeignKey(User,on_delete=models.CASCADE,null= True, blank= True)
     product_name = models.CharField(max_length=250,blank=True,null=True,default="No Title")
     product_image = models.ImageField(upload_to='productforsell/',null=True, blank=True)
     product_quantity = models.FloatField(default=0.0,null=True,blank=True)
-    SI_units = models.CharField(max_length=20, choices=SI_UNIT_CHOICES,default="Kilogram")
+    SI_units = models.CharField(max_length=20, choices=SI_UNIT_CHOICES,null=True,blank=True)
     ammount_in_green_points = models.PositiveIntegerField(default=0,null=True,blank=True)
     date_time = models.DateTimeField(auto_now_add=True)
     is_approved = models.CharField(max_length=10, choices= APPROVEREJECT, default='pending')
-    reject_reason = models.TextField(null=True, blank=True)
+    reason = models.TextField(null=True, blank=True)
+    validity_duration_days = models.PositiveIntegerField(null=True, blank=True)
+    validity_end_date = models.DateTimeField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        # Set validity end date based on current date and time
+        if self.validity_duration_days is not None and self.validity_duration_days > 0:
+            self.validity_end_date = timezone.now() + timezone.timedelta(days=self.validity_duration_days)
+        else:
+            # Set default validity duration as 7 days if not provided by seller
+            self.validity_duration_days = 7
+            self.validity_end_date = timezone.now() + timezone.timedelta(days=self.validity_duration_days)
+        super().save(*args, **kwargs)
+
+    def days_left_to_expire(self):
+        if self.validity_end_date:
+            delta = self.validity_end_date - timezone.now()
+            remaining_days = max(0, delta.days)
+            if remaining_days == 0:
+                self.delete()
+            return remaining_days
+        return 0
 
 class ProduceBuy(models.Model):
     SI_UNIT_CHOICES = [
@@ -172,10 +177,23 @@ class ProduceBuy(models.Model):
         ('Gram', 'Gram'),
         ('Liter', 'Liter'),
     ]
+    BUYINGSTATUS = [
+        ('BuyInProgress', 'BuyInProgress'),
+        ('BuyCompleted', 'BuyCompleted'),
+        ('BuyRejected', 'BuyRejected'),
+    ]
+    PAYMENTLINK = [
+        ('Send', 'Send'),
+        ('NotAvailable', 'NotAvailable'),
+    ]
     seller = models.ForeignKey(User,on_delete=models.CASCADE,related_name='selling_user',null=True,blank=False)
     buyer = models.ForeignKey(User, on_delete=models.CASCADE , related_name='buying_user',null=True,blank=False)
-    sell_produce = models.CharField(max_length=250, blank=True, null=True)
+    # sell_produce = models.CharField(max_length=250, blank=True, null=True)
+    sell_produce = models.ForeignKey(SellProduce,on_delete=models.SET_NULL, blank=True, null=True)
+    product_name = models.CharField(max_length=250, blank=True, null=True)
     product_quantity = models.FloatField(default=0.0,null=True,blank=True)
     SI_units = models.CharField(max_length=20, choices=SI_UNIT_CHOICES,default="Kilogram")
     ammount_in_green_points = models.PositiveIntegerField(default=0,null=True,blank=True)
+    buying_status = models.CharField(max_length=20, choices=BUYINGSTATUS,null=True,blank=True)
+    payment_link = models.CharField(max_length=20, choices=PAYMENTLINK,default="NotAvailable")
     date_time = models.DateTimeField(auto_now_add=True)

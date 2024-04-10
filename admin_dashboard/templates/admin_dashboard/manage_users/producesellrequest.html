@@ -35,6 +35,7 @@
                         <th scope="col">P_Name</th>
                         <th scope="col">Quantity</th>
                         <th scope="col">Units</th>
+                        <th scope="col">For Days</th>
                         <th scope="col">Image</th>
                         <th scope="col">Ammount</th>
                         <th scope="col">Action</th>
@@ -48,14 +49,13 @@
                         <td>{{ sell_request.product_name }}</td>
                         <td>{{ sell_request.product_quantity }}</td>
                         <td>{{ sell_request.SI_units }}</td>
+                        <td>{{ sell_request.validity_duration_days }}</td>
                         <td><img src="{{ sell_request.product_image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class="zoom"></td>
                         <td>{{ sell_request.ammount_in_green_points }}</td>
                         
                         <td>
                             <div class="d-flex justify-content-arround">
-                                <a href="{% url 'admin_dashboard:approvesellrequest' sell_request.id %}">
-                                    <span class="btn btn-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
-                                </a>
+                                <span class="btn btn-success" data-toggle="modal" data-target="#exampleModal1"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
                                 <span class="btn btn-danger mx-1" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-ban" aria-hidden="true"></i></span>
                             </div>
                         </td>
@@ -78,6 +78,31 @@
                                 <div style="text-align: center;">
                                     <button class="btn btn-outline-success mt-2" type="submit">
                                         Add Reason
+                                    </button>
+                                </div>
+                             </form>
+                            </div>
+                           
+                          </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Give Reason</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                             <form action="{% url 'admin_dashboard:approvesellrequest' %}" method="post">
+                                {% csrf_token %}
+                                <input name="sell_id" value="{{sell_request.id}}" type="number" class="form-control" hidden/>
+                                <input name="reason" type="text" class="form-control"/>
+                                <div style="text-align: center;">
+                                    <button class="btn btn-outline-success mt-2" type="submit">
+                                        Say Something
                                     </button>
                                 </div>
                              </form>

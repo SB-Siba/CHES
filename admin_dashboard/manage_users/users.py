@@ -321,15 +321,19 @@ class UserProduceSellRequest(View):
         return render(request, self.template, locals())
     
 
-def ApproveSellRequest(request, pk):
-    sell_obj = get_object_or_404(models.SellProduce,id = pk)
+def ApproveSellRequest(request):
+    if request.method == "POST":
+        sell_id = request.POST['sell_id']
+        reason = request.POST['reason']
+
+    sell_obj = get_object_or_404(models.SellProduce,id = int(sell_id))
+
     if sell_obj is not None:
         sell_obj.is_approved = "approved"
+        sell_obj.reason = reason
         sell_obj.save()
         # Send email to the user that his/her request has been approved
-    
-        messages.info(request,"Activity Added successfully.")
-    
+        
     else:
         msg = 'This account does not exist.'
         messages.error(request,msg)
@@ -344,7 +348,7 @@ def RejectSellRequest(request):
         sell_obj = get_object_or_404(models.SellProduce,id = int(sell_id))
         if sell_obj is not None:
             sell_obj.is_approved = "rejected"
-            sell_obj.reject_reason = reason
+            sell_obj.reason = reason
             sell_obj.save()
             
             # send an email to the user with rejection message

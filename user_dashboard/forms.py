@@ -62,16 +62,18 @@ class SellProduceForm(forms.ModelForm):
         ('Kilogram', 'Kilogram'),
         ('Gram', 'Gram'),
         ('Liter', 'Liter'),
+        ('Units', 'Units'),
     ]
 
     class Meta:
         model = common_models.SellProduce
-        fields = ['product_name', 'product_image', 'product_quantity', 'SI_units','ammount_in_green_points']
+        fields = ['product_name', 'product_image', 'product_quantity', 'SI_units','ammount_in_green_points','validity_duration_days']
         widgets = {
             'product_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Produce Name'}),
             'product_quantity': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Quantity'}),
             'SI_units': forms.Select(attrs={'class': 'form-control'}),
             'ammount_in_green_points': forms.NumberInput(attrs={'class': 'form-control'}),
+            'validity_duration_days': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
     product_image = forms.ImageField(label="Product Image", required=True, widget=forms.FileInput(attrs={'class': 'form-control'}))

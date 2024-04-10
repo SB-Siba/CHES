@@ -30,7 +30,7 @@
                         
                         <td>
                             {% if sell_request.is_approved == "approved" %}
-                                <span class="text-success btn">Approved</span>
+                                <abbr title="Click To See The Reason" style="font-size: 1.5rem;"><span class="text-success btn" data-toggle="modal" data-target="#exampleModal2">Approved</span></abbr>
                             {% elif sell_request.is_approved == "rejected" %}
                                 <abbr title="Click To See The Reason" style="font-size: 1.5rem;"><span class="text-danger btn" data-toggle="modal" data-target="#exampleModal">Rejected</span></abbr>
                             {% else %}
@@ -48,7 +48,22 @@
                               </button>
                             </div>
                             <div class="modal-body text-center text-danger" style="font-size: larger;">
-                                {{sell_request.reject_reason}}
+                                {{sell_request.reason}}
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Approve Reason</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body text-center text-success" style="font-size: larger;">
+                                {{sell_request.reason}}
                             </div>
                           </div>
                         </div>
