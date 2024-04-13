@@ -195,5 +195,7 @@ class ProduceBuy(models.Model):
     SI_units = models.CharField(max_length=20, choices=SI_UNIT_CHOICES,default="Kilogram")
     ammount_in_green_points = models.PositiveIntegerField(default=0,null=True,blank=True)
     buying_status = models.CharField(max_length=20, choices=BUYINGSTATUS,null=True,blank=True)
+    quantity_buyer_want = models.PositiveIntegerField(default=1,null=True,blank=True)
+    ammount_based_on_quantity_buyer_want = models.PositiveBigIntegerField(default=0,null=True,blank=True)
     payment_link = models.CharField(max_length=20, choices=PAYMENTLINK,default="NotAvailable")
     date_time = models.DateTimeField(auto_now_add=True)

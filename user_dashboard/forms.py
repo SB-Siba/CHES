@@ -78,3 +78,10 @@ class SellProduceForm(forms.ModelForm):
 
     product_image = forms.ImageField(label="Product Image", required=True, widget=forms.FileInput(attrs={'class': 'form-control'}))
     
+class BuyQuantityForm(forms.Form):
+    quantity = forms.IntegerField(label="Quantity",widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Quantity', 'required': 'required'}))
+
+
+class BuyAmmountForm(forms.Form):
+    ammount_based_on_buyer_quantity = forms.IntegerField(label="Ammount Based On Quantity",widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Ammount', 'required': 'required'}))
+

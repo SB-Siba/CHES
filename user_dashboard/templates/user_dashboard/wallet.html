@@ -50,15 +50,16 @@
           <th>Details</th>
         </tr>
       </thead>
+    
       <tbody>
         {% for i,j in main_obj %}
           <tr style="color: black;">
             <td style="font-size: small;">{{i.product_name}}</td>
             <td style="font-size: small;">{{i.product_quantity}}&nbsp;{{i.SI_units}}</td>
             {% if j %}
-              <td style="font-size: small;" class="text-danger">- {{i.ammount_in_green_points}}</td>
+              <td style="font-size: small;" class="text-danger">- {{i.ammount_based_on_quantity_buyer_want}}</td>
             {% else %}
-              <td style="font-size: small;" class="text-success">+ {{i.ammount_in_green_points}}</td>
+              <td style="font-size: small;" class="text-success">+ {{i.ammount_based_on_quantity_buyer_want}}</td>
             {% endif %}
             
             <td style="font-size: small;">{{i.date_time}}</td>
@@ -69,5 +70,7 @@
     </table>
   </section>
 </section>
+
+
 
 {% endblock content %}

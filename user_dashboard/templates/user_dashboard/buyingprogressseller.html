@@ -4,21 +4,67 @@
 {% block title %}Buying Progress{% endblock title %}
 
 {% block content %}
-    {% for i in bbeigins_obj %}
-        <h4>Hey {{i.seller.full_name}},<br>{{i.buyer.full_name}} want to buy your product.</h4>
-        Product Details : <br>
-        <small>Name : {{i.sell_produce.product_name}}</small><br>
-        <small>Quantity : {{i.product_quantity}}</small><br>
-        <small>Units : {{i.SI_units}}</small><br>
-        <small>Ammount : {{i.ammount_in_green_points}}</small>
-        <div>
-            {% if i.payment_link == "NotAvailable" %}
-                <a href="{% url 'user_dashboard:sendpaymentlink' i.id %}" class="btn btn-primary">Send Payment Link</a>
-                <a href="" class="btn btn-danger">Reject this order</a>
-            {% else %}
-                <small class="text-success">Payment Link Send Successfully.</small>
-            {% endif %}
+{% for i in bbeigins_obj %}
+<h4>Hey {{i.seller.full_name}},<br>{{i.buyer.full_name}} want to buy your product.</h4>
+Product Details : <br>
+<small>Name : {{i.sell_produce.product_name}}</small><br>
+<small>Quantity : {{i.quantity_buyer_want}}</small><br>
+<small>Units : {{i.SI_units}}</small><br>
+<div>
+    {% if i.payment_link == "NotAvailable" %}
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentModal{{ i.id }}">Send
+            Payment Link</button>
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ i.id }}">Reject
+            this order</button>
+    {% else %}
+        <small class="text-success">Payment Link Send Succesfully.</small>
+    {% endif %}
+</div>
+<hr>
+
+<!-- Payment Modal -->
+<div class="modal fade" id="paymentModal{{ i.id }}" tabindex="-1" aria-labelledby="paymentModalLabel{{ i.id }}"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentModalLabel{{ i.id }}">Send Payment Ammount Based On Quantity</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="modalForm" method="post" action="{% url 'user_dashboard:sendpaymentlink' i.id %}">
+                    {% include 'app_common/snippets/alert.html' %}
+                    {% csrf_token %}
+                    {{form.as_p}}
+
+                    <div style="text-align: center;margin-top: 2rem;">
+                        <button class="btn btn-block btn-success" type="submit">Send</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <hr>
-    {% endfor %}
+    </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal fade" id="rejectModal{{ i.id }}" tabindex="-1" aria-labelledby="rejectModalLabel{{ i.id }}"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rejectModalLabel{{ i.id }}">Reject Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to reject this order?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="" class="btn btn-danger">Reject Order</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
 {% endblock content %}

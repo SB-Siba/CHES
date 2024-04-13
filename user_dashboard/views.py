@@ -351,17 +351,18 @@ class AllSellRequests(View):
 class GreenCommerceProductCommunity(View):
     template = app + "greencommerceproducts.html"
     model = app_commonmodels.SellProduce
+    form = user_form.BuyQuantityForm
 
     def get(self,request):
         produce_obj = self.model.objects.filter(is_approved = "approved").order_by("-date_time")
-        context={'produces':produce_obj}
+        context={'produces':produce_obj,'form':self.form}
         return render(request,self.template,context)
 
 
 class BuyingBegins(View):
     model = app_commonmodels.SellProduce
     
-    def get(self,request,prod_id):
+    def post(self,request,prod_id):
         user = request.user
         buyer = app_commonmodels.User.objects.get(id = user.id)
         sell_prod_obj = self.model.objects.get(id=prod_id)
@@ -370,26 +371,35 @@ class BuyingBegins(View):
         SI_units = sell_prod_obj.SI_units
         ammount_in_green_points = sell_prod_obj.ammount_in_green_points
 
-        try:
-            if buyer.wallet >= ammount_in_green_points:
-                buying_obj = app_commonmodels.ProduceBuy(buyer = buyer,seller = seller,sell_produce = sell_prod_obj,product_name = sell_prod_obj.product_name,product_quantity = product_quantity,SI_units = SI_units,ammount_in_green_points = ammount_in_green_points,buying_status = 'BuyInProgress')
-                buying_obj.save()
-                return redirect('user_dashboard:buybeginsbuyerview')  
-            else:
-                messages.error(request,"You don't have enough green points in your wallet!")
+        form_data = request.POST
+        quantity = int(form_data['quantity'])
+        
+        # print(type(prod_id),type(quantity))
+        if product_quantity >= quantity:
+            try:
+                if buyer.wallet >= ammount_in_green_points:
+                    buying_obj = app_commonmodels.ProduceBuy(buyer = buyer,seller = seller,sell_produce = sell_prod_obj,product_name = sell_prod_obj.product_name,product_quantity = product_quantity,SI_units = SI_units,ammount_in_green_points = ammount_in_green_points,buying_status = 'BuyInProgress',quantity_buyer_want = quantity)
+                    buying_obj.save()
+                    return redirect('user_dashboard:buybeginsbuyerview')
+                else:
+                    messages.error(request,"You don't have enough green points in your wallet!")
+                    return redirect('user_dashboard:greencommerceproducts')
+            except Exception as e:
+                print(e)
                 return redirect('user_dashboard:greencommerceproducts')
-        except Exception as e:
-            print(e)
-            return redirect('user_dashboard:greencommerceproducts')
+        else:
+            messages.error(request,"The requested amount is not available.")
+            return redirect('user_dashboard:greencommerceproducts') 
 
 
 class BuyBeginsSellerView(View):
     template = app + "buyingprogressseller.html"
     model = app_commonmodels.ProduceBuy
+    form = user_form.BuyAmmountForm
     def get(self,request):
         user = request.user
         bbeigins_obj = self.model.objects.filter(seller=user, buying_status="BuyInProgress")
-
+        form = self.form
         return render(request,self.template,locals())
     
 class BuyBeginsBuyerView(View):
@@ -402,10 +412,15 @@ class BuyBeginsBuyerView(View):
         return render(request,self.template,locals())
     
 def send_payment_link(request,buy_id):
-    buy_obj = app_commonmodels.ProduceBuy.objects.get(id=buy_id)
-    
-    buy_obj.payment_link = "Send"
-    buy_obj.save()
+    if request.method == "POST":
+        buy_obj = app_commonmodels.ProduceBuy.objects.get(id=buy_id)
+        form_data = request.POST
+        ammount_based_on_buyer_quantity = int(form_data['ammount_based_on_buyer_quantity'])
+        buy_obj.payment_link = "Send"
+        buy_obj.ammount_based_on_quantity_buyer_want = ammount_based_on_buyer_quantity
+        buy_obj.save()
+
+        return redirect('user_dashboard:buybeginssellerview')
 #     send email with payment link to the buyer 
 #     subject = 'Payment Link for GreenCommerce Product - YourGreenLife'
 #     message = f'''Dear {buy_obj.buyer},<br/>
@@ -425,7 +440,7 @@ def send_payment_link(request,buy_id):
 #         messages.success(request,"We have sent a Payment Link to your registered Email Id.")
 #     except Exception as e:
 #         messages.error(request,str(e))
-    return redirect('user_dashboard:buybeginssellerview')
+    
     
 
 
@@ -436,24 +451,27 @@ class ProduceBuyView(View):
         buy_prod_obj = self.model.objects.get(id=prod_id)
         seller = buy_prod_obj.seller
         buyer = buy_prod_obj.buyer
-        ammount_in_green_points = buy_prod_obj.ammount_in_green_points
+        ammount_for_quantity_want = buy_prod_obj.ammount_based_on_quantity_buyer_want
         sell_prod = buy_prod_obj.sell_produce
 
+
         try:
-            buyer.wallet -= ammount_in_green_points
-            buyer.total_invest += ammount_in_green_points
+            buyer.wallet -= ammount_for_quantity_want
+            buyer.total_invest += ammount_for_quantity_want
             buyer.coins += 50
                 
-            seller.wallet += ammount_in_green_points
-            seller.total_income += ammount_in_green_points
+            seller.wallet += ammount_for_quantity_want
+            seller.total_income += ammount_for_quantity_want
             seller.coins += 50
 
             sell_prod_obj = app_commonmodels.SellProduce.objects.get(id = sell_prod.id)
+            sell_prod_obj.product_quantity = sell_prod_obj.product_quantity-buy_prod_obj.quantity_buyer_want
+            sell_prod_obj.ammount_in_green_points = sell_prod_obj.ammount_in_green_points - ammount_for_quantity_want
             buy_prod_obj.buying_status = "BuyCompleted"
             buy_prod_obj.save()
+            sell_prod_obj.save()
             buyer.save()
             seller.save()
-            sell_prod_obj.delete()
             return redirect('user_dashboard:greencommerceproducts')  
 
         except Exception as e:

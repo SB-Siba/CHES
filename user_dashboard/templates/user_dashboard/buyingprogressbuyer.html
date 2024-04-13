@@ -8,12 +8,11 @@
         <h4>Hey {{i.buyer.full_name}},<br>You want to buy from {{i.seller.full_name}}, Once he/she approve Payment option will be available.</h4>
         Product Details : <br>
         <small>Name : {{i.sell_produce.product_name}}</small><br>
-        <small>Quantity : {{i.product_quantity}}</small><br>
+        <small>Quantity : {{i.quantity_buyer_want}}</small><br>
         <small>Units : {{i.SI_units}}</small><br>
-        <small>Ammount : {{i.ammount_in_green_points}}</small>
         <div>
             {% if i.payment_link == "Send" %}
-                <a href="{% url 'user_dashboard:producebuy' i.id %}" class="btn btn-primary">Pay Now</a>
+                <a href="{% url 'user_dashboard:producebuy' i.id %}" class="btn btn-primary">Pay <small><i class="fa-solid fa-indian-rupee-sign me-1 mx-2"></i></small>{{i.ammount_based_on_quantity_buyer_want}}</a>
             {% else %}
                 <small class="text-danger">Order Not Approved By The Seller Yet.</small>
             {% endif %}
