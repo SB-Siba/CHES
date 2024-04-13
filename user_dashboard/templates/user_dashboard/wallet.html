@@ -26,11 +26,13 @@
     </div>
     <div class="card bg-warning text-white">
       <h4>Total Purchase</h4>
-      <p>Progammer</p>
+      <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2"
+        style="font-weight: bold;">{{user.total_invest}}</span></p>
     </div>
     <div class="card bg-info text-white">
       <h4>Total Earnings</h4>
-      <p>tester</p>
+      <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2"
+        style="font-weight: bold;">{{user.total_income}}</span></p>
     </div>
   </div>
 
@@ -42,19 +44,25 @@
       <thead>
         <tr style="color: black;">
           <th>Product Name</th>
+          <th>Quantity</th>
           <th>Ammount</th>
-          <th>Date</th>
-          <th>Time</th>
+          <th>Date & Time</th>
           <th>Details</th>
         </tr>
       </thead>
+    
       <tbody>
-        {% for key,value in dict_transaction.items %}
+        {% for i,j in main_obj %}
           <tr style="color: black;">
-            <td style="font-size: small;">{{key}}</td>
-            <td style="font-size: small;">{{value.amount}}</td>
-            <td style="font-size: small;">{{value.date_time|date:'Y-m-d'}}</td>
-            <td style="font-size: small;">{{value.date_time|time:'H:i:s'}}</td>
+            <td style="font-size: small;">{{i.product_name}}</td>
+            <td style="font-size: small;">{{i.product_quantity}}&nbsp;{{i.SI_units}}</td>
+            {% if j %}
+              <td style="font-size: small;" class="text-danger">- {{i.ammount_based_on_quantity_buyer_want}}</td>
+            {% else %}
+              <td style="font-size: small;" class="text-success">+ {{i.ammount_based_on_quantity_buyer_want}}</td>
+            {% endif %}
+            
+            <td style="font-size: small;">{{i.date_time}}</td>
             <td style="font-size: small;"><button>View</button></td>
           </tr>
         {% endfor %}
@@ -62,5 +70,7 @@
     </table>
   </section>
 </section>
+
+
 
 {% endblock content %}

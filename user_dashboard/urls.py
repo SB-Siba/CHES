@@ -21,7 +21,12 @@ urlpatterns = [
     path('allsellrequests', views.AllSellRequests.as_view(), name = "allsellrequests"),
 
     path('greencommerceproducts', views.GreenCommerceProductCommunity.as_view(), name = "greencommerceproducts"),
+    path('buyingbegins/<int:prod_id>', views.BuyingBegins.as_view(), name = "buybegins"),
+    path('buybeginssellerview', views.BuyBeginsSellerView.as_view(), name = "buybeginssellerview"),
+    path('sendpaymentlink/<int:buy_id>', views.send_payment_link, name = "sendpaymentlink"),
+    path('buybeginsbuyerview', views.BuyBeginsBuyerView.as_view(), name = "buybeginsbuyerview"),
     path('producebuy/<int:prod_id>', views.ProduceBuyView.as_view(), name = "producebuy"),
+
 
 ]
 

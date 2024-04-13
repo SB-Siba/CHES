@@ -7,7 +7,8 @@ from app_common import models as app_commonmodels
 from . import forms as user_form
 from app_common import forms as common_forms
 from django.shortcuts import get_object_or_404
-
+from django.db.models import Q
+from django.utils import timezone
 from helpers import utils
 
 app = "user_dashboard/"
@@ -21,7 +22,14 @@ class UserDashboard(View):
         users_orderby_coins = app_commonmodels.User.objects.filter(is_superuser=False).order_by('-coins')[:10]
         garden_obj = get_object_or_404(app_commonmodels.GardeningProfile, user=user)
         rank = user.get_rank()
-        return render(request, self.template,locals())
+
+        context = {
+            'user':user,
+            'users_orderby_coins':users_orderby_coins,
+            'garden_obj':garden_obj,
+            'rank' : rank,
+        }
+        return render(request, self.template,context)
     
 class UserProfile(View):
     template = app + "user_profile.html"
@@ -262,15 +270,27 @@ class ActivityList(View):
 
 class WalletView(View):
     template = app + "wallet.html"
-    model = app_commonmodels.Wallet_Trasnsaction_History
+    model = app_commonmodels.ProduceBuy
 
     def get(self,request):
         user = request.user
         try:
-            transactions = self.model.objects.get(user=user)
-            dict_transaction = transactions.history
+            transactions = self.model.objects.filter((Q(buyer=user) | Q(seller=user)) & Q(buying_status="BuyCompleted")).order_by('-date_time')
+            list_of_transactions = []
+            xyz = []
+            for i in transactions:
+                list_of_transactions.append(i)
+                if i.buyer == user:
+                    x = True
+                    xyz.append(x)
+                else:
+                    x = False
+                    xyz.append(x)
+            main_obj = zip(list_of_transactions,xyz)  
+            
         except Exception:
-            dict_transaction = None
+            transactions = None
+            
         return render(request,self.template,locals())
     
 
@@ -295,16 +315,30 @@ class SellProduceView(View):
             product_quantity = form.cleaned_data['product_quantity']
             SI_units = form.cleaned_data['SI_units']
             ammount_in_green_points = form.cleaned_data['ammount_in_green_points']
+            validity_duration_days = form.cleaned_data['validity_duration_days']
 
             # Save SellProduce
             
-            sellObj=self.model(user = user,product_name = product_name,product_image = product_image,product_quantity = product_quantity,SI_units = SI_units,ammount_in_green_points = ammount_in_green_points)
+            sellObj=self.model(user = user,product_name = product_name,product_image = product_image,product_quantity = product_quantity,SI_units = SI_units,ammount_in_green_points = ammount_in_green_points,validity_duration_days = validity_duration_days)
             sellObj.save()
             messages.success(request,'Request for sell Sent Successfully')
             return redirect('user_dashboard:user_dashboard')
         else:
             messages.error(request,"Error! Please check your inputs.")
             return redirect('user_dashboard:addactivity')
+
+
+def delete_expired_sell_produce(request):
+    """
+    This function is used to delete the expired sell produce from database.
+    It will be called in every midnight by a cron job.
+    """
+    current_date = timezone.now()
+    app_commonmodels.SellProduce.objects.filter(validity__lte=current_date).delete()
+   
+
+
+
 
 class AllSellRequests(View):
     template = app + "sellrequestlist.html"
@@ -317,16 +351,18 @@ class AllSellRequests(View):
 class GreenCommerceProductCommunity(View):
     template = app + "greencommerceproducts.html"
     model = app_commonmodels.SellProduce
+    form = user_form.BuyQuantityForm
 
     def get(self,request):
         produce_obj = self.model.objects.filter(is_approved = "approved").order_by("-date_time")
-        context={'produces':produce_obj}
+        context={'produces':produce_obj,'form':self.form}
         return render(request,self.template,context)
 
-from datetime import datetime  
-class ProduceBuyView(View):
+
+class BuyingBegins(View):
     model = app_commonmodels.SellProduce
-    def get(self,request,prod_id):
+    
+    def post(self,request,prod_id):
         user = request.user
         buyer = app_commonmodels.User.objects.get(id = user.id)
         sell_prod_obj = self.model.objects.get(id=prod_id)
@@ -335,41 +371,109 @@ class ProduceBuyView(View):
         SI_units = sell_prod_obj.SI_units
         ammount_in_green_points = sell_prod_obj.ammount_in_green_points
 
-        try:
-            if buyer.wallet >= ammount_in_green_points:
-                buying_obj = app_commonmodels.ProduceBuy(buyer = buyer,seller = seller,sell_produce = sell_prod_obj.product_name,product_quantity = product_quantity,SI_units = SI_units,ammount_in_green_points = ammount_in_green_points)
-                buyer.wallet -= ammount_in_green_points
-                buyer.total_invest += ammount_in_green_points
-                buyer.coins += 50
-                
-                seller.wallet += ammount_in_green_points
-                seller.total_income += ammount_in_green_points
-                seller.coins += 50
-
-                current_date_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-                transaction_user_buyer, created = app_commonmodels.Wallet_Trasnsaction_History.objects.get_or_create(user = user)
-                json_data = transaction_user_buyer.history or {}
-                two_values = {'amount': "-"+str(ammount_in_green_points), 'date_time': current_date_time}
-                json_data[sell_prod_obj.product_name] = two_values
-                transaction_user_buyer.history = json_data
-                transaction_user_buyer.save()
-
-                transaction_user_seller, created = app_commonmodels.Wallet_Trasnsaction_History.objects.get_or_create(user = seller)
-                json_data = transaction_user_seller.history or {}
-                two_values = {'amount': "+"+str(ammount_in_green_points), 'date_time': current_date_time}
-                json_data[sell_prod_obj.product_name] = two_values
-                transaction_user_seller.history = json_data
-                transaction_user_seller.save()
-
-                buying_obj.save()
-                buyer.save()
-                seller.save()
-                sell_prod_obj.delete()
-                return redirect('user_dashboard:greencommerceproducts')  
-            else:
-                messages.error(request,"You don't have enough green points in your wallet!")
+        form_data = request.POST
+        quantity = int(form_data['quantity'])
+        
+        # print(type(prod_id),type(quantity))
+        if product_quantity >= quantity:
+            try:
+                if buyer.wallet >= ammount_in_green_points:
+                    buying_obj = app_commonmodels.ProduceBuy(buyer = buyer,seller = seller,sell_produce = sell_prod_obj,product_name = sell_prod_obj.product_name,product_quantity = product_quantity,SI_units = SI_units,ammount_in_green_points = ammount_in_green_points,buying_status = 'BuyInProgress',quantity_buyer_want = quantity)
+                    buying_obj.save()
+                    return redirect('user_dashboard:buybeginsbuyerview')
+                else:
+                    messages.error(request,"You don't have enough green points in your wallet!")
+                    return redirect('user_dashboard:greencommerceproducts')
+            except Exception as e:
+                print(e)
                 return redirect('user_dashboard:greencommerceproducts')
+        else:
+            messages.error(request,"The requested amount is not available.")
+            return redirect('user_dashboard:greencommerceproducts') 
+
+
+class BuyBeginsSellerView(View):
+    template = app + "buyingprogressseller.html"
+    model = app_commonmodels.ProduceBuy
+    form = user_form.BuyAmmountForm
+    def get(self,request):
+        user = request.user
+        bbeigins_obj = self.model.objects.filter(seller=user, buying_status="BuyInProgress")
+        form = self.form
+        return render(request,self.template,locals())
+    
+class BuyBeginsBuyerView(View):
+    template = app + "buyingprogressbuyer.html"
+    model = app_commonmodels.ProduceBuy
+    def get(self,request):
+        user = request.user
+        bbeigins_obj = self.model.objects.filter(buyer=user, buying_status="BuyInProgress")
+        print(bbeigins_obj)
+        return render(request,self.template,locals())
+    
+def send_payment_link(request,buy_id):
+    if request.method == "POST":
+        buy_obj = app_commonmodels.ProduceBuy.objects.get(id=buy_id)
+        form_data = request.POST
+        ammount_based_on_buyer_quantity = int(form_data['ammount_based_on_buyer_quantity'])
+        buy_obj.payment_link = "Send"
+        buy_obj.ammount_based_on_quantity_buyer_want = ammount_based_on_buyer_quantity
+        buy_obj.save()
+
+        return redirect('user_dashboard:buybeginssellerview')
+#     send email with payment link to the buyer 
+#     subject = 'Payment Link for GreenCommerce Product - YourGreenLife'
+#     message = f'''Dear {buy_obj.buyer},<br/>
+#                Your Payment has been initiated for the product "{buy_obj.product.name}" which you purchased from the GreenCommerce platform <br/> You can now pay for the product <br/> Please use the following Payment Link
+#                You can pay for the product "{buy_obj.product.name}" by clicking on the following Payment Link.<br/>
+#                Please click on the below Payment Link and make the payment.<br/>
+#                <a href="{buy_obj.payment_link}">{buy_obj.payment_link}</a><br/>
+#                Once you have made the payment, please mark it as Paid from My Orders section of our website.
+#                Thank You for shopping with us.
+#                Regards,<br/>
+#                The GreenCommerce Team.
+#               '''
+#     msg = EmailMessage(subject,message,'info@yourgreenlife.com',[buy_obj.buyer.email])
+#     try:
+#         msg.content_subtype='html'
+#         msg.send()
+#         messages.success(request,"We have sent a Payment Link to your registered Email Id.")
+#     except Exception as e:
+#         messages.error(request,str(e))
+    
+    
+
+
+class ProduceBuyView(View):
+    model = app_commonmodels.ProduceBuy
+    def get(self,request,prod_id):
+        user = request.user
+        buy_prod_obj = self.model.objects.get(id=prod_id)
+        seller = buy_prod_obj.seller
+        buyer = buy_prod_obj.buyer
+        ammount_for_quantity_want = buy_prod_obj.ammount_based_on_quantity_buyer_want
+        sell_prod = buy_prod_obj.sell_produce
+
+
+        try:
+            buyer.wallet -= ammount_for_quantity_want
+            buyer.total_invest += ammount_for_quantity_want
+            buyer.coins += 50
+                
+            seller.wallet += ammount_for_quantity_want
+            seller.total_income += ammount_for_quantity_want
+            seller.coins += 50
+
+            sell_prod_obj = app_commonmodels.SellProduce.objects.get(id = sell_prod.id)
+            sell_prod_obj.product_quantity = sell_prod_obj.product_quantity-buy_prod_obj.quantity_buyer_want
+            sell_prod_obj.ammount_in_green_points = sell_prod_obj.ammount_in_green_points - ammount_for_quantity_want
+            buy_prod_obj.buying_status = "BuyCompleted"
+            buy_prod_obj.save()
+            sell_prod_obj.save()
+            buyer.save()
+            seller.save()
+            return redirect('user_dashboard:greencommerceproducts')  
+
         except Exception as e:
             print(e)
             return redirect('user_dashboard:greencommerceproducts')

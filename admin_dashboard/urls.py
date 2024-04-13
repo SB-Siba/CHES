@@ -27,7 +27,7 @@ urlpatterns = [
     path('approveactivity/<int:pk>',users.ApproveActivity, name= 'approveactivity'),
     path('rejectactivity',users.RejectActivity, name= 'rejectpactivity'),
     path('sellrequest',users.UserProduceSellRequest.as_view(), name= 'sellrequest'),
-    path('approvesellrequest/<int:pk>',users.ApproveSellRequest, name= 'approvesellrequest'),
+    path('approvesellrequest',users.ApproveSellRequest, name= 'approvesellrequest'),
     path('rejectsellrequest',users.RejectSellRequest, name= 'rejectpsellrequest'),
 
 

@@ -3,6 +3,7 @@
 
 {% block title %}Dashboard{% endblock title %}
 
+
 {% block content %}
 <!-- Content Row -->
 <div class="row">
@@ -114,26 +115,9 @@
                 <main>
                     <div id="leaderboardheader">
                         <p class="fw-bold" style="font-size: xx-large; color: black;">Leader Board</p>
-                        <!-- <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="cityDropdown"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Select City
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="cityDropdown">
-                                <li><a class="dropdown-item" href="#" onclick="filterLeaderboard('Bhubaneswar')">Bhubaneswar</a>
-                                </li>
-                                <li><a class="dropdown-item" href="#" onclick="filterLeaderboard('Cuttack')">Cuttack</a>
-                                </li>
-                                <li><a class="dropdown-item" href="#" onclick="filterLeaderboard('Brahmapur')">Brahmapur</a>
-                                </li>
-                                <li><a class="dropdown-item" href="#" onclick="filterLeaderboard('Puri')">Puri</a>
-                                </li>
-                                <li><a class="dropdown-item" href="#" onclick="filterLeaderboard('Balasore')">Balasore</a>
-                                </li>
-                            </ul>
-                        </div> -->
+                
                         <div class="filter-container">
-                            <select id="city-filter">
+                            <select id="city-filter" class="form-select">
                                 <option value="all">All</option>
                                 <option value="Bhubaneswar">Bhubaneswar</option>
                                 <option value="Cuttack">Cuttack</option>
@@ -147,11 +131,13 @@
                         <div class="ribbon"></div>
                         <table>
                             {% for leader_user in users_orderby_coins %}
-                            <tr data-city="{{ leader_user.city }}" class="leaderRow">
-                                <td class="number" style="font-size: x-large;">{{forloop.counter}}</td>
-                                <td class="name">{{leader_user.full_name}}</td>
-                                <td class="points">
-                                    {{leader_user.coins}}
+                            <tr data-rank="" data-city="{{ leader_user.city }}" class="leaderRow ltr">
+                                <td class="number lc" style="font-size: x-large;">
+                                    {{ forloop.counter }}
+                                </td>
+                                <td class="name lc">{{ leader_user.full_name }}</td>
+                                <td class="points lc">
+                                    {{ leader_user.coins }}
                                     {% if forloop.first %}
                                     <img class="gold-medal"
                                         src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true"
@@ -166,20 +152,4 @@
             </div>
         </div>
         {% endblock content %}
-        <script>
-            // JavaScript for filtering leaderboard based on selected city
-            document.getElementById('city-filter').addEventListener('change', function() {
-                var selectedCity = this.value;
-                var rows = document.querySelectorAll('.leaderRow');
-    
-                // Show or hide rows based on the selected city
-                rows.forEach(function(row) {
-                    var rowCity = row.getAttribute('data-city');
-                    if (selectedCity === 'all' || rowCity === selectedCity) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
-        </script>
+        
