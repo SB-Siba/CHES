@@ -1,0 +1,45 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}All Orders{% endblock title %}
+{% block content %}
+    <div class="page-wapper">
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Request-ID</th>
+                        <th scope="col">P_Name</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Units</th>
+                        <th scope="col">Ammount</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orderlist %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.product_name }}</td>
+                        <td>{{ order.product_quantity }}</td>
+                        <td>{{ order.SI_units }}</td>
+                        <td>{{ order.ammount_in_green_points }}</td>
+                        
+                        <td>
+                            {% if order.buying_status == "BuyCompleted" %}
+                                <span class="text-success">Completed</span>
+                            {% elif order.buying_status == "BuyRejected" %}
+                                <span class="text-danger">Rejected</span>
+                            {% else %}
+                                <span class="text-warning">In Progress</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
+    </div>
+{% endblock content %}

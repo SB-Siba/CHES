@@ -26,6 +26,8 @@ urlpatterns = [
     path('sendpaymentlink/<int:buy_id>', views.send_payment_link, name = "sendpaymentlink"),
     path('buybeginsbuyerview', views.BuyBeginsBuyerView.as_view(), name = "buybeginsbuyerview"),
     path('producebuy/<int:prod_id>', views.ProduceBuyView.as_view(), name = "producebuy"),
+    path('buyreject/<int:ord_id>', views.reject_buy, name = "buyreject"),
+    path('orders/', views.AllOrders.as_view(), name = "allorders"),
 
 
 ]

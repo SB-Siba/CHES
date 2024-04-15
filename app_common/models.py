@@ -73,9 +73,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+    # def get_rank(self):
+    #     higher_scores_count = User.objects.filter(coins__gt=self.coins).count()
+    #     return higher_scores_count + 1
+
     def get_rank(self):
-        higher_scores_count = User.objects.filter(coins__gt=self.coins).count()
-        return higher_scores_count + 1
+        higher_or_equal_scores_count = User.objects.filter(coins__gte=self.coins).count()
+        return higher_or_equal_scores_count
 
 class GaredenQuizModel(models.Model):
     user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)

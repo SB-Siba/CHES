@@ -138,11 +138,9 @@
                                 <td class="name lc">{{ leader_user.full_name }}</td>
                                 <td class="points lc">
                                     {{ leader_user.coins }}
-                                    {% if forloop.first %}
                                     <img class="gold-medal"
                                         src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true"
-                                        alt="gold medal" />
-                                    {% endif %}
+                                        alt="gold medal"/>
                                 </td>
                             </tr>
                             {% endfor %}
