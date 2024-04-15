@@ -60,7 +60,7 @@ Product Details : <br>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a href="" class="btn btn-danger">Reject Order</a>
+                <a href="{% url 'user_dashboard:buyreject' i.id %}" class="btn btn-danger">Reject Order</a>
             </div>
         </div>
     </div>

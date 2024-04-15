@@ -332,6 +332,7 @@ def delete_expired_sell_produce(request):
     """
     This function is used to delete the expired sell produce from database.
     It will be called in every midnight by a cron job.
+    0 0 * * * /path/to/python /path/to/your/manage.py shell -c "from yourapp.utils import delete_expired_sell_produce; delete_expired_sell_produce()"
     """
     current_date = timezone.now()
     app_commonmodels.SellProduce.objects.filter(validity__lte=current_date).delete()
@@ -354,7 +355,7 @@ class GreenCommerceProductCommunity(View):
     form = user_form.BuyQuantityForm
 
     def get(self,request):
-        produce_obj = self.model.objects.filter(is_approved = "approved").order_by("-date_time")
+        produce_obj = self.model.objects.exclude(user=request.user).filter(is_approved="approved").order_by("-date_time")
         context={'produces':produce_obj,'form':self.form}
         return render(request,self.template,context)
 
@@ -478,3 +479,18 @@ class ProduceBuyView(View):
             print(e)
             return redirect('user_dashboard:greencommerceproducts')
 
+
+def reject_buy(request,ord_id):
+    order_obj = app_commonmodels.ProduceBuy.objects.get(id=ord_id)
+    order_obj.buying_status="BuyRejected"
+    order_obj.save()
+    return redirect('user_dashboard:buybeginssellerview')
+    
+
+class AllOrders(View):
+    template = app + "all_orders.html"
+    model = app_commonmodels.ProduceBuy
+
+    def get(self,request):
+        orders = self.model.objects.filter(buyer = request.user)
+        return render(request , self.template , {'orderlist' : orders})

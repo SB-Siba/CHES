@@ -22,6 +22,9 @@
         <a class="nav-link" href="{% url 'admin_dashboard:pending_user' %}">
             <i class="fa-solid fa-wallet"></i>
             <span>Users for Approve</span>
+            {% if not_approvedlist %}
+            <span class="badge badge-danger badge-counter">{{not_approvedlist.count}}</span>
+            {% endif %}
         </a>
         </li>
 
@@ -35,12 +38,18 @@
         <a class="nav-link" href="{% url 'admin_dashboard:gardeningprofileupdaterequest' %}">
             <i class="fa-solid fa-wallet"></i>
             <span>Gardening Profile Update Request</span>
+            {% if profile_update_obj %}
+            <span class="badge badge-danger badge-counter">{{profile_update_obj.count}}</span>
+            {% endif %}
         </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{% url 'admin_dashboard:useractivityrequest' %}">
                 <i class="fa-solid fa-wallet"></i>
                 <span>User Activity Request</span>
+                {% if activity_request_obj %}
+                <span class="badge badge-danger badge-counter">{{activity_request_obj.count}}</span>
+                {% endif %}
             </a>
         </li>
 
@@ -48,6 +57,9 @@
             <a class="nav-link" href="{% url 'admin_dashboard:sellrequest' %}">
                 <i class="fa-solid fa-wallet"></i>
                 <span>Sell Request</span>
+                {% if sell_request_obj %}
+                <span class="badge badge-danger badge-counter">{{sell_request_obj.count}}</span>
+                {% endif %}
             </a>
         </li>
 
