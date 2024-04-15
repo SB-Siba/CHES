@@ -5,17 +5,17 @@
 
 {% block content %}
 <div class="container-xxl py-5">
-    <div class="container">
-        <div class="row g-5">
+    <div class="container bg-white">
+        <div class="row g-5 contact">
             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
                 <p class="fs-5 fw-bold text-primary">Contact Us</p>
-                <h1 class="display-5 mb-2">If You Have Any Query, Please Contact Us</h1>
+                <h2 class="display-5 mb-2">If You Have Any Query, Please Contact Us</h2>
                 <form method="post" action="" class="p-4">
                     {% include 'app_common/snippets/alert.html' %}
                     {% csrf_token %}
                     {{form.as_p}}
                     <div style="text-align:center;">
-                        <button class="btn-outline-success btn-lg btn-block" type="submit">
+                        <button class="btn" type="submit">
                             Send Message
                         </button>
                     </div>

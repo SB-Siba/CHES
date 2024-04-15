@@ -9,9 +9,9 @@ class LoginForm(forms.ModelForm):
         model = models.User
         fields =["username","password",]
     username = forms.CharField(max_length=255, label='UserName')
-    username.widget.attrs.update({'class': 'form-control','type':'text','placeholder':'Enter username',"required":"required"})
+    username.widget.attrs.update({'class': 'form-control','type':'text','placeholder':'Enter Username',"required":"required"})
     
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Enter Password'}))
 
 
 
@@ -33,7 +33,7 @@ class RegisterForm(forms.ModelForm):
     full_name.widget.attrs.update({'class': 'form-control','type':'text','placeholder':'Full Name',"required":"required"})
 
     email = forms.CharField(label='Email')
-    email.widget.attrs.update({'class': 'form-control','type':'email', "placeholder":"user@gmail.com","required":"required"})
+    email.widget.attrs.update({'class': 'form-control','type':'email', "placeholder":"Enter Email","required":"required"})
 
     contact = forms.IntegerField(label='Enter Contact Number')
     contact.widget.attrs.update({'class': 'form-control','type':'number','placeholder':'Contact Number',"required":"required"})
@@ -41,8 +41,8 @@ class RegisterForm(forms.ModelForm):
     city = forms.ChoiceField(choices = CITIES)
     city.widget.attrs.update({'class': 'form-control','type':'text','placeholder':'Select City',"required":"required"})
     
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Enter Password'}))
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Confirm Password'}))
 
 
     def clean(self):

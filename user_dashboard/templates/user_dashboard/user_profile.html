@@ -9,7 +9,7 @@
     <div class="row d-flex justify-content-center align-items-center h-100 w-100">
       <div class="col-md-12 col-xl-12">
 
-        <div class="card text-success" style="border-radius: 15px;">
+        <div class="card text-success user_profile">
           <div class="card-body text-center">
             <div class="mt-3 mb-4">
               {% if user.user_image %}
@@ -22,64 +22,124 @@
 
             </div>
             <h4 class="mb-2">{{user.full_name}}</h4>
-            <p class="text-success mb-2">
+            <p class="mb-2">
               <span>{{user.email}}</span><span class="mx-2">|</span><span>{{user.contact}}</span>
             </p>
-            <p class="text-success">{{user.city}}</p>
+            <p class="">{{user.city}}</p>
 
-            <div class="mb-4 pb-2">
-              <a href="{{user.facebook_link}}">
-                <button type="button" class="btn btn-outline-primary btn-floating">
+            <div class="mb-4 pb-2 d-flex justify-content-center">
+              <a href="{{user.facebook_link}} m-2">
+                <button type="button" class="btn social_btn">
                   <i class="fab fa-facebook-f fa-lg"></i>
                 </button>
               </a>
               <a href="{{user.instagram_link}}">
-                <button type="button" class="btn btn-outline-primary btn-floating">
+                <button type="button" class="btn social_btn">
                   <i class="fab fa-instagram fa-lg"></i>
                 </button>
               </a>
               <a href="{{user.twitter_link}}">
-                <button type="button" class="btn btn-outline-primary btn-floating">
+                <button type="button" class="btn social_btn">
                   <i class="fab fa-twitter fa-lg"></i>
                 </button>
               </a>
               <a href="{{user.youtube_link}}">
-                <button type="button" class="btn btn-outline-primary btn-floating">
+                <button type="button" class="btn social_btn">
                   <i class="fab fa-youtube fa-lg"></i> <!-- YouTube -->
                 </button>
               </a>
             </div>
 
             <a href="{% url 'user_dashboard:userprofileupdate' %}">
-              <button type="button" class="btn btn-success btn-rounded btn-lg">
+              <button type="button" class="btn edit-details">
                 Edit Details
               </button>
             </a>
 
             <a href="{% url 'user_dashboard:gardeningprofile' %}">
-              <button type="button" class="btn btn-success btn-rounded btn-lg">
+              <button type="button" class="btn gard-details">
                 Gardening Details
               </button>
             </a>
 
-            <div class="d-flex justify-content-between text-center mt-5 mb-2">
-              <div>
-                <p class="mb-2 h5">{{user.wallet}}</p>
-                <p class="text-success mb-0">Wallets Balance</p>
+            <div class="row mt-5">
+
+              <!-- Earnings (Monthly) Card Example -->
+              <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="card border-left-primary shadow h-100 py-2">
+                      <div class="card-body">
+                          <div class="row no-gutters align-items-center text-left">
+                              <div class="col mr-2">
+                                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Wallets Balance</div>
+                                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{user.wallet}}</div>
+                              </div>
+                              <div class="col-auto">
+                                  <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
-              <div>
-                <p class="mb-2 h5">{{user.coins}}</p>
-                <p class="text-success mb-0">Total Coins</p>
+
+              <!-- Earnings (Monthly) Card Example -->
+              <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="card border-left-success shadow h-100 py-2">
+                      <div class="card-body">
+                          <div class="row no-gutters align-items-center text-left">
+                              <div class="col mr-2">
+                                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Total Coins</div>
+                                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{user.coins}}</div>
+                              </div>
+                              <div class="col-auto">
+                                  <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
-              <div class="px-3">
-                <p class="mb-2 h5">{{user.total_income}}</p>
-                <p class="text-success mb-0">Income amounts</p>
+
+              <!-- Earnings (Monthly) Card Example -->
+              <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="card border-left-info shadow h-100 py-2">
+                      <div class="card-body">
+                          <div class="row no-gutters align-items-center text-left">
+                              <div class="col mr-2">
+                                  <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Income amounts
+                                  </div>
+                                  <div class="row no-gutters align-items-center">
+                                      <div class="col-auto">
+                                          <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{user.total_income}}</div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-auto">
+                                  <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
-              <div>
-                <p class="mb-2 h5">{{user.total_invest}}</p>
-                <p class="text-success mb-0">Total Buy Ammount</p>
+
+              <!-- Pending Requests Card Example -->
+              <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="card border-left-warning shadow h-100 py-2">
+                      <div class="card-body">
+                          <div class="row no-gutters align-items-center text-left">
+                              <div class="col mr-2">
+                                  <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Total Buy Amount</div>
+                                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{user.total_invest}}</div>
+                              </div>
+                              <div class="col-auto">
+                                  <i class="fas fa-comments fa-2x text-gray-300"></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
-            </div>
+          </div>
           </div>
         </div>
 

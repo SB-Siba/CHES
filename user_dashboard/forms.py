@@ -54,7 +54,7 @@ class ActivityAddForm(forms.Form):
     activity_title = forms.CharField(label="Activity Title",widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter Activity Title', 'required': 'required'}))
     activity_content = forms.CharField(label="Activity Description",widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter About Activity', 'required': 'required'}))
 
-    activity_image = forms.FileField(required= True)
+    activity_image = forms.FileField(label="Activity Image" ,required= True)
     activity_image.widget.attrs.update({'class': 'form-control','type':'file'})
 
 class SellProduceForm(forms.ModelForm):
