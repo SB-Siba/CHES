@@ -3,27 +3,44 @@
 {% load static %}
 
 {% block content %}
-    <div class="login">
-        <div
-            class="d-flex justify-space-between"
-            style="align-items: center;justify-content: space-evenly;">
-            <div class="auth_reg_logo">
-                <img src="{% static 'user_dashboard/images/green-logo.png' %}"/>
-            </div>
-            <div>
-                <h3>Gardening Data</h3>
+<style>
+    .login form p {
+        text-align: left;
+    }
+    .login form .form-control {
+        margin-bottom:2rem;
+    }
+    .submit-data form p label {
+        display:block;
+    }
+</style>
+   <div class="container">
+    <div class="row d-flex align-items-center justify-content-center mb-5">
+        <div class="col-lg-8">
+            <div class="login submit-data">
+                <div
+                    class="d-flex justify-space-between"
+                    style="align-items: center;justify-content: space-evenly;">
+                    <div class="auth_reg_logo">
+                        <img src="{% static 'user_dashboard/images/green-logo.png' %}"/>
+                    </div>
+                    <div>
+                        <h3>Gardening Data</h3>
+                    </div>
+                </div>
+               
+                <form method="post" action="" class="p-4" enctype="multipart/form-data">
+                    {% include 'app_common/snippets/alert.html' %}
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <div style="text-align:center;">
+                        <button class="log_btn" type="submit">
+                            Submit
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-       
-        <form method="post" action="" class="p-4" enctype="multipart/form-data">
-            {% include 'app_common/snippets/alert.html' %}
-            {% csrf_token %}
-            {{form.as_p}}
-            <div style="text-align:center;">
-                <button class="log_btn" type="submit">
-                    Submit
-                </button>
-            </div>
-        </form>
     </div>
+   </div>
 {% endblock content %}

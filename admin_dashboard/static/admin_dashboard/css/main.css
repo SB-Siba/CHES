@@ -1,3 +1,5 @@
+
+
 .side-nav{
     background-color: #1F782B!important;
 }
@@ -117,4 +119,13 @@ background-color: #1E295B;
 .add-new-title{
     color: #000;
     font-weight: 600;
+}
+
+.qry-sub{
+    background-color: #1f782b;
+}
+
+
+.qry-sub i {
+    color: #fff;
 }
