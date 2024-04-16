@@ -3,28 +3,39 @@
 {% load static %}
 
 {% block content %}
-    <div class="login">
-        <div
-            class="d-flex justify-space-between"
-            style="align-items: center;justify-content: space-evenly;">
-            <div class="auth_reg_logo">
-                <img src="{% static 'user_dashboard/images/green-logo.png' %}"/>
-            </div>
-            <div>
-                <h3>Login</h3>
+<style>
+    .auth {
+        background:#006633;
+    }
+</style>
+    <div class="container">
+        <div class="row d-flex align-items-center justify-content-center">
+            <div class="col-lg-6">
+                <div class="login">
+                    <div
+                        class="d-flex justify-space-between"
+                        style="align-items: center;justify-content: space-evenly;">
+                        <div class="auth_reg_logo">
+                            <img src="{% static 'user_dashboard/images/green-logo.png' %}"/>
+                        </div>
+                        <div>
+                            <h3>Login</h3>
+                        </div>
+                    </div>
+                    <form method="post" action="" class="p-4 mt-4"> 
+                    {% include 'app_common/snippets/alert.html' %}
+                        {% csrf_token %}
+                        {{form.as_p}}
+                        <div style="text-align:center;">
+                            <button class="log_btn" type="submit">
+                                Login
+                            </button>
+                        </div>
+                        
+                        <p>Create New account <a href="{% url 'app_common:register' %}"><b>SignUp</b></a></p>
+                    </form>
+                </div>
             </div>
         </div>
-        <form method="post" action="" class="p-4 mt-4"> 
-        {% include 'app_common/snippets/alert.html' %}
-            {% csrf_token %}
-            {{form.as_p}}
-            <div style="text-align:center;">
-                <button class="log_btn" type="submit">
-                    Login
-                </button>
-            </div>
-            
-            <p>Create New account <a href="{% url 'app_common:register' %}"><b>SignUp</b></a></p>
-        </form>
     </div>
 {% endblock content %}

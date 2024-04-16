@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+h1, h2 , h3 ,h4 {
+    font-family: 'Jost', sans-serif; 
+    color: #000;
+}
 .side-nav{
     background-color: #1F782B!important;
 }
@@ -48,4 +53,155 @@ background-color: #1E295B;
 }
 .dash-card8{
     background-color: #F46D87;
+}
+.sell_wrapper{
+    background-color: #fff;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.sell_wrapper form p {
+    color: #000;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.sell_wrapper form .form-control {
+    padding: 10px;
+    border-radius: 0px;
+    height: 53px;
+    border: 1px solid #4CAF50;
+}
+.sell_btn {
+    background-color: #14453b;
+    color: #fff;
+    padding: 10px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    height: 53px;
+}
+.sell_btn:hover {
+    background-color: #1F782B;
+    color: #fff;
+}
+.gardenning_profile{
+    background-color: #14453b;
+    color: #fff; 
+    border-top:5px solid #1F782B;
+}
+.gardenning_profile .edit_btn {
+    background-color: #1F782B;
+    color: #fff;
+    padding: 9px 30px;
+    margin-bottom: 1rem;
+    font-size: 16px;
+}
+.update-form{
+    display: flex;
+    flex-wrap: wrap;
+}
+.update-form p {
+    margin-left: 10px;
+}
+.update-form .form-control {
+    width: 323px;
+}
+
+.user_profile{
+    background-color: #fff;
+    border: none;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.user_profile h4{
+    color: #4CAF50;
+}
+.user_profile p{
+    color: #14453b;
+    font-weight: 700;
+}
+.user_profile .social_btn {
+    border: 1px solid #14453b;
+    background: #14453b;
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+    margin-left: 10px;
+}
+.user_profile .social_btn i {
+    color: #FFEB3B;
+}
+.user_profile .social_btn:hover{
+    background-color: #4CAF50;
+}
+.edit-details{
+    background-color: #14453b;
+    color: #fff;
+    font-size: 15px;
+    border-radius: 50px;
+    padding: 12px 30px;
+}
+.edit-details:hover{
+    background-color: #4CAF50;
+    color: #FFEB3B;
+}
+.gard-details{
+    background-color: #1f782b;
+    color: #fff;
+    font-size: 15px;
+    border-radius: 50px;
+    padding: 12px 30px;
+}
+.gard-details:hover{
+    background-color: #4CAF50;
+    color: #FFEB3B;
+}
+.form_sec{
+    display: flex;
+    flex-wrap: wrap;
+}
+ form .form_sec p {
+    color: #000;
+    font-size: 15px;
+    font-weight: 600;
+    margin-left: 8px;
+    margin-bottom: 24px;
+ }
+ .update {
+    width: 200px;
+ }
+.service-text h4{
+    color: #14453B;
+}
+.service-text p{
+    color: #000;
+}
+
+.service-text img {
+    height: 220px;
+}
+.service-text .btn {
+    background-color: #1f782b;
+    color: #fff;
+    padding: 10px 21px;
+    font-weight: 600;
+    font-size: 15px;
+}
+.service-text .btn i {
+    color: #fff;
+}
+
+.contact form .form-control {
+    padding: 10px;
+    border-radius: 0px;
+    height: 53px;
+    border: 1px solid #4CAF50;
+}
+.contact form p label{
+display: none;
+}
+.contact .btn{
+    background-color: #1f782b;
+    color: #fff;
+    padding: 10px 21px;
+    font-weight: 600;
+    font-size: 15px;
 }
