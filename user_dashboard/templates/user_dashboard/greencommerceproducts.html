@@ -14,7 +14,7 @@
                     <img class="pic-2" src="{{prod.product_image.url}}">
                 </a>
                 <ul class="product-links">
-                    <li><a href="" data-tip="message"><i class="fas fa-sms"></i></a></li>
+                    <li><a href="{% url 'chat:startmessages' prod.user.id %}" data-tip="message"><i class="fas fa-sms"></i></a></li>
                     <li><a href="#" data-tip="call"><i class="fas fa-phone"></i></a></li>
                 </ul>
             </div>

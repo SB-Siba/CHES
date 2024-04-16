@@ -101,10 +101,9 @@ background-color: #1E295B;
 }
 .update-form p {
     margin-left: 10px;
+    width: 100%;
 }
-.update-form .form-control {
-    width: 323px;
-}
+
 
 .user_profile{
     background-color: #fff;
