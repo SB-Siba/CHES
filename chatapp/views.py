@@ -1,134 +1,108 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Message
-from .forms import MessageForm
 from app_common.models import User
-from django.http import JsonResponse
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 
-
-
-
-def user_info(request):
-    # Retrieve user information (replace this with your actual logic)
-    user = request.user
-    user_info = {
-        'full_name': user.full_name,
-        'email': user.email,
-        'user_image': user.user_image.url if user.user_image  else None,
-        # Add more user information as needed
-    }
-    # Return user information as JSON response
-    return JsonResponse(user_info)
-
-
 @login_required
-def inbox(request):
-    user = request.user
-    conversations = user.received_messages.values('sender__full_name').distinct()
-    return render(request, 'chat/inbox.html', {'conversations': conversations})
+def chat(request):
+    # Retrieve all users except the current user
+    messages = Message.objects.filter(Q(receiver=request.user) | Q(sender=request.user))
+    context = {'messages': messages}
+    return render(request, 'chat/messages.html', context)
 
-@login_required
-def conversation_sender(request, full_name):
-    user = request.user
-    sender = get_object_or_404(User, full_name=full_name)
-    messages = Message.objects.filter(sender=sender, recipient=request.user) | Message.objects.filter(sender=request.user, recipient=sender)
-    messages = messages.order_by('timestamp')
-    sender_details = {
-        'full_name': sender.full_name,
-        'user_image_url': sender.user_image.url if sender.user_image else None  # Assuming user_image is an ImageField
-        # Add more sender details as needed
-    }
-    messages_data = [{
-        'sender':message.sender.email,
-        'content': message.content,
-        'timestamp': message.timestamp,
-        # Add more message fields as needed
-    } for message in messages]
+
+def start_messages(request, r_id):
+    # Retrieve the receiver object if it exists
+    receiver = get_object_or_404(User, pk=r_id)
     
-    return JsonResponse({'messages': messages_data, 'sender': sender_details})
+    sender = request.user
+    
+    # Check if a message with the same sender and receiver already exists
+    existing_message = Message.objects.filter(sender=sender, receiver=receiver).exists()
+    
+    # If a message already exists, redirect back with a message
+    if existing_message:
+        return redirect('chat:all_messages')
+    
+    # If the receiver does not exist, create a new message object
+    msg_obj = Message(sender=sender, receiver=receiver, message_status="Start")
+    msg_obj.save()
+    
+    return redirect('chat:all_messages')
+
+from django.utils import timezone
+import json
 
 @login_required
-def conversation_reciver(request, full_name):
-    recipient = get_object_or_404(User, full_name=full_name)
-    messages = Message.objects.filter(recipient=recipient, sender=request.user) | Message.objects.filter(recipient=request.user, sender=recipient)
-    messages = messages.order_by('timestamp')
-    recipient_details = {
-        'full_name': recipient.full_name,
-        'user_image_url': recipient.user_image.url if recipient.user_image else None  # Assuming user_image is an ImageField
-        # Add more recipient details as needed
-    }
-    messages_data = [{
-        'sender':message.sender.email,
-        'sender_image':message.sender.user_image.url if message.sender.user_image else None,
-        'content': message.content,
-        'timestamp': message.timestamp,
-        # Add more message fields as needed
-    } for message in messages]
-    
-    return JsonResponse({'messages': messages_data, 'recipient': recipient_details})
-    
-
-@login_required
-@csrf_exempt
-def compose_message(request, full_name):
-    recipient = get_object_or_404(User, full_name=full_name)
- 
+def send_message(request):
     if request.method == 'POST':
-        form = MessageForm(request.POST)
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.sender = request.user
-            message.recipient = recipient
-            message.save()
-            return redirect('chat:all_messages')
-
-from datetime import datetime
-import pytz
-def allMessages(request):
-    user = request.user
-    
-    # Get distinct participants in conversations
-    conversation_participants = set()
-    conversations = Message.objects.filter(Q(recipient=user) | Q(sender=user))
-    for conversation in conversations:
-        if conversation.sender == user:
-            conversation_participants.add((conversation.sender.full_name, conversation.recipient.full_name))
+        sender = request.user
+        receiver_id = request.POST.get('receiver_id')
+        receiver = get_object_or_404(User, pk=receiver_id)
+        message = request.POST.get('message')
+        print(f"Message received: {message}")
+        # Retrieve existing messages or initialize an empty list
+        existing_messages = Message.objects.filter(Q(sender=request.user,receiver = receiver) | Q(sender=receiver,receiver = request.user)).values_list('messages', flat=True)
+        if existing_messages and existing_messages[0] is not None:
+            print("yess")
+            messages = json.loads(existing_messages[0])
         else:
-            conversation_participants.add((conversation.recipient.full_name, conversation.sender.full_name))
-            # Sort by most recent first
-    print("Before sorting:")
-    for participant in conversation_participants:
-        print(participant)
+            messages = []
 
-    # Sort conversation participants based on the timestamp of their last message in descending order
-    sorted_conversation_participants = sorted(conversation_participants, key=lambda x: x[1], reverse=True)
+        # Append the new message to the list of messages
+        message_data = {
+            'sender': sender.id,
+            'message': message,
+            'timestamp': timezone.now().isoformat(),
+        }
+        messages.append(message_data)
 
-    # Print the sorted list
-    print("\nAfter sorting:")
-    for participant in sorted_conversation_participants:
-        print(participant)
+        # Update the JSONField with the new messages
+        messages_to_update = Message.objects.filter(
+            Q(sender=request.user, receiver=receiver) | Q(sender=receiver, receiver=request.user)
+        )
 
-    # Fetch the latest message for each conversation
-    messages = []
-    for sender_name, recipient_name in sorted_conversation_participants:
+        # Update the messages
+        for message in messages_to_update:
+            # Update each message with the new messages value
+            message.messages = json.dumps(messages)
+            message.save()
+
+        # Redirect back to the chat page or any other page you prefer
+        return redirect('chat:all_messages')
+    else:
+        # Handle if it's not a POST request
+        return HttpResponseBadRequest("Invalid request method")
+
+def fetch_messages(request):
+    if request.method == 'GET':
+        # Fetch the receiver ID from the request
+        receiver_id = request.GET.get('receiver_id')
         
-        try:
-            latest_message = Message.objects.filter(
-                (Q(sender__full_name=sender_name) & Q(recipient__full_name=recipient_name)) |
-                (Q(sender__full_name=recipient_name) & Q(recipient__full_name=sender_name))
-            ).latest('timestamp')
-     
-            time = str(latest_message.timestamp)
-            latest_message_timestamp = datetime.fromisoformat(time)
-            local_timezone = pytz.timezone('Asia/Kolkata')  # Replace with your local timezone
-            latest_message_timestamp_local = latest_message_timestamp.astimezone(local_timezone)
-            hour_minute = latest_message_timestamp_local.strftime('%I:%M %p')
-            messages.append((hour_minute, latest_message))
-        except Message.DoesNotExist:
-            pass
-    
-    form = MessageForm()
+        # Retrieve the receiver object
+        receiver = get_object_or_404(User, pk=receiver_id)
         
-    return render(request, "chat/messages.html", {'all_messages': messages, 'form': form})
+        # Retrieve the messages sent to the receiver
+        messages = Message.objects.filter(Q(sender=request.user,receiver = receiver) | Q(sender=receiver,receiver = request.user)).values_list('messages', flat=True)
+        f_messages = [msg for msg in messages if msg is not None]
+        print(f_messages)
+        if len(f_messages) > 0:
+            sender_id = request.user.id
+            response_data = {
+                'messages': json.loads(messages[0]),
+                'senderId': sender_id
+            }
+            return JsonResponse(response_data, safe=False)
+        else:
+            sender_id = request.user.id
+            response_data = {
+                'messages': [],    
+                'senderId': sender_id
+            }
+            return JsonResponse(response_data, safe=False)
+    else:
+        # Handle if it's not a GET request
+        return HttpResponseBadRequest("Invalid request method")
