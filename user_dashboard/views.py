@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.utils import timezone
 from helpers import utils
+from chatapp.models import Message
 
 app = "user_dashboard/"
 
@@ -22,7 +23,6 @@ class UserDashboard(View):
         users_orderby_coins = app_commonmodels.User.objects.filter(is_superuser=False).order_by('-coins')[:10]
         garden_obj = get_object_or_404(app_commonmodels.GardeningProfile, user=user)
         rank = user.get_rank()
-
         context = {
             'user':user,
             'users_orderby_coins':users_orderby_coins,
@@ -356,7 +356,16 @@ class GreenCommerceProductCommunity(View):
 
     def get(self,request):
         produce_obj = self.model.objects.exclude(user=request.user).filter(is_approved="approved").order_by("-date_time")
-        context={'produces':produce_obj,'form':self.form}
+        message_status = []
+        for i in produce_obj:
+            msg_obj = Message.objects.filter(Q(receiver=i.user,sender=request.user) | Q(receiver=request.user,sender=i.user))
+            if msg_obj:
+                message_status.append(True)
+            else:
+                message_status.append(False)
+       
+        zipped_value = zip(produce_obj,message_status)
+        context={'zipped_value':zipped_value,'form':self.form}
         return render(request,self.template,context)
 
 
@@ -409,7 +418,7 @@ class BuyBeginsBuyerView(View):
     def get(self,request):
         user = request.user
         bbeigins_obj = self.model.objects.filter(buyer=user, buying_status="BuyInProgress")
-        print(bbeigins_obj)
+        
         return render(request,self.template,locals())
     
 def send_payment_link(request,buy_id):
@@ -485,6 +494,7 @@ def reject_buy(request,ord_id):
     order_obj.buying_status="BuyRejected"
     order_obj.save()
     return redirect('user_dashboard:buybeginssellerview')
+
     
 
 class AllOrders(View):

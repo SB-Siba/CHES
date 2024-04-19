@@ -301,7 +301,7 @@
   <div class="top-bar"></div>
   <div class="container">
     <div class="row no-gutters">
-      <div class="col-md-4 border-right">
+      <div class="col-md-4 border-right" style="overflow-y: auto;">
         <div class="settings-tray">
           {% if request.user.user_image %}
             <img class="profile-image" src="{{request.user.user_image.url}}" alt="Profile img">
@@ -310,7 +310,7 @@
           {% endif %}
           
           <span class="settings-tray--right">
-            <i class="fa-solid fa-arrows-rotate"></i>
+            <i onclick="refreshPage()" class="fa-solid fa-arrows-rotate"></i>
           </span>
         </div>
         <div class="search-box">
@@ -319,7 +319,7 @@
             <input placeholder="Search here" type="text">
           </div>
         </div>
-        {% for i in messages %}
+        {% for i,l_message in zipped_messages %}
           {% if i.receiver == request.user %}
             <div class="friend-drawer friend-drawer--onhover {% if forloop.first %}active{% endif %}" onclick="loadMessages('{{ i.sender.id }}')">
               {% if i.sender.user_image %}
@@ -329,9 +329,9 @@
               {% endif %}
               <div class="text">
                 <h6>{{i.sender.full_name}}</h6>
-                <p class="text-muted">Hey, you're arrested!</p>
+                <p class="text-muted">{{ l_message.0 }}</p>
               </div>
-              <span class="time text-muted small">13:21</span>
+              <span class="time text-muted small">{{ l_message.1 }}</span>
             </div>
             <hr>
             {% else %}
@@ -343,29 +343,31 @@
               {% endif %}
               <div class="text">
                 <h6>{{i.receiver.full_name}}</h6>
-                <p class="text-muted">Hey, you're arrested!</p>
+                <p class="text-muted">{{ l_message.0 }}</p>
               </div>
-              <span class="time text-muted small">13:21</span>
+              <span class="time text-muted small">{{ l_message.1 }}</span>
             </div>
             <hr>
           {% endif %}
-        
         {% endfor %}
       </div>
+      
       <div class="col-md-8" style="background-color:#f6e6c466;">
+        
         <div class="settings-tray">
           <div class="friend-drawer no-gutters friend-drawer--grey">
-            <img class="profile-image" src="{% static 'user_dashboard\img\profile8.jpg'%}" alt="">
+            <img class="profile-image" id="chatpartner-profile-image" src="{% static 'user_dashboard\img\profile8.jpg'%}" alt="">
             <div class="text">
-              <h6>Robo Cop</h6>
+              <h6 id="chatpartner_name"></h6>
               <p class="text-muted">Layin' down the law since like before Christ...</p>
             </div>
             <span class="settings-tray--right">
-              <i class="fa-solid fa-arrows-rotate"></i>
+              <i onclick="refreshPage()" class="fa-solid fa-arrows-rotate"></i>
             </span>
           </div>
         </div>
-        <div class="chat-panel">
+
+        <div class="chat-panel" id="chat-panel" style="height: 400px; overflow-y: auto;">
 
         </div>
         <div class="row">

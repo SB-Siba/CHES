@@ -100,12 +100,25 @@
 
             <!-- Project Card Example -->
             <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        My Activity</h6>
-                </div>
-                <div class="card-body">
-                    <img src="{% static 'user_dashboard/images/line-charts.png' %}" class="img-fluid">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">My Activity</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart">
+                            <canvas id="lineChart"
+                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -115,7 +128,7 @@
                 <main>
                     <div id="leaderboardheader">
                         <p class="fw-bold" style="font-size: xx-large; color: black;">Leader Board</p>
-                
+
                         <div class="filter-container">
                             <select id="city-filter" class="form-select">
                                 <option value="all">All</option>
@@ -138,9 +151,11 @@
                                 <td class="name lc">{{ leader_user.full_name }}</td>
                                 <td class="points lc">
                                     {{ leader_user.coins }}
+                                    {% if forloop.first %}
                                     <img class="gold-medal"
                                         src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true"
-                                        alt="gold medal"/>
+                                        alt="gold medal" />
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
@@ -149,5 +164,89 @@
                 </main>
             </div>
         </div>
-        {% endblock content %}
+    </div>
+</div>
+{% endblock content %}
+
+<script>
+    $(document).ready(function(){
+        var data_subjects = {{ subject_name|safe }};
+        var data_present = {{ data_present }};
+        var data_absent = {{ data_absent }};
+      //Data Set for Pie chart
+      var pieData = {
+        labels: [
+            'PRESENT',
+            'ABSENT',
+            'TOTAL ATTENDANCE'
+        ],
+        datasets: [
+          {
+            data: [{{ attendance_present }},{{ attendance_absent }},{{ attendance_total }}],
+            backgroundColor : ['#00a65a','#f56954','#00c0ef'],
+          }
+        ]
+      };
+
+      var areaChartData = {
         
+        labels  : data_subjects,
+        datasets: [
+          {
+            label               : 'Present In Class',
+            backgroundColor     : 'rgba(60,141,188,0.9)',
+            borderColor         : 'rgba(60,141,188,0.8)',
+            pointRadius          : false,
+            pointColor          : '#3b8bba',
+            pointStrokeColor    : 'rgba(60,141,188,1)',
+            pointHighlightFill  : '#fff',
+            pointHighlightStroke: 'rgba(60,141,188,1)',
+            data                : data_present,
+          },
+          {
+            label               : 'Absent In Class',
+            backgroundColor     : 'rgba(210, 214, 222, 1)',
+            borderColor         : 'rgba(210, 214, 222, 1)',
+            pointRadius         : false,
+            pointColor          : 'rgba(210, 214, 222, 1)',
+            pointStrokeColor    : '#c1c7d1',
+            pointHighlightFill  : '#fff',
+            pointHighlightStroke: 'rgba(220,220,220,1)',
+            data                : data_absent,
+          },
+        ]
+      }
+
+      var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+      var pieOptions     = {
+        maintainAspectRatio : false,
+        responsive : true,
+      }
+      //Create pie or douhnut chart
+      // You can switch between pie and douhnut using the method below.
+      new Chart(pieChartCanvas, {
+        type: 'pie',
+        data: pieData,
+        options: pieOptions
+      });
+
+      var barChartCanvas = $('#barChart').get(0).getContext('2d')
+      var barChartData = $.extend(true, {}, areaChartData)
+      var temp0 = areaChartData.datasets[0]
+      var temp1 = areaChartData.datasets[1]
+      barChartData.datasets[0] = temp1
+      barChartData.datasets[1] = temp0
+
+      var barChartOptions = {
+        responsive              : true,
+        maintainAspectRatio     : false,
+        datasetFill             : false
+      }
+
+      new Chart(barChartCanvas, {
+        type: 'bar',
+        data: barChartData,
+        options: barChartOptions
+      })
+    })
+  </script>

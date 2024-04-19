@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="row">
-    {% for prod in produces %}
+    {% for prod,m_status in zipped_value %}
     <div class="col-md-3 col-sm-6">
         <div class="product-grid">
             <div class="product-image">
@@ -13,10 +13,11 @@
                     <img class="pic-1" src="{{prod.product_image.url}}">
                     <img class="pic-2" src="{{prod.product_image.url}}">
                 </a>
-                <ul class="product-links">
-                    <li><a href="{% url 'chat:startmessages' prod.user.id %}" data-tip="message"><i class="fas fa-sms"></i></a></li>
-                    <li><a href="#" data-tip="call"><i class="fas fa-phone"></i></a></li>
-                </ul>
+                {% if not m_status %}
+                    <ul class="product-links">
+                        <li><a href="{% url 'chat:startmessages' prod.user.id prod.id %}" data-tip="message"><i class="fas fa-sms"></i></a></li>
+                    </ul>
+                {% endif %}
             </div>
             <div class="product-content">
                 <div class="d-flex justify-content-between align-items-center">
