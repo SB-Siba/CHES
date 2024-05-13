@@ -22,9 +22,9 @@
                     <tr>
                         <td>{{ order.id }}</td>
                         <td>{{ order.product_name }}</td>
-                        <td>{{ order.product_quantity }}</td>
+                        <td>{{ order.quantity_buyer_want }}</td>
                         <td>{{ order.SI_units }}</td>
-                        <td>{{ order.ammount_in_green_points }}</td>
+                        <td>{{ order.ammount_based_on_quantity_buyer_want }}</td>
                         
                         <td>
                             {% if order.buying_status == "BuyCompleted" %}

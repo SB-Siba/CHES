@@ -51,7 +51,7 @@ class Register(View):
                 user_obj.save()
                 request.session['full_name'] = full_name
                 messages.success(request,"You have registered successfully. Wait for admin's approval.")
-                return redirect('app_common:gardeningdetails')
+                return redirect('app_common:gardeningdetails',email)
             except:
                 messages.error(request,'Failed to register')
                 return redirect('app_common:register')
@@ -111,11 +111,10 @@ class GardeningDetails(View):
     template = app + "gardening_details.html"
     form_class = forms.GardeningForm
 
-    def get(self,request):
-        full_name = request.session.get('full_name')
-        print(full_name)
+    def get(self,request,u_email):
+        print(u_email)
         try:
-            user_obj = models.User.objects.get(full_name = full_name)
+            user_obj = models.User.objects.get(email = u_email)
             form = self.form_class(instance=user_obj)
             context={'form':form}
         except self.model.DoesNotExist:
@@ -123,11 +122,10 @@ class GardeningDetails(View):
         
         return render(request, self.template, context)     
 
-    def post(self,request):
+    def post(self,request,u_email):
         form = self.form_class(request.POST,request.FILES)
-        full_name = request.session.get('full_name')
         if form.is_valid():
-            user_obj = models.User.objects.get(full_name = full_name)
+            user_obj = models.User.objects.get(email = u_email)
 
             garden_area = form.cleaned_data['garden_area']
             number_of_plants = form.cleaned_data['number_of_plants']
@@ -139,7 +137,7 @@ class GardeningDetails(View):
                 gardening_obj = self.model(user = user_obj,garden_area = garden_area,number_of_plants = number_of_plants,number_of_unique_plants = number_of_unique_plants,garden_image = garden_image)
                 gardening_obj.save()
                 messages.success(request,'Data Added Successfully')
-                return redirect('app_common:gardeningquiz')
+                return redirect('app_common:gardeningquiz',u_email)
             except:
                 messages.error(request,'Failed to Add data')
                 return redirect('app_common:gardeningdetails')
@@ -148,12 +146,12 @@ class GardeningDetails(View):
             return redirect('app_common:gardeningdetails')
 
 
-def gardening_quiz_view(request):
+def gardening_quiz_view(request,u_email):
+    print(u_email)
     if request.method == 'POST':
-        full_name = request.session.get('full_name')
         form = forms.GardeningQuizForm(request.POST)
         if form.is_valid():
-            user_obj = models.User.objects.get(full_name = full_name)
+            user_obj = models.User.objects.get(email = u_email)
             q1 = form.cleaned_data['q1']
             q2 = form.cleaned_data['q2']
             q3 = form.cleaned_data['q3']
@@ -174,8 +172,11 @@ def gardening_quiz_view(request):
             return redirect('app_common:login')
     else:
         form = forms.GardeningQuizForm()
-    
-    return render(request, 'app_common/gardening_quiz.html', {'form': form})
+        context={
+            "form":form,
+            "u_email":u_email
+            }
+    return render(request, 'app_common/gardening_quiz.html', context)
 
 class Home(View):
     template = app + 'index.html'

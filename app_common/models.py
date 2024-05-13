@@ -117,6 +117,8 @@ class UserActivity(models.Model):
     activity_content = models.TextField(null=True,blank=True)
     activity_image = models.ImageField(upload_to='activity/',null=True, blank=True)
     date_time = models.DateTimeField(auto_now_add=True)
+    likes = models.JSONField(default=list,null=True, blank=True)
+    comments = models.JSONField(default=list,null=True, blank=True)
     is_accepted = models.CharField(max_length=10, choices= ACCEPTREJECT, default='pending')
     reject_reason = models.TextField(null=True, blank=True)
 
@@ -170,7 +172,7 @@ class SellProduce(models.Model):
         if self.validity_end_date:
             delta = self.validity_end_date - timezone.now()
             remaining_days = max(0, delta.days)
-            if remaining_days == 0:
+            if remaining_days == 0 or  self.product_quantity == 0.0:
                 self.delete()
             return remaining_days
         return 0

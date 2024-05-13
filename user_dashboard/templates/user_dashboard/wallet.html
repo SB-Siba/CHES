@@ -55,7 +55,7 @@
         {% for i,j in main_obj %}
         <tr style="color: black;">
           <td style="font-size: small;">{{i.product_name}}</td>
-          <td style="font-size: small;">{{i.product_quantity}}&nbsp;{{i.SI_units}}</td>
+          <td style="font-size: small;">{{i.quantity_buyer_want}}&nbsp;{{i.SI_units}}</td>
           {% if j %}
           <td style="font-size: small;" class="text-danger">- {{i.ammount_based_on_quantity_buyer_want}}</td>
           {% else %}
@@ -124,7 +124,7 @@
                           <div class="d-flex justify-content-between border-bottom pb-2 px-3">
                             <div class="mt-3">
                               <span class="title">{{i.product_name}}</span>
-                              <span class="title mx-5">{{i.product_quantity}}&nbsp;{{i.SI_units}}</span>
+                              <span class="title mx-5">{{i.quantity_buyer_want}}&nbsp;{{i.SI_units}}</span>
                             </div>
                             <div class="mt-3">
                               <span class="value">{{i.ammount_based_on_quantity_buyer_want}} /-</span>

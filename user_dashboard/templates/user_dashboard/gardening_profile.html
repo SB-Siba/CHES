@@ -134,17 +134,23 @@
     <form method="post">
         <div class="row">
             <div class="col-md-4">
-                <div class="profile-img">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt=""/>
-                </div>
+                {% if garden_profile_obj.user.user_image %}
+                    <div class="profile-img">
+                        <img src="{{garden_profile_obj.user.user_image.url}}" alt=""/>
+                    </div>
+                {% else %}
+                    <div class="profile-img">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt=""/>
+                    </div>
+                {% endif %}
             </div>
             <div class="col-md-8">
                 <div class="profile-head">
                     <h3>
-                        Sathi Sarkar
+                        {{garden_profile_obj.user.full_name}}
                     </h3>
                     <p>
-                        sathi@gmail.com
+                        {{garden_profile_obj.user.email}}
                     </p>
                 </div>
                 <div class="tab-content profile-tab mt-5" id="myTabContent">

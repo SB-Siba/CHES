@@ -65,6 +65,13 @@
                 </div>
             </div>
         </li>
+        
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'user_dashboard:allposts' %}">
+                <img src="{% static 'user_dashboard\img\posts.png' %}" class="text-info" alt="" style="height: 15px;">
+                <span>Posts</span>
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link" href="{% url 'user_dashboard:walletpage' %}">
                 <i class="fa-solid fa-wallet"></i>
@@ -73,23 +80,29 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{% url 'chat:all_messages' %}">
-                <i class="fa-solid fa-wallet"></i>
+                <i class="fa-solid fa-message"></i>
                 <span> Messages</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'user_dashboard:buybeginsbuyerview' %}">
-                <i class="fa-solid fa-wallet"></i>
-                <span> Buying Progress</span>
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFive"
+                aria-expanded="true" aria-controls="collapseTwo">
+                <img src="{% static 'user_dashboard\img\buy_sell.png' %}" class="text-info" alt="" style="height: 15px;">
+                <span>Buy/Sell Progress</span>
             </a>
+            <div id="collapseFive" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="{% url 'user_dashboard:buybeginsbuyerview' %}">
+                        <img src="{% static 'user_dashboard\img\buy.png' %}" class="text-info" alt="" style="height: 15px;">
+                            <span>Buying Progress</span>
+                    </a>
+                    <a class="collapse-item" href="{% url 'user_dashboard:buybeginssellerview' %}">
+                        <img src="{% static 'user_dashboard\img\sell.png' %}" class="text-info" alt="" style="height: 15px;">
+                            <span>Selling Progress</span>
+                    </a>
+                </div>
+            </div>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'user_dashboard:buybeginssellerview' %}">
-                <i class="fa-solid fa-wallet"></i>
-                <span> Selling Progress</span>
-            </a>
-        </li>
-
         <!-- Nav Item - Tables -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
