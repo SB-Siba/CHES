@@ -522,7 +522,7 @@ class AllPosts(View):
         # activity.likes = []
         # activity.save()
 
-        posts = self.model.objects.all().order_by("-id")
+        posts = self.model.objects.filter(is_accepted = "approved").order_by("-id")
         posts_list = []
         like_list = []
         like_count_per_activity = []

@@ -4,16 +4,6 @@
 {% block title %}Wallet Page{% endblock title %}
 
 {% block content %}
-<!-- <div class="container">
-    <div class="d-flex justify-content-between">
-      <div class="" style="font-weight: bolder; font-size: larger;">
-        My Wallet Balance
-      </div>
-      <div>
-        <i class="fa-solid fa-coins fa-2x text-success"></i> <span class="mx-2 text-success" style="font-weight: bold;">{{request.user.wallet}}</span>
-      </div>
-    </div>
-</div> -->
 <section class="main">
   <div class="main-top">
     <h1>My Wallet</h1>
@@ -70,16 +60,16 @@
         <div class="modal fade" id="transactionModal{{ forloop.counter }}" tabindex="-1" role="dialog"
           aria-labelledby="transactionModalLabel{{ forloop.counter }}" aria-hidden="true">
           <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content mainn">
               <div class="row">
                 <div class="receipt-main col-xs-12 col-sm-12 col-md-12">
                   <div class="row">
                     <div class="receipt-header d-flex justify-content-between">
                       <div class="col-xs-6 col-sm-6 col-md-6">
                         <div class="receipt-left">
-                          <img class="img-responsive" alt="iamgurdeeposahan"
-                            src="https://bootdey.com/img/Content/avatar/avatar6.png"
-                            style="width: 71px; border-radius: 43px;">
+                          <img class="img-responsive" alt="user-avatar"
+                            src="{% static 'user_dashboard/img/g_logo2.png' %}"
+                            style="width: 100px; border-radius: 100px;">
                         </div>
                       </div>
                       <div class="col-xs-6 col-sm-6 col-md-6 text-right">
@@ -145,19 +135,17 @@
                       </div>
                       <div class="col-xs-4 col-sm-4 col-md-4">
                         <div class="d-flex justify-content-end">
-                          <img class="img-responsive" alt="iamgurdeeposahan"
-                            src="{% static 'user_dashboard\img\tree_stamp.png' %}"
-                            style="width: 71px; border-radius: 43px;">
+                          <img class="img-responsive" alt="tree-stamp"
+                            src="{% static 'user_dashboard/img/g_logo1.png' %}"
+                            style="width: 100px; border-radius: 100px;">
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="d-flex justify-content-center">
-                    <button type="button" class="btn-lg btn-success pt-1 pb-1 px-2 pe-2" data-dismiss="modal"
-                      aria-label="Close">
-                      <span aria-hidden="true"><small>Close</small></span>
-                    </button>
-                  </div>
+                  <div class="content-block" style="box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px 0 20px;border-top:1px solid #dedede;" valign="top">
+                    <button class="downloadButton" data-counter="{{ forloop.counter }}">Download Invoice</button>
+                    <p style="margin-bottom: 5px;text-align: center;"><b>NOTE :</b> This is computer generated receipt and does not require physical signature.</p>
+                  </div> 
                 </div>
               </div>
             </div>
@@ -170,5 +158,40 @@
   </section>
 </section>
 
-
 {% endblock content %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll('.downloadButton').forEach(button => {
+          button.addEventListener('click', function() {
+              const counter = this.getAttribute('data-counter');
+              const modalContent = document.querySelector(`#transactionModal${counter} .modal-content`);
+
+              if (!modalContent) {
+                  console.error('Modal content not found for counter:', counter);
+                  return;
+              }
+
+              this.style.display = 'none';
+
+              domtoimage.toPng(modalContent)
+                  .then(function(dataUrl) {
+                      const { jsPDF } = window.jspdf;
+                      const pdf = new jsPDF();
+
+                      pdf.addImage(dataUrl, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+                      pdf.save('invoice.pdf');
+
+                      button.style.display = 'block';
+                  })
+                  .catch(function(error) {
+                      console.error('Error generating PDF:', error);
+                      button.style.display = 'block';
+                  }.bind(this));
+          });
+      });
+  });
+</script>  
+{% endblock scripts %}

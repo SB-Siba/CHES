@@ -50,7 +50,7 @@ class Register(View):
                 user_obj.set_password(password)
                 user_obj.save()
                 request.session['full_name'] = full_name
-                messages.success(request,"You have registered successfully. Wait for admin's approval.")
+                messages.success(request,"Now Please give your Gardening Details.")
                 return redirect('app_common:gardeningdetails',email)
             except:
                 messages.error(request,'Failed to register')
@@ -136,7 +136,7 @@ class GardeningDetails(View):
             try:
                 gardening_obj = self.model(user = user_obj,garden_area = garden_area,number_of_plants = number_of_plants,number_of_unique_plants = number_of_unique_plants,garden_image = garden_image)
                 gardening_obj.save()
-                messages.success(request,'Data Added Successfully')
+                messages.success(request,'Data Added Successfully.Now Please answer these questions.')
                 return redirect('app_common:gardeningquiz',u_email)
             except:
                 messages.error(request,'Failed to Add data')

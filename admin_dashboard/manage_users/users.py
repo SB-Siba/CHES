@@ -19,11 +19,15 @@ class PendingUser(View):
     def get(self, request):
         not_approvedlist = self.model.objects.filter(is_approved=False).order_by('-id')
         garden_details_list = []
-        for i in not_approvedlist:
-            garden_details = models.GardeningProfile.objects.get(user = i)
-            garden_details_list.append(garden_details)
-        data = zip(not_approvedlist,garden_details_list)
-       
+        try:
+            for i in not_approvedlist:
+                garden_details = models.GardeningProfile.objects.get(user = i)
+                garden_details_list.append(garden_details)
+            data = zip(not_approvedlist,garden_details_list)
+        except Exception:
+            garden_details_list = []
+            data = zip(not_approvedlist,garden_details_list)
+    
         return render(request,self.template,locals())
         
 def ApproveUser(request, pk):
