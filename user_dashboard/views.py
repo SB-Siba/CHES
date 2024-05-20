@@ -43,7 +43,8 @@ class UserProfile(View):
     template = app + "user_profile.html"
 
     def get(self,request):
-        return render(request,self.template)
+        rating_of_user = request.user.calculate_avg_rating()
+        return render(request,self.template,locals())
 
 
 class UpdateProfileView(View):
@@ -178,6 +179,10 @@ class GardeningProfie(View):
         user = request.user
         try:
             garden_profile_obj = self.model.objects.get(user=user)
+            garden_area = garden_profile_obj.garden_area
+            # Assume each tree needs 4 square ft and each pot needs 1 square ft
+            trees = garden_area // 4
+            pots = garden_area // 1
         except self.model.DoesNotExist:
             garden_profile_obj = None
         return render(request,self.template,locals())
@@ -364,6 +369,7 @@ class GreenCommerceProductCommunity(View):
 
     def get(self,request):
         produce_obj = self.model.objects.exclude(user=request.user).filter(is_approved="approved").order_by("-date_time")
+        ratings_list = [i.user.calculate_avg_rating() for i in produce_obj]
         message_status = []
         for i in produce_obj:
             msg_obj = Message.objects.filter(Q(receiver=i.user,sender=request.user) | Q(receiver=request.user,sender=i.user))
@@ -372,7 +378,7 @@ class GreenCommerceProductCommunity(View):
             else:
                 message_status.append(False)
        
-        zipped_value = zip(produce_obj,message_status)
+        zipped_value = zip(produce_obj,message_status,ratings_list)
         context={'zipped_value':zipped_value,'form':self.form}
         return render(request,self.template,context)
 
@@ -509,9 +515,32 @@ class AllOrders(View):
     template = app + "all_orders.html"
     model = app_commonmodels.ProduceBuy
 
-    def get(self,request):
-        orders = self.model.objects.filter(buyer = request.user)
-        return render(request , self.template , {'orderlist' : orders})
+    def get(self, request):
+        orders = self.model.objects.filter(buyer=request.user)
+        orders_list = []
+        ratings_given = []
+        
+        encountered_sellers = set()  # Track encountered sellers to avoid duplicates
+
+        for order in orders:
+            orders_list.append(order)
+            seller = order.seller
+            
+            
+            # Check if we've already processed ratings for this seller
+            if order.id not in encountered_sellers:
+                encountered_sellers.add(order.id)
+                ratings = seller.ratings
+                
+                # Check if the buyer has given ratings to this seller
+                rating_given = any(rating['buyer_name'] == request.user.full_name for rating in ratings)
+                if rating_given:
+                    ratings_given.append("Given")
+                else:
+                    ratings_given.append("NotGiven")
+        
+        order_and_ratings = zip(orders_list,ratings_given)
+        return render(request , self.template , {'order_and_ratings' : order_and_ratings})
     
 class AllPosts(View):
     template = app + "all_posts.html"
@@ -540,7 +569,7 @@ class AllPosts(View):
                 comment_count_per_activity.append(len(i.comments))
                 like_list.append(0)
      
-        print(posts_list,"\n",like_list,"\n",like_count_per_activity,"\n",comment_count_per_activity)
+        # print(posts_list,"\n",like_list,"\n",like_count_per_activity,"\n",comment_count_per_activity)
         post_and_like = zip(posts_list,like_list,like_count_per_activity,comment_count_per_activity)
         return render(request , self.template ,locals())
     
@@ -590,3 +619,28 @@ def get_all_comments(request):
         return JsonResponse(comments_data, safe=False)
     else:
         return JsonResponse([], safe=False)
+
+class RateOrder(View):
+    model = app_commonmodels.ProduceBuy
+
+    def post(self,request):
+        order_id = request.POST.get("order_id")
+        rating = request.POST.get("rating")
+        # print(order_id,rating)
+        buy_obj = get_object_or_404(self.model,id = order_id)
+        seller = buy_obj.seller
+        buyer = buy_obj.buyer
+        if seller.ratings is None:
+            seller.ratings = []
+
+        new_rating = {
+            "buyer_name": buyer.full_name,
+            "order_product": buy_obj.product_name,
+            "quantity": buy_obj.quantity_buyer_want,
+            "ammount_paid": buy_obj.ammount_based_on_quantity_buyer_want,
+            "rating": rating,
+        }
+        seller.ratings.append(new_rating)
+        
+        seller.save()
+        return redirect('user_dashboard:allorders')

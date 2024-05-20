@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="row">
-    {% for prod,m_status in zipped_value %}
+    {% for prod,m_status,u_rating in zipped_value %}
     <div class="col-md-3 col-sm-6">
         <div class="product-grid">
             <div class="product-image">
@@ -105,26 +105,35 @@
                                                 <div class="mb-0 list-unstyled d-flex flex-row" style="color: yellow;">
                                                     <li>
                                                         <small>
-                                                            <p class="mb-2 h5">{{user.wallet}}</p>
+                                                            <p class="mb-2 h5">{{prod.user.wallet}}</p>
                                                             <p class="text-white mb-0">Wallets Balance</p>
                                                         </small>
                                                     </li>
                                                     <li>
                                                         <small>
-                                                            <p class="mb-2 h5">{{user.coins}}</p>
+                                                            <p class="mb-2 h5">{{prod.user.coins}}</p>
                                                             <p class="text-white mb-0">Total Coins</p>
                                                         </small>
                                                     </li>
                                                     <li class="px-3">
                                                         <small>
-                                                            <p class="mb-2 h5">{{user.total_income}}</p>
+                                                            <p class="mb-2 h5">{{prod.user.total_income}}</p>
                                                             <p class="text-white mb-0">Income amounts</p>
                                                         </small>
                                                     </li>
                                                     <li>
                                                         <small>
-                                                            <p class="mb-2 h5">{{user.total_invest}}</p>
+                                                            <p class="mb-2 h5">{{prod.user.total_invest}}</p>
                                                             <p class="text-white mb-0">Total Purchase Ammount</p>
+                                                        </small>
+                                                    </li>
+                                                    <li>
+                                                        <small>
+                                                            <div class="d-flex">
+                                                                <p class="mb-2 h5">{{u_rating}}</p>
+                                                                <i class="fas fa-star text-warning mt-1 mx-1"></i>
+                                                            </div>
+                                                            <p class="text-white mb-0">Ratings</p>
                                                         </small>
                                                     </li>
                                                 </div>
