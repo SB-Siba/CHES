@@ -1,0 +1,35 @@
+{% extends 'app_common/authentication/master.html' %}
+{% block title %}SignUp{% endblock title %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <div class="row d-flex align-items-center justify-content-center mb-5">
+            <div class="col-lg-6">
+                <div class="login">
+                    <div
+                        class="d-flex justify-space-between"
+                        style="align-items: center;justify-content: space-evenly;">
+                        <div class="auth_reg_logo">
+                            <img src="{% static 'user_dashboard/images/green-logo.png' %}"/>
+                        </div>
+                        <div>
+                            <h3>Vendor Details</h3>
+                        </div>
+                    </div>
+                   
+                    <form method="post" action="" class="p-4" enctype="multipart/form-data">
+                        {% include 'app_common/snippets/alert.html' %}
+                        {% csrf_token %}
+                        {{form.as_p}}
+                        <div style="text-align:center;">
+                            <button class="log_btn" type="submit">
+                                Add data
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

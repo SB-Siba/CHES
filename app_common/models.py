@@ -47,6 +47,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_approved = models.BooleanField(default=False)
 
+    is_gardener = models.BooleanField(default=False)
+    is_vendor = models.BooleanField(default=False)
+
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
@@ -223,3 +226,30 @@ class ProduceBuy(models.Model):
     ammount_based_on_quantity_buyer_want = models.PositiveBigIntegerField(default=0,null=True,blank=True)
     payment_link = models.CharField(max_length=20, choices=PAYMENTLINK,default="NotAvailable")
     date_time = models.DateTimeField(auto_now_add=True)
+
+class VendorDetails(models.Model):
+    BUSINESS_CATEGORIES = (
+        ('plants', 'Plants'),
+        ('tools', 'Tools'),
+        ('seeds', 'Seeds'),
+        ('other', 'Other'),
+    )
+    vendor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='vendor_details')
+    business_name = models.CharField(max_length=255)
+    business_address = models.CharField(max_length=255)
+    business_description = models.TextField()
+    business_license_number = models.CharField(max_length=50)
+    business_category = models.CharField(max_length=20, choices=BUSINESS_CATEGORIES)
+    establishment_year = models.PositiveIntegerField()
+    website = models.URLField(blank=True)
+    established_by = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        if self.vendor:
+            return f"{self.business_name} - {self.vendor.full_name}"
+        return self.business_name
+    
+    def get_vendor_rating(self):
+        if self.vendor:
+            return self.vendor.calculate_avg_rating()
+        return 0

@@ -18,16 +18,31 @@ class PendingUser(View):
     
     def get(self, request):
         not_approvedlist = self.model.objects.filter(is_approved=False).order_by('-id')
+        gardener_list = []
+        vendor_list = []
         garden_details_list = []
+        vendor_details_list = []
         try:
             for i in not_approvedlist:
-                garden_details = models.GardeningProfile.objects.get(user = i)
-                garden_details_list.append(garden_details)
-            data = zip(not_approvedlist,garden_details_list)
+                if i.is_gardener == True:
+                    gardener_list.append(i)
+                    garden_details = models.GardeningProfile.objects.get(user = i)
+                    garden_details_list.append(garden_details)
+                elif i.is_vendor == True:
+                    vendor_list.append(i)
+                    vendor_details = models.VendorDetails.objects.get(vendor = i)
+                    vendor_details_list.append(vendor_details)
+            garden_data = zip(gardener_list,garden_details_list)
+            vendor_data = zip(vendor_list,vendor_details_list)
+
         except Exception:
+            gardener_list = []
+            vendor_list = []
             garden_details_list = []
-            data = zip(not_approvedlist,garden_details_list)
-    
+            vendor_details_list = []
+            garden_data = zip(gardener_list,garden_details_list)
+            vendor_data = zip(vendor_list,vendor_details_list)
+        
         return render(request,self.template,locals())
         
 def ApproveUser(request, pk):
@@ -55,15 +70,31 @@ def RejectUser(request, pk):
         messages.error(request,msg)
     return redirect("admin_dashboard:pending_user") 
 
-class UserList(View):
-    template = app + "user_list.html"
+class GardenerList(View):
+    template = app + "gardener_list.html"
     model = models.User
     form_class = forms.WalletBalanceAdd
 
     def get(self, request):
         page = request.GET.get('page',1)
 
-        user_list= self.model.objects.filter(is_approved=True,is_superuser = False).order_by("-id")
+        user_list= self.model.objects.filter(is_approved=True,is_superuser = False,is_gardener = True).order_by("-id")
+        paginated_data = utils.paginate(request, user_list, 25, page)
+        context = {
+            "user_list":paginated_data,
+            'data_list':paginated_data,
+            'form':self.form_class,
+        }
+        return render(request, self.template, context)
+class VendorList(View):
+    template = app + "vendor_list.html"
+    model = models.User
+    form_class = forms.WalletBalanceAdd
+
+    def get(self, request):
+        page = request.GET.get('page',1)
+
+        user_list= self.model.objects.filter(is_approved=True,is_superuser = False,is_vendor = True).order_by("-id")
         paginated_data = utils.paginate(request, user_list, 25, page)
         context = {
             "user_list":paginated_data,
@@ -88,6 +119,14 @@ class UserGardeningDetails(View):
     def get(self, request, pk):
         user = get_object_or_404(models.User, id=pk)
         gardening_data = get_object_or_404(models.GardeningProfile, user=user)
+
+        return render(request, self.template, locals())
+    
+class VendorDetails(View):
+    template = app + "vendor_data.html"
+    def get(self, request, pk):
+        user = get_object_or_404(models.User, id=pk)
+        vendor_data = get_object_or_404(models.VendorDetails, vendor=user)
 
         return render(request, self.template, locals())
     

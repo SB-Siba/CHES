@@ -29,11 +29,17 @@
         </li>
 
       <li class="nav-item">
-          <a class="nav-link" href="{% url 'admin_dashboard:users_list' %}">
+          <a class="nav-link" href="{% url 'admin_dashboard:gardeners_list' %}">
               <i class="fa-solid fa-wallet"></i>
-              <span>Users</span>
+              <span>Gardeners</span>
           </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_dashboard:vendors_list' %}">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Vendors</span>
+        </a>
+    </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'admin_dashboard:gardeningprofileupdaterequest' %}">
             <i class="fa-solid fa-wallet"></i>

@@ -27,18 +27,18 @@
         </div>
         
         <div class="table-responsive">
-            <div> 
+            <!-- <div> 
                 <a href="{% url 'admin_dashboard:add_user'%}">
                     <button class="btn new-user-btn">Create New User</button>
                 </a>
-            </div>
+            </div> -->
             <table class="table table-hover table-nowrap">
                 <thead class="table-light">
                     <tr>
                         <th scope="col">User-ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Wallet Balance</th>
-                        <th scope="col">Gardening Details</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Vendor Details</th>
                         <th scope="col">Active Status</th>
                         <th scope="col">Last Login</th>
                         <th>Action</th>
@@ -49,8 +49,8 @@
                     <tr>
                         <td>{{ user.id }}</td>
                         <td>{{ user.full_name }}</td>
-                        <td>{{ user.wallet }}</td>
-                        <td><a href="{% url 'admin_dashboard:gardening_details' user.id %}">Gardening Details</a></td>
+                        <td>{{ user.email }}</td>
+                        <td><a href="{% url 'admin_dashboard:vendor_details' user.id %}">Vendor Details</a></td>
                         <td>{{ user.is_active }}</td>
                         <td>{{ user.last_login }}</td>
                         <td>
