@@ -1,0 +1,113 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block title %}Produce Sell Request List{% endblock title %}
+
+{% block content %}
+    <div class="page-wapper">
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="search_sec">
+            <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
+                {% csrf_token %}
+                <div class="table_search_box">
+                    <select class="form-control selects" name="search_by" aria-label="Default select example">
+                        <option value="email">Email</option>
+                        <option value="contact">Contact</option>
+                    </select>
+                    <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query" required/>
+                    <button class="btn qry-sub" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Vendor Email</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Quantity</th> 
+                        <th scope="col">Disc. Price</th>
+                        <th scope="col">Max Price</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sell_request in sell_request_obj %}
+                    <tr>
+                        <td>{{ sell_request.id }}</td>
+                        <td>{{ sell_request.vendor.email }}</td>
+                        <td>{{ sell_request.name }}</td>
+                        <td>{{ sell_request.quantity }}</td>
+                        <td>{{ sell_request.discount_price }}</td>
+                        <td>{{ sell_request.max_price }}</td>
+                        <td><img src="{{ sell_request.image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class="zoom"></td>
+                        <td>
+                            <div class="d-flex justify-content-around">
+                                <span class="btn btn-success" data-toggle="modal" data-target="#approveModal_{{ sell_request.id }}"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+                                <span class="btn btn-danger mx-1" data-toggle="modal" data-target="#rejectModal_{{ sell_request.id }}"><i class="fa fa-ban" aria-hidden="true"></i></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Reject Modal -->
+                    <div class="modal fade" id="rejectModal_{{ sell_request.id }}" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="rejectModalLabel">Give Reason</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                             <form action="{% url 'admin_dashboard:vendor_rejectpsellrequest' %}" method="post">
+                                {% csrf_token %}
+                                <input name="sell_id" value="{{ sell_request.id }}" type="number" class="form-control" hidden/>
+                                <input name="reason" type="text" class="form-control"/>
+                                <div style="text-align: center;">
+                                    <button class="btn btn-outline-danger mt-2" type="submit">
+                                        Add Reason
+                                    </button>
+                                </div>
+                             </form>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <!-- Approve Modal -->
+                    <div class="modal fade" id="approveModal_{{ sell_request.id }}" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="approveModalLabel">Give Reason</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                             <form action="{% url 'admin_dashboard:vendor_approvesellrequest' %}" method="post">
+                                {% csrf_token %}
+                                <input name="sell_id" value="{{ sell_request.id }}" type="number" class="form-control" hidden/>
+                                <input name="reason" type="text" class="form-control"/>
+                                <div style="text-align: center;">
+                                    <button class="btn btn-outline-success mt-2" type="submit">
+                                        Say Something
+                                    </button>
+                                </div>
+                             </form>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+<script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
+{% endblock js %}

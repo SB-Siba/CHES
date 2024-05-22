@@ -100,6 +100,10 @@ class Login(View):
             elif user.is_approved == True and user.is_gardener == True:
                 auth.login(request,user)
                 return redirect('user_dashboard:user_dashboard')
+            
+            elif user.is_approved == True and user.is_vendor == True:
+                auth.login(request,user)
+                return redirect('vendor_dashboard:vendor_dashboard')
             else:
                 messages.error(request,"Your account hasn't been approved yet.")
                 return redirect('app_common:login')

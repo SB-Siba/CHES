@@ -253,3 +253,36 @@ class VendorDetails(models.Model):
         if self.vendor:
             return self.vendor.calculate_avg_rating()
         return 0
+    
+
+class ProductFromVendor(models.Model):
+    CATEGORY_CHOICES = [
+        ('seeds', 'Seeds'),
+        ('plants', 'Plants'),
+        ('tools', 'Gardening Tools'),
+        ('fertilizers', 'Fertilizers'),
+        ('pots_containers', 'Pots & Containers'),
+        ('pest_control', 'Pest Control'),
+        ('irrigation', 'Irrigation Systems'),
+        ('garden_decor', 'Garden Decor'),
+        # Add more gardening-specific categories as needed
+    ]
+    APPROVEREJECT = (
+        ("approved","approved"),
+        ("rejected","rejected"),
+        ("pending","pending")
+    )
+    
+    vendor = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    discount_price = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
+    max_price = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
+    image = models.ImageField(upload_to='vendor_products/', null=True, blank=True)
+    quantity = models.IntegerField(default=0)
+    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
+    is_approved = models.CharField(max_length=10, choices= APPROVEREJECT, default='pending')
+    reason = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name} --> {self.vendor.full_name}"

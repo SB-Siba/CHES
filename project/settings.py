@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'channels',
     'chatapp',
+    'vendor_dashboard',
 ]
 
 MIDDLEWARE = [

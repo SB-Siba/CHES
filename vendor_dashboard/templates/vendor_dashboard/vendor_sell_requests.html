@@ -1,0 +1,85 @@
+{% extends 'vendor_dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="mt-2">
+    {% include 'app_common/snippets/alert.html' %}
+    <div class="table-responsive">
+        <table class="table table-hover table-nowrap">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th> 
+                    <th scope="col">Disc. Price</th>
+                    <th scope="col">Max Price</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sell_request in req_obj %}
+                <tr>
+                    <td>{{ sell_request.id }}</td>
+                    <td>{{ sell_request.name }}</td>
+                    <td>{{ sell_request.quantity }}</td>
+                    <td>{{ sell_request.discount_price }}</td>
+                    <td>{{ sell_request.max_price }}</td>
+                    <td><img src="{{ sell_request.image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class="zoom"></td>
+                    
+                    <td>
+                        {% if sell_request.is_approved == "approved" %}
+                            <abbr title="Click To See The Reason" style="font-size: 1.5rem;"><span class="text-success btn" data-bs-toggle="modal" data-bs-target="#modalapprove_{{sell_request.id}}">Approved</span></abbr>
+                        {% elif sell_request.is_approved == "rejected" %}
+                            <abbr title="Click To See The Reason" style="font-size: 1.5rem;"><span class="text-danger btn" data-bs-toggle="modal" data-bs-target="#modalreject_{{sell_request.id}}">Rejected</span></abbr>
+                        {% else %}
+                            <abbr title="Click To See The Reason" style="font-size: 1.5rem;"><span class="text-warning btn" data-bs-toggle="modal" data-bs-target="#modalpending_{{sell_request.id}}">Pending</span></abbr>
+                        {% endif %}
+                    </td>
+                </tr>
+                <div class="modal fade" id="modalapprove_{{sell_request.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Reject Reason</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center text-success" style="font-size: larger;">
+                            {{sell_request.reason}}
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="modalreject_{{sell_request.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Approve Reason</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center text-danger" style="font-size: larger;">
+                            {{sell_request.reason}}
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="modalpending_{{sell_request.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Pending</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-center text-warning" style="font-size: larger;">
+                            Not Approvede by admin yet.
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% include 'app_common/snippets/pagination.html' %}
+    </div>
+</div>
+{% endblock main_content %}

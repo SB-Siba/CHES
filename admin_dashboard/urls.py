@@ -31,10 +31,10 @@ urlpatterns = [
     path('sellrequest',users.UserProduceSellRequest.as_view(), name= 'sellrequest'),
     path('approvesellrequest',users.ApproveSellRequest, name= 'approvesellrequest'),
     path('rejectsellrequest',users.RejectSellRequest, name= 'rejectpsellrequest'),
-
-
-
-
+    # Vendor Section
+    path('vendor_sellrequest',users.VendorSellRequests.as_view(), name= 'vendor_sellrequest'),
+    path('vendor_approvesellrequest',users.ApproveVendorSellRequest, name= 'vendor_approvesellrequest'),
+    path('vendor_rejectsellrequest',users.RejectVendorSellRequest, name= 'vendor_rejectpsellrequest'),
 ]
 
 #  admin_dashboard:users_list

@@ -400,3 +400,51 @@ def RejectSellRequest(request):
             msg = 'This account does not exist.'
             messages.error(request,msg)
     return redirect("admin_dashboard:sellrequest") 
+
+
+# Vendor Section
+class VendorSellRequests(View):
+    template = app + "vendorsellrequests.html"
+    model = models.ProductFromVendor
+
+    def get(self, request):
+        sell_request_obj = self.model.objects.filter(is_approved='pending').order_by('-id')
+        return render(request, self.template, locals())
+    
+
+def ApproveVendorSellRequest(request):
+    if request.method == "POST":
+        sell_id = request.POST['sell_id']
+        reason = request.POST['reason']
+
+    sell_obj = get_object_or_404(models.ProductFromVendor,id = int(sell_id))
+
+    if sell_obj is not None:
+        sell_obj.is_approved = "approved"
+        sell_obj.reason = reason
+        sell_obj.save()
+        # Send email to the user that his/her request has been approved
+        
+    else:
+        msg = 'This account does not exist.'
+        messages.error(request,msg)
+
+    return redirect("admin_dashboard:vendor_sellrequest") 
+
+def RejectVendorSellRequest(request):
+    if request.method == "POST":
+        sell_id = request.POST['sell_id']
+        reason = request.POST['reason']
+        
+        sell_obj = get_object_or_404(models.ProductFromVendor,id = int(sell_id))
+        if sell_obj is not None:
+            sell_obj.is_approved = "rejected"
+            sell_obj.reason = reason
+            sell_obj.save()
+            
+            # send an email to the user with rejection message
+            messages.success(request,'The request has been rejected')
+        else:
+            msg = 'This account does not exist.'
+            messages.error(request,msg)
+    return redirect("admin_dashboard:vendor_sellrequest") 
