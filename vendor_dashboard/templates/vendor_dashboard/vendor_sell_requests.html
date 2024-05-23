@@ -10,7 +10,7 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Quantity</th> 
+                    <th scope="col">Stock</th> 
                     <th scope="col">Disc. Price</th>
                     <th scope="col">Max Price</th>
                     <th scope="col">Image</th>
@@ -22,7 +22,7 @@
                 <tr>
                     <td>{{ sell_request.id }}</td>
                     <td>{{ sell_request.name }}</td>
-                    <td>{{ sell_request.quantity }}</td>
+                    <td>{{ sell_request.stock }}</td>
                     <td>{{ sell_request.discount_price }}</td>
                     <td>{{ sell_request.max_price }}</td>
                     <td><img src="{{ sell_request.image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class="zoom"></td>

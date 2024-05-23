@@ -279,10 +279,27 @@ class ProductFromVendor(models.Model):
     discount_price = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
     max_price = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
     image = models.ImageField(upload_to='vendor_products/', null=True, blank=True)
-    quantity = models.IntegerField(default=0)
+    stock = models.IntegerField(default=0)
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
     is_approved = models.CharField(max_length=10, choices= APPROVEREJECT, default='pending')
     reason = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.name} --> {self.vendor.full_name}"
+    
+class Order(models.Model):
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='customerorders')
+    vendor = models.ForeignKey(User, on_delete=models.CASCADE,related_name='vendororders')
+    product = models.ForeignKey(ProductFromVendor, on_delete=models.CASCADE, related_name='orderproduct')
+    quantity = models.PositiveIntegerField(default=1)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, default='Pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        self.total_price = self.product.discount_price * self.quantity
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Order {self.id} by {self.customer.full_name} for {self.product.name}"

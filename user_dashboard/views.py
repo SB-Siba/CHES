@@ -644,3 +644,22 @@ class RateOrder(View):
         
         seller.save()
         return redirect('user_dashboard:allorders')
+    
+class VendorsProduct(View):
+    template = app + "vendor_products.html"
+    model = app_commonmodels.ProductFromVendor
+
+    def get(self,request):
+        products = self.model.objects.filter(is_approved="approved").order_by("-id")
+        ratings_list = [i.vendor.calculate_avg_rating() for i in products]
+        message_status = []
+        for i in products:
+            msg_obj = Message.objects.filter(Q(receiver=i.vendor,sender=request.user) | Q(receiver=request.user,sender=i.vendor))
+            if msg_obj:
+                message_status.append(True)
+            else:
+                message_status.append(False)
+       
+        zipped_value = zip(products,message_status,ratings_list)
+        context={'zipped_value':zipped_value}
+        return render(request,self.template,context)

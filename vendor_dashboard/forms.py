@@ -21,14 +21,14 @@ class VendorDetailsForm(forms.Form):
 class ProductFromVendorForm(forms.ModelForm):
     class Meta:
         model = common_model.ProductFromVendor
-        fields = ['name', 'description', 'discount_price', 'max_price', 'image', 'quantity', 'category']
+        fields = ['name', 'description', 'discount_price', 'max_price', 'image', 'stock', 'category']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'discount_price': forms.NumberInput(attrs={'class': 'form-control'}),
             'max_price': forms.NumberInput(attrs={'class': 'form-control'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),
-            'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
+            'stock': forms.NumberInput(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
         }
 
