@@ -97,6 +97,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         # Calculate average rating
         if num_ratings > 0:
             avg_rating = total_rating / num_ratings
+            avg_rating = round(avg_rating, 1)  # Round to 2 decimal places
         else:
             avg_rating = 0
 
@@ -218,9 +219,9 @@ class ProduceBuy(models.Model):
     # sell_produce = models.CharField(max_length=250, blank=True, null=True)
     sell_produce = models.ForeignKey(SellProduce,on_delete=models.SET_NULL, blank=True, null=True)
     product_name = models.CharField(max_length=250, blank=True, null=True)
-    product_quantity = models.FloatField(default=0.0,null=True,blank=True)
+    # product_quantity = models.FloatField(default=0.0,null=True,blank=True)
     SI_units = models.CharField(max_length=20, choices=SI_UNIT_CHOICES,default="Kilogram")
-    ammount_in_green_points = models.PositiveIntegerField(default=0,null=True,blank=True)
+    rating_given = models.BooleanField(default=False,null=True,blank=True)
     buying_status = models.CharField(max_length=20, choices=BUYINGSTATUS,null=True,blank=True)
     quantity_buyer_want = models.PositiveIntegerField(default=1,null=True,blank=True)
     ammount_based_on_quantity_buyer_want = models.PositiveBigIntegerField(default=0,null=True,blank=True)

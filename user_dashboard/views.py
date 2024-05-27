@@ -388,32 +388,37 @@ class BuyingBegins(View):
     
     def post(self,request,prod_id):
         user = request.user
-        buyer = app_commonmodels.User.objects.get(id = user.id)
-        sell_prod_obj = self.model.objects.get(id=prod_id)
-        seller = sell_prod_obj.user
-        product_quantity = sell_prod_obj.product_quantity
-        SI_units = sell_prod_obj.SI_units
-        ammount_in_green_points = sell_prod_obj.ammount_in_green_points
+        try:
+            buyer = app_commonmodels.User.objects.get(id = user.id)
+            sell_prod_obj = self.model.objects.get(id=prod_id)
+            seller = sell_prod_obj.user
+            product_quantity = sell_prod_obj.product_quantity
+            SI_units = sell_prod_obj.SI_units
+            ammount_in_green_points = sell_prod_obj.ammount_in_green_points
 
-        form_data = request.POST
-        quantity = int(form_data['quantity'])
-        
-        # print(type(prod_id),type(quantity))
-        if product_quantity >= quantity:
-            try:
-                if buyer.wallet >= ammount_in_green_points:
-                    buying_obj = app_commonmodels.ProduceBuy(buyer = buyer,seller = seller,sell_produce = sell_prod_obj,product_name = sell_prod_obj.product_name,product_quantity = product_quantity,SI_units = SI_units,ammount_in_green_points = ammount_in_green_points,buying_status = 'BuyInProgress',quantity_buyer_want = quantity)
-                    buying_obj.save()
-                    return redirect('user_dashboard:user_dashboard')
-                else:
-                    messages.error(request,"You don't have enough green points in your wallet!")
+            form_data = request.POST
+            quantity = int(form_data['quantity'])
+            
+            # print(type(prod_id),type(quantity))
+            if product_quantity >= quantity:
+                try:
+                    if buyer.wallet >= ammount_in_green_points:
+                        buying_obj = app_commonmodels.ProduceBuy(buyer = buyer,seller = seller,sell_produce = sell_prod_obj,product_name = sell_prod_obj.product_name,SI_units = SI_units,buying_status = 'BuyInProgress',quantity_buyer_want = quantity)
+                        buying_obj.save()
+                        return redirect('user_dashboard:user_dashboard')
+                    else:
+                        messages.error(request,"You don't have enough green points in your wallet!")
+                        return redirect('user_dashboard:greencommerceproducts')
+                except Exception as e:
+                    print(e)
                     return redirect('user_dashboard:greencommerceproducts')
-            except Exception as e:
-                print(e)
-                return redirect('user_dashboard:greencommerceproducts')
-        else:
-            messages.error(request,"The requested amount is not available.")
-            return redirect('user_dashboard:greencommerceproducts') 
+            else:
+                messages.error(request,"The requested amount is not available.")
+                return redirect('user_dashboard:greencommerceproducts') 
+        except self.model.DoesNotExist:
+            messages.error(request,"The product is not available.")
+            return redirect('user_dashboard:greencommerceproducts')
+
 
 
 class BuyBeginsSellerView(View):
@@ -517,30 +522,31 @@ class AllOrders(View):
 
     def get(self, request):
         orders = self.model.objects.filter(buyer=request.user)
-        orders_list = []
-        ratings_given = []
+        # orders_list = []
+        # ratings_given = []
         
-        encountered_sellers = set()  # Track encountered sellers to avoid duplicates
+        # encountered_sellers = set()  # Track encountered sellers to avoid duplicates
 
-        for order in orders:
-            orders_list.append(order)
-            seller = order.seller
+        # for order in orders:
+        #     orders_list.append(order)
+        #     seller = order.seller
             
             
-            # Check if we've already processed ratings for this seller
-            if order.id not in encountered_sellers:
-                encountered_sellers.add(order.id)
-                ratings = seller.ratings
-                
-                # Check if the buyer has given ratings to this seller
-                rating_given = any(rating['buyer_name'] == request.user.full_name for rating in ratings)
-                if rating_given:
-                    ratings_given.append("Given")
-                else:
-                    ratings_given.append("NotGiven")
-        
-        order_and_ratings = zip(orders_list,ratings_given)
-        return render(request , self.template , {'order_and_ratings' : order_and_ratings})
+        #     # Check if we've already processed ratings for this seller
+        #     if order.id not in encountered_sellers:
+        #         encountered_sellers.add(order.id)
+        #         print(encountered_sellers)
+        #         ratings = seller.ratings
+        #         print(ratings)
+        #         # Check if the buyer has given ratings to this seller
+        #         rating_given = any(rating['buyer_name'] == request.user.full_name for rating in ratings)
+        #         if rating_given:
+        #             ratings_given.append("Given")
+        #         else:
+        #             ratings_given.append("NotGiven")
+        # print(ratings_given)
+        # order_and_ratings = zip(orders_list,ratings_given)
+        return render(request , self.template , {'orders' : orders})
     
 class AllPosts(View):
     template = app + "all_posts.html"
@@ -641,7 +647,8 @@ class RateOrder(View):
             "rating": rating,
         }
         seller.ratings.append(new_rating)
-        
+        buy_obj.rating_given = True
+        buy_obj.save()
         seller.save()
         return redirect('user_dashboard:allorders')
     
