@@ -15,16 +15,17 @@
                         <th scope="col">Units</th>
                         <th scope="col">Ammount</th>
                         <th scope="col">Status</th>
+                        <th scope="col">Rating</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for order in orderlist %}
+                    {% for order,rating_given in order_and_ratings %}
                     <tr>
                         <td>{{ order.id }}</td>
                         <td>{{ order.product_name }}</td>
-                        <td>{{ order.product_quantity }}</td>
+                        <td>{{ order.quantity_buyer_want }}</td>
                         <td>{{ order.SI_units }}</td>
-                        <td>{{ order.ammount_in_green_points }}</td>
+                        <td>{{ order.ammount_based_on_quantity_buyer_want }}</td>
                         
                         <td>
                             {% if order.buying_status == "BuyCompleted" %}
@@ -35,6 +36,15 @@
                                 <span class="text-warning">In Progress</span>
                             {% endif %}
                         </td>
+                        <td>
+                            {% if rating_given == "NotGiven" %}
+                                <a type="button" class="btn btn-primary rate-order-btn" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">
+                                    Rate This
+                                </a>
+                            {% else %}
+                                <a class="btn btn-secondary" disabled>Rated</a>
+                            {% endif %}   
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -42,4 +52,42 @@
             {% include 'app_common/snippets/pagination.html' %}
         </div>
     </div>
+    <!-- Rate Order Modal -->
+    <div class="modal fade" id="rateOrderModal" tabindex="-1" role="dialog" aria-labelledby="rateOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rateOrderModalLabel">Rate Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="rateOrderForm" action="{% url 'user_dashboard:rate_order' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <input type="hidden" id="orderId" name="order_id">
+                        <div class="form-group">
+                            <label for="rating">Rating:</label>
+                            <input type="number" class="form-control" id="rating" name="rating" step="0.1" min="0" max="5" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit Rating</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        // Handle rate order button click
+        $('.rate-order-btn').on('click', function () {
+            var orderId = $(this).data('order-id');
+            $('#orderId').val(orderId);
+        });
+    });
+</script>
+{% endblock scripts %}

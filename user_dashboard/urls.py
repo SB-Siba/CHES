@@ -28,8 +28,12 @@ urlpatterns = [
     path('producebuy/<int:prod_id>', views.ProduceBuyView.as_view(), name = "producebuy"),
     path('buyreject/<int:ord_id>', views.reject_buy, name = "buyreject"),
     path('orders/', views.AllOrders.as_view(), name = "allorders"),
-
-
+    path('all-posts/', views.AllPosts.as_view(), name = "allposts"),
+    path("pluslike/",views.plus_like,name="like"),
+    path('minuslike/',views.minus_like,name="dislike"),
+    path('give-comment/',views.give_comment,name="give_comment"),
+    path('all-comment/',views.get_all_comments,name="get_all_comments"),
+    path('rate-order/',views.RateOrder.as_view(),name="rate_order"),
 ]
 
 #  user_dashboard:user_dashboard

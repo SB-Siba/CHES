@@ -53,6 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     wallet = models.FloatField(default=0.0)
     coins = models.PositiveBigIntegerField(default=0,null=True,blank=True)
+    ratings = models.JSONField(default=list,null=True,blank=True)
 
     total_income = models.FloatField(default=0.0)
     total_invest = models.FloatField(default=0.0)
@@ -80,6 +81,23 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_rank(self):
         higher_or_equal_scores_count = User.objects.filter(coins__gte=self.coins).count()
         return higher_or_equal_scores_count
+
+    def calculate_avg_rating(self):
+        total_rating = 0
+        num_ratings = len(self.ratings)
+
+        # Calculate total rating
+        for rating_data in self.ratings:
+            rating = float(rating_data['rating'])  # Convert rating to float
+            total_rating += rating
+
+        # Calculate average rating
+        if num_ratings > 0:
+            avg_rating = total_rating / num_ratings
+        else:
+            avg_rating = 0
+
+        return avg_rating
 
 class GaredenQuizModel(models.Model):
     user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)
@@ -117,6 +135,8 @@ class UserActivity(models.Model):
     activity_content = models.TextField(null=True,blank=True)
     activity_image = models.ImageField(upload_to='activity/',null=True, blank=True)
     date_time = models.DateTimeField(auto_now_add=True)
+    likes = models.JSONField(default=list,null=True, blank=True)
+    comments = models.JSONField(default=list,null=True, blank=True)
     is_accepted = models.CharField(max_length=10, choices= ACCEPTREJECT, default='pending')
     reject_reason = models.TextField(null=True, blank=True)
 
@@ -170,7 +190,7 @@ class SellProduce(models.Model):
         if self.validity_end_date:
             delta = self.validity_end_date - timezone.now()
             remaining_days = max(0, delta.days)
-            if remaining_days == 0:
+            if remaining_days == 0 or  self.product_quantity == 0.0:
                 self.delete()
             return remaining_days
         return 0

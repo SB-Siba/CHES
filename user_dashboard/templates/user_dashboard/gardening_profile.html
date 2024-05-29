@@ -6,7 +6,7 @@
 {% block content %}
 
 <style>
-    .emp-profile{
+    .emp-profile {
         padding: 3%;
         margin-top: 3%;
         margin-bottom: 3%;
@@ -14,14 +14,17 @@
         background: #fff;
         box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     }
-    .profile-img{
+
+    .profile-img {
         text-align: center;
     }
-    .profile-img img{
+
+    .profile-img img {
         width: 150px;
         height: 150px;
         border-radius: 140px;
     }
+
     .profile-img .file {
         position: relative;
         overflow: hidden;
@@ -32,27 +35,33 @@
         font-size: 15px;
         background: #212529b8;
     }
+
     .profile-img .file input {
         position: absolute;
         opacity: 0;
         right: 0;
         top: 0;
     }
-    .profile-head h5{
+
+    .profile-head h5 {
         color: #333;
     }
+
     .profile-head h3 {
-        color:#14453b;
+        color: #14453b;
     }
-    .profile-head p{
-        color:#000;
-        font-size:17px;
-        font-weight:600;
+
+    .profile-head p {
+        color: #000;
+        font-size: 17px;
+        font-weight: 600;
     }
-    .profile-head h6{
+
+    .profile-head h6 {
         color: #0062cc;
     }
-    .profile-edit-btn{
+
+    .profile-edit-btn {
         border: none;
         border-radius: 1.5rem;
         width: 70%;
@@ -61,70 +70,84 @@
         color: #6c757d;
         cursor: pointer;
     }
-    .proile-rating{
+
+    .proile-rating {
         font-size: 12px;
         color: #818182;
         margin-top: 5%;
     }
-    .proile-rating span{
+
+    .proile-rating span {
         color: #495057;
         font-size: 15px;
         font-weight: 600;
     }
-    .profile-head .nav-tabs{
-        margin-bottom:5%;
+
+    .profile-head .nav-tabs {
+        margin-bottom: 5%;
     }
-    .profile-head .nav-tabs .nav-link{
-        font-weight:600;
+
+    .profile-head .nav-tabs .nav-link {
+        font-weight: 600;
         border: none;
     }
-    .profile-head .nav-tabs .nav-link.active{
+
+    .profile-head .nav-tabs .nav-link.active {
         border: none;
-        border-bottom:2px solid #0062cc;
+        border-bottom: 2px solid #0062cc;
     }
-    .profile-work{
+
+    .profile-work {
         padding: 14%;
         margin-top: -15%;
     }
-    .profile-work p{
+
+    .profile-work p {
         font-size: 12px;
         color: #818182;
         font-weight: 600;
         margin-top: 10%;
     }
-    .profile-work a{
+
+    .profile-work a {
         text-decoration: none;
         color: #495057;
         font-weight: 600;
         font-size: 14px;
     }
-    .profile-work ul{
+
+    .profile-work ul {
         list-style: none;
     }
-    .profile-tab strong{
+
+    .profile-tab strong {
         font-weight: 800;
-        color:#000;
+        color: #000;
     }
-    .profile-tab p{
+
+    .profile-tab p {
         font-weight: 600;
-        color:#14453b;
+        color: #14453b;
     }
+
     .edit_btn {
         background-color: #1F782B;
         color: #fff;
         padding: 9px 30px;
         margin-bottom: 1rem;
         font-size: 16px;
-        border-radius:0px;
+        border-radius: 0px;
     }
+
     .edit_btn:hover {
         background: transparent;
         border: 2px solid #1F782B;
         color: #1F782B;
     }
+
     .box {
         border-bottom: 1px solid darkgray;
-        margin-bottom:10px;
+        margin-bottom: 10px;
     }
 </style>
 
@@ -134,58 +157,70 @@
     <form method="post">
         <div class="row">
             <div class="col-md-4">
+                {% if garden_profile_obj.user.user_image %}
                 <div class="profile-img">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt=""/>
+                    <img src="{{garden_profile_obj.user.user_image.url}}" alt="" />
                 </div>
+                {% else %}
+                <div class="profile-img">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog"
+                        alt="" />
+                </div>
+                {% endif %}
             </div>
             <div class="col-md-8">
                 <div class="profile-head">
                     <h3>
-                        Sathi Sarkar
+                        {{garden_profile_obj.user.full_name}}
                     </h3>
                     <p>
-                        sathi@gmail.com
+                        {{garden_profile_obj.user.email}}
                     </p>
                 </div>
                 <div class="tab-content profile-tab mt-5" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                <div class="row box">
-                                    <div class="col-md-6">
-                                        <p><strong>Garden Area:</strong></p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p>{{garden_profile_obj.garden_area}} sqft</p>
-                                    </div>
-                                </div>
-                                <div class="row box">
-                                    <div class="col-md-6">
-                                       <p><strong>Number of Plants:</strong></p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p>{{garden_profile_obj.number_of_plants}}</p>
-                                    </div>
-                                </div>
-                                <div class="row box">
-                                    <div class="col-md-6">
-                                       <p><strong>Number of Unique Plants:</strong></p>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p>{{garden_profile_obj.number_of_unique_plants}}</p>
-                                    </div>
-                                </div>
-                               
+                        <div class="row box">
+                            <div class="col-md-6">
+                                <p><strong>Garden Area:</strong></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{garden_profile_obj.garden_area}} sqft</p>
+                            </div>
+                        </div>
+                        <div class="row box">
+                            <div class="col-md-6">
+                                <p><strong>Number of Plants:</strong></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{garden_profile_obj.number_of_plants}}</p>
+                            </div>
+                        </div>
+                        <div class="row box">
+                            <div class="col-md-6">
+                                <p><strong>Number of Unique Plants:</strong></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{garden_profile_obj.number_of_unique_plants}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <p>
+                                * In your <b>{{garden_area}} sq.ft</b> area you can impliment <b>{{trees}} trees</b> and <b>{{pots}} pots</b>.
+                            </p>
+                        </div>
                     </div>
-                   
+
                 </div>
             </div>
-            
+
         </div>
         
         <div class="row">
             <div class="col-md-12 d-flex justify-content-center mt-4">
-                <a href="{% url 'user_dashboard:gardeningprofileupdate' %}" class="btn edit_btn btn-lg mt-3">Edit Profile <i class="fa-solid fa-pen-to-square"></i></a>
+                <a href="{% url 'user_dashboard:gardeningprofileupdate' %}" class="btn edit_btn btn-lg mt-3">Edit
+                    Profile <i class="fa-solid fa-pen-to-square"></i></a>
             </div>
         </div>
-    </form>           
+    </form>
 </div>
 {% endblock content %}

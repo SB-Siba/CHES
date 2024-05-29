@@ -8,8 +8,8 @@ urlpatterns = [
     path('authentication/register', views.Register.as_view(), name = "register"),
     path('authentication/logout', views.Logout.as_view(), name = "logout"),
     path('index', views.Home.as_view(), name='index'),
-    path('add-gardening-details', views.GardeningDetails.as_view(), name='gardeningdetails'),
-    path('gardening-quiz', views.gardening_quiz_view, name='gardeningquiz'),
+    path('add-gardening-details/<str:u_email>', views.GardeningDetails.as_view(), name='gardeningdetails'),
+    path('gardening-quiz/<str:u_email>', views.gardening_quiz_view, name='gardeningquiz'),
 ]
 
 #   app_common:register

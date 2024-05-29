@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
@@ -10,19 +11,26 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.utils import timezone
 from helpers import utils
+from chatapp.models import Message
 
 app = "user_dashboard/"
 
-#@method_decorator(utils.login_required, name='dispatch')
 class UserDashboard(View):
     template = app + "index.html"
 
     def get(self, request):
         user = request.user
+        # Deleting Expire Produce
+        try:
+            sell_produce_obj  = app_commonmodels.SellProduce.objects.all()
+            for i in sell_produce_obj:
+                if i.days_left_to_expire <= 0:
+                    i.delete()
+        except Exception:
+            pass
         users_orderby_coins = app_commonmodels.User.objects.filter(is_superuser=False).order_by('-coins')[:10]
         garden_obj = get_object_or_404(app_commonmodels.GardeningProfile, user=user)
         rank = user.get_rank()
-
         context = {
             'user':user,
             'users_orderby_coins':users_orderby_coins,
@@ -35,7 +43,8 @@ class UserProfile(View):
     template = app + "user_profile.html"
 
     def get(self,request):
-        return render(request,self.template)
+        rating_of_user = request.user.calculate_avg_rating()
+        return render(request,self.template,locals())
 
 
 class UpdateProfileView(View):
@@ -170,6 +179,10 @@ class GardeningProfie(View):
         user = request.user
         try:
             garden_profile_obj = self.model.objects.get(user=user)
+            garden_area = garden_profile_obj.garden_area
+            # Assume each tree needs 4 square ft and each pot needs 1 square ft
+            trees = garden_area // 4
+            pots = garden_area // 1
         except self.model.DoesNotExist:
             garden_profile_obj = None
         return render(request,self.template,locals())
@@ -356,7 +369,17 @@ class GreenCommerceProductCommunity(View):
 
     def get(self,request):
         produce_obj = self.model.objects.exclude(user=request.user).filter(is_approved="approved").order_by("-date_time")
-        context={'produces':produce_obj,'form':self.form}
+        ratings_list = [i.user.calculate_avg_rating() for i in produce_obj]
+        message_status = []
+        for i in produce_obj:
+            msg_obj = Message.objects.filter(Q(receiver=i.user,sender=request.user) | Q(receiver=request.user,sender=i.user))
+            if msg_obj:
+                message_status.append(True)
+            else:
+                message_status.append(False)
+       
+        zipped_value = zip(produce_obj,message_status,ratings_list)
+        context={'zipped_value':zipped_value,'form':self.form}
         return render(request,self.template,context)
 
 
@@ -381,7 +404,7 @@ class BuyingBegins(View):
                 if buyer.wallet >= ammount_in_green_points:
                     buying_obj = app_commonmodels.ProduceBuy(buyer = buyer,seller = seller,sell_produce = sell_prod_obj,product_name = sell_prod_obj.product_name,product_quantity = product_quantity,SI_units = SI_units,ammount_in_green_points = ammount_in_green_points,buying_status = 'BuyInProgress',quantity_buyer_want = quantity)
                     buying_obj.save()
-                    return redirect('user_dashboard:buybeginsbuyerview')
+                    return redirect('user_dashboard:user_dashboard')
                 else:
                     messages.error(request,"You don't have enough green points in your wallet!")
                     return redirect('user_dashboard:greencommerceproducts')
@@ -409,7 +432,7 @@ class BuyBeginsBuyerView(View):
     def get(self,request):
         user = request.user
         bbeigins_obj = self.model.objects.filter(buyer=user, buying_status="BuyInProgress")
-        print(bbeigins_obj)
+        
         return render(request,self.template,locals())
     
 def send_payment_link(request,buy_id):
@@ -485,12 +508,139 @@ def reject_buy(request,ord_id):
     order_obj.buying_status="BuyRejected"
     order_obj.save()
     return redirect('user_dashboard:buybeginssellerview')
+
     
 
 class AllOrders(View):
     template = app + "all_orders.html"
     model = app_commonmodels.ProduceBuy
 
+    def get(self, request):
+        orders = self.model.objects.filter(buyer=request.user)
+        orders_list = []
+        ratings_given = []
+        
+        encountered_sellers = set()  # Track encountered sellers to avoid duplicates
+
+        for order in orders:
+            orders_list.append(order)
+            seller = order.seller
+            
+            
+            # Check if we've already processed ratings for this seller
+            if order.id not in encountered_sellers:
+                encountered_sellers.add(order.id)
+                ratings = seller.ratings
+                
+                # Check if the buyer has given ratings to this seller
+                rating_given = any(rating['buyer_name'] == request.user.full_name for rating in ratings)
+                if rating_given:
+                    ratings_given.append("Given")
+                else:
+                    ratings_given.append("NotGiven")
+        
+        order_and_ratings = zip(orders_list,ratings_given)
+        return render(request , self.template , {'order_and_ratings' : order_and_ratings})
+    
+class AllPosts(View):
+    template = app + "all_posts.html"
+    model = app_commonmodels.UserActivity
     def get(self,request):
-        orders = self.model.objects.filter(buyer = request.user)
-        return render(request , self.template , {'orderlist' : orders})
+
+        # activity = self.model.objects.get(id=7)
+        # activity.likes = []
+        # activity.save()
+
+        posts = self.model.objects.filter(is_accepted = "approved").order_by("-id")
+        posts_list = []
+        like_list = []
+        like_count_per_activity = []
+        comment_count_per_activity = []
+
+        for i in posts:
+            if request.user.full_name in i.likes: 
+                posts_list.append(i)     
+                like_count_per_activity.append(len(i.likes))  
+                comment_count_per_activity.append(len(i.comments))
+                like_list.append(1)
+            else:
+                posts_list.append(i)
+                like_count_per_activity.append(len(i.likes))
+                comment_count_per_activity.append(len(i.comments))
+                like_list.append(0)
+     
+        # print(posts_list,"\n",like_list,"\n",like_count_per_activity,"\n",comment_count_per_activity)
+        post_and_like = zip(posts_list,like_list,like_count_per_activity,comment_count_per_activity)
+        return render(request , self.template ,locals())
+    
+
+def plus_like(request):
+    if request.method == 'GET':
+        user = request.user
+        actvity_id = request.GET['activity_id']
+        activity_obj = app_commonmodels.UserActivity.objects.get(id = int(actvity_id))
+        if user.full_name not in activity_obj.likes:
+            activity_obj.likes.append(user.full_name)
+        activity_obj.save()
+        data={'status':'Product added to wishlist'}
+        return JsonResponse(data)
+    
+def minus_like(request):
+    if request.method == 'GET':
+        user = request.user
+        actvity_id = request.GET['activity_id']
+        activity_obj = app_commonmodels.UserActivity.objects.get(id = int(actvity_id))
+        if user.full_name in activity_obj.likes:
+            activity_obj.likes.remove(user.full_name)
+        activity_obj.save()
+        data={'status':'Product removed from wishlist'}
+        return JsonResponse(data)
+    
+def give_comment(request):
+    if request.method == "POST":
+        commenter=request.user.full_name
+        comment=request.POST["comment"]
+        post=request.POST["post"]
+        post_obj = app_commonmodels.UserActivity.objects.get(id = int(post)) 
+    
+        comment_data = {
+            "commenter": commenter,
+            "comment": comment
+        }
+        post_obj.comments.append(comment_data)
+        post_obj.save()
+        return redirect('user_dashboard:allposts')
+    
+def get_all_comments(request):
+    post_id = request.GET.get('post_id')
+    activity_obj = app_commonmodels.UserActivity.objects.filter(id=int(post_id)).first()
+    if activity_obj:
+        comments_data = activity_obj.comments  # Assuming comments_data is a list of dictionaries
+        return JsonResponse(comments_data, safe=False)
+    else:
+        return JsonResponse([], safe=False)
+
+class RateOrder(View):
+    model = app_commonmodels.ProduceBuy
+
+    def post(self,request):
+        order_id = request.POST.get("order_id")
+        rating = request.POST.get("rating")
+        # print(order_id,rating)
+        buy_obj = get_object_or_404(self.model,id = order_id)
+        seller = buy_obj.seller
+        buyer = buy_obj.buyer
+        if seller.ratings is None:
+            seller.ratings = []
+
+        new_rating = {
+            "buyer_name": buyer.full_name,
+            "order_product": buy_obj.product_name,
+            "quantity": buy_obj.quantity_buyer_want,
+            "ammount_paid": buy_obj.ammount_based_on_quantity_buyer_want,
+            "rating": rating,
+        }
+        seller.ratings.append(new_rating)
+        
+        seller.save()
+        return redirect('user_dashboard:allorders')
