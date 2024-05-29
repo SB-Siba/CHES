@@ -289,18 +289,46 @@ class ProductFromVendor(models.Model):
         return f"{self.name} --> {self.vendor.full_name}"
     
 class Order(models.Model):
-    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='customerorders')
-    vendor = models.ForeignKey(User, on_delete=models.CASCADE,related_name='vendororders')
-    product = models.ForeignKey(ProductFromVendor, on_delete=models.CASCADE, related_name='orderproduct')
-    quantity = models.PositiveIntegerField(default=1)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=20, default='Pending')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    ORDER_STATUS = (
+        ("Placed","Placed"),
+        ("Accepted","Accepted"),
+        ("Cancel","Cancel"),
+        ("On_Way","On_Way"),
+        ("Refund","Refund"),
+        ("Return","Return"),
+    )
 
-    def save(self, *args, **kwargs):
-        self.total_price = self.product.discount_price * self.quantity
-        super().save(*args, **kwargs)
+    PaymentStatus = (
+        ("Paid","Paid"),
+        ("Pending","Pending"),
+        ("Refunded","Refunded"),
+    )
+
+    uid=models.CharField(max_length=255, null=True, blank=True)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,related_name="customer")
+    vendor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,related_name="vendor")
+    products = models.JSONField(default=dict, null=True, blank=True)
+    coupon = models.CharField(max_length=255, null=True, blank=True)
+    order_value = models.FloatField(default=0.0)
+    order_meta_data = models.JSONField(default=dict, null=True, blank=True)
+    order_status = models.CharField(max_length=255, choices= ORDER_STATUS, default="Placed")
+    razorpay_payment_id = models.TextField(null= True, blank=True)
+    razorpay_order_id = models.TextField(null= True, blank=True)
+    razorpay_signature = models.TextField(null= True, blank=True)
+    payment_status = models.CharField(max_length=255, choices= PaymentStatus, default="Paid")
+
+    customer_details = models.JSONField(default=dict, null=True, blank=True)
+
+    more_info = models.TextField(null= True, blank=True)
+    date = models.DateField(auto_now_add= True, null=True, blank=True)
+
+    transaction_id = models.TextField(null= True, blank=True)
+    can_edit = models.BooleanField(default=True) # id a order is canceled or refunded, make it non editable
 
     def __str__(self):
-        return f"Order {self.id} by {self.customer.full_name} for {self.product.name}"
+        return self.uid
+
+    def save(self, *args, **kwargs):
+        if not self.uid:
+            self.uid = utils.generate_unique_id(5)
+        super().save(*args, **kwargs)

@@ -1,0 +1,100 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}All Orders From Vendor{% endblock title %}
+{% block content %}
+    <div class="page-wapper">
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">ORD_ID</th>
+                        <th scope="col">Products</th>
+                        <th scope="col">Order Ammount</th>
+                        <th scope="col">status</th>
+                        <th>Invoice</th>
+                    </tr>
+                </thead>
+                <tbody id="test_table_tbody">
+                    {% for order,product in order_and_products %}
+                    <tr>
+                      <td>
+                        <a>
+                          {{order.uid}}
+                        </a>
+                      </td>
+                      <td>
+                        {% for i,j in order.products.items %}
+                        {{i}} : {{j}} <br>
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {{order.order_value}}
+                      </td>
+                      {% if order.order_status == "Accepted" %}
+                      <td>
+                        <p class="text-success">
+                          {{order.order_status}}
+                        </p>
+                      </td>
+                      {% else %}
+                      <td>
+                        <p class="text-black">
+                          {{order.order_status}}
+                        </p>
+                      </td>
+                      {% endif %}
+                      <td>
+                        <a href="{% url 'user_dashboard:invoice' order.uid %}"
+                          class="btn btn-sm btn-square btn-neutral btn-primary">
+                          Invoice
+                        </a>
+                      </td>
+                    </tr>
+
+                    {% endfor %}
+                  </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
+    </div>
+    <!-- Rate Order Modal -->
+    <!-- <div class="modal fade" id="rateOrderModal" tabindex="-1" role="dialog" aria-labelledby="rateOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rateOrderModalLabel">Rate Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="rateOrderForm" action="{% url 'user_dashboard:rate_order' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <input type="hidden" id="orderId" name="order_id">
+                        <div class="form-group">
+                            <label for="rating">Rating:</label>
+                            <input type="number" class="form-control" id="rating" name="rating" step="0.1" min="0" max="5" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit Rating</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> -->
+{% endblock content %}
+<!-- {% block scripts %}
+<script>
+    $(document).ready(function () {
+        // Handle rate order button click
+        $('.rate-order-btn').on('click', function () {
+            var orderId = $(this).data('order-id');
+            $('#orderId').val(orderId);
+        });
+    });
+</script>
+{% endblock scripts %} -->

@@ -57,9 +57,9 @@
                       </div>
                       <h6 class="text-success">By : {{prod.vendor.full_name}}</h6>
                       <div class="d-flex flex-column mt-4">
-                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary btn-sm mt-2" type="button">
+                        <a href="{% url 'user_dashboard:checkout_vendor_products' prod.id prod.vendor%}" class="btn btn-outline-primary btn-sm mt-2" type="button">
                           Buy Now
-                        </button>
+                        </a>
                       </div>
                     </div>
                   </div>

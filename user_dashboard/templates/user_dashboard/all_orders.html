@@ -37,6 +37,17 @@
                             {% endif %}
                         </td>
                         <td>
+                            {% if not order.rating_given and order.buying_status == "BuyCompleted" %}
+                                <a type="button" class="btn btn-primary rate-order-btn" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">
+                                    Rate This
+                                </a>
+                            {% elif order.buying_status == "BuyInProgress" %}
+                                <a class="btn btn-secondary" disabled>Not Done Yet</a>
+                            {% else %}
+                                <a class="btn btn-secondary" disabled>Rated</a>
+                            {% endif %}   
+                        </td>
+                        <!-- <td>
                             {% if not order.rating_given %}
                                 <a type="button" class="btn btn-primary rate-order-btn" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">
                                     Rate This
@@ -44,7 +55,7 @@
                             {% else %}
                                 <a class="btn btn-secondary" disabled>Rated</a>
                             {% endif %}   
-                        </td>
+                        </td> -->
                     </tr>
                     {% endfor %}
                 </tbody>
