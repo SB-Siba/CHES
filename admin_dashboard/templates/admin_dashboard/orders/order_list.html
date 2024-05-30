@@ -1,0 +1,113 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block content %}
+
+<header>
+  <div class="container-fluid">
+    <div class="border-bottom pt-6">
+      <div class="row align-items-center">
+        <div class="col-sm col-12">
+          <h1 class="h2 ls-tight">Order List</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="py-6 bg-surface-secondary">
+
+
+  <div class="container-fluid">
+    <div class="vstack gap-4">
+      <div class="utility_order">
+        <button class="btn btn-outline-primary my-1" data-bs-toggle="modal" data-bs-target="#order_filter">
+          <i class="fa-solid fa-filter" style="color: #005cfa;"></i>
+          filter
+        </button>
+
+        <form method="get" action="{% url 'admin_dashboard:admin_order_search' %}">
+          {% csrf_token %}
+          <input class="form-control" type="text" name="query" placeholder="SEARCH ID" required />
+          <button class="btn">
+            <i class="fa-solid fa-magnifying-glass fa-shake" style="color: #a805ff;"></i>
+          </button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table table-hover table-nowrap">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">Order ID</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Transaction Id</th>
+                <th scope="col">Status</th>
+                <th scope="col">Payment</th>
+              </tr>
+            </thead>
+            <tbody id="test_table_tbody">
+              {% for order in order_list %}
+              <tr>
+                <td>
+                  <a target="_blank" href="{% url 'admin_dashboard:order_detail' order.uid %}">
+                    {{order.uid}}
+                  </a>
+                </td>
+                <td>
+                  <!-- {% if 'final_value' in order.order_meta_data %}
+                    {{ order.order_meta_data.final_value }}
+                  {% else %}
+                    {{ order.order_meta_data.final_cart_value }}
+                  {% endif %} -->
+                  {{order.order_value}}
+                </td>
+                <td>{{order.transaction_id}}</td>
+                <td>{{order.order_status}}</td>
+                <td>{{order.payment_status}}</td>
+              </tr>
+              {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<!-- filter -->
+<div class="modal fade" id="order_filter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Filter By Order Status</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="order_filter">
+
+        <form id="" method="get" action="{% url 'admin_dashboard:order_status_search' %}">
+          {% csrf_token %}
+          <div>
+            <select class="form-select" aria-label="Default select example" name="filter_by">
+              {% for status in order_status_options %}
+                <option value="{{status.1}}">{{status.1}}</option>
+              {% endfor %}
+            </select>
+
+            <button class="btn btn-primary" type="submit">
+              search
+            </button>
+          </div>
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+{% block js %}
+{% endblock js %}

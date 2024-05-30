@@ -83,6 +83,7 @@
                             <th scope="col">Business Category</th>
                             <th scope="col">Establishment Year</th>
                             <th scope="col">Website</th>
+                            <th scope="col">Give Points</th>
                             <th scope="col">Action</th>
                             <th></th>
                         </tr>
@@ -98,9 +99,12 @@
                             <td>{{vendor_detail.establishment_year}}</td>
                             <td>{{vendor_detail.website}}</td>
                             <td>
+                                <input type="number" id="points-{{ v_user.id }}" max="500" min="0" step="1" placeholder="Give Points Between 0-500">
+                            </td>                           
+                            <td>
                                 <div class="d-flex justify-content-arround">
-                                    <a href="{% url 'admin_dashboard:approve_user' v_user.id %}">
-                                        <span class="btn btn-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+                                    <a href="#" class="btn btn-success" onclick="approveVendor({{ v_user.id }})">
+                                        <span><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
                                     </a>
                                     <a href="{% url 'admin_dashboard:reject_user' v_user.id %}">
                                         <span class="btn btn-danger mx-1"><i class="fa fa-ban" aria-hidden="true"></i></span>
@@ -119,5 +123,17 @@
     </div>
 {% endblock content %}
 {% block js %}
-<script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
+<!-- <script src="{% static 'admin_dashboard/js/user_list.js'%}"></script> -->
+<script>
+    function approveVendor(userId) {
+        var points = document.getElementById('points-' + userId).value;
+        console.log(points)
+        if (points !== "") {
+            var url = "{% url 'admin_dashboard:approve_user' 0 %}".replace("0", userId) + "?coins=" + points;
+            window.location.href = url;
+        } else {
+            alert("Please enter points between 0 and 500.");
+        }
+    }
+</script>
 {% endblock js %}

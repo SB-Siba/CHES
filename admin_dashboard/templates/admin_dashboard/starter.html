@@ -21,6 +21,8 @@
     <!-- Custom styles for this template-->
     <link href="{% static 'admin_dashboard/css/sb-admin-2.min.css'%}" rel="stylesheet">
     <link href="{% static 'admin_dashboard/css/main.css'%}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_common/css/utilities.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app_common/css/style.css'%}">
     <link href="{% static 'admin_dashboard/css/image_hover.css'%}" rel="stylesheet">
 
 
@@ -205,7 +207,9 @@
             </div>
         </div>
     </div>
-
+    {% block js %}
+        
+    {% endblock js %}
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'admin_dashboard/vendor/jquery/jquery.min.js'%}"></script>
     <script src="{% static 'admin_dashboard/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
@@ -223,9 +227,6 @@
     <!-- Page level custom scripts -->
     <script src="{% static 'admin_dashboard/js/demo/chart-area-demo.js'%}"></script>
     <script src="{% static 'admin_dashboard/js/demo/chart-pie-demo.js'%}"></script>
-    <script>
-        const myChart = new Chart(ctx, {...});
-    </script>
 </body>
 
 </html>

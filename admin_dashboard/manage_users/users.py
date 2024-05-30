@@ -48,8 +48,12 @@ class PendingUser(View):
 def ApproveUser(request, pk):
     user = get_object_or_404(models.User, id=pk)
     if user is not None:
+        coins = request.GET.get('coins', None)
         user.is_approved = True
-        user.wallet = 500 + user.quiz_score
+        if coins:
+            user.wallet = 500 + int(coins)
+        else:
+            user.wallet = 500 + user.quiz_score
         user.coins = 100
         user.save()
         msg = 'The account has been approved successfully!'

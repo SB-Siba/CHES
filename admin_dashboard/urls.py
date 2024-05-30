@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from .manage_users import users
+from admin_dashboard.orders import order
 
 app_name = 'admin_dashboard'
 
@@ -35,6 +36,12 @@ urlpatterns = [
     path('vendor_sellrequest',users.VendorSellRequests.as_view(), name= 'vendor_sellrequest'),
     path('vendor_approvesellrequest',users.ApproveVendorSellRequest, name= 'vendor_approvesellrequest'),
     path('vendor_rejectsellrequest',users.RejectVendorSellRequest, name= 'vendor_rejectpsellrequest'),
+    #Orders
+    path('order/admin_order_list', order.OrderList.as_view(), name='admin_order_list'),
+    path('order/admin_order_search', order.OrderSearch.as_view(), name='admin_order_search'),
+    path('order/order_detail/<str:order_uid>', order.OrderDetail.as_view(), name='order_detail'),
+    path('order/download_invoice/<str:order_uid>', order.DownloadInvoice.as_view(), name='download_invoice'),
+    path('order/order_status_search', order.OrderStatusSearch.as_view(), name='order_status_search'),
 ]
 
 #  admin_dashboard:users_list

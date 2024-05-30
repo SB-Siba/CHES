@@ -809,6 +809,7 @@ class GardenerDownloadInvoice(View):
             price_per_unit.append(p_overview['price_per_unit'])
             total_prices.append(p_overview['total_price'])
             # product['product']['quantity']=product['quantity']
+        
         prod_quant = zip(products, quantities,price_per_unit,total_prices)
         try:
             final_total = data['order_meta_data']['final_cart_value']
