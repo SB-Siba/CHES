@@ -50,6 +50,12 @@ class RegisterForm(forms.ModelForm):
     is_vendor = forms.BooleanField(required=False, label='Are you a Vendor?')
     is_vendor.widget.attrs.update({'class': 'form-check-input'})
 
+    is_rtg = forms.BooleanField(required=False, label='Are you a RTG?')
+    is_rtg.widget.attrs.update({'class': 'form-check-input'})
+
+    is_serviceprovider = forms.BooleanField(required=False, label='Are you a Service Provider?')
+    is_serviceprovider.widget.attrs.update({'class': 'form-check-input'})
+
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
@@ -58,8 +64,8 @@ class RegisterForm(forms.ModelForm):
         if password != confirm_password:
             raise forms.ValidationError("Password Mismatched")
 
-        if not cleaned_data.get("is_gardener") and not cleaned_data.get("is_vendor"):
-            raise forms.ValidationError("Please select at least one: Gardener or Vendor.")
+        if not cleaned_data.get("is_gardener") and not cleaned_data.get("is_vendor") and not cleaned_data.get("is_rtg") and not cleaned_data.get("is_serviceprovider"):
+            raise forms.ValidationError("Please select at least one: Gardener or Vendor or RTG or Service Provider")
 
         return cleaned_data
     
@@ -112,3 +118,47 @@ class VendorDetailsForm(forms.ModelForm):
     establishment_year = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Establishment Year'}))
     website = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Website'}))
     established_by = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Established By'}))
+
+
+class ServiceProviderDetailsForm(forms.ModelForm):
+    class Meta:
+        model = models.ServiceProviderDetails
+        fields = ['service_type', 'service_area', 'average_cost_per_hour', 'years_experience']
+
+    service_type = forms.MultipleChoiceField(
+        choices=models.ServiceProviderDetails.SERVICE_TYPES,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
+    )
+    service_area = forms.MultipleChoiceField(
+        choices=models.ServiceProviderDetails.SERVICE_AREAS,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
+    )
+    average_cost_per_hour = forms.DecimalField(
+        max_digits=10, decimal_places=2,
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Average Cost per Hour'})
+    )
+    years_experience = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Years of Experience'})
+    )
+
+
+class GardenerDetailsForm(forms.ModelForm):
+    class Meta:
+        model = models.GardenerDetails
+        fields = ['service_for', 'available_days', 'hourly_rate']
+
+    service_for = forms.MultipleChoiceField(
+        choices=models.GardenerDetails.SERVICE_TYPES,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
+    )
+    available_days = forms.MultipleChoiceField(
+        choices=models.GardenerDetails.AVAILABLE_DAYS,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
+    )
+    hourly_rate = forms.DecimalField(
+        max_digits=10, decimal_places=2,
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Cost per Hour'})
+    )
+    years_experience = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Years of Experience'})
+    )

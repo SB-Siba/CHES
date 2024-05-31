@@ -27,13 +27,19 @@
             {% endif %}
         </a>
         </li>
-
+        
       <li class="nav-item">
           <a class="nav-link" href="{% url 'admin_dashboard:gardeners_list' %}">
               <i class="fa-solid fa-wallet"></i>
               <span>Gardeners</span>
           </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_dashboard:RTgardeners_list' %}">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Roof Top Gardeners</span>
+        </a>
+    </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'admin_dashboard:vendors_list' %}">
             <i class="fa-solid fa-wallet"></i>

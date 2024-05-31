@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.hashers import make_password
-
+from multiselectfield import MultiSelectField
 from .manager import MyAccountManager
 from helpers import utils
 from django.utils import timezone
@@ -48,7 +48,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_approved = models.BooleanField(default=False)
 
     is_gardener = models.BooleanField(default=False)
+    is_rtg = models.BooleanField(default=False)
     is_vendor = models.BooleanField(default=False)
+    is_serviceprovider = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
@@ -332,3 +334,54 @@ class Order(models.Model):
         if not self.uid:
             self.uid = utils.generate_unique_id(5)
         super().save(*args, **kwargs)
+
+class ServiceProviderDetails(models.Model):
+    SERVICE_TYPES = [
+        ('Lawn Care', 'Lawn Care'),
+        ('Tree Trimming', 'Tree Trimming'),
+        ('Garden Design', 'Garden Design'),
+        ('Irrigation Systems', 'Irrigation Systems'),
+        # Add more types as needed
+    ]
+    SERVICE_AREAS = (
+        ("Bhubaneswar","Bhubaneswar"),
+        ("Cuttack","Cuttack"),
+        ("Brahmapur","Brahmapur"),
+        ("Puri","Puri"),
+        ("Balasore","Balasore"),
+    )
+    provider = models.ForeignKey(User, on_delete=models.CASCADE)
+    service_type = models.TextField()
+    service_area = models.TextField()  # Storing choices as comma-separated values
+    average_cost_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
+    years_experience = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.provider.full_name} - {self.service_type}"
+
+class GardenerDetails(models.Model):
+    SERVICE_TYPES = [
+        ('Lawn Care', 'Lawn Care'),
+        ('Tree Pruning', 'Tree Pruning'),
+        ('Garden Maintenance', 'Garden Maintenance'),
+        ('Planting', 'Planting'),
+        # Add more types as needed
+    ]
+    AVAILABLE_DAYS = [
+        ('Sunday', 'Sunday'),
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'),
+        ('Saturday', 'Saturday'),
+    ]
+
+    gardener = models.ForeignKey(User, on_delete=models.CASCADE)
+    service_for = models.TextField()
+    hourly_rate = models.DecimalField(max_digits=10, decimal_places=2)
+    years_experience = models.IntegerField()
+    available_days = models.TextField()
+
+    def __str__(self):
+        return f"Gardener: {self.gardener.full_name}"

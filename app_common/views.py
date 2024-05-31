@@ -48,19 +48,30 @@ class Register(View):
             try:
                 user_obj = models.User(full_name = full_name,email = email,contact = contact,city = city)
                 # Save is_gardener and is_vendor fields
-                if form.cleaned_data['is_gardener']:
-                    user_obj.is_gardener = True
-                if form.cleaned_data['is_vendor']:
-                    user_obj.is_vendor = True
-                user_obj.set_password(password)
-                user_obj.save()
-                if form.cleaned_data['is_gardener']:
+                if form.cleaned_data['is_rtg']:
+                    user_obj.is_rtg = True
+                    user_obj.set_password(password)
+                    user_obj.save()
                     messages.success(request,"Now Please give your Gardening Details.")
                     return redirect('app_common:gardeningdetails',email)
-                else:
+                elif form.cleaned_data['is_vendor']:
+                    user_obj.is_vendor = True
+                    user_obj.set_password(password)
+                    user_obj.save()
                     messages.success(request,"Now Please give your Vendor Details.")
                     return redirect('app_common:vendordetails',email)
-                
+                elif form.cleaned_data['is_gardener']:
+                    user_obj.is_gardener = True
+                    user_obj.set_password(password)
+                    user_obj.save()
+                    messages.success(request,"Now Please give your Vendor Details.")
+                    return redirect('app_common:gardenerdetails',email)
+                elif form.cleaned_data['is_serviceprovider']:
+                    user_obj.is_serviceprovider = True
+                    user_obj.set_password(password)
+                    user_obj.save()
+                    messages.success(request,"Now Please give your Vendor Details.")
+                    return redirect('app_common:serviceproviderdetails',email)
             except:
                 messages.error(request,'Failed to register')
                 return redirect('app_common:register')
@@ -244,6 +255,93 @@ class VendorDetails(View):
         else:
             messages.error(request,'Please correct the below errors.')
             return redirect('app_common:vendordetails',u_email)
+        
+
+class ServiceProviderDetails(View):
+    model = models.ServiceProviderDetails
+    template = app + "serviceprovider_details.html"
+    form_class = forms.ServiceProviderDetailsForm
+
+    def get(self,request,u_email):
+        try:
+            user_obj = models.User.objects.get(email = u_email)
+            form = self.form_class(instance=user_obj)
+            context={'form':form}
+        except self.model.DoesNotExist:
+            messages.error(request,"No Data Found")
+        
+        return render(request, self.template, context)     
+
+    def post(self,request,u_email):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user_obj = models.User.objects.get(email = u_email)
+
+            service_type = form.cleaned_data['service_type']
+            service_area = form.cleaned_data['service_area']
+            average_cost_per_hour = form.cleaned_data['average_cost_per_hour']
+            years_experience = form.cleaned_data['years_experience']
+            try:
+                service_provider_detail_obj = self.model(
+                    provider = user_obj,
+                    service_type = service_type,
+                    service_area = service_area,
+                    average_cost_per_hour = average_cost_per_hour,
+                    years_experience = years_experience,
+                    )
+                service_provider_detail_obj.save()
+                messages.success(request,'Details Added Successfully.Now Please wait for admin approval for login.')
+                return redirect('app_common:login')
+            except:
+                messages.error(request,'Failed to Add data')
+                return redirect('app_common:serviceproviderdetails',u_email)
+        else:
+            messages.error(request,'Please correct the below errors.')
+            return redirect('app_common:serviceproviderdetails',u_email)
+
+
+class GardenerDetails(View):
+    model = models.GardenerDetails
+    template = app + "gardener_details.html"
+    form_class = forms.GardenerDetailsForm
+
+    def get(self,request,u_email):
+        try:
+            user_obj = models.User.objects.get(email = u_email)
+            form = self.form_class(instance=user_obj)
+            context={'form':form}
+        except self.model.DoesNotExist:
+            messages.error(request,"No Data Found")
+        
+        return render(request, self.template, context)     
+
+    def post(self,request,u_email):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user_obj = models.User.objects.get(email = u_email)
+
+            service_for = form.cleaned_data['service_for']
+            available_days = form.cleaned_data['available_days']
+            hourly_rate = form.cleaned_data['hourly_rate']
+            years_experience = form.cleaned_data['years_experience']
+            try:
+                gardener_detail_obj = self.model(
+                    gardener = user_obj,
+                    service_for = service_for,
+                    available_days = available_days,
+                    hourly_rate = hourly_rate,
+                    years_experience = years_experience,
+                    )
+                gardener_detail_obj.save()
+                messages.success(request,'Details Added Successfully.Now Please wait for admin approval for login.')
+                return redirect('app_common:login')
+            except:
+                messages.error(request,'Failed to Add data')
+                return redirect('app_common:gardenerdetails',u_email)
+        else:
+            messages.error(request,'Please correct the below errors.')
+            return redirect('app_common:gardenerdetails',u_email)
+        
 
 class Home(View):
     template = app + 'index.html'

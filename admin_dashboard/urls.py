@@ -15,6 +15,7 @@ urlpatterns = [
     path('approve_user/<int:pk>',users.ApproveUser, name='approve_user'),
     path('reject_user/<int:pk>',users.RejectUser, name='reject_user'),
     path('manage_users/gardeners_list',users.GardenerList.as_view(), name= 'gardeners_list'),
+    path('manage_users/RTgardeners_list',users.RTGList.as_view(), name= 'RTgardeners_list'),
     path('manage_users/vendors_list',users.VendorList.as_view(), name= 'vendors_list'),
     path('manage_users/delete_user/<int:pk>',users.Delete_User, name= 'delete_user'),
 
