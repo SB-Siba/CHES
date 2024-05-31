@@ -78,6 +78,16 @@
                     </div>
                 </div>
                 <div class="mb-3">
+                    <label for="id_contact">Contact Number</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">+91 - </span>
+                        </div>
+                        {{ form.contact_number }}
+                        <div class="invalid-feedback" style="width: 100%;"> Your contact number is required. </div>
+                    </div>
+                </div>
+                <div class="mb-3">
                     <label for="id_email">Email <span class="text-muted">(Optional)</span></label>
                     {{ form.email }}
                     <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
@@ -89,9 +99,9 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-4">
-                        <label for="id_state">State</label>
-                        {{ form.state }}
-                        <div class="invalid-feedback"> Please provide a valid state. </div>
+                        <label for="id_state">City</label>
+                        {{ form.city }}
+                        <div class="invalid-feedback"> Please provide a valid city. </div>
                     </div>
                     <div class="col-md-6 mb-4">
                         <label for="id_zip_code">Zip</label>

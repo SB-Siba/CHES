@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.utils import timezone
 from helpers import utils
 from chatapp.models import Message
+from admin_dashboard.orders.forms import OrderUpdateForm
 
 app = "vendor_dashboard/"
 
@@ -529,9 +530,106 @@ def reject_buy(request,ord_id):
     
 
 class AllOrders(View):
-    template = app + "all_orders.html"
-    model = common_models.ProduceBuy
+    template = app + "order_list.html"
+    model = common_models.Order
 
     def get(self, request):
-        orders = self.model.objects.filter(buyer=request.user)
-        return render(request , self.template , {'orders' : orders})
+        order_list = self.model.objects.filter(vendor=request.user).order_by('-id')
+        paginated_data = utils.paginate(request, order_list, 50)
+        order_status_options = common_models.Order.ORDER_STATUS
+        print(order_list)
+        context = {
+            "order":order_list,
+            "order_list":paginated_data,
+            "order_status_options":order_status_options,
+        }
+        return render(request , self.template , context)
+    
+
+class OrderStatusSearch(View):
+    model = common_models.Order
+    template = app + "order_list.html"
+
+    def get(self,request):
+        filter_by = request.GET.get('filter_by')
+        order_list = self.model.objects.filter(vendor = request.user,order_status = filter_by)
+        paginated_data = utils.paginate(request, order_list, 50)
+        order_status_options = common_models.Order.ORDER_STATUS
+        
+        context = {
+            "order_list":paginated_data,
+            "order_status_options":order_status_options,
+        }
+        return render(request, self.template,context)
+
+
+class OrderSearch(View):
+    model = common_models.Order
+    template = app + "order_list.html"
+
+    def get(self,request):
+        query = request.GET.get('query')
+        order_list = self.model.objects.filter(uid__icontains = query)
+        context = {
+            "order_list":order_list,
+        }
+        return render(request, self.template,context)
+
+
+class OrderDetail(View):
+    model = common_models.Order
+    form_class = OrderUpdateForm
+    template= app + "order_detail.html"
+
+    def get(self,request, order_uid):
+        # order_o = common_model.Cart.objects.all().delete()
+        order = self.model.objects.get(uid = order_uid)
+        
+        product_list = []
+        product_quantity = []
+        total_quantity= 0
+        grand_total = 0
+        try:
+            grand_total = order.order_meta_data['final_cart_value']
+        except Exception:
+            grand_total = order.order_meta_data['final_value']
+        # for product in order.products:
+        #     product['product']['quantity'] = product['quantity']
+        #     total_quantity += product['quantity']
+        #     product_list.append(product['product'])
+
+        for i,j in order.products.items():
+            try:
+                p_obj = common_models.ProductFromVendor.objects.get(name= i)
+            except Exception:
+                p_obj = ""
+            product_list.append(p_obj)
+            product_quantity.append(j)
+            total_quantity+= int(j)
+        zipproduct = zip(product_list, product_quantity)
+        context={
+            'order':order,
+            'grand_total':grand_total,
+            'zipproduct':zipproduct,
+            'total_quantity':total_quantity,
+            'customer_details':order.customer_details,
+            'form':OrderUpdateForm(instance = order)
+        }
+        return render(request, self.template, context)
+    
+    def post(self,request, order_uid):
+        order = self.model.objects.get(uid = order_uid)
+
+        form = self.form_class(request.POST, instance = order)
+
+        if form.is_valid():
+            obj=form.save()
+            # update_order_status.delay(obj.user.email, OrderSerializer(obj).data)
+            messages.success(request, 'Order Status is updated....')
+
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{field}: {error}')
+
+        return redirect('vendor_dashboard:order_detail', order_uid = order_uid)

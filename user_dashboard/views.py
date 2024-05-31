@@ -711,6 +711,7 @@ class CheckoutView(View):
             first_name = form.cleaned_data['first_name'] 
             last_name = form.cleaned_data['last_name']    
             username = form.cleaned_data['username']
+            contact_number = form.cleaned_data['contact_number']
             email = form.cleaned_data['email']
             address = form.cleaned_data['address']
             city = form.cleaned_data['city']
@@ -722,6 +723,7 @@ class CheckoutView(View):
                 'first_name': first_name,
                 'last_name': last_name,
                 'username': username,
+                'contact_number':contact_number,
                 'email': email,
                 'address': address,
                 'city': city,

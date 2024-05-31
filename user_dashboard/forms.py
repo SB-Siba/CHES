@@ -234,6 +234,12 @@ class CheckoutForm(forms.Form):
             attrs={"class": "form-control", "placeholder": "Username", "required": True}
         ),
     )
+    contact_number = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Contact", "required": True}
+        ),
+    )
     email = forms.EmailField(
         required=False,
         widget=forms.EmailInput(
