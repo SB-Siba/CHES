@@ -23,16 +23,59 @@
                         </div>
                     </div>
                    
-                    <form method="post" action="" class="p-4">
+                    <form method="post" action="" class="p-4 text-black">
                         {% include 'app_common/snippets/alert.html' %}
                         {% csrf_token %}
-                        {{form.as_p}}
-                        <div style="text-align:center;">
-                            <button class="log_btn" type="submit">
-                                SignUp
-                            </button>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.full_name.id_for_label }}">Full Name</label>
+                            {{ form.full_name }}
                         </div>
-                        <p>Already have account? <a href="{% url 'app_common:login'%}"><b>Login</b></a></p>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.email.id_for_label }}">Email</label>
+                            {{ form.email }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.contact.id_for_label }}">Contact Number</label>
+                            {{ form.contact }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.city.id_for_label }}">City</label>
+                            {{ form.city }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.password.id_for_label }}">Password</label>
+                            {{ form.password }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.confirm_password.id_for_label }}">Confirm Password</label>
+                            {{ form.confirm_password }}
+                        </div>
+                        
+                        <div class="d-flex justify-content-center mt-1">
+                            <div class="form-check">
+                                <label for="{{ form.is_gardener.id_for_label }}" class="form-check-label">
+                                    {{ form.is_gardener }} Gardener
+                                </label>
+                            </div>
+                            
+                            <div class="form-check">
+                                <label for="{{ form.is_vendor.id_for_label }}" class="form-check-label">
+                                    {{ form.is_vendor }} Vendor
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align:center;">
+                            <button class="log_btn" type="submit">SignUp</button>
+                        </div>
+                        
+                        <p>Already have an account? <a href="{% url 'app_common:login' %}"><b>Login</b></a></p>
                     </form>
                 </div>
             </div>

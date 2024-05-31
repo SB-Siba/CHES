@@ -35,7 +35,8 @@
 </head>
 
 <body id="page-top">
-
+    <input type="hidden" id="fetchUserDetailsUrl" value="{% url 'chat:fetch_user_details' %}">
+    <input type="hidden" id="fetchMessagesUrl" value="{% url 'chat:fetch_messages' %}">
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -176,13 +177,13 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <footer class="sticky-footer bg-white">
+            <!-- <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>Copyright &copy;</span>
                     </div>
                 </div>
-            </footer>
+            </footer> -->
             <!-- End of Footer -->
 
         </div>

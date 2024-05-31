@@ -29,11 +29,17 @@
         </li>
 
       <li class="nav-item">
-          <a class="nav-link" href="{% url 'admin_dashboard:users_list' %}">
+          <a class="nav-link" href="{% url 'admin_dashboard:gardeners_list' %}">
               <i class="fa-solid fa-wallet"></i>
-              <span>Users</span>
+              <span>Gardeners</span>
           </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_dashboard:vendors_list' %}">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Vendors</span>
+        </a>
+    </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'admin_dashboard:gardeningprofileupdaterequest' %}">
             <i class="fa-solid fa-wallet"></i>
@@ -52,13 +58,22 @@
                 {% endif %}
             </a>
         </li>
-
+        
         <li class="nav-item">
             <a class="nav-link" href="{% url 'admin_dashboard:sellrequest' %}">
                 <i class="fa-solid fa-wallet"></i>
-                <span>Sell Request</span>
-                {% if sell_request_obj %}
-                <span class="badge badge-danger badge-counter">{{sell_request_obj.count}}</span>
+                <span>Gardener Sell Request</span>
+                {% if gardener_sell_request_obj %}
+                <span class="badge badge-danger badge-counter">{{gardener_sell_request_obj.count}}</span>
+                {% endif %}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_dashboard:vendor_sellrequest' %}">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Vendor Sell Request</span>
+                {% if vendor_sell_request_obj %}
+                <span class="badge badge-danger badge-counter">{{vendor_sell_request_obj.count}}</span>
                 {% endif %}
             </a>
         </li>
@@ -70,7 +85,11 @@
               <span>Wallet</span>
           </a>
       </li>
-
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_dashboard:admin_order_list' %}">
+            <i class="fa-solid fa-coins"></i>
+            <span>Gardener Orders</span></a>
+        </li>
       <!-- Nav Item - Tables -->
       <li class="nav-item">
           <a class="nav-link" href="#">

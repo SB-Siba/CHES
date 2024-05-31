@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'channels',
     'chatapp',
+    'vendor_dashboard',
 ]
 
 MIDDLEWARE = [
@@ -135,6 +136,15 @@ STATIC_ROOT = os.path.join(str(BASE_DIR) + '/staticfiles/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# more settings 
+GST_CHARGE = 0.015
+DELIVARY_CHARGE_PER_BAG = 0
+DELIVARY_FREE_ORDER_AMOUNT = 3000
+
+COUPON_ENABLE = True
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

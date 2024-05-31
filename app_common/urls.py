@@ -10,6 +10,7 @@ urlpatterns = [
     path('index', views.Home.as_view(), name='index'),
     path('add-gardening-details/<str:u_email>', views.GardeningDetails.as_view(), name='gardeningdetails'),
     path('gardening-quiz/<str:u_email>', views.gardening_quiz_view, name='gardeningquiz'),
+    path('add-vendor-details/<str:u_email>', views.VendorDetails.as_view(), name='vendordetails'),
 ]
 
 #   app_common:register

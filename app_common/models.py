@@ -47,6 +47,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_approved = models.BooleanField(default=False)
 
+    is_gardener = models.BooleanField(default=False)
+    is_vendor = models.BooleanField(default=False)
+
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
@@ -94,6 +97,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         # Calculate average rating
         if num_ratings > 0:
             avg_rating = total_rating / num_ratings
+            avg_rating = round(avg_rating, 1)  # Round to 2 decimal places
         else:
             avg_rating = 0
 
@@ -215,11 +219,116 @@ class ProduceBuy(models.Model):
     # sell_produce = models.CharField(max_length=250, blank=True, null=True)
     sell_produce = models.ForeignKey(SellProduce,on_delete=models.SET_NULL, blank=True, null=True)
     product_name = models.CharField(max_length=250, blank=True, null=True)
-    product_quantity = models.FloatField(default=0.0,null=True,blank=True)
+    # product_quantity = models.FloatField(default=0.0,null=True,blank=True)
     SI_units = models.CharField(max_length=20, choices=SI_UNIT_CHOICES,default="Kilogram")
-    ammount_in_green_points = models.PositiveIntegerField(default=0,null=True,blank=True)
+    rating_given = models.BooleanField(default=False,null=True,blank=True)
     buying_status = models.CharField(max_length=20, choices=BUYINGSTATUS,null=True,blank=True)
     quantity_buyer_want = models.PositiveIntegerField(default=1,null=True,blank=True)
     ammount_based_on_quantity_buyer_want = models.PositiveBigIntegerField(default=0,null=True,blank=True)
     payment_link = models.CharField(max_length=20, choices=PAYMENTLINK,default="NotAvailable")
     date_time = models.DateTimeField(auto_now_add=True)
+
+class VendorDetails(models.Model):
+    BUSINESS_CATEGORIES = (
+        ('plants', 'Plants'),
+        ('tools', 'Tools'),
+        ('seeds', 'Seeds'),
+        ('other', 'Other'),
+    )
+    vendor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='vendor_details')
+    business_name = models.CharField(max_length=255)
+    business_address = models.CharField(max_length=255)
+    business_description = models.TextField()
+    business_license_number = models.CharField(max_length=50)
+    business_category = models.CharField(max_length=20, choices=BUSINESS_CATEGORIES)
+    establishment_year = models.PositiveIntegerField()
+    website = models.URLField(blank=True)
+    established_by = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        if self.vendor:
+            return f"{self.business_name} - {self.vendor.full_name}"
+        return self.business_name
+    
+    def get_vendor_rating(self):
+        if self.vendor:
+            return self.vendor.calculate_avg_rating()
+        return 0
+    
+
+class ProductFromVendor(models.Model):
+    CATEGORY_CHOICES = [
+        ('seeds', 'Seeds'),
+        ('plants', 'Plants'),
+        ('tools', 'Gardening Tools'),
+        ('fertilizers', 'Fertilizers'),
+        ('pots_containers', 'Pots & Containers'),
+        ('pest_control', 'Pest Control'),
+        ('irrigation', 'Irrigation Systems'),
+        ('garden_decor', 'Garden Decor'),
+        # Add more gardening-specific categories as needed
+    ]
+    APPROVEREJECT = (
+        ("approved","approved"),
+        ("rejected","rejected"),
+        ("pending","pending")
+    )
+    
+    vendor = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    discount_price = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
+    max_price = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
+    image = models.ImageField(upload_to='vendor_products/', null=True, blank=True)
+    stock = models.IntegerField(default=0)
+    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
+    is_approved = models.CharField(max_length=10, choices= APPROVEREJECT, default='pending')
+    reason = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name} --> {self.vendor.full_name}"
+    
+class Order(models.Model):
+    ORDER_STATUS = (
+        ("Placed","Placed"),
+        ("Accepted","Accepted"),
+        ("Cancel","Cancel"),
+        ("On_Way","On_Way"),
+        ("Refund","Refund"),
+        ("Return","Return"),
+    )
+
+    PaymentStatus = (
+        ("Paid","Paid"),
+        ("Pending","Pending"),
+        ("Refunded","Refunded"),
+    )
+
+    uid=models.CharField(max_length=255, null=True, blank=True)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,related_name="customer")
+    vendor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,related_name="vendor")
+    products = models.JSONField(default=dict, null=True, blank=True)
+    coupon = models.CharField(max_length=255, null=True, blank=True)
+    order_value = models.FloatField(default=0.0)
+    order_meta_data = models.JSONField(default=dict, null=True, blank=True)
+    order_status = models.CharField(max_length=255, choices= ORDER_STATUS, default="Placed")
+    razorpay_payment_id = models.TextField(null= True, blank=True)
+    razorpay_order_id = models.TextField(null= True, blank=True)
+    razorpay_signature = models.TextField(null= True, blank=True)
+    payment_status = models.CharField(max_length=255, choices= PaymentStatus, default="Paid")
+
+    customer_details = models.JSONField(default=dict, null=True, blank=True)
+
+    more_info = models.TextField(null= True, blank=True)
+    date = models.DateField(auto_now_add= True, null=True, blank=True)
+
+    transaction_id = models.TextField(null= True, blank=True)
+    can_edit = models.BooleanField(default=True) # id a order is canceled or refunded, make it non editable
+
+    def __str__(self):
+        return self.uid
+
+    def save(self, *args, **kwargs):
+        if not self.uid:
+            self.uid = utils.generate_unique_id(5)
+        super().save(*args, **kwargs)

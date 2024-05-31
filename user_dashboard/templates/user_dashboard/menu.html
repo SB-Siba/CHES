@@ -35,9 +35,17 @@
                         <img src="{% static 'user_dashboard\img\buy.png' %}" class="text-info" alt="" style="height: 15px;">
                             <span>Buy From Community</span>
                     </a>
+                    <a class="collapse-item" href="{% url 'user_dashboard:vendorproducts' %}">
+                        <img src="{% static 'user_dashboard\img\buy.png' %}" class="text-info" alt="" style="height: 15px;">
+                            <span>Buy From Vendors</span>
+                    </a>
                     <a class="collapse-item" href="{% url 'user_dashboard:allorders' %}">
                         <img src="{% static 'user_dashboard\img\s_cart.png' %}" class="text-info" alt="" style="height: 15px;">
-                            <span>My Orders</span>
+                            <span>My Community Orders</span>
+                    </a>
+                    <a class="collapse-item" href="{% url 'user_dashboard:allordersfromvendor' %}">
+                        <img src="{% static 'user_dashboard\img\s_cart.png' %}" class="text-info" alt="" style="height: 15px;">
+                            <span>My Orders From Vendor</span>
                     </a>
                     <a class="collapse-item" href="{% url 'user_dashboard:allsellrequests' %}">
                         <img src="{% static 'user_dashboard\img\request.png' %}" class="text-info" alt="" style="height: 15px;">

@@ -1,0 +1,46 @@
+{% extends 'vendor_dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="mt-2">
+    {% include 'app_common/snippets/alert.html' %}
+    <div class="table-responsive">
+        <table class="table table-hover table-nowrap">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Quantity</th> 
+                    <!-- <th scope="col">Quantity</th> -->
+                    <!-- <th scope="col">Image</th> -->
+                    <th scope="col">Invoice</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order,product,quantity in order_product_quantity %}
+                <tr>
+                    <td>{{ order.uid }}</td>
+                    <td>
+                        {% for j in product %}
+                        {{ j }}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for i in quantity %}
+                        {{ i }}
+                        {% endfor %}  
+                    </td>
+                    <td>
+                        <a href="{% url 'vendor_dashboard:invoice' order.uid %}"
+                          class="btn btn-sm btn-square btn-neutral btn-primary">
+                          Invoice
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% include 'app_common/snippets/pagination.html' %}
+    </div>
+</div>
+{% endblock main_content %}

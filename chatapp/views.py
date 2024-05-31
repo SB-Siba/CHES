@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Message
-from app_common.models import User,SellProduce
+from app_common.models import User,SellProduce,ProductFromVendor
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.db.models import Q
 from django.db.models import Max
@@ -79,13 +79,21 @@ def chat(request):
     context = {
         'zipped_messages': zipped_messages,
         }
-    return render(request, 'chat/messages.html', context)
+    if request.user.is_gardener:
+        return render(request, 'chat/messages.html', context)
+    else:
+        return render(request, 'chat/vendor_message_box.html', context)
 
 
 def start_messages(request, r_id,product_id):
     # Retrieve the receiver object if it exists
     receiver = get_object_or_404(User, pk=r_id)
-    product_obj = get_object_or_404(SellProduce,pk=product_id)
+    try:
+        product_obj = get_object_or_404(SellProduce,pk=product_id)
+        initial_message = f"Hi {receiver.full_name}, I am interested in purchasing {product_obj.product_name}."
+    except:
+        product_obj = get_object_or_404(ProductFromVendor,pk=product_id)
+        initial_message = f"Hi {receiver.full_name}, I am interested in purchasing {product_obj.name}."
     sender = request.user
     
     # Check if a message with the same sender and receiver already exists
@@ -95,7 +103,7 @@ def start_messages(request, r_id,product_id):
     if existing_message:
         return redirect('chat:all_messages')
     
-    initial_message = f"Hi {receiver.full_name}, I am interested in purchasing {product_obj.product_name}."
+    # initial_message = f"Hi {receiver.full_name}, I am interested in purchasing {product_obj.product_name}."
     message_data = {
         'sender': sender.id,
         'message': initial_message,

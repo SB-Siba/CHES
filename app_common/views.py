@@ -47,11 +47,20 @@ class Register(View):
 
             try:
                 user_obj = models.User(full_name = full_name,email = email,contact = contact,city = city)
+                # Save is_gardener and is_vendor fields
+                if form.cleaned_data['is_gardener']:
+                    user_obj.is_gardener = True
+                if form.cleaned_data['is_vendor']:
+                    user_obj.is_vendor = True
                 user_obj.set_password(password)
                 user_obj.save()
-                request.session['full_name'] = full_name
-                messages.success(request,"Now Please give your Gardening Details.")
-                return redirect('app_common:gardeningdetails',email)
+                if form.cleaned_data['is_gardener']:
+                    messages.success(request,"Now Please give your Gardening Details.")
+                    return redirect('app_common:gardeningdetails',email)
+                else:
+                    messages.success(request,"Now Please give your Vendor Details.")
+                    return redirect('app_common:vendordetails',email)
+                
             except:
                 messages.error(request,'Failed to register')
                 return redirect('app_common:register')
@@ -88,9 +97,13 @@ class Login(View):
                 auth.login(request,user) 
                 return redirect('admin_dashboard:admin_dashboard')
         
-            elif user.is_approved == True:
+            elif user.is_approved == True and user.is_gardener == True:
                 auth.login(request,user)
                 return redirect('user_dashboard:user_dashboard')
+            
+            elif user.is_approved == True and user.is_vendor == True:
+                auth.login(request,user)
+                return redirect('vendor_dashboard:vendor_dashboard')
             else:
                 messages.error(request,"Your account hasn't been approved yet.")
                 return redirect('app_common:login')
@@ -140,10 +153,10 @@ class GardeningDetails(View):
                 return redirect('app_common:gardeningquiz',u_email)
             except:
                 messages.error(request,'Failed to Add data')
-                return redirect('app_common:gardeningdetails')
+                return redirect('app_common:gardeningdetails',u_email)
         else:
             messages.error(request,'Please correct the below errors.')
-            return redirect('app_common:gardeningdetails')
+            return redirect('app_common:gardeningdetails',u_email)
 
 
 def gardening_quiz_view(request,u_email):
@@ -178,6 +191,60 @@ def gardening_quiz_view(request,u_email):
             }
     return render(request, 'app_common/gardening_quiz.html', context)
 
+
+class VendorDetails(View):
+    model = models.VendorDetails
+    template = app + "vendor_details.html"
+    form_class = forms.VendorDetailsForm
+
+    def get(self,request,u_email):
+        print(u_email)
+        try:
+            user_obj = models.User.objects.get(email = u_email)
+            form = self.form_class(instance=user_obj)
+            context={'form':form}
+        except self.model.DoesNotExist:
+            messages.error(request,"No Data Found")
+        
+        return render(request, self.template, context)     
+
+    def post(self,request,u_email):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user_obj = models.User.objects.get(email = u_email)
+
+            business_name = form.cleaned_data['business_name']
+            business_address = form.cleaned_data['business_address']
+            business_description = form.cleaned_data['business_description']
+            business_license_number = form.cleaned_data['business_license_number']
+            business_category = form.cleaned_data['business_category']
+            establishment_year = form.cleaned_data['establishment_year']
+            website = form.cleaned_data['website']
+            established_by = form.cleaned_data['established_by']
+           
+
+            try:
+                vendor_detail_obj = self.model(
+                    vendor = user_obj,
+                    business_name = business_name,
+                    business_address = business_address,
+                    business_description = business_description,
+                    business_license_number = business_license_number,
+                    business_category = business_category,
+                    establishment_year = establishment_year,
+                    website = website,
+                    established_by = established_by
+                    )
+                vendor_detail_obj.save()
+                messages.success(request,'Details Added Successfully.Now Please wait for admin approval for login.')
+                return redirect('app_common:login')
+            except:
+                messages.error(request,'Failed to Add data')
+                return redirect('app_common:vendordetails',u_email)
+        else:
+            messages.error(request,'Please correct the below errors.')
+            return redirect('app_common:vendordetails',u_email)
+
 class Home(View):
     template = app + 'index.html'
 
@@ -187,3 +254,4 @@ class Home(View):
             request,
             self.template
         )
+    

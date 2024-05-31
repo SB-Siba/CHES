@@ -27,29 +27,40 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = models.User
-        fields =["full_name","email","contact","city","password","confirm_password"]
+        fields = ["full_name", "email", "contact", "city", "password", "confirm_password", "is_gardener", "is_vendor"]
 
     full_name = forms.CharField(max_length=255, label='Enter Full Name')
     full_name.widget.attrs.update({'class': 'form-control','type':'text','placeholder':'Full Name',"required":"required"})
 
-    email = forms.CharField(label='Email')
+    email = forms.EmailField(label='Email')
     email.widget.attrs.update({'class': 'form-control','type':'email', "placeholder":"Enter Email","required":"required"})
 
-    contact = forms.IntegerField(label='Enter Contact Number')
-    contact.widget.attrs.update({'class': 'form-control','type':'number','placeholder':'Contact Number',"required":"required"})
+    contact = forms.CharField(max_length=10, label='Enter Contact Number')
+    contact.widget.attrs.update({'class': 'form-control','type':'text','placeholder':'Contact Number',"required":"required"})
     
-    city = forms.ChoiceField(choices = CITIES)
-    city.widget.attrs.update({'class': 'form-control','type':'text','placeholder':'Select City',"required":"required"})
+    city = forms.ChoiceField(choices=CITIES)
+    city.widget.attrs.update({'class': 'form-control','placeholder':'Select City',"required":"required"})
     
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Enter Password'}))
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Confirm Password'}))
 
+    is_gardener = forms.BooleanField(required=False, label='Are you a Gardener?')
+    is_gardener.widget.attrs.update({'class': 'form-check-input'})
+
+    is_vendor = forms.BooleanField(required=False, label='Are you a Vendor?')
+    is_vendor.widget.attrs.update({'class': 'form-check-input'})
 
     def clean(self):
         cleaned_data = super().clean()
-        if cleaned_data['password'] != cleaned_data['confirm_password']:
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password != confirm_password:
             raise forms.ValidationError("Password Mismatched")
-        
+
+        if not cleaned_data.get("is_gardener") and not cleaned_data.get("is_vendor"):
+            raise forms.ValidationError("Please select at least one: Gardener or Vendor.")
+
         return cleaned_data
     
 class GardeningForm(forms.ModelForm):
@@ -86,3 +97,18 @@ class GardeningQuizForm(forms.Form):
     q5 = forms.CharField(label='5. What is the primary purpose of adding compost to soil?')
     q5.widget.attrs.update({'class': 'form-control','type':'text','placeholder':'Answer here',"required":"required"})
     
+
+class VendorDetailsForm(forms.ModelForm):
+    class Meta:
+        model = models.VendorDetails
+        fields = ['business_name', 'business_address', 'business_description', 'business_license_number',
+                  'business_category', 'establishment_year', 'website', 'established_by']
+
+    business_name = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Name'}))
+    business_address = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Address'}))
+    business_description = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'class': 'form-control', 'placeholder': 'Business Description'}))
+    business_license_number = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business License Number'}))
+    business_category = forms.ChoiceField(choices=models.VendorDetails.BUSINESS_CATEGORIES, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Business Category'}))
+    establishment_year = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Establishment Year'}))
+    website = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Website'}))
+    established_by = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Established By'}))

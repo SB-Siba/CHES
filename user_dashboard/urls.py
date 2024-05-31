@@ -34,6 +34,11 @@ urlpatterns = [
     path('give-comment/',views.give_comment,name="give_comment"),
     path('all-comment/',views.get_all_comments,name="get_all_comments"),
     path('rate-order/',views.RateOrder.as_view(),name="rate_order"),
+
+    path('products-from-vendor/', views.VendorsProduct.as_view(), name = "vendorproducts"),
+    path('checkout-vendor-products/<int:vprod_id>/<str:vendor_email>',views.CheckoutView.as_view(),name="checkout_vendor_products"),
+    path('orders-from-vendor/', views.AllOrdersFromVendors.as_view(), name = "allordersfromvendor"),
+    path('invoice/<int:order_uid>',views.GardenerDownloadInvoice.as_view(),name="invoice"),
 ]
 
 #  user_dashboard:user_dashboard

@@ -12,6 +12,7 @@ from django.db.models import Q
 from django.utils import timezone
 from helpers import utils
 from chatapp.models import Message
+from . serializers import DirectBuySerializer,OrderSerializer
 
 app = "user_dashboard/"
 
@@ -388,32 +389,37 @@ class BuyingBegins(View):
     
     def post(self,request,prod_id):
         user = request.user
-        buyer = app_commonmodels.User.objects.get(id = user.id)
-        sell_prod_obj = self.model.objects.get(id=prod_id)
-        seller = sell_prod_obj.user
-        product_quantity = sell_prod_obj.product_quantity
-        SI_units = sell_prod_obj.SI_units
-        ammount_in_green_points = sell_prod_obj.ammount_in_green_points
+        try:
+            buyer = app_commonmodels.User.objects.get(id = user.id)
+            sell_prod_obj = self.model.objects.get(id=prod_id)
+            seller = sell_prod_obj.user
+            product_quantity = sell_prod_obj.product_quantity
+            SI_units = sell_prod_obj.SI_units
+            ammount_in_green_points = sell_prod_obj.ammount_in_green_points
 
-        form_data = request.POST
-        quantity = int(form_data['quantity'])
-        
-        # print(type(prod_id),type(quantity))
-        if product_quantity >= quantity:
-            try:
-                if buyer.wallet >= ammount_in_green_points:
-                    buying_obj = app_commonmodels.ProduceBuy(buyer = buyer,seller = seller,sell_produce = sell_prod_obj,product_name = sell_prod_obj.product_name,product_quantity = product_quantity,SI_units = SI_units,ammount_in_green_points = ammount_in_green_points,buying_status = 'BuyInProgress',quantity_buyer_want = quantity)
-                    buying_obj.save()
-                    return redirect('user_dashboard:user_dashboard')
-                else:
-                    messages.error(request,"You don't have enough green points in your wallet!")
+            form_data = request.POST
+            quantity = int(form_data['quantity'])
+            
+            # print(type(prod_id),type(quantity))
+            if product_quantity >= quantity:
+                try:
+                    if buyer.wallet >= ammount_in_green_points:
+                        buying_obj = app_commonmodels.ProduceBuy(buyer = buyer,seller = seller,sell_produce = sell_prod_obj,product_name = sell_prod_obj.product_name,SI_units = SI_units,buying_status = 'BuyInProgress',quantity_buyer_want = quantity)
+                        buying_obj.save()
+                        return redirect('user_dashboard:user_dashboard')
+                    else:
+                        messages.error(request,"You don't have enough green points in your wallet!")
+                        return redirect('user_dashboard:greencommerceproducts')
+                except Exception as e:
+                    print(e)
                     return redirect('user_dashboard:greencommerceproducts')
-            except Exception as e:
-                print(e)
-                return redirect('user_dashboard:greencommerceproducts')
-        else:
-            messages.error(request,"The requested amount is not available.")
-            return redirect('user_dashboard:greencommerceproducts') 
+            else:
+                messages.error(request,"The requested amount is not available.")
+                return redirect('user_dashboard:greencommerceproducts') 
+        except self.model.DoesNotExist:
+            messages.error(request,"The product is not available.")
+            return redirect('user_dashboard:greencommerceproducts')
+
 
 
 class BuyBeginsSellerView(View):
@@ -517,30 +523,31 @@ class AllOrders(View):
 
     def get(self, request):
         orders = self.model.objects.filter(buyer=request.user)
-        orders_list = []
-        ratings_given = []
+        # orders_list = []
+        # ratings_given = []
         
-        encountered_sellers = set()  # Track encountered sellers to avoid duplicates
+        # encountered_sellers = set()  # Track encountered sellers to avoid duplicates
 
-        for order in orders:
-            orders_list.append(order)
-            seller = order.seller
+        # for order in orders:
+        #     orders_list.append(order)
+        #     seller = order.seller
             
             
-            # Check if we've already processed ratings for this seller
-            if order.id not in encountered_sellers:
-                encountered_sellers.add(order.id)
-                ratings = seller.ratings
-                
-                # Check if the buyer has given ratings to this seller
-                rating_given = any(rating['buyer_name'] == request.user.full_name for rating in ratings)
-                if rating_given:
-                    ratings_given.append("Given")
-                else:
-                    ratings_given.append("NotGiven")
-        
-        order_and_ratings = zip(orders_list,ratings_given)
-        return render(request , self.template , {'order_and_ratings' : order_and_ratings})
+        #     # Check if we've already processed ratings for this seller
+        #     if order.id not in encountered_sellers:
+        #         encountered_sellers.add(order.id)
+        #         print(encountered_sellers)
+        #         ratings = seller.ratings
+        #         print(ratings)
+        #         # Check if the buyer has given ratings to this seller
+        #         rating_given = any(rating['buyer_name'] == request.user.full_name for rating in ratings)
+        #         if rating_given:
+        #             ratings_given.append("Given")
+        #         else:
+        #             ratings_given.append("NotGiven")
+        # print(ratings_given)
+        # order_and_ratings = zip(orders_list,ratings_given)
+        return render(request , self.template , {'orders' : orders})
     
 class AllPosts(View):
     template = app + "all_posts.html"
@@ -641,6 +648,184 @@ class RateOrder(View):
             "rating": rating,
         }
         seller.ratings.append(new_rating)
-        
+        buy_obj.rating_given = True
+        buy_obj.save()
         seller.save()
         return redirect('user_dashboard:allorders')
+    
+class VendorsProduct(View):
+    template = app + "vendor_products.html"
+    model = app_commonmodels.ProductFromVendor
+
+    def get(self,request):
+        products = self.model.objects.filter(is_approved="approved").order_by("-id")
+        ratings_list = [i.vendor.calculate_avg_rating() for i in products]
+        message_status = []
+        for i in products:
+            msg_obj = Message.objects.filter(Q(receiver=i.vendor,sender=request.user) | Q(receiver=request.user,sender=i.vendor))
+            if msg_obj:
+                message_status.append(True)
+            else:
+                message_status.append(False)
+       
+        zipped_value = zip(products,message_status,ratings_list)
+        context={'zipped_value':zipped_value}
+        return render(request,self.template,context)
+    
+class CheckoutView(View):
+    template = app + "checkout_page.html"
+    form = user_form.CheckoutForm
+
+    def get(self,request,vprod_id,vendor_email):
+        user = request.user
+        
+        initial_data = {
+        'username': user.email,
+        }
+
+        form = self.form(initial=initial_data)
+        vendor_product_obj = get_object_or_404(app_commonmodels.ProductFromVendor,id = vprod_id)
+        serializer = DirectBuySerializer(vendor_product_obj)
+        order_details = serializer.data
+        ord_meta_data = {}
+        for i,j in order_details.items():
+            ord_meta_data.update(j)
+
+        discount_ammount = ord_meta_data['discount_amount']
+        discount_percentage = ord_meta_data['discount_percentage']
+        gst = ord_meta_data['charges']["GST"]
+        t_price = ord_meta_data['final_value']
+        data = {
+            'form': form,
+            "vendor_product":vendor_product_obj,
+            "discount_ammount":discount_ammount,
+            "discount_percentage":discount_percentage,
+            "gst":gst,
+            "total":t_price
+            }
+        return render(request, self.template, data)
+    def post(self,request,vprod_id,vendor_email):
+        form = self.form(request.POST)
+        if form.is_valid():
+            user = request.user
+            first_name = form.cleaned_data['first_name'] 
+            last_name = form.cleaned_data['last_name']    
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            address = form.cleaned_data['address']
+            city = form.cleaned_data['city']
+            zip_code = form.cleaned_data['zip_code']
+            same_address = form.cleaned_data['same_address']
+            save_info = form.cleaned_data['save_info']
+
+            customer_details = {
+                'first_name': first_name,
+                'last_name': last_name,
+                'username': username,
+                'email': email,
+                'address': address,
+                'city': city,
+                'zip_code': zip_code,
+            }
+
+            prod_obj = get_object_or_404(app_commonmodels.ProductFromVendor,id = vprod_id)
+            
+            serializer = DirectBuySerializer(prod_obj)
+            order_details = serializer.data
+            # print(order_details)
+            ord_meta_data = {}
+            for i,j in order_details.items():
+                ord_meta_data.update(j)
+            # print(ord_meta_data)
+            t_price = ord_meta_data['final_value']
+
+            try:
+                vendor = get_object_or_404(app_commonmodels.User,email = vendor_email)
+                # subject = "Order Successfull."
+                # message = f"Dear {user.full_name},\nYour order of {prod_obj.title} has been placed successfully.\n\nPlease check your email for further instructions"
+                # from_email = "forverify.noreply@gmail.com"
+                # send_mail(subject, message, from_email,[user_email], fail_silently=False)
+                order = app_commonmodels.Order(
+                    customer = user,
+                    vendor = vendor,
+                    products={prod_obj.name:1},
+                    order_value=float(t_price),
+                    customer_details=customer_details,
+                    order_meta_data = ord_meta_data
+                    # razorpay_payment_id = razorpay_payment_id,
+                    # razorpay_order_id= razorpay_order_id,
+                    # razorpay_signature= razorpay_signature,
+                )
+                # order.order_meta_data = json.loads(ord_meta_data)
+                order.save()
+                prod_obj.stock -= 1
+                prod_obj.save()
+                messages.success(request, "Order Successful!")
+                return redirect("user_dashboard:user_dashboard")
+            except Exception as e:
+                print(e)
+                messages.error(request, "Error while placing Order.")
+                return redirect("user_dashboard:user_dashboard")
+            
+    
+class AllOrdersFromVendors(View):
+    model = app_commonmodels.Order
+    template = app + "all_orders_from_vendor.html"
+
+    def get(self,request):
+        user = request.user
+        orders = self.model.objects.filter(customer=request.user).order_by("-uid")
+        order_list = []
+        products_list = []
+        for order in orders:
+            order_products = []
+            order_items = order.products
+            # print(order_items)
+            for name, quantity in order_items.items():
+                order_products.append(get_object_or_404(app_commonmodels.ProductFromVendor,name = name))
+            
+            products_list.append(order_products)
+            order_list.append(order)
+        print(order_list)
+        order_and_products = zip(order_list, products_list)
+        
+        context={'order_and_products':order_and_products}
+        return render(request,self.template,context)
+    
+class GardenerDownloadInvoice(View):
+    model = app_commonmodels.Order
+    template = app + "invoice.html"
+
+    def get(self,request, order_uid):
+        order = self.model.objects.get(uid = order_uid)
+        data = OrderSerializer(order).data
+        products = []
+        quantities = []
+        price_per_unit = []
+        total_prices = []
+        for product,p_overview in data['order_meta_data']['products'].items():
+            products.append(product)
+            quantities.append(p_overview['quantity'])
+            price_per_unit.append(p_overview['price_per_unit'])
+            total_prices.append(p_overview['total_price'])
+            # product['product']['quantity']=product['quantity']
+        
+        prod_quant = zip(products, quantities,price_per_unit,total_prices)
+        try:
+            final_total = data['order_meta_data']['final_cart_value']
+        except Exception:
+            final_total = data['order_meta_data']['final_value']
+        
+        context ={
+            'order':data,
+            'details':data['customer_details'],
+            'customer':order.customer,
+            'vendor':order.vendor,
+            'productandquantity':prod_quant,
+            'GST':data['order_meta_data']['charges']['GST'],
+            'delevery_charge':data['order_meta_data']['charges']['Delivary'],
+            'gross_amt':data['order_meta_data']['our_price'],
+            'discount':data['order_meta_data']['discount_amount'],
+            'final_total':final_total
+        }
+        return render(request,self.template,context)
