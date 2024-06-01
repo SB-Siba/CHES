@@ -29,7 +29,7 @@ class UserDashboard(View):
                     i.delete()
         except Exception:
             pass
-        users_orderby_coins = app_commonmodels.User.objects.filter(is_superuser=False).order_by('-coins')[:10]
+        users_orderby_coins = app_commonmodels.User.objects.filter(is_superuser=False,is_rtg = True).order_by('-coins')[:10]
         garden_obj = get_object_or_404(app_commonmodels.GardeningProfile, user=user)
         rank = user.get_rank()
         context = {

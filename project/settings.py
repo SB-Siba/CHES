@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'channels',
     'chatapp',
     'vendor_dashboard',
+    'serviceprovider',
 ]
 
 MIDDLEWARE = [

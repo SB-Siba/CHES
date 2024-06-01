@@ -47,7 +47,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_approved = models.BooleanField(default=False)
 
-    is_gardener = models.BooleanField(default=False)
     is_rtg = models.BooleanField(default=False)
     is_vendor = models.BooleanField(default=False)
     is_serviceprovider = models.BooleanField(default=False)
@@ -358,30 +357,3 @@ class ServiceProviderDetails(models.Model):
 
     def __str__(self):
         return f"{self.provider.full_name} - {self.service_type}"
-
-class GardenerDetails(models.Model):
-    SERVICE_TYPES = [
-        ('Lawn Care', 'Lawn Care'),
-        ('Tree Pruning', 'Tree Pruning'),
-        ('Garden Maintenance', 'Garden Maintenance'),
-        ('Planting', 'Planting'),
-        # Add more types as needed
-    ]
-    AVAILABLE_DAYS = [
-        ('Sunday', 'Sunday'),
-        ('Monday', 'Monday'),
-        ('Tuesday', 'Tuesday'),
-        ('Wednesday', 'Wednesday'),
-        ('Thursday', 'Thursday'),
-        ('Friday', 'Friday'),
-        ('Saturday', 'Saturday'),
-    ]
-
-    gardener = models.ForeignKey(User, on_delete=models.CASCADE)
-    service_for = models.TextField()
-    hourly_rate = models.DecimalField(max_digits=10, decimal_places=2)
-    years_experience = models.IntegerField()
-    available_days = models.TextField()
-
-    def __str__(self):
-        return f"Gardener: {self.gardener.full_name}"

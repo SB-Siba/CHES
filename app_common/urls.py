@@ -12,7 +12,6 @@ urlpatterns = [
     path('gardening-quiz/<str:u_email>', views.gardening_quiz_view, name='gardeningquiz'),
     path('add-vendor-details/<str:u_email>', views.VendorDetails.as_view(), name='vendordetails'),
     path('add-service-provider-details/<str:u_email>', views.ServiceProviderDetails.as_view(), name='serviceproviderdetails'),
-    path('add-gardener-details/<str:u_email>', views.GardenerDetails.as_view(), name='gardenerdetails'),
 ]
 
 #   app_common:register

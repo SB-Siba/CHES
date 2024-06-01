@@ -47,7 +47,6 @@ class Register(View):
 
             try:
                 user_obj = models.User(full_name = full_name,email = email,contact = contact,city = city)
-                # Save is_gardener and is_vendor fields
                 if form.cleaned_data['is_rtg']:
                     user_obj.is_rtg = True
                     user_obj.set_password(password)
@@ -60,12 +59,6 @@ class Register(View):
                     user_obj.save()
                     messages.success(request,"Now Please give your Vendor Details.")
                     return redirect('app_common:vendordetails',email)
-                elif form.cleaned_data['is_gardener']:
-                    user_obj.is_gardener = True
-                    user_obj.set_password(password)
-                    user_obj.save()
-                    messages.success(request,"Now Please give your Vendor Details.")
-                    return redirect('app_common:gardenerdetails',email)
                 elif form.cleaned_data['is_serviceprovider']:
                     user_obj.is_serviceprovider = True
                     user_obj.set_password(password)
@@ -108,13 +101,16 @@ class Login(View):
                 auth.login(request,user) 
                 return redirect('admin_dashboard:admin_dashboard')
         
-            elif user.is_approved == True and user.is_gardener == True:
+            elif user.is_approved == True and user.is_rtg == True:
                 auth.login(request,user)
                 return redirect('user_dashboard:user_dashboard')
             
             elif user.is_approved == True and user.is_vendor == True:
                 auth.login(request,user)
                 return redirect('vendor_dashboard:vendor_dashboard')
+            elif user.is_approved == True and user.is_serviceprovider == True:
+                auth.login(request,user)
+                return redirect('service_provider:service_provider_dash')
             else:
                 messages.error(request,"Your account hasn't been approved yet.")
                 return redirect('app_common:login')
@@ -299,49 +295,6 @@ class ServiceProviderDetails(View):
             messages.error(request,'Please correct the below errors.')
             return redirect('app_common:serviceproviderdetails',u_email)
 
-
-class GardenerDetails(View):
-    model = models.GardenerDetails
-    template = app + "gardener_details.html"
-    form_class = forms.GardenerDetailsForm
-
-    def get(self,request,u_email):
-        try:
-            user_obj = models.User.objects.get(email = u_email)
-            form = self.form_class(instance=user_obj)
-            context={'form':form}
-        except self.model.DoesNotExist:
-            messages.error(request,"No Data Found")
-        
-        return render(request, self.template, context)     
-
-    def post(self,request,u_email):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            user_obj = models.User.objects.get(email = u_email)
-
-            service_for = form.cleaned_data['service_for']
-            available_days = form.cleaned_data['available_days']
-            hourly_rate = form.cleaned_data['hourly_rate']
-            years_experience = form.cleaned_data['years_experience']
-            try:
-                gardener_detail_obj = self.model(
-                    gardener = user_obj,
-                    service_for = service_for,
-                    available_days = available_days,
-                    hourly_rate = hourly_rate,
-                    years_experience = years_experience,
-                    )
-                gardener_detail_obj.save()
-                messages.success(request,'Details Added Successfully.Now Please wait for admin approval for login.')
-                return redirect('app_common:login')
-            except:
-                messages.error(request,'Failed to Add data')
-                return redirect('app_common:gardenerdetails',u_email)
-        else:
-            messages.error(request,'Please correct the below errors.')
-            return redirect('app_common:gardenerdetails',u_email)
-        
 
 class Home(View):
     template = app + 'index.html'
