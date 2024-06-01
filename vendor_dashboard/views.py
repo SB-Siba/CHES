@@ -121,17 +121,6 @@ class VendorSellProduct(View):
             messages.error(request,"Error! Please check your inputs.")
             return redirect('vendor_dashboard:vendor_sell_product')
         
-class VendorSellRequests(View):
-    template = app + "vendor_sell_requests.html"
-    model = common_models.ProductFromVendor
-
-    def get(self,request):
-        user = request.user
-        req_obj = self.model.objects.filter(Q(vendor = user) | Q(is_approved = "pending"))
-        data = {
-            'req_obj': req_obj,
-            }
-        return render(request, self.template, data)
     
 class VendorSoldProducts(View):
     template = app + "sold_products.html"

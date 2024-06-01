@@ -64,11 +64,6 @@ class ServiceProviderUpdateProfileView(View):
             service_provider_details.average_cost_per_hour = form.cleaned_data['average_cost_per_hour']
             service_provider_details.years_experience = form.cleaned_data['years_experience']
             
-            # Handle image update
-            if 'image' in request.FILES:
-                service_provider_details.image = request.FILES['image']
-            # Saving updated details
-            service_provider_details.save()
             
             # Update user object if needed
             user_obj = get_object_or_404(common_models.User, id=service_provider_details.provider.id)

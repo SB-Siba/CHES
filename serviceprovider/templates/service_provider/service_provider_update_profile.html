@@ -1,7 +1,7 @@
 {% extends 'service_provider/base.html' %}
 {% load static %}
 
-{% block main_content %}
+{% block s_vendor_content %}
 <div class="container mt-3">
     <div class="row d-flex align-items-center justify-content-center">
       <div class="col-lg-8 sell_wrapper">
@@ -37,7 +37,7 @@
                 {{ form.image }}
             </div>
             <div style="text-align:center;">
-                <button class="log_btn" type="submit">
+                <button class="btn btn-success btn-lg" type="submit">
                     Update Profile
                 </button>
             </div>
@@ -45,4 +45,4 @@
       </div>
     </div>
   </div>
-{% endblock main_content %}
+{% endblock s_vendor_content %}

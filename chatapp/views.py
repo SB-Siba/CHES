@@ -79,21 +79,26 @@ def chat(request):
     context = {
         'zipped_messages': zipped_messages,
         }
-    if request.user.is_gardener:
+    if request.user.is_rtg:
         return render(request, 'chat/messages.html', context)
-    else:
+    elif request.user.is_serviceprovider:
+        return render(request, 'chat/s_provider_msg_box.html', context)
+    elif request.user.is_vendor:
         return render(request, 'chat/vendor_message_box.html', context)
 
 
-def start_messages(request, r_id,product_id):
+def start_messages(request, r_id,product_name=None):
     # Retrieve the receiver object if it exists
     receiver = get_object_or_404(User, pk=r_id)
-    try:
-        product_obj = get_object_or_404(SellProduce,pk=product_id)
-        initial_message = f"Hi {receiver.full_name}, I am interested in purchasing {product_obj.product_name}."
-    except:
-        product_obj = get_object_or_404(ProductFromVendor,pk=product_id)
-        initial_message = f"Hi {receiver.full_name}, I am interested in purchasing {product_obj.name}."
+    if not product_name:
+        product_name = "None"
+    
+    # Set the initial message based on whether product_name is provided
+    if product_name != "None":
+        initial_message = f"Hi {receiver.full_name}, I am interested in purchasing {product_name}."
+    else:
+        initial_message = f"Hi {receiver.full_name}, I would like to start a conversation with you."
+    
     sender = request.user
     
     # Check if a message with the same sender and receiver already exists

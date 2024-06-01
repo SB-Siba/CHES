@@ -28,41 +28,6 @@ class DirectBuySerializer(serializers.ModelSerializer):
         self.coupon = kwargs.pop('coupon', None)
         super().__init__(*args, **kwargs)
 
-    #coupon validation and calculation
-    # def coupon_validation(self, code, amount):
-    #     error_dict = {
-    #         "valid" : False,
-    #         "discount" : "0",
-    #         "message": "Invalid Coupon Code"
-    #     }
-        
-    #     try:
-    #         coupon_obj = common_models.Coupon.objects.get(code = code)
-    #     except:
-    #         return error_dict
-        
-    #     if coupon_obj.quantity < 1 or coupon_obj.active == 'no':
-    #         return error_dict
-        
-    #     if coupon_obj.discount_type == "flat":
-    #         discount = coupon_obj.discount_digit
-    #         return {
-    #         "coupon":code,
-    #         "valid" : True,
-    #         "discount" : discount,
-    #         "message": f"{code} : is applied successfully"
-    #         }
-    #     elif coupon_obj.discount_type == "pencentage":
-    #         discount = round(amount*(coupon_obj.discount_digit/100),2)
-    #         return {
-    #             "coupon":code,
-    #             "valid" : True,
-    #             "discount" : discount,
-    #             "message": f"{code} : is applied successfully"
-    #         }
-    #     else:
-    #         return error_dict
-
     def get_products_data(self,obj):
         total_items = 1
         total_value = 0
@@ -79,8 +44,13 @@ class DirectBuySerializer(serializers.ModelSerializer):
             product = get_object_or_404(models.ProductFromVendor,id = obj.id)
             gross_value += float(product.max_price)
             #____________
-            product_discounted__price = float(product.discount_price)
-            our_price = product_discounted__price
+            if self.context.get('offer_discount') == "1":
+                discount_percentage = float(product.discount_percentage)
+                product_discounted_price = float(product.discount_price) * (1 - (discount_percentage / 100))
+                our_price = product_discounted_price
+            else:
+                product_discounted_price = float(product.discount_price)
+                our_price = product_discounted_price
             price = product.discount_price
 
             x = {}

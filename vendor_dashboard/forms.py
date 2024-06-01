@@ -19,9 +19,12 @@ class VendorDetailsForm(forms.Form):
     image = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
 
 class ProductFromVendorForm(forms.ModelForm):
+    green_coins_required = forms.IntegerField(label='Green Coins Required', widget=forms.NumberInput(attrs={'class': 'form-control'}))
+    discount_percentage = forms.DecimalField(label='Discount Percentage', max_digits=5, decimal_places=2, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+
     class Meta:
         model = common_model.ProductFromVendor
-        fields = ['name', 'description', 'discount_price', 'max_price', 'image', 'stock', 'category']
+        fields = ['name', 'description', 'discount_price', 'max_price', 'image', 'stock', 'category', 'green_coins_required', 'discount_percentage']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
@@ -31,6 +34,3 @@ class ProductFromVendorForm(forms.ModelForm):
             'stock': forms.NumberInput(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
         }
-
-    discount_price = forms.DecimalField(max_digits=10, decimal_places=2, widget=forms.NumberInput(attrs={'class': 'form-control'}))
-    max_price = forms.DecimalField(max_digits=10, decimal_places=2, widget=forms.NumberInput(attrs={'class': 'form-control'}))

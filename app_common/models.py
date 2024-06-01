@@ -82,8 +82,25 @@ class User(AbstractBaseUser, PermissionsMixin):
     #     higher_scores_count = User.objects.filter(coins__gt=self.coins).count()
     #     return higher_scores_count + 1
 
-    def get_rank(self):
-        higher_or_equal_scores_count = User.objects.filter(coins__gte=self.coins).count()
+    def get_rank(self, user_type):
+        if user_type == 'vendor':
+            higher_or_equal_scores_count = User.objects.filter(
+                is_vendor=True,
+                coins__gte=self.coins
+            ).count()
+        elif user_type == 'serviceprovider':
+            higher_or_equal_scores_count = User.objects.filter(
+                is_serviceprovider=True,
+                coins__gte=self.coins
+            ).count()
+        elif user_type == 'rtg':
+            higher_or_equal_scores_count = User.objects.filter(
+                is_rtg=True,
+                coins__gte=self.coins
+            ).count()
+        else:
+            higher_or_equal_scores_count = 0  # Handle invalid user type
+
         return higher_or_equal_scores_count
 
     def calculate_avg_rating(self):
@@ -269,11 +286,6 @@ class ProductFromVendor(models.Model):
         ('garden_decor', 'Garden Decor'),
         # Add more gardening-specific categories as needed
     ]
-    APPROVEREJECT = (
-        ("approved","approved"),
-        ("rejected","rejected"),
-        ("pending","pending")
-    )
     
     vendor = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -283,9 +295,20 @@ class ProductFromVendor(models.Model):
     image = models.ImageField(upload_to='vendor_products/', null=True, blank=True)
     stock = models.IntegerField(default=0)
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
-    is_approved = models.CharField(max_length=10, choices= APPROVEREJECT, default='pending')
     reason = models.TextField(null=True, blank=True)
+    green_coins_required = models.PositiveIntegerField(default=0)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 
+    def calculate_discounted_price(self):
+        """
+        Calculate the discounted price based on the discount percentage.
+        """
+        if self.discount_percentage > 0:
+            discount_amount = (self.discount_percentage / 100) * self.max_price
+            discounted_price = self.max_price - discount_amount
+            return discounted_price
+        else:
+            return self.max_price
     def __str__(self):
         return f"{self.name} --> {self.vendor.full_name}"
     

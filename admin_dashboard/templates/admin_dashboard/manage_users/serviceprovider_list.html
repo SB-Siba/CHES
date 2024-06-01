@@ -1,6 +1,6 @@
 {% extends 'admin_dashboard/starter.html' %}
 {% load static %}
-{% block title %}User List{% endblock title %}
+{% block title %}Service Providers List{% endblock title %}
 {% block content %}
     <div class="page-wapper">
         {% include 'app_common/snippets/alert.html' %}
@@ -38,7 +38,7 @@
                         <th scope="col">User-ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Wallet Balance</th>
-                        <th scope="col">Gardening Details</th>
+                        <th scope="col">Details</th>
                         <th scope="col">Active Status</th>
                         <th scope="col">Last Login</th>
                         <th>Action</th>
@@ -50,7 +50,7 @@
                         <td>{{ user.id }}</td>
                         <td>{{ user.full_name }}</td>
                         <td>{{ user.wallet }}</td>
-                        <td><a href="{% url 'admin_dashboard:gardening_details' user.id %}">Gardening Details</a></td>
+                        <td><a href="{% url 'admin_dashboard:service_providor_details' user.id %}">Details</a></td>
                         <td>{{ user.is_active }}</td>
                         <td>{{ user.last_login }}</td>
                         <td>
