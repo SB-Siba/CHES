@@ -39,30 +39,35 @@ class DirectBuySerializer(serializers.ModelSerializer):
 
         products = {}
         product_list = []
-
+        coin_exchange =  None
         try:
             product = get_object_or_404(models.ProductFromVendor,id = obj.id)
             gross_value += float(product.max_price)
+            x = {}
             #____________
             if self.context.get('offer_discount') == "1":
                 discount_percentage = float(product.discount_percentage)
-                product_discounted_price = float(product.discount_price) * (1 - (discount_percentage / 100))
+                product_discounted_price = float(f"{float(product.discount_price) * (1 - (discount_percentage / 100)):.2f}")
                 our_price = product_discounted_price
+                d_price = product.calculate_discounted_price()
+                x['quantity'] = 1
+                x['price_per_unit'] = float(d_price)
+                x['total_price'] = float(our_price)
+                x["coinexchange"] = product.green_coins_required
+                x["forpercentage"] = float(product.discount_percentage)
+                coin_exchange = True
             else:
                 product_discounted_price = float(product.discount_price)
                 our_price = product_discounted_price
-            price = product.discount_price
-
-            x = {}
-            
-            x['quantity'] = 1
-            x['price_per_unit'] = float(price)
-            x['total_price'] = float(price)
+                x['quantity'] = 1
+                x['price_per_unit'] = float(our_price)
+                x['total_price'] = float(our_price)
+                x["coinexchange"] = None
+                x["forpercentage"] = None
+                coin_exchange = False
 
             products[product.name] = x
-            #______________
-
-            
+        
         except Exception as e:
             print(e)
         discount_amount = gross_value - our_price
@@ -74,6 +79,7 @@ class DirectBuySerializer(serializers.ModelSerializer):
             'discount_amount':discount_amount,
             'discount_percentage': round((discount_amount/gross_value)*100,1),
             'charges':charges,
+            'coin_exchange':coin_exchange
         }
 
         # calculating final amount by adding the charges
@@ -107,12 +113,12 @@ class DirectBuySerializer(serializers.ModelSerializer):
             final_value += float(value)
 
         #modifing coupon data
-        if settings.COUPON_ENABLE and self.coupon:
-            cuopon_validation_response= self.coupon_validation(self.coupon, final_value)
-            result['cuopon_validation_result']=cuopon_validation_response
+        # if settings.COUPON_ENABLE and self.coupon:
+        #     cuopon_validation_response= self.coupon_validation(self.coupon, final_value)
+        #     result['cuopon_validation_result']=cuopon_validation_response
 
-            if cuopon_validation_response['valid'] == True:
-                result['final_value'] -= cuopon_validation_response['discount']
+        #     if cuopon_validation_response['valid'] == True:
+        #         result['final_value'] -= cuopon_validation_response['discount']
 
         result['final_value'] = float(final_value)
 

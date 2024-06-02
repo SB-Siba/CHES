@@ -172,24 +172,40 @@
                                                                     </td>
                                                                 </tr>
                                                             {% endfor %}
-
-                                                            {% for tax in invoice.tax.tax_list %}
+                                                            {% if coin_exchange %}
                                                                 <tr>
                                                                     <td
-                                                                        style="border-bottom: 1px solid #dddddd;">
+                                                                        style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
                                                                     </td>
-                                                                    <td style="border-bottom: 1px solid #dddddd;">
+                                                                    <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
                                                                     </td>
                                                                     <th
                                                                         style="border-bottom: 1px solid #dddddd;text-align: left; padding-left:9px;background-color: #0000000f;">
-                                                                        {{tax.tax_name}} ({{tax.percentage}} %)
+                                                                        Coin Exchange:
                                                                     </th>
                                                                     <td
                                                                         style="border-bottom: 1px solid #dddddd;text-align: end; padding:11px;background-color: #0000000f;">
-                                                                        {{tax.tax_amount}}
+                                                                        {{coins_for_exchange}}
                                                                     </td>
                                                                 </tr>
-                                                            {% endfor %}
+                                                                <tr>
+                                                                    <td
+                                                                        style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                    </td>
+                                                                    <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                    </td>
+                                                                    <th
+                                                                        style="border-bottom: 1px solid #dddddd;text-align: left; padding-left:9px;background-color: #0000000f;">
+                                                                        Discount For Green Coins:
+                                                                    </th>
+                                                                    <td
+                                                                        style="border-bottom: 1px solid #dddddd;text-align: end; padding:11px;background-color: #0000000f;">
+                                                                        {{exchange_percentage}}
+                                                                    </td>
+                                                                </tr> 
+                                                            {% endif %}
                                                             <tr>
                                                                 <td
                                                                     style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">

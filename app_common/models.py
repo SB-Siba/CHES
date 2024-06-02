@@ -298,17 +298,37 @@ class ProductFromVendor(models.Model):
     reason = models.TextField(null=True, blank=True)
     green_coins_required = models.PositiveIntegerField(default=0)
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+    ratings = models.JSONField(default=list,null=True,blank=True)
 
     def calculate_discounted_price(self):
         """
         Calculate the discounted price based on the discount percentage.
         """
         if self.discount_percentage > 0:
-            discount_amount = (self.discount_percentage / 100) * self.max_price
-            discounted_price = self.max_price - discount_amount
+            discount_amount = (self.discount_percentage / 100) * self.discount_price
+            discounted_price = self.discount_price - discount_amount
             return discounted_price
         else:
-            return self.max_price
+            return self.discount_price
+    
+    def calculate_avg_rating(self):
+        total_rating = 0
+        num_ratings = len(self.ratings)
+
+        # Calculate total rating
+        for rating_data in self.ratings:
+            rating = float(rating_data['rating'])  # Convert rating to float
+            total_rating += rating
+
+        # Calculate average rating
+        if num_ratings > 0:
+            avg_rating = total_rating / num_ratings
+            avg_rating = round(avg_rating, 1)  # Round to 2 decimal places
+        else:
+            avg_rating = 0
+
+        return avg_rating
+    
     def __str__(self):
         return f"{self.name} --> {self.vendor.full_name}"
     
@@ -320,6 +340,7 @@ class Order(models.Model):
         ("On_Way","On_Way"),
         ("Refund","Refund"),
         ("Return","Return"),
+        ("Delivered","Delivered"),
     )
 
     PaymentStatus = (
@@ -348,7 +369,7 @@ class Order(models.Model):
 
     transaction_id = models.TextField(null= True, blank=True)
     can_edit = models.BooleanField(default=True) # id a order is canceled or refunded, make it non editable
-
+    rating_given = models.BooleanField(default=False,null=True,blank=True)
     def __str__(self):
         return self.uid
 

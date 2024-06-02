@@ -39,6 +39,7 @@ urlpatterns = [
     path('checkout-vendor-products/<int:vprod_id>/<str:vendor_email>/', views.CheckoutView.as_view(), name="checkout_vendor_products"),
     path('orders-from-vendor/', views.AllOrdersFromVendors.as_view(), name = "allordersfromvendor"),
     path('invoice/<int:order_uid>',views.GardenerDownloadInvoice.as_view(),name="invoice"),
+    path('rate-order-from-vendor/',views.RateOrderFromVendor.as_view(),name="rate_order_from_vendor"),
 
     path('service-providers-list/',views.ServiceProvidersList.as_view(),name="service_providers"),
 

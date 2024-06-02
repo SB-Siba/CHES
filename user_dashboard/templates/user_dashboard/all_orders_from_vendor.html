@@ -13,6 +13,7 @@
                         <th scope="col">Products</th>
                         <th scope="col">Order Ammount</th>
                         <th scope="col">status</th>
+                        <th scope="col">Rate Product</th>
                         <th>Invoice</th>
                     </tr>
                 </thead>
@@ -46,6 +47,17 @@
                       </td>
                       {% endif %}
                       <td>
+                        {% if not order.rating_given and order.order_status == "Delivered" %}
+                            <a type="button" class="btn btn-sm btn-square btn-neutral btn-primary rate-order-btn" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">
+                                Rate This
+                            </a>
+                        {% elif order.rating_given %}
+                            <a class="btn btn-sm btn-square btn-neutral btn-secondary" disabled>Rated</a>
+                        {% else %}
+                            <a class="btn btn-sm btn-square btn-neutral btn-secondary" disabled>Not Yet</a>
+                        {% endif %}   
+                      </td>
+                      <td>
                         <a href="{% url 'user_dashboard:invoice' order.uid %}"
                           class="btn btn-sm btn-square btn-neutral btn-primary">
                           Invoice
@@ -60,7 +72,7 @@
         </div>
     </div>
     <!-- Rate Order Modal -->
-    <!-- <div class="modal fade" id="rateOrderModal" tabindex="-1" role="dialog" aria-labelledby="rateOrderModalLabel" aria-hidden="true">
+    <div class="modal fade" id="rateOrderModal" tabindex="-1" role="dialog" aria-labelledby="rateOrderModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -69,7 +81,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="rateOrderForm" action="{% url 'user_dashboard:rate_order' %}" method="post">
+                <form id="rateOrderForm" action="{% url 'user_dashboard:rate_order_from_vendor' %}" method="post">
                     {% csrf_token %}
                     <div class="modal-body">
                         <input type="hidden" id="orderId" name="order_id">
@@ -85,9 +97,9 @@
                 </form>
             </div>
         </div>
-    </div> -->
+    </div>
 {% endblock content %}
-<!-- {% block scripts %}
+{% block scripts %}
 <script>
     $(document).ready(function () {
         // Handle rate order button click
@@ -97,4 +109,4 @@
         });
     });
 </script>
-{% endblock scripts %} -->
+{% endblock scripts %}

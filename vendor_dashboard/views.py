@@ -158,18 +158,20 @@ class VendorDownloadInvoice(View):
         quantities = []
         price_per_unit = []
         total_prices = []
+        coin_exchange = data['order_meta_data']['coin_exchange']
+        coins_for_exchange = 0
+        exchange_percentage = 0
+        
         for product,p_overview in data['order_meta_data']['products'].items():
             products.append(product)
             quantities.append(p_overview['quantity'])
             price_per_unit.append(p_overview['price_per_unit'])
             total_prices.append(p_overview['total_price'])
-            # product['product']['quantity']=product['quantity']
+            if coin_exchange:
+                coins_for_exchange += p_overview['coinexchange']
+                exchange_percentage += p_overview['forpercentage']
         
         prod_quant = zip(products, quantities,price_per_unit,total_prices)
-        try:
-            final_total = data['order_meta_data']['final_cart_value']
-        except Exception:
-            final_total = data['order_meta_data']['final_value']
         
         context ={
             'order':data,
@@ -181,7 +183,10 @@ class VendorDownloadInvoice(View):
             'delevery_charge':data['order_meta_data']['charges']['Delivary'],
             'gross_amt':data['order_meta_data']['our_price'],
             'discount':data['order_meta_data']['discount_amount'],
-            'final_total':final_total
+            'final_total':order.order_value,
+            'coin_exchange':coin_exchange,
+            'coins_for_exchange':coins_for_exchange,
+            'exchange_percentage':exchange_percentage
         }
         return render(request,self.template,context)
     

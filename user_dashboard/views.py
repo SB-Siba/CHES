@@ -659,7 +659,7 @@ class VendorsProduct(View):
 
     def get(self,request):
         products = self.model.objects.all().order_by("-id")
-        ratings_list = [i.vendor.calculate_avg_rating() for i in products]
+        ratings_list = [i.calculate_avg_rating() for i in products]
         message_status = []
         for i in products:
             msg_obj = Message.objects.filter(Q(receiver=i.vendor,sender=request.user) | Q(receiver=request.user,sender=i.vendor))
@@ -696,6 +696,7 @@ class CheckoutView(View):
         discount_amount = '{:.2f}'.format(ord_meta_data['discount_amount'])
         gst = float(ord_meta_data['charges']["GST"])
         gst = '{:.2f}'.format(gst)
+        delivery_charge = float(ord_meta_data['charges']["Delivary"])
         # Using round() function for discount_percentage, t_price, and our_price
         discount_percentage = round(ord_meta_data['discount_percentage'], 2)
         t_price = round(ord_meta_data['final_value'], 2)
@@ -710,7 +711,8 @@ class CheckoutView(View):
             "discount_percentage":discount_percentage,
             "gst":gst,
             "total":t_price,
-            "offer_discount":offer_discount
+            "offer_discount":offer_discount,
+            'delivery_charge':delivery_charge
             }
         return render(request, self.template, data)
     def post(self,request,vprod_id,vendor_email):
@@ -800,7 +802,6 @@ class AllOrdersFromVendors(View):
         for order in orders:
             order_products = []
             order_items = order.products
-            # print(order_items)
             for name, quantity in order_items.items():
                 order_products.append(get_object_or_404(app_commonmodels.ProductFromVendor,name = name))
             
@@ -823,18 +824,24 @@ class GardenerDownloadInvoice(View):
         quantities = []
         price_per_unit = []
         total_prices = []
+        coin_exchange = data['order_meta_data']['coin_exchange']
+        coins_for_exchange = 0
+        exchange_percentage = 0
+        
         for product,p_overview in data['order_meta_data']['products'].items():
             products.append(product)
             quantities.append(p_overview['quantity'])
             price_per_unit.append(p_overview['price_per_unit'])
             total_prices.append(p_overview['total_price'])
-            # product['product']['quantity']=product['quantity']
+            if coin_exchange:
+                coins_for_exchange += p_overview['coinexchange']
+                exchange_percentage += p_overview['forpercentage']
         
         prod_quant = zip(products, quantities,price_per_unit,total_prices)
-        try:
-            final_total = data['order_meta_data']['final_cart_value']
-        except Exception:
-            final_total = data['order_meta_data']['final_value']
+        # try:
+        #     final_total = data['order_meta_data']['final_cart_value']
+        # except Exception:
+            # t_price = round(ord_meta_data['final_value'], 2)
         
         context ={
             'order':data,
@@ -846,7 +853,10 @@ class GardenerDownloadInvoice(View):
             'delevery_charge':data['order_meta_data']['charges']['Delivary'],
             'gross_amt':data['order_meta_data']['our_price'],
             'discount':data['order_meta_data']['discount_amount'],
-            'final_total':final_total
+            'final_total':order.order_value,
+            'coin_exchange':coin_exchange,
+            'coins_for_exchange':coins_for_exchange,
+            'exchange_percentage':exchange_percentage
         }
         return render(request,self.template,context)
     
@@ -869,3 +879,33 @@ class ServiceProvidersList(View):
         providers_area_types = zip(providers,areas,types)
         context = {'providers_area_types':providers_area_types}
         return render(request,self.template,context)
+    
+class RateOrderFromVendor(View):
+    model = app_commonmodels.Order
+
+    def post(self,request):
+        order_id = request.POST.get("order_id")
+        rating = request.POST.get("rating")
+        # print(order_id,rating)
+        buy_obj = get_object_or_404(self.model,id = order_id)
+        vendor = buy_obj.vendor
+        customer = buy_obj.customer
+        product = ""
+        print(buy_obj.products,type(buy_obj.products))
+        for i,j in buy_obj.products.items():
+            product = i
+        product_obj = get_object_or_404(app_commonmodels.ProductFromVendor,name = product)     
+        if product_obj.ratings is None:
+            product_obj.ratings = []
+
+        new_rating = {
+            "buyer_name": customer.full_name,
+            "order_product": product,
+            "ammount_paid": buy_obj.order_value,
+            "rating": rating,
+        }
+        product_obj.ratings.append(new_rating)
+        buy_obj.rating_given = True
+        buy_obj.save()
+        product_obj.save()
+        return redirect('user_dashboard:allordersfromvendor')
