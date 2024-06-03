@@ -6,7 +6,7 @@
 {% block content %}
 <section>
     <div class="container py-0">
-        {% for prod,m_status,u_rating in zipped_value %}
+        {% for prod,m_status,p_rating in zipped_value %}
         <div class="row justify-content-center mb-3">
             <div class="col-md-12 col-xl-10">
               <div class="card shadow-0 border rounded-3">
@@ -25,16 +25,11 @@
                     </div>
                     <div class="col-md-6 col-lg-6 col-xl-6">
                       <h5>{{prod.name}}</h5>
-                      <!-- <div class="d-flex flex-row">
-                        <div class="text-danger mb-1 me-2">
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                          <i class="fa fa-star"></i>
-                        </div>
-                        <span>310</span>
-                      </div> -->
-                      <div class="mt-1 mb-0 text-muted small">
+                      <div class="d-flex justify-content-first">
+                        <i class="fa fa-star text-danger"></i>
+                        <p class="mx-1">{{p_rating}}</p>
+                      </div>
+                      <div class="mt-0 mb-0 text-muted small">
                         <span class="text-primary"> • </span>
                         <span>Avalable</span>
                         <span class="text-primary"> - </span>
@@ -49,6 +44,13 @@
                       <p class="text-truncate mb-4 mb-md-0">
                         {{prod.description|truncatewords:20}}
                       </p>
+                      <p class="d-flex justify-content-center">
+                        <label class="form-check-label">
+                          <input class="form-check-input offer-discount-checkbox"
+                              type="checkbox" name="offer_discount"
+                              value="1" data-product-id="{{ prod.id }}" data-vendor-email="{{ prod.vendor.email }}"><small>Exchange {{prod.green_coins_required}} green coins for discount of {{prod.discount_percentage}}%.</small>
+                        </label>
+                      </p>
                     </div>
                     <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
                       <div class="d-flex flex-row align-items-center mb-1">
@@ -56,13 +58,14 @@
                         <span class="text-danger"><s><i class="fa fa-inr"></i>{{prod.max_price}}</s></span>
                       </div>
                       <h6 class="text-success">By : {{prod.vendor.full_name}}</h6>
-                      <div class="d-flex flex-column mt-4">
-                        <a href="{% url 'user_dashboard:checkout_vendor_products' prod.id prod.vendor%}" class="btn btn-outline-primary btn-sm mt-2" type="button">
+                      <div class="d-flex flex-column mt-1">
+                        
+                        <a href="#" class="btn btn-outline-primary btn-sm mt-2 buy-now-button" data-product-id="{{ prod.id }}" data-vendor-email="{{ prod.vendor.email }}" type="button">
                           Buy Now
                         </a>
                       </div>
-                      <div class="d-flex flex-column mt-4">
-                        <a href="{% url 'chat:startmessages' prod.vendor.id prod.id %}" class="btn btn-outline-primary btn-sm mt-2" type="button">
+                      <div class="d-flex flex-column mt-1">
+                        <a href="{% url 'chat:startmessages' prod.vendor.id prod.name %}" class="btn btn-outline-primary btn-sm mt-2" type="button">
                           Send Message
                         </a>
                       </div>
@@ -77,3 +80,34 @@
   </section>
 </div>
 {% endblock content %}
+{% block scripts %}
+<script>
+  // Assuming you have some event listener for when the Buy Now button is clicked
+  document.querySelectorAll('.buy-now-button').forEach(button => {
+      button.addEventListener('click', function(event) {
+          event.preventDefault(); // Prevent default behavior of anchor tag
+
+          const productId = this.getAttribute('data-product-id');
+          const vendorEmail = this.getAttribute('data-vendor-email');
+
+          // Get the value of the offer discount checkbox
+          const offerDiscountCheckbox = document.querySelector('.offer-discount-checkbox');
+          const offerDiscountValue = offerDiscountCheckbox.checked ? "1" : "0";
+
+          // Define the URL pattern in JavaScript
+          const urlPattern = "{% url 'user_dashboard:checkout_vendor_products' 0 0 %}";
+
+          // Replace placeholders in URL pattern with actual data
+          const urlWithParams = urlPattern.replace('0', productId).replace('0', vendorEmail);
+
+          // Append offer discount value as query parameter
+          const urlWithDiscount = `${urlWithParams}?offer_discount=${offerDiscountValue}`;
+
+          // Redirect to the checkout URL with checkbox value included
+          window.location.href = urlWithDiscount;
+      });
+  });
+</script>
+
+
+{% endblock scripts %}

@@ -8,7 +8,9 @@ urlpatterns = [
     path('vendor/profile', views.VendorProfile.as_view(), name = "vendor_profile"),
     path('vendor/update_profile/', views.UpdateProfileView.as_view(), name='update_vendor_profile'),
     path('vendor/sell-product/', views.VendorSellProduct.as_view(), name='vendor_sell_product'),
-    path('vendor/sell-request-list/', views.VendorSellRequests.as_view(), name='vendor_sell_requests'),
+    path('vendor/sell-product-list/', views.SellProductsList.as_view(), name='vendor_sell_product_list'),
+    path('vendor/sell-product-update/<int:product_id>', views.UpdateProduct.as_view(), name='vendor_sell_product_update'),
+    path('vendor/sell-product-delete/<int:product_id>', views.DeleteSellProduct.as_view(), name='vendor_sell_product_delete'),
     path('vendor/sold-products-list/', views.VendorSoldProducts.as_view(), name='vendor_sold_products'),
     path('invoice/<int:order_uid>',views.VendorDownloadInvoice.as_view(),name="invoice"),
     path('addactivity', views.AddActivityVendor.as_view(), name = "addactivity"),
@@ -30,5 +32,9 @@ urlpatterns = [
     path('buybeginsbuyerview', views.BuyBeginsBuyerView.as_view(), name = "buybeginsbuyerview"),
     path('producebuy/<int:prod_id>', views.ProduceBuyView.as_view(), name = "producebuy"),
     path('buyreject/<int:ord_id>', views.reject_buy, name = "buyreject"),
-    path('orders/', views.AllOrders.as_view(), name = "allorders"),
+    #Orders
+    path('order/vendor_order_list', views.AllOrders.as_view(), name='vendor_order_list'),
+    path('order/vendor_order_search', views.OrderSearch.as_view(), name='vendor_order_search'),
+    path('order/order_detail/<str:order_uid>', views.OrderDetail.as_view(), name='order_detail'),
+    path('order/order_status_search', views.OrderStatusSearch.as_view(), name='order_status_search'),
 ]

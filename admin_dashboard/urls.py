@@ -14,12 +14,14 @@ urlpatterns = [
     path('quiz_answers/<int:user_id>',users.QuizAnswers.as_view(), name='quizanswers'),
     path('approve_user/<int:pk>',users.ApproveUser, name='approve_user'),
     path('reject_user/<int:pk>',users.RejectUser, name='reject_user'),
-    path('manage_users/gardeners_list',users.GardenerList.as_view(), name= 'gardeners_list'),
+    path('manage_users/serviceproviders_list',users.ServiceProvidersList.as_view(), name= 'serviceproviders_list'),
+    path('manage_users/RTgardeners_list',users.RTGList.as_view(), name= 'RTgardeners_list'),
     path('manage_users/vendors_list',users.VendorList.as_view(), name= 'vendors_list'),
     path('manage_users/delete_user/<int:pk>',users.Delete_User, name= 'delete_user'),
 
     path('manage_users/users_gardening_data/<int:pk>',users.UserGardeningDetails.as_view(), name= 'gardening_details'),
     path('manage_users/vendor_data/<int:pk>',users.VendorDetails.as_view(), name= 'vendor_details'),
+    path('manage_users/service_provider_data/<int:pk>',users.ServiceProviderDetails.as_view(), name= 'service_providor_details'),
     path('manage_users/user_update/<str:user_id>',users.UserUpdate.as_view(), name= 'user_update'),
     path('manage_users/search_user',users.SearchUser.as_view(), name= 'search_user'),
     path('manage_users/add_wallet_balance',users.WalletBalanceAdd.as_view(), name= 'add_wallet_balance'),
@@ -32,10 +34,6 @@ urlpatterns = [
     path('sellrequest',users.UserProduceSellRequest.as_view(), name= 'sellrequest'),
     path('approvesellrequest',users.ApproveSellRequest, name= 'approvesellrequest'),
     path('rejectsellrequest',users.RejectSellRequest, name= 'rejectpsellrequest'),
-    # Vendor Section
-    path('vendor_sellrequest',users.VendorSellRequests.as_view(), name= 'vendor_sellrequest'),
-    path('vendor_approvesellrequest',users.ApproveVendorSellRequest, name= 'vendor_approvesellrequest'),
-    path('vendor_rejectsellrequest',users.RejectVendorSellRequest, name= 'vendor_rejectpsellrequest'),
     #Orders
     path('order/admin_order_list', order.OrderList.as_view(), name='admin_order_list'),
     path('order/admin_order_search', order.OrderSearch.as_view(), name='admin_order_search'),

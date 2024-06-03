@@ -11,6 +11,7 @@ urlpatterns = [
     path('add-gardening-details/<str:u_email>', views.GardeningDetails.as_view(), name='gardeningdetails'),
     path('gardening-quiz/<str:u_email>', views.gardening_quiz_view, name='gardeningquiz'),
     path('add-vendor-details/<str:u_email>', views.VendorDetails.as_view(), name='vendordetails'),
+    path('add-service-provider-details/<str:u_email>', views.ServiceProviderDetails.as_view(), name='serviceproviderdetails'),
 ]
 
 #   app_common:register

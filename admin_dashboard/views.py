@@ -18,7 +18,6 @@ class AdminDashboard(View):
         profile_update_obj = common_models.GardeningProfileUpdateRequest.objects.all()
         activity_request_obj = common_models.UserActivity.objects.filter(is_accepted='pending').order_by('-date_time')
         gardener_sell_request_obj = common_models.SellProduce.objects.filter(is_approved='pending').order_by('-date_time')
-        vendor_sell_request_obj = common_models.ProductFromVendor.objects.filter(is_approved='pending').order_by('-id')
 
         return render(request, self.template,locals())
 

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'channels',
     'chatapp',
     'vendor_dashboard',
+    'serviceprovider',
 ]
 
 MIDDLEWARE = [
@@ -140,7 +141,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # more settings 
 GST_CHARGE = 0.015
-DELIVARY_CHARGE_PER_BAG = 0
+DELIVARY_CHARGE_PER_BAG = 30
 DELIVARY_FREE_ORDER_AMOUNT = 3000
 
 COUPON_ENABLE = True

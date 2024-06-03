@@ -1,5 +1,6 @@
 from django import forms
 from app_common import models as common_model
+from decimal import Decimal
 
 class VendorDetailsForm(forms.Form):
     BUSINESS_CATEGORIES = (
@@ -19,9 +20,17 @@ class VendorDetailsForm(forms.Form):
     image = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
 
 class ProductFromVendorForm(forms.ModelForm):
+    discount_percentage = forms.DecimalField(
+        label='Discount Percentage',
+        max_digits=5,
+        decimal_places=2,
+        initial=Decimal('10.00'),  # Set the initial value to 10.00
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = common_model.ProductFromVendor
-        fields = ['name', 'description', 'discount_price', 'max_price', 'image', 'stock', 'category']
+        fields = ['name', 'description', 'discount_price', 'max_price', 'image', 'stock', 'category', 'discount_percentage']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
@@ -31,6 +40,9 @@ class ProductFromVendorForm(forms.ModelForm):
             'stock': forms.NumberInput(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
         }
-
-    discount_price = forms.DecimalField(max_digits=10, decimal_places=2, widget=forms.NumberInput(attrs={'class': 'form-control'}))
-    max_price = forms.DecimalField(max_digits=10, decimal_places=2, widget=forms.NumberInput(attrs={'class': 'form-control'}))
+        
+    def clean_discount_percentage(self):
+        discount_percentage = self.cleaned_data.get('discount_percentage', Decimal('10.00'))
+        if discount_percentage < Decimal('10.00'):
+            raise forms.ValidationError("Discount percentage cannot be less than 10.")
+        return discount_percentage

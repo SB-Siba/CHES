@@ -28,41 +28,6 @@ class DirectBuySerializer(serializers.ModelSerializer):
         self.coupon = kwargs.pop('coupon', None)
         super().__init__(*args, **kwargs)
 
-    #coupon validation and calculation
-    # def coupon_validation(self, code, amount):
-    #     error_dict = {
-    #         "valid" : False,
-    #         "discount" : "0",
-    #         "message": "Invalid Coupon Code"
-    #     }
-        
-    #     try:
-    #         coupon_obj = common_models.Coupon.objects.get(code = code)
-    #     except:
-    #         return error_dict
-        
-    #     if coupon_obj.quantity < 1 or coupon_obj.active == 'no':
-    #         return error_dict
-        
-    #     if coupon_obj.discount_type == "flat":
-    #         discount = coupon_obj.discount_digit
-    #         return {
-    #         "coupon":code,
-    #         "valid" : True,
-    #         "discount" : discount,
-    #         "message": f"{code} : is applied successfully"
-    #         }
-    #     elif coupon_obj.discount_type == "pencentage":
-    #         discount = round(amount*(coupon_obj.discount_digit/100),2)
-    #         return {
-    #             "coupon":code,
-    #             "valid" : True,
-    #             "discount" : discount,
-    #             "message": f"{code} : is applied successfully"
-    #         }
-    #     else:
-    #         return error_dict
-
     def get_products_data(self,obj):
         total_items = 1
         total_value = 0
@@ -74,25 +39,35 @@ class DirectBuySerializer(serializers.ModelSerializer):
 
         products = {}
         product_list = []
-
+        coin_exchange =  None
         try:
             product = get_object_or_404(models.ProductFromVendor,id = obj.id)
             gross_value += float(product.max_price)
-            #____________
-            product_discounted__price = float(product.discount_price)
-            our_price = product_discounted__price
-            price = product.discount_price
-
             x = {}
-            
-            x['quantity'] = 1
-            x['price_per_unit'] = float(price)
-            x['total_price'] = float(price)
+            #____________
+            if self.context.get('offer_discount') == "1":
+                discount_percentage = float(product.discount_percentage)
+                product_discounted_price = float(f"{float(product.discount_price) * (1 - (discount_percentage / 100)):.2f}")
+                our_price = product_discounted_price
+                d_price = product.calculate_discounted_price()
+                x['quantity'] = 1
+                x['price_per_unit'] = float(d_price)
+                x['total_price'] = float(our_price)
+                x["coinexchange"] = product.green_coins_required
+                x["forpercentage"] = float(product.discount_percentage)
+                coin_exchange = True
+            else:
+                product_discounted_price = float(product.discount_price)
+                our_price = product_discounted_price
+                x['quantity'] = 1
+                x['price_per_unit'] = float(our_price)
+                x['total_price'] = float(our_price)
+                x["coinexchange"] = None
+                x["forpercentage"] = None
+                coin_exchange = False
 
             products[product.name] = x
-            #______________
-
-            
+        
         except Exception as e:
             print(e)
         discount_amount = gross_value - our_price
@@ -104,6 +79,7 @@ class DirectBuySerializer(serializers.ModelSerializer):
             'discount_amount':discount_amount,
             'discount_percentage': round((discount_amount/gross_value)*100,1),
             'charges':charges,
+            'coin_exchange':coin_exchange
         }
 
         # calculating final amount by adding the charges
@@ -137,12 +113,12 @@ class DirectBuySerializer(serializers.ModelSerializer):
             final_value += float(value)
 
         #modifing coupon data
-        if settings.COUPON_ENABLE and self.coupon:
-            cuopon_validation_response= self.coupon_validation(self.coupon, final_value)
-            result['cuopon_validation_result']=cuopon_validation_response
+        # if settings.COUPON_ENABLE and self.coupon:
+        #     cuopon_validation_response= self.coupon_validation(self.coupon, final_value)
+        #     result['cuopon_validation_result']=cuopon_validation_response
 
-            if cuopon_validation_response['valid'] == True:
-                result['final_value'] -= cuopon_validation_response['discount']
+        #     if cuopon_validation_response['valid'] == True:
+        #         result['final_value'] -= cuopon_validation_response['discount']
 
         result['final_value'] = float(final_value)
 

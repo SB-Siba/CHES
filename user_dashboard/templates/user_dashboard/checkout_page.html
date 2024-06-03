@@ -19,13 +19,13 @@
                     <div>
                         <h6 class="my-0">Price</h6>
                     </div>
-                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{vendor_product.max_price}}</span>
+                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{gross_ammount}}</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
                         <h6 class="my-0">Our Price</h6>
                     </div>
-                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{vendor_product.discount_price}}</span>
+                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{our_price}}</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
@@ -38,6 +38,12 @@
                         <h6 class="my-0">GST</h6>
                     </div>
                     <span class="text-success"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{gst}}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between bg-light">
+                    <div class="text-success">
+                        <h6 class="my-0">Delivery Charge</h6>
+                    </div>
+                    <span class="text-success"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{delivery_charge}}</span>
                 </li>
                 <!-- <li class="list-group-item d-flex justify-content-between bg-light">
                     <div class="text-success">
@@ -55,6 +61,7 @@
             <h4 class="mb-3">Billing address</h4>
             <form method="post" class="needs-validation" novalidate>
                 {% csrf_token %}
+                <input type="hidden" name="offer_discount" value="{{ offer_discount }}">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="id_first_name">First name</label>
@@ -78,6 +85,16 @@
                     </div>
                 </div>
                 <div class="mb-3">
+                    <label for="id_contact">Contact Number</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">+91 - </span>
+                        </div>
+                        {{ form.contact_number }}
+                        <div class="invalid-feedback" style="width: 100%;"> Your contact number is required. </div>
+                    </div>
+                </div>
+                <div class="mb-3">
                     <label for="id_email">Email <span class="text-muted">(Optional)</span></label>
                     {{ form.email }}
                     <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
@@ -89,9 +106,9 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-4">
-                        <label for="id_state">State</label>
-                        {{ form.state }}
-                        <div class="invalid-feedback"> Please provide a valid state. </div>
+                        <label for="id_state">City</label>
+                        {{ form.city }}
+                        <div class="invalid-feedback"> Please provide a valid city. </div>
                     </div>
                     <div class="col-md-6 mb-4">
                         <label for="id_zip_code">Zip</label>

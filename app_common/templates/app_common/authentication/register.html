@@ -57,18 +57,34 @@
                             {{ form.confirm_password }}
                         </div>
                         
-                        <div class="d-flex justify-content-center mt-1">
-                            <div class="form-check">
-                                <label for="{{ form.is_gardener.id_for_label }}" class="form-check-label">
-                                    {{ form.is_gardener }} Gardener
-                                </label>
+                        <div class="row mt-1">
+                            <div class="row">
+                                <div class="form-check col-12 col-md-6">
+                                    <label for="{{ form.is_rtg.id_for_label }}" class="form-check-label">
+                                        {{ form.is_rtg }} Roof Top Gardener
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check col-12 col-md-6">
+                                    <label for="{{ form.is_vendor.id_for_label }}" class="form-check-label">
+                                        {{ form.is_vendor }} Vendor
+                                    </label>
+                                </div>
                             </div>
                             
-                            <div class="form-check">
-                                <label for="{{ form.is_vendor.id_for_label }}" class="form-check-label">
-                                    {{ form.is_vendor }} Vendor
-                                </label>
+                            <div class="row">
+                                <div class="form-check col-12 col-md-6">
+                                    <label for="{{ form.is_gardener.id_for_label }}" class="form-check-label">
+                                        {{ form.is_gardener }} Gardener
+                                    </label>
+                                </div>
+                                <div class="form-check col-12 col-md-6">
+                                    <label for="{{ form.is_serviceprovider.id_for_label }}" class="form-check-label">
+                                        {{ form.is_serviceprovider }} Service Provider
+                                    </label>
+                                </div>
                             </div>
+                            
                         </div>
                         
                         <div style="text-align:center;">

@@ -1,0 +1,64 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block title %}Gardening Details{% endblock title %}
+{% block content %}
+    <div class="page-wapper">
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="search_sec">
+               
+            <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
+                {% csrf_token %}
+                <div class="table_search_box">
+
+                    <select class="form-control selects" name="search_by" aria-label="Default select example">
+                        <option value="email">Email</option>
+                        <option value="contact">Contact</option>
+                    </select>
+    
+                    <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query" required/>
+    
+                    <button class="btn qry-sub" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+
+                </div>
+            </form>
+
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Available For</th>
+                        <th scope="col">Available In</th>
+                        <th scope="col">Avg. Price Per Hour</th>
+                        <th scope="col">Exprience In Years</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ serviceprovider_data.service_type }}</td>
+                        <td>{{ serviceprovider_data.service_area }}</td>
+                        <td>
+                            {{ serviceprovider_data.average_cost_per_hour }}
+                        </td>
+                        <td>
+                            {{ serviceprovider_data.years_experience }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
+    </div>
+
+
+
+
+<!-- wallet balance add modal -->
+
+
+{% endblock content %}
+{% block js %}
+<script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
+{% endblock js %}

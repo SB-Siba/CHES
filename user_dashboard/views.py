@@ -13,7 +13,7 @@ from django.utils import timezone
 from helpers import utils
 from chatapp.models import Message
 from . serializers import DirectBuySerializer,OrderSerializer
-
+import ast
 app = "user_dashboard/"
 
 class UserDashboard(View):
@@ -29,9 +29,9 @@ class UserDashboard(View):
                     i.delete()
         except Exception:
             pass
-        users_orderby_coins = app_commonmodels.User.objects.filter(is_superuser=False).order_by('-coins')[:10]
+        users_orderby_coins = app_commonmodels.User.objects.filter(is_superuser=False,is_rtg = True).order_by('-coins')[:10]
         garden_obj = get_object_or_404(app_commonmodels.GardeningProfile, user=user)
-        rank = user.get_rank()
+        rank = user.get_rank("rtg")
         context = {
             'user':user,
             'users_orderby_coins':users_orderby_coins,
@@ -658,8 +658,8 @@ class VendorsProduct(View):
     model = app_commonmodels.ProductFromVendor
 
     def get(self,request):
-        products = self.model.objects.filter(is_approved="approved").order_by("-id")
-        ratings_list = [i.vendor.calculate_avg_rating() for i in products]
+        products = self.model.objects.all().order_by("-id")
+        ratings_list = [i.calculate_avg_rating() for i in products]
         message_status = []
         for i in products:
             msg_obj = Message.objects.filter(Q(receiver=i.vendor,sender=request.user) | Q(receiver=request.user,sender=i.vendor))
@@ -678,39 +678,52 @@ class CheckoutView(View):
 
     def get(self,request,vprod_id,vendor_email):
         user = request.user
-        
+        offer_discount = request.GET.get('offer_discount', None)
+       
         initial_data = {
         'username': user.email,
         }
 
         form = self.form(initial=initial_data)
         vendor_product_obj = get_object_or_404(app_commonmodels.ProductFromVendor,id = vprod_id)
-        serializer = DirectBuySerializer(vendor_product_obj)
+        serializer = DirectBuySerializer(vendor_product_obj,context={'offer_discount': offer_discount})
         order_details = serializer.data
+        # print(order_details)
         ord_meta_data = {}
         for i,j in order_details.items():
             ord_meta_data.update(j)
 
-        discount_ammount = ord_meta_data['discount_amount']
-        discount_percentage = ord_meta_data['discount_percentage']
-        gst = ord_meta_data['charges']["GST"]
-        t_price = ord_meta_data['final_value']
+        discount_amount = '{:.2f}'.format(ord_meta_data['discount_amount'])
+        gst = float(ord_meta_data['charges']["GST"])
+        gst = '{:.2f}'.format(gst)
+        delivery_charge = float(ord_meta_data['charges']["Delivary"])
+        # Using round() function for discount_percentage, t_price, and our_price
+        discount_percentage = round(ord_meta_data['discount_percentage'], 2)
+        t_price = round(ord_meta_data['final_value'], 2)
+        our_price = round(ord_meta_data['our_price'], 2)
+        gross_ammount = round(ord_meta_data['gross_value'], 2)
         data = {
             'form': form,
             "vendor_product":vendor_product_obj,
-            "discount_ammount":discount_ammount,
+            "gross_ammount":gross_ammount,
+            "our_price":our_price,
+            "discount_ammount":discount_amount,
             "discount_percentage":discount_percentage,
             "gst":gst,
-            "total":t_price
+            "total":t_price,
+            "offer_discount":offer_discount,
+            'delivery_charge':delivery_charge
             }
         return render(request, self.template, data)
     def post(self,request,vprod_id,vendor_email):
         form = self.form(request.POST)
+        offer_discount = request.POST.get('offer_discount', None)
         if form.is_valid():
             user = request.user
             first_name = form.cleaned_data['first_name'] 
             last_name = form.cleaned_data['last_name']    
             username = form.cleaned_data['username']
+            contact_number = form.cleaned_data['contact_number']
             email = form.cleaned_data['email']
             address = form.cleaned_data['address']
             city = form.cleaned_data['city']
@@ -722,6 +735,7 @@ class CheckoutView(View):
                 'first_name': first_name,
                 'last_name': last_name,
                 'username': username,
+                'contact_number':contact_number,
                 'email': email,
                 'address': address,
                 'city': city,
@@ -730,14 +744,14 @@ class CheckoutView(View):
 
             prod_obj = get_object_or_404(app_commonmodels.ProductFromVendor,id = vprod_id)
             
-            serializer = DirectBuySerializer(prod_obj)
+            serializer = DirectBuySerializer(prod_obj,context={'offer_discount': offer_discount})
             order_details = serializer.data
             # print(order_details)
             ord_meta_data = {}
             for i,j in order_details.items():
                 ord_meta_data.update(j)
             # print(ord_meta_data)
-            t_price = ord_meta_data['final_value']
+            t_price = round(ord_meta_data['final_value'], 2)
 
             try:
                 vendor = get_object_or_404(app_commonmodels.User,email = vendor_email)
@@ -749,7 +763,7 @@ class CheckoutView(View):
                     customer = user,
                     vendor = vendor,
                     products={prod_obj.name:1},
-                    order_value=float(t_price),
+                    order_value=t_price,
                     customer_details=customer_details,
                     order_meta_data = ord_meta_data
                     # razorpay_payment_id = razorpay_payment_id,
@@ -757,6 +771,14 @@ class CheckoutView(View):
                     # razorpay_signature= razorpay_signature,
                 )
                 # order.order_meta_data = json.loads(ord_meta_data)
+         
+                if int(offer_discount) == 1:
+                    user.wallet -= float(prod_obj.green_coins_required)
+                    vendor.wallet += float(prod_obj.green_coins_required)
+                    user.save()
+                    vendor.save()
+                
+
                 order.save()
                 prod_obj.stock -= 1
                 prod_obj.save()
@@ -780,7 +802,6 @@ class AllOrdersFromVendors(View):
         for order in orders:
             order_products = []
             order_items = order.products
-            # print(order_items)
             for name, quantity in order_items.items():
                 order_products.append(get_object_or_404(app_commonmodels.ProductFromVendor,name = name))
             
@@ -803,18 +824,24 @@ class GardenerDownloadInvoice(View):
         quantities = []
         price_per_unit = []
         total_prices = []
+        coin_exchange = data['order_meta_data']['coin_exchange']
+        coins_for_exchange = 0
+        exchange_percentage = 0
+        
         for product,p_overview in data['order_meta_data']['products'].items():
             products.append(product)
             quantities.append(p_overview['quantity'])
             price_per_unit.append(p_overview['price_per_unit'])
             total_prices.append(p_overview['total_price'])
-            # product['product']['quantity']=product['quantity']
+            if coin_exchange:
+                coins_for_exchange += p_overview['coinexchange']
+                exchange_percentage += p_overview['forpercentage']
         
         prod_quant = zip(products, quantities,price_per_unit,total_prices)
-        try:
-            final_total = data['order_meta_data']['final_cart_value']
-        except Exception:
-            final_total = data['order_meta_data']['final_value']
+        # try:
+        #     final_total = data['order_meta_data']['final_cart_value']
+        # except Exception:
+            # t_price = round(ord_meta_data['final_value'], 2)
         
         context ={
             'order':data,
@@ -826,6 +853,59 @@ class GardenerDownloadInvoice(View):
             'delevery_charge':data['order_meta_data']['charges']['Delivary'],
             'gross_amt':data['order_meta_data']['our_price'],
             'discount':data['order_meta_data']['discount_amount'],
-            'final_total':final_total
+            'final_total':order.order_value,
+            'coin_exchange':coin_exchange,
+            'coins_for_exchange':coins_for_exchange,
+            'exchange_percentage':exchange_percentage
         }
         return render(request,self.template,context)
+    
+class ServiceProvidersList(View):
+    model = app_commonmodels.ServiceProviderDetails
+    template = app + "service_providers_list.html"
+
+    def get(self,request):
+        service_providers = self.model.objects.filter(provider__is_approved = True)
+        providers = []
+        areas = []
+        types = []
+        for i in service_providers:
+            service_types = ast.literal_eval(i.service_type)
+            service_areas = ast.literal_eval(i.service_area)
+            providers.append(i)
+            types.append(service_types)
+            areas.append(service_areas)
+
+        providers_area_types = zip(providers,areas,types)
+        context = {'providers_area_types':providers_area_types}
+        return render(request,self.template,context)
+    
+class RateOrderFromVendor(View):
+    model = app_commonmodels.Order
+
+    def post(self,request):
+        order_id = request.POST.get("order_id")
+        rating = request.POST.get("rating")
+        # print(order_id,rating)
+        buy_obj = get_object_or_404(self.model,id = order_id)
+        vendor = buy_obj.vendor
+        customer = buy_obj.customer
+        product = ""
+        print(buy_obj.products,type(buy_obj.products))
+        for i,j in buy_obj.products.items():
+            product = i
+        product_obj = get_object_or_404(app_commonmodels.ProductFromVendor,name = product)     
+        if product_obj.ratings is None:
+            product_obj.ratings = []
+
+        new_rating = {
+            "buyer_name": customer.full_name,
+            "order_product": product,
+            "ammount_paid": buy_obj.order_value,
+            "rating": rating,
+        }
+        product_obj.ratings.append(new_rating)
+        buy_obj.rating_given = True
+        buy_obj.save()
+        product_obj.save()
+        return redirect('user_dashboard:allordersfromvendor')

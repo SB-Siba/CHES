@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.hashers import make_password
-
+from multiselectfield import MultiSelectField
 from .manager import MyAccountManager
 from helpers import utils
+from decimal import Decimal
 from django.utils import timezone
 
 
@@ -47,8 +48,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_approved = models.BooleanField(default=False)
 
-    is_gardener = models.BooleanField(default=False)
+    is_rtg = models.BooleanField(default=False)
     is_vendor = models.BooleanField(default=False)
+    is_serviceprovider = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
@@ -81,8 +83,25 @@ class User(AbstractBaseUser, PermissionsMixin):
     #     higher_scores_count = User.objects.filter(coins__gt=self.coins).count()
     #     return higher_scores_count + 1
 
-    def get_rank(self):
-        higher_or_equal_scores_count = User.objects.filter(coins__gte=self.coins).count()
+    def get_rank(self, user_type):
+        if user_type == 'vendor':
+            higher_or_equal_scores_count = User.objects.filter(
+                is_vendor=True,
+                coins__gte=self.coins
+            ).count()
+        elif user_type == 'serviceprovider':
+            higher_or_equal_scores_count = User.objects.filter(
+                is_serviceprovider=True,
+                coins__gte=self.coins
+            ).count()
+        elif user_type == 'rtg':
+            higher_or_equal_scores_count = User.objects.filter(
+                is_rtg=True,
+                coins__gte=self.coins
+            ).count()
+        else:
+            higher_or_equal_scores_count = 0  # Handle invalid user type
+
         return higher_or_equal_scores_count
 
     def calculate_avg_rating(self):
@@ -268,23 +287,57 @@ class ProductFromVendor(models.Model):
         ('garden_decor', 'Garden Decor'),
         # Add more gardening-specific categories as needed
     ]
-    APPROVEREJECT = (
-        ("approved","approved"),
-        ("rejected","rejected"),
-        ("pending","pending")
-    )
     
     vendor = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    discount_price = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
-    max_price = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
+    discount_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    max_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     image = models.ImageField(upload_to='vendor_products/', null=True, blank=True)
     stock = models.IntegerField(default=0)
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
-    is_approved = models.CharField(max_length=10, choices= APPROVEREJECT, default='pending')
     reason = models.TextField(null=True, blank=True)
+    green_coins_required = models.PositiveIntegerField(default=0)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=10.00)
+    ratings = models.JSONField(default=list, null=True, blank=True)
 
+    def calculate_discounted_price(self):
+        """
+        Calculate the discounted price based on the discount percentage.
+        """
+        if self.discount_percentage > 0:
+            discount_amount = (self.discount_percentage / 100) * self.discount_price
+            discounted_price = self.discount_price - discount_amount
+            return discounted_price
+        else:
+            return self.discount_price
+    
+    def calculate_avg_rating(self):
+        total_rating = 0
+        num_ratings = len(self.ratings)
+
+        # Calculate total rating
+        for rating_data in self.ratings:
+            rating = float(rating_data['rating'])  # Convert rating to float
+            total_rating += rating
+
+        # Calculate average rating
+        if num_ratings > 0:
+            avg_rating = total_rating / num_ratings
+            avg_rating = round(avg_rating, 1)  # Round to 1 decimal place
+        else:
+            avg_rating = 0
+
+        return avg_rating
+
+    def save(self, *args, **kwargs):
+        # Calculate green_coins_required as a percentage of the discount_price
+        if self.discount_price > 0 and self.discount_percentage > 0:
+            self.green_coins_required = int((self.discount_percentage / Decimal('100.00')) * self.discount_price)
+        else:
+            self.green_coins_required = 0
+        super(ProductFromVendor, self).save(*args, **kwargs)
+    
     def __str__(self):
         return f"{self.name} --> {self.vendor.full_name}"
     
@@ -296,6 +349,7 @@ class Order(models.Model):
         ("On_Way","On_Way"),
         ("Refund","Refund"),
         ("Return","Return"),
+        ("Delivered","Delivered"),
     )
 
     PaymentStatus = (
@@ -324,7 +378,7 @@ class Order(models.Model):
 
     transaction_id = models.TextField(null= True, blank=True)
     can_edit = models.BooleanField(default=True) # id a order is canceled or refunded, make it non editable
-
+    rating_given = models.BooleanField(default=False,null=True,blank=True)
     def __str__(self):
         return self.uid
 
@@ -332,3 +386,27 @@ class Order(models.Model):
         if not self.uid:
             self.uid = utils.generate_unique_id(5)
         super().save(*args, **kwargs)
+
+class ServiceProviderDetails(models.Model):
+    SERVICE_TYPES = [
+        ('Lawn Care', 'Lawn Care'),
+        ('Tree Trimming', 'Tree Trimming'),
+        ('Garden Design', 'Garden Design'),
+        ('Irrigation Systems', 'Irrigation Systems'),
+        # Add more types as needed
+    ]
+    SERVICE_AREAS = (
+        ("Bhubaneswar","Bhubaneswar"),
+        ("Cuttack","Cuttack"),
+        ("Brahmapur","Brahmapur"),
+        ("Puri","Puri"),
+        ("Balasore","Balasore"),
+    )
+    provider = models.ForeignKey(User, on_delete=models.CASCADE)
+    service_type = models.TextField()
+    service_area = models.TextField()  # Storing choices as comma-separated values
+    average_cost_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
+    years_experience = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.provider.full_name} - {self.service_type}"

@@ -26,7 +26,7 @@
 
         </div>
         {% for n_approve in not_approvedlist %}
-            {% if n_approve.is_gardener %}
+            {% if n_approve.is_rtg %}
                 <div class="table-responsive">
                     <table class="table table-hover table-nowrap">
                         <thead class="table-light">
@@ -44,22 +44,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for g_user,garden_user in garden_data %}
+                            {% for rtg_user,rtgarden_user in rtgardener_data %}
                             <tr>
-                                <td>{{ g_user.id }}</td>
-                                <td>{{ g_user.full_name }}</td>
-                                <td>{{ g_user.email }}</td>
-                                <td>{{ garden_user.garden_area }}</td>
-                                <td>{{ garden_user.number_of_plants }}</td>
-                                <td>{{ garden_user.number_of_unique_plants }}</td>
-                                <td><img src="{{ garden_user.garden_image.url }}" alt="Garden Image" style="height: 50px; width: 50px;"></td>
-                                <td><a href="{% url 'admin_dashboard:quizanswers' g_user.id %}">View</a></td>
+                                <td>{{ rtg_user.id }}</td>
+                                <td>{{ rtg_user.full_name }}</td>
+                                <td>{{ rtg_user.email }}</td>
+                                <td>{{ rtgarden_user.garden_area }}</td>
+                                <td>{{ rtgarden_user.number_of_plants }}</td>
+                                <td>{{ rtgarden_user.number_of_unique_plants }}</td>
+                                <td><img src="{{ rtgarden_user.garden_image.url }}" alt="Garden Image" style="height: 50px; width: 50px;"></td>
+                                <td><a href="{% url 'admin_dashboard:quizanswers' rtg_user.id %}">View</a></td>
                                 <td>
                                     <div class="d-flex justify-content-arround">
-                                        <a href="{% url 'admin_dashboard:approve_user' g_user.id %}">
+                                        <a href="{% url 'admin_dashboard:approve_user' rtg_user.id %}">
                                             <span class="btn btn-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
                                         </a>
-                                        <a href="{% url 'admin_dashboard:reject_user' g_user.id %}">
+                                        <a href="{% url 'admin_dashboard:reject_user' rtg_user.id %}">
                                             <span class="btn btn-danger mx-1"><i class="fa fa-ban" aria-hidden="true"></i></span>
                                         </a>
                                     </div>
@@ -69,55 +69,129 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    {% include 'app_common/snippets/pagination.html' %}
                 </div>
-            {% else %}
-            <div class="table-responsive">
-                <table class="table table-hover table-nowrap">
-                    <thead class="table-light">
-                        <tr>
-                            <th scope="col">E-Mail</th>
-                            <th scope="col">Bussiness Name</th>
-                            <th scope="col">Business Address</th>
-                            <th scope="col">Business License Number</th>
-                            <th scope="col">Business Category</th>
-                            <th scope="col">Establishment Year</th>
-                            <th scope="col">Website</th>
-                            <th scope="col">Give Points</th>
-                            <th scope="col">Action</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for v_user,vendor_detail in vendor_data %}
-                        <tr>
-                            <td>{{ v_user.email }}</td>
-                            <td>{{ vendor_detail.business_name }}</td>
-                            <td>{{ vendor_detail.business_address }}</td>
-                            <td>{{ vendor_detail.business_license_number }}</td>
-                            <td>{{vendor_detail.business_category}}</td>
-                            <td>{{vendor_detail.establishment_year}}</td>
-                            <td>{{vendor_detail.website}}</td>
-                            <td>
-                                <input type="number" id="points-{{ v_user.id }}" max="500" min="0" step="1" placeholder="Give Points Between 0-500">
-                            </td>                           
-                            <td>
-                                <div class="d-flex justify-content-arround">
-                                    <a href="#" class="btn btn-success" onclick="approveVendor({{ v_user.id }})">
-                                        <span><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
-                                    </a>
-                                    <a href="{% url 'admin_dashboard:reject_user' v_user.id %}">
-                                        <span class="btn btn-danger mx-1"><i class="fa fa-ban" aria-hidden="true"></i></span>
-                                    </a>
-                                </div>
-                            </td>
-                        
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% include 'app_common/snippets/pagination.html' %}
-            </div>
+            {% elif n_approve.is_vendor %}
+                <div class="table-responsive">
+                    <table class="table table-hover table-nowrap">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">E-Mail</th>
+                                <th scope="col">Bussiness Name</th>
+                                <th scope="col">Business Address</th>
+                                <th scope="col">Business License Number</th>
+                                <th scope="col">Business Category</th>
+                                <th scope="col">Establishment Year</th>
+                                <th scope="col">Website</th>
+                                <th scope="col">Give Points</th>
+                                <th scope="col">Action</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for v_user,vendor_detail in vendor_data %}
+                            <tr>
+                                <td>{{ v_user.email }}</td>
+                                <td>{{ vendor_detail.business_name }}</td>
+                                <td>{{ vendor_detail.business_address }}</td>
+                                <td>{{ vendor_detail.business_license_number }}</td>
+                                <td>{{vendor_detail.business_category}}</td>
+                                <td>{{vendor_detail.establishment_year}}</td>
+                                <td>{{vendor_detail.website}}</td>
+                                <td>
+                                    <input type="number" id="points-{{ v_user.id }}" max="500" min="0" step="1" placeholder="Give Points Between 0-500">
+                                </td>                           
+                                <td>
+                                    <div class="d-flex justify-content-arround">
+                                        <a href="#" class="btn btn-success" onclick="approveVendor({{ v_user.id }})">
+                                            <span><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+                                        </a>
+                                        <a href="{% url 'admin_dashboard:reject_user' v_user.id %}">
+                                            <span class="btn btn-danger mx-1"><i class="fa fa-ban" aria-hidden="true"></i></span>
+                                        </a>
+                                    </div>
+                                </td>
+                            
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% elif n_approve.is_serviceprovider %}
+                <div class="table-responsive">
+                    <table class="table table-hover table-nowrap">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">E-Mail</th>
+                                <th scope="col">Service Type</th>
+                                <th scope="col">Service Areas</th>
+                                <th scope="col">Average Cost Per Hour</th>
+                                <th scope="col">Years Experience</th>
+                                <th scope="col">Action</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s_provider,s_provider_detail in service_provider_data %}
+                            <tr>
+                                <td>{{ s_provider.email }}</td>
+                                <td>{{ s_provider_detail.service_type|slice:"1:-1"  }}</td>
+                                <td>{{ s_provider_detail.service_area|slice:"1:-1"  }}</td>
+                                <td>{{ s_provider_detail.average_cost_per_hour }}</td>
+                                <td>{{s_provider_detail.years_experience}}</td>                          
+                                <td>
+                                    <div class="d-flex justify-content-arround">
+                                        <a href="{% url 'admin_dashboard:approve_user' s_provider.id %}">
+                                            <span class="btn btn-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+                                        </a>
+                                        <a href="{% url 'admin_dashboard:reject_user' s_provider.id %}">
+                                            <span class="btn btn-danger mx-1"><i class="fa fa-ban" aria-hidden="true"></i></span>
+                                        </a>
+                                    </div>
+                                </td>
+                            
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% elif n_approve.is_gardener %}
+                <div class="table-responsive">
+                    <table class="table table-hover table-nowrap">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">E-Mail</th>
+                                <th scope="col">Service For</th>
+                                <th scope="col">Hourly Rate</th>
+                                <th scope="col">Years Experience</th>
+                                <th scope="col">Available Days</th>
+                                <th scope="col">Action</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for gardener,gardener_detail in gardener_data %}
+                            <tr>
+                                <td>{{ gardener.email }}</td>
+                                <td>{{ gardener_detail.service_for|slice:"1:-1" }}</td>
+                                <td>{{ gardener_detail.hourly_rate }}</td>
+                                <td>{{ gardener_detail.years_experience }}</td>
+                                <td>{{ gardener_detail.available_days|slice:"1:-1"  }}</td>                          
+                                <td>
+                                    <div class="d-flex justify-content-arround">
+                                        <a href="{% url 'admin_dashboard:approve_user' gardener.id %}">
+                                            <span class="btn btn-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+                                        </a>
+                                        <a href="{% url 'admin_dashboard:reject_user' gardener.id %}">
+                                            <span class="btn btn-danger mx-1"><i class="fa fa-ban" aria-hidden="true"></i></span>
+                                        </a>
+                                    </div>
+                                </td>
+                            
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             {% endif %}
         {% endfor %}  
     </div>

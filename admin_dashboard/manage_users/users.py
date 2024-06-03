@@ -18,30 +18,45 @@ class PendingUser(View):
     
     def get(self, request):
         not_approvedlist = self.model.objects.filter(is_approved=False).order_by('-id')
-        gardener_list = []
+        rtgardener_list = []
         vendor_list = []
-        garden_details_list = []
+        gardener_list = []
+        service_provider_list = []
+        rtgarden_details_list = []
         vendor_details_list = []
+        gardener_details_list = []
+        service_provider_details_list = []
         try:
             for i in not_approvedlist:
-                if i.is_gardener == True:
-                    gardener_list.append(i)
+                if i.is_rtg == True:
+                    rtgardener_list.append(i)
                     garden_details = models.GardeningProfile.objects.get(user = i)
-                    garden_details_list.append(garden_details)
+                    rtgarden_details_list.append(garden_details)
                 elif i.is_vendor == True:
                     vendor_list.append(i)
                     vendor_details = models.VendorDetails.objects.get(vendor = i)
                     vendor_details_list.append(vendor_details)
-            garden_data = zip(gardener_list,garden_details_list)
+                elif i.is_serviceprovider == True:
+                    service_provider_list.append(i)
+                    s_provider_details = models.ServiceProviderDetails.objects.get(provider = i)
+                    service_provider_details_list.append(s_provider_details)
+            rtgardener_data = zip(rtgardener_list,rtgarden_details_list)
             vendor_data = zip(vendor_list,vendor_details_list)
-
+            gardener_data = zip(gardener_list,gardener_details_list)
+            service_provider_data = zip(service_provider_list,service_provider_details_list)
         except Exception:
-            gardener_list = []
+            rtgardener_list = []
             vendor_list = []
-            garden_details_list = []
+            rtgarden_details_list = []
             vendor_details_list = []
-            garden_data = zip(gardener_list,garden_details_list)
+            gardener_list = []
+            gardener_details_list = []
+            service_provider_list = []
+            service_provider_details_list = []
+            rtgardener_data = zip(rtgardener_list,rtgarden_details_list)
             vendor_data = zip(vendor_list,vendor_details_list)
+            gardener_data = zip(gardener_list,gardener_details_list)
+            service_provider_data = zip(service_provider_list,service_provider_details_list)
         
         return render(request,self.template,locals())
         
@@ -74,15 +89,32 @@ def RejectUser(request, pk):
         messages.error(request,msg)
     return redirect("admin_dashboard:pending_user") 
 
-class GardenerList(View):
-    template = app + "gardener_list.html"
+class ServiceProvidersList(View):
+    template = app + "serviceprovider_list.html"
     model = models.User
     form_class = forms.WalletBalanceAdd
 
     def get(self, request):
         page = request.GET.get('page',1)
 
-        user_list= self.model.objects.filter(is_approved=True,is_superuser = False,is_gardener = True).order_by("-id")
+        user_list= self.model.objects.filter(is_approved=True,is_superuser = False,is_serviceprovider = True).order_by("-id")
+        paginated_data = utils.paginate(request, user_list, 25, page)
+        context = {
+            "user_list":paginated_data,
+            'data_list':paginated_data,
+            'form':self.form_class,
+        }
+        return render(request, self.template, context)
+    
+class RTGList(View):
+    template = app + "rtg_list.html"
+    model = models.User
+    form_class = forms.WalletBalanceAdd
+
+    def get(self, request):
+        page = request.GET.get('page',1)
+
+        user_list= self.model.objects.filter(is_approved=True,is_superuser = False,is_rtg = True).order_by("-id")
         paginated_data = utils.paginate(request, user_list, 25, page)
         context = {
             "user_list":paginated_data,
@@ -131,6 +163,14 @@ class VendorDetails(View):
     def get(self, request, pk):
         user = get_object_or_404(models.User, id=pk)
         vendor_data = get_object_or_404(models.VendorDetails, vendor=user)
+
+        return render(request, self.template, locals())
+    
+class ServiceProviderDetails(View):
+    template = app + "service_provider_data.html"
+    def get(self, request, pk):
+        user = get_object_or_404(models.User, id=pk)
+        serviceprovider_data = get_object_or_404(models.ServiceProviderDetails, provider=user)
 
         return render(request, self.template, locals())
     
@@ -244,10 +284,10 @@ class QuizAnswers(View):
 
             user_obj.quiz_score += int(quizPoints)
             user_obj.save()
-            messages.success(request, 'Points For Quiz Given Successfully')
+            messages.success(request, 'Wallet Balance For Quiz Given Successfully')
             return redirect("admin_dashboard:pending_user")
         except models.User.DoesNotExist:
-            messages.error(request, 'Error While Giving Points For Quiz ')
+            messages.error(request, 'Error While Giving Wallet Balance For Quiz ')
             return redirect("admin_dashboard:quizanswers",user_id)
 
 
@@ -404,51 +444,3 @@ def RejectSellRequest(request):
             msg = 'This account does not exist.'
             messages.error(request,msg)
     return redirect("admin_dashboard:sellrequest") 
-
-
-# Vendor Section
-class VendorSellRequests(View):
-    template = app + "vendorsellrequests.html"
-    model = models.ProductFromVendor
-
-    def get(self, request):
-        sell_request_obj = self.model.objects.filter(is_approved='pending').order_by('-id')
-        return render(request, self.template, locals())
-    
-
-def ApproveVendorSellRequest(request):
-    if request.method == "POST":
-        sell_id = request.POST['sell_id']
-        reason = request.POST['reason']
-
-    sell_obj = get_object_or_404(models.ProductFromVendor,id = int(sell_id))
-
-    if sell_obj is not None:
-        sell_obj.is_approved = "approved"
-        sell_obj.reason = reason
-        sell_obj.save()
-        # Send email to the user that his/her request has been approved
-        
-    else:
-        msg = 'This account does not exist.'
-        messages.error(request,msg)
-
-    return redirect("admin_dashboard:vendor_sellrequest") 
-
-def RejectVendorSellRequest(request):
-    if request.method == "POST":
-        sell_id = request.POST['sell_id']
-        reason = request.POST['reason']
-        
-        sell_obj = get_object_or_404(models.ProductFromVendor,id = int(sell_id))
-        if sell_obj is not None:
-            sell_obj.is_approved = "rejected"
-            sell_obj.reason = reason
-            sell_obj.save()
-            
-            # send an email to the user with rejection message
-            messages.success(request,'The request has been rejected')
-        else:
-            msg = 'This account does not exist.'
-            messages.error(request,msg)
-    return redirect("admin_dashboard:vendor_sellrequest") 
