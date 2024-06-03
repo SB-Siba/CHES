@@ -1,0 +1,44 @@
+{% extends 'vendor_dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="mt-2">
+    {% include 'app_common/snippets/alert.html' %}
+    <div class="table-responsive">
+        <table class="table table-hover table-nowrap">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Stock</th> 
+                    <th scope="col">Disc. Price</th>
+                    <th scope="col">Max Price</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.stock }}</td>
+                    <td>{{ product.discount_price }}</td>
+                    <td>{{ product.max_price }}</td>
+                    <td><img src="{{ product.image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class="zoom"></td>
+                    <td>
+                        <a href="{% url 'vendor_dashboard:vendor_sell_product_update' product.id %}">
+                            <i class="fa-regular fa-pen-to-square" style="color: #8400db;"></i>
+                        </a>
+                        <a href="{% url 'vendor_dashboard:vendor_sell_product_delete' product.id %}">
+                            <i class="fa fa-trash text-danger" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% include 'app_common/snippets/pagination.html' %}
+    </div>
+</div>
+{% endblock main_content %}

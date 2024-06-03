@@ -9,7 +9,7 @@
             <div class="row align-items-center">
                 <div class="" style="display: flex;justify-content: space-between;">
                     <h1 class="h2 ls-tight">Order Details : {{order.uid}}</h1>
-                    <h1 class="h2 ls-tight"><a target="_blank" href="{% url 'vendor_dashboard:invoice' order.uid %}"> <i class="fa-solid fa-print fa-beat" style="color: #ee00ff;margin-right: 2rem;"></i> </a> Order Value : {{grand_total}}</h1>
+                    <h1 class="h2 ls-tight"><a target="_blank" href="{% url 'vendor_dashboard:invoice' order.uid %}"> <i class="fa-solid fa-print fa-beat" style="color: #ee00ff;margin-right: 2rem;"></i> </a> Order Value : {{order.order_value}}</h1>
                 </div>
             </div>
         </div>

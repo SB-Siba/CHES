@@ -146,6 +146,40 @@ class VendorSoldProducts(View):
             'order_product_quantity': order_product_quantity,
             }
         return render(request, self.template, data)
+
+class SellProductsList(View):
+    template = app + "sell_product_list.html"
+    model = common_models.ProductFromVendor
+
+    def get(self,request):
+        user = request.user
+        product_objs = self.model.objects.filter(vendor = user)
+        return render(request,self.template,{'products':product_objs})
+
+class UpdateProduct(View):
+    template = app + "update_sold_products.html"
+    model = common_models.ProductFromVendor
+    form_class = common_forms.ProductFromVendorForm
+    def get(self,request, product_id):
+        product = get_object_or_404(common_models.ProductFromVendor, id=product_id, vendor=request.user)
+        form = self.form_class(instance=product)
+        return render(request, self.template, {'form': form, 'product': product})
+    def post(self,request, product_id):
+        product = get_object_or_404(common_models.ProductFromVendor, id=product_id, vendor=request.user)
+        form = self.form_class(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('vendor_dashboard:vendor_sell_product_list')
+        
+        return render(request, self.template, {'form': form, 'product': product})
+    
+class DeleteSellProduct(View):
+    model = common_models.ProductFromVendor
+
+    def get(self,request,product_id):
+        product = get_object_or_404(common_models.ProductFromVendor, id=product_id)
+        product.delete()
+        return redirect('vendor_dashboard:vendor_sell_product_list')
     
 class VendorDownloadInvoice(View):
     model = common_models.Order
@@ -627,3 +661,4 @@ class OrderDetail(View):
                     messages.error(request, f'{field}: {error}')
 
         return redirect('vendor_dashboard:order_detail', order_uid = order_uid)
+

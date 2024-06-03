@@ -4,6 +4,7 @@ from django.contrib.auth.hashers import make_password
 from multiselectfield import MultiSelectField
 from .manager import MyAccountManager
 from helpers import utils
+from decimal import Decimal
 from django.utils import timezone
 
 
@@ -290,15 +291,15 @@ class ProductFromVendor(models.Model):
     vendor = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    discount_price = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
-    max_price = models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
+    discount_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    max_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     image = models.ImageField(upload_to='vendor_products/', null=True, blank=True)
     stock = models.IntegerField(default=0)
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
     reason = models.TextField(null=True, blank=True)
     green_coins_required = models.PositiveIntegerField(default=0)
-    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
-    ratings = models.JSONField(default=list,null=True,blank=True)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=10.00)
+    ratings = models.JSONField(default=list, null=True, blank=True)
 
     def calculate_discounted_price(self):
         """
@@ -323,11 +324,19 @@ class ProductFromVendor(models.Model):
         # Calculate average rating
         if num_ratings > 0:
             avg_rating = total_rating / num_ratings
-            avg_rating = round(avg_rating, 1)  # Round to 2 decimal places
+            avg_rating = round(avg_rating, 1)  # Round to 1 decimal place
         else:
             avg_rating = 0
 
         return avg_rating
+
+    def save(self, *args, **kwargs):
+        # Calculate green_coins_required as a percentage of the discount_price
+        if self.discount_price > 0 and self.discount_percentage > 0:
+            self.green_coins_required = int((self.discount_percentage / Decimal('100.00')) * self.discount_price)
+        else:
+            self.green_coins_required = 0
+        super(ProductFromVendor, self).save(*args, **kwargs)
     
     def __str__(self):
         return f"{self.name} --> {self.vendor.full_name}"
