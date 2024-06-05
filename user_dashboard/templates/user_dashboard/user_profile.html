@@ -4,22 +4,19 @@
 {% block title %}User Profile{% endblock title %}
 
 {% block content %}
-<section class="vh-100">
+<section class="" style="min-height: 150vh; overflow-y: hidden;">
   <div class="container h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100 w-100">
+    <div class="row d-flex justify-content-center  user_profile-row  w-100" style="margin-top: 2rem;">
       <div class="col-md-12 col-xl-12">
-
         <div class="card text-success user_profile">
           <div class="card-body text-center">
-            <div class="mt-3 mb-4">
+            <div class="mt-2 mb-4">
               {% if user.user_image %}
               <img src="{{user.user_image.url}}" class="rounded-circle img-fluid" style="width: 100px;" />
-
               {% else %}
               <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
                 class="rounded-circle img-fluid" style="width: 100px;" />
               {% endif %}
-
             </div>
             <h4 class="mb-2">{{user.full_name}}</h4>
             <p class="mb-2">
@@ -50,23 +47,25 @@
               </a>
             </div>
 
-            <a href="{% url 'user_dashboard:userprofileupdate' %}">
+         <div class="mt-5">
+             <a href="{% url 'user_dashboard:userprofileupdate' %}">
               <button type="button" class="btn edit-details">
-                Edit Details
+                  <b>Edit Details</b>
               </button>
             </a>
 
             <a href="{% url 'user_dashboard:gardeningprofile' %}">
               <button type="button" class="btn gard-details">
-                Gardening Details
+                <b>Gardening Details</b>
               </button>
             </a>
+         </div>
 
             <div class="row mt-5">
 
               <!-- Earnings (Monthly) Card Example -->
               <div class="col-xl-3 col-md-6 mb-4">
-                  <div class="card border-left-primary shadow h-100 py-2">
+                  <div class="wallet-card1 card border-left-primary shadow h-100 py-2">
                       <div class="card-body">
                           <div class="row no-gutters align-items-center text-left">
                               <div class="col mr-2">
@@ -75,7 +74,7 @@
                                   <div class="h5 mb-0 font-weight-bold text-gray-800">{{user.wallet}}</div>
                               </div>
                               <div class="col-auto">
-                                  <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                  <i class="fas fa-calendar fa-2x text-primary"></i>
                               </div>
                           </div>
                       </div>
@@ -84,7 +83,7 @@
 
               <!-- Earnings (Monthly) Card Example -->
               <div class="col-xl-3 col-md-6 mb-4">
-                  <div class="card border-left-success shadow h-100 py-2">
+                  <div class="card wallet-card2 border-left-success shadow h-100 py-2">
                       <div class="card-body">
                           <div class="row no-gutters align-items-center text-left">
                               <div class="col mr-2">
@@ -93,7 +92,7 @@
                                   <div class="h5 mb-0 font-weight-bold text-gray-800">{{user.coins}}</div>
                               </div>
                               <div class="col-auto">
-                                  <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                  <i class="fas fa-dollar-sign fa-2x text-success"></i>
                               </div>
                           </div>
                       </div>
@@ -102,7 +101,7 @@
 
               <!-- Earnings (Monthly) Card Example -->
               <div class="col-xl-3 col-md-6 mb-4">
-                  <div class="card border-left-info shadow h-100 py-2">
+                  <div class="card  wallet-card3 border-left-info shadow h-100 py-2">
                       <div class="card-body">
                           <div class="row no-gutters align-items-center text-left">
                               <div class="col mr-2">
@@ -115,7 +114,7 @@
                                   </div>
                               </div>
                               <div class="col-auto">
-                                  <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                  <i class="fas fa-clipboard-list fa-2x text-info"></i>
                               </div>
                           </div>
                       </div>
@@ -124,7 +123,7 @@
 
               <!-- Pending Requests Card Example -->
               <div class="col-xl-3 col-md-6 mb-4">
-                  <div class="card border-left-secondary shadow h-100 py-2">
+                  <div class="card wallet-card4 border-left-secondary shadow h-100 py-2">
                       <div class="card-body">
                           <div class="row no-gutters align-items-center text-left">
                               <div class="col mr-2">
@@ -133,7 +132,7 @@
                                   <div class="h5 mb-0 font-weight-bold text-gray-800">{{user.total_invest}}</div>
                               </div>
                               <div class="col-auto">
-                                  <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                  <i class="fas fa-comments fa-2x text-warning"></i>
                               </div>
                           </div>
                       </div>
@@ -141,7 +140,7 @@
               </div>
               <!-- Rating -->
               <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card wallet-card5 border-left-warning shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center text-left">
                             <div class="col mr-2">

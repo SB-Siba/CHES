@@ -4127,7 +4127,6 @@ input[type="button"].btn-block {
   line-height: inherit;
   white-space: nowrap;
 }
-
 .navbar-brand:hover, .navbar-brand:focus {
   text-decoration: none;
 }
@@ -4138,6 +4137,7 @@ input[type="button"].btn-block {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
+ 
 }
 
 .navbar-nav .nav-link {
@@ -4185,8 +4185,8 @@ input[type="button"].btn-block {
 }
 
 .navbar-nav-scroll {
-  max-height: 75vh;
-  overflow-y: auto;
+  max-height: 100vh;
+  overflow-y: scroll !important;
 }
 
 @media (max-width: 575.98px) {
