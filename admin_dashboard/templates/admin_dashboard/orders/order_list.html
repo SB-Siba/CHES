@@ -50,9 +50,12 @@
               {% for order in order_list %}
               <tr>
                 <td>
-                  <a target="_blank" href="{% url 'admin_dashboard:order_detail' order.uid %}">
+                  <!-- <a target="_blank" href="{% url 'admin_dashboard:order_detail' order.uid %}">
                     {{order.uid}}
-                  </a>
+                  </a> -->
+                  
+                    {{order.uid}}
+                  
                 </td>
                 <td>
                   <!-- {% if 'final_value' in order.order_meta_data %}
