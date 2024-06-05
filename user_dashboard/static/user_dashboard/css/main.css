@@ -8,6 +8,7 @@ h1, h2 , h3 ,h4 {
 }
 .sidebar-brand{
     background-color: #fff;
+   
 }
 .fa-bell{
     color: #81CC2A;
@@ -28,19 +29,30 @@ h1, h2 , h3 ,h4 {
     color: #FFD600;
     font-weight: 600;
 }
+.index-card{
+    height: 25vh;
+}
 .dash-card1{
-background-color: #1E295B;
+    background: rgb(3,17,94);
+    background: linear-gradient(355deg, rgba(3,17,94,1) 0%, rgb(23, 35, 202) 48%, rgba(18,23,94,1) 100%);
+    border-left:5px solid rgb(255, 0, 0);
 }
 
 .dash-card2{
-    background-color: #15A085;
+    background: rgb(0,191,131);
+background: linear-gradient(349deg, rgb(32, 140, 106) 0%, rgb(42, 217, 144) 48%, rgba(0,193,111,1) 80%);
+border-left:5px solid  blue;
 }
 
 .dash-card3{
-    background-color: #8E44AD;
+    background: rgb(126,55,148);
+background: linear-gradient(349deg, rgb(164, 30, 185) 0%, rgba(170,37,197,1) 48%, rgb(143, 1, 153) 80%);
+border-left: 5px solid rgb(98, 195, 8);
 }
 .dash-card4{
-    background-color: #7C51F4;
+    background: rgb(183,166,0);
+background: linear-gradient(349deg, rgba(183,166,0,1) 0%, rgba(197,196,37,1) 48%, rgba(152,149,30,1) 80%);
+border-left: 5px solid rgb(192, 1, 106);
 }
 .dash-card5{
    background-color: #F39C13;
@@ -104,11 +116,14 @@ background-color: #1E295B;
     width: 100%;
 }
 
+.user_profile-row{
 
+}
 .user_profile{
     background-color: #fff;
     border: none;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    height: 63vh!important;
 }
 .user_profile h4{
     color: #4CAF50;
@@ -139,8 +154,9 @@ background-color: #1E295B;
     padding: 12px 30px;
 }
 .edit-details:hover{
-    background-color: #4CAF50;
-    color: #FFEB3B;
+    background: rgb(31,120,43);
+background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%, rgba(31,120,43,1) 80%);
+    color: #fff;
 }
 .gard-details{
     background-color: #1f782b;
@@ -150,8 +166,9 @@ background-color: #1E295B;
     padding: 12px 30px;
 }
 .gard-details:hover{
-    background-color: #4CAF50;
-    color: #FFEB3B;
+    background: rgb(31,120,43);
+    background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%, rgba(31,120,43,1) 80%);
+    color: #fff;
 }
 .form_sec{
     display: flex;
@@ -203,4 +220,22 @@ display: none;
     padding: 10px 21px;
     font-weight: 600;
     font-size: 15px;
+}
+.wallet-card1{
+    background: rgb(234,244,243);
+    background: linear-gradient(349deg, rgb(99, 114, 232) 0%, rgb(190, 204, 244) 48%, rgb(233, 237, 246) 88%);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 3px !important;
+}
+.wallet-card2{
+    background: rgb(235,244,234);
+background: linear-gradient(349deg, rgb(67, 192, 53) 0%, rgb(198, 247, 194) 48%, rgb(230, 237, 227) 88%);
+box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 3px !important;
+}
+.wallet-card3{
+    background: rgb(234,243,244);
+background: linear-gradient(349deg, rgb(98, 220, 234) 0%, rgba(184,237,241,1) 48%, rgb(234, 241, 241) 88%);
+}
+.wallet-card4{
+    background: rgb(244,244,234);
+background: linear-gradient(349deg, rgb(237, 237, 113) 0%, rgba(240,241,184,1) 48%, rgb(247, 247, 232) 88%);
 }

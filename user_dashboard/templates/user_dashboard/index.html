@@ -3,105 +3,147 @@
 
 {% block title %}Dashboard{% endblock title %}
 
-
 {% block content %}
-<!-- Content Row -->
-<div class="row">
 
-    <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2 dash-card1">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="h5 mb-0 font-weight-bold text-white">{{garden_obj.number_of_plants}}</div>
-                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
-                            Total plants</div>
-
-                    </div>
-                    <div class="col-auto">
-                        <i class="fa-solid fa-tree fa-2x text-white"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2 dash-card2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="h5 mb-0 font-weight-bold text-white">{{garden_obj.garden_area}} sqr.ft.</div>
-                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
-                            Total Gardening area
-                        </div>
-
-                    </div>
-                    <div class="col-auto">
-                        <img src="{% static 'user_dashboard\img\n.png' %}" class="text-info" alt=""
-                            style="height: 40px;">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2 dash-card3">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="h5 mb-0 mr-3 font-weight-bold text-white">
-                            <i class="fas fa-donate fa-trophy"></i>
-                            {{rank}}
-                        </div>
-                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">My Ranking
-                        </div>
-
-                    </div>
-                    <div class="col-auto">
-                        <i class="fa-solid fa-trophy fa-2x text-white"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2 dash-card5">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="h5 mb-0 font-weight-bold text-white">Balance</div>
-                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
-                            <img src="{% static 'user_dashboard/images/coin.png' %}">{{request.user.wallet}}
-                        </div>
-
-                    </div>
-                    <div class="col-auto">
-                        <i class="fa-solid fa-coins fa-2x text-white"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+<style>
+  
+</style>
+<div class="container-fluid">
     <!-- Content Row -->
+    <div class="row my-4  ">
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card index-card shadow   py-2 dash-card1" style="height: 9rem;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-md-8">
+                            <div class="h5 mb-0 font-weight-bold text-white">{{ garden_obj.number_of_plants }}</div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                Total plants
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            <i class="fa-solid fa-tree fa-2x text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 ">
+            <div class="card index-card shadow  py-2 dash-card2" style="height: 9rem;" >
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-md-8">
+                            <div class="h5 mb-0 font-weight-bold text-white">{{garden_obj.garden_area}} sqr.ft.</div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                Total Gardening area
+                            </div>
+
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            <img src="{% static 'user_dashboard\img\n.png' %}" class="text-info" alt=""
+                                style="height: 40px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 ">
+            <div class="card index-card  shadow  py-2 dash-card3" style="height: 9rem;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 mr-3 font-weight-bold text-white">
+                                <i class="fas fa-donate fa-trophy"></i>
+                                {{rank}}
+                            </div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">My Ranking
+                            </div>
+
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-trophy fa-2x text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 ">
+            <div class="card index-card  shadow  py-2 dash-card4" style="height: 9rem;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 font-weight-bold text-white">Balance</div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                               <!-- <img src="{% static 'user_dashboard/images/coin.png' %}"> -->{{request.user.wallet}}
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-coins fa-2x text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <hr style="border: 2px solid gray;" >
 
     <!-- Content Row -->
     <div class="row">
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+            <div class="card leaderbaord mb-4">
+                <main>
+                    <div id="leaderboardheader">
+                        <p class="fw-bold pt-3" style="font-size: xx-large; color: black;">Leader Board</p>
 
+                        <div class="filter-container">
+                            <select id="city-filter" class="form-select">
+                                <option value="all">All</option>
+                                <option value="Bhubaneswar">Bhubaneswar</option>
+                                <option value="Cuttack">Cuttack</option>
+                                <option value="Brahmapur">Brahmapur</option>
+                                <option value="Puri">Puri</option>
+                                <option value="Balasore">Balasore</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="leaderboard">
+                        <table  class="" >
+                            {% for leader_user in users_orderby_coins %}
+                            <tr data-rank="" data-city="{{ leader_user.city }}" class="leaderRow ltr">
+                                <td class="number lc" style="font-size: x-large;">
+                                    {{ forloop.counter }}
+                                </td>
+                                <td class="name lc">{{ leader_user.full_name }}</td>
+                                <td class="points lc">
+                                    {{ leader_user.coins }}
+                                    {% if forloop.first %}
+                                    🏅 
+                                    {% endif %} 
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </main>
+            </div>
+        </div>
         <!-- Content Column -->
-        <div class="col-lg-6 mb-4 col-md-12">
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
 
             <!-- Project Card Example -->
             <div class="card shadow mb-4">
                 <div class="card card-info">
-                    <div class="card-header">
+                    <div class="card-header  d-flex justify-content-between align-items-center p-3">
                         <h3 class="card-title">My Activity</h3>
 
                         <div class="card-tools">
@@ -123,50 +165,12 @@
             </div>
         </div>
 
-        <div class="col-lg-6 mb-4 col-md-12">
-            <div class="card leaderbaord mb-4">
-                <main>
-                    <div id="leaderboardheader">
-                        <p class="fw-bold" style="font-size: xx-large; color: black;">Leader Board</p>
 
-                        <div class="filter-container">
-                            <select id="city-filter" class="form-select">
-                                <option value="all">All</option>
-                                <option value="Bhubaneswar">Bhubaneswar</option>
-                                <option value="Cuttack">Cuttack</option>
-                                <option value="Brahmapur">Brahmapur</option>
-                                <option value="Puri">Puri</option>
-                                <option value="Balasore">Balasore</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div id="leaderboard">
-                        <div class="ribbon"></div>
-                        <table>
-                            {% for leader_user in users_orderby_coins %}
-                            <tr data-rank="" data-city="{{ leader_user.city }}" class="leaderRow ltr">
-                                <td class="number lc" style="font-size: x-large;">
-                                    {{ forloop.counter }}
-                                </td>
-                                <td class="name lc">{{ leader_user.full_name }}</td>
-                                <td class="points lc">
-                                    {{ leader_user.coins }}
-                                    {% if forloop.first %}
-                                    <img class="gold-medal"
-                                        src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true"
-                                        alt="gold medal" />
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                </main>
-            </div>
-        </div>
     </div>
+    <!-- /.row -->
 </div>
 {% endblock content %}
+
 
 <script>
     $(document).ready(function(){

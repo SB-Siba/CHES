@@ -1,22 +1,20 @@
-
-.login{
-    width: 72%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 4rem;
+.auth {
+    background:#006633;
+}
+.login {
+    width: 100%;
+    max-width: 450px;
+    margin: 2rem auto;
     padding: 1rem;
     border-radius: 8px;
     background-color: #fff;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
-.register{
-    width: 87%;
-}
 .login h3 {
     text-align: center;
-    margin-top: 3rem;
-    margin-bottom: 2rem;
-    font-size: 39px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 2rem;
     text-transform: uppercase;
     color: #086b39;
     font-weight: 600;
@@ -25,10 +23,6 @@
 .login p {
     font-family: "Inter", sans-serif;
 }
-.login h2 {
-    color: #198754;
-}
-
 .auth_reg_logo {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border-radius: 50%;
@@ -45,13 +39,13 @@
     font-family: "Inter", sans-serif;
 }
 .log_btn {
-    background-color: #198754;
+    background:#006633;      
     border: 1px solid;
     margin-bottom: 20px;
     color: #fff;
     border-radius: 50px;
-    padding: 16px 30px;
-    font-weight: 600;
+    padding: 10px 30px;
+    font-weight: 700;
     width: 100%;
     margin-top: 1rem;
     font-family: "Inter", sans-serif;
@@ -64,12 +58,13 @@ label {
     font-family: auto;
     padding-bottom: 8px;
 }
-form p{
+form p {
     text-align: center;
 }
-form p label{
+form p label {
     display: none;
 }
-form p b{
+form p b {
     color: #f50400;
 }
+
