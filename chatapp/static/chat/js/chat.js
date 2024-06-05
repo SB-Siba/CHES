@@ -38,16 +38,16 @@ function loadMessages(receiverId) {
                     for (var i = 0; i < allMessages.length; i++) {
                         var bubbleClass = (allMessages[i].sender === senderId) ? 'chat-bubble chat-bubble--right' : 'chat-bubble chat-bubble--left';
                         var bubbleHTML = '<div class="row no-gutters">' +
-                            '<div class="col-md-3' + ((allMessages[i].sender === senderId) ? ' offset-md-9' : '') + '">' +
-                            '<div class="' + bubbleClass + '">' +
-                            allMessages[i].message + // Assuming message contains the actual message content
-                            '</div>' +
-                            '</div>' +
-                            '</div>';
-
-                        // Append the bubble HTML to the chat panel HTML
-                        chatPanelHTML += bubbleHTML;
-                    }
+                                '<div class="col-md-5' + ((allMessages[i].sender === senderId) ? ' offset-md-7' : '') + '">' +
+                                '<div class="' + bubbleClass + '">' +
+                                allMessages[i].message + // Assuming message contains the actual message content
+                                '</div>' +
+                                '</div>' +
+                                '</div>';
+        
+                            // Append the bubble HTML to the chat panel HTML
+                            chatPanelHTML += bubbleHTML;
+                    };
                     $('.chat-panel').html(chatPanelHTML); // Add the complete chat panel HTML to the page
                     scrollChatToBottom();
                 },
