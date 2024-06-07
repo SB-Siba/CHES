@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views,auth_api,api_of_rtg
 
 app_name = 'app_common'
 
@@ -12,6 +12,33 @@ urlpatterns = [
     path('gardening-quiz/<str:u_email>', views.gardening_quiz_view, name='gardeningquiz'),
     path('add-vendor-details/<str:u_email>', views.VendorDetails.as_view(), name='vendordetails'),
     path('add-service-provider-details/<str:u_email>', views.ServiceProviderDetails.as_view(), name='serviceproviderdetails'),
+
+    # URLS API VIEWS AUTHENTICATION
+    path('api/register/', auth_api.RegisterAPIView.as_view(), name='api_register'),
+    path('api/login/', auth_api.LoginAPIView.as_view(), name='api_login'),
+    path('api/logout/', auth_api.LogoutAPIView.as_view(), name='api_logout'),
+    path('api/gardening-details/<str:u_email>/', auth_api.GardeningDetailsAPIView.as_view(), name='api_gardening_details'),
+    path('api/gardening-quiz/<str:u_email>/', auth_api.GardeningQuizAPIView.as_view(), name='api_gardening_quiz'),
+    path('api/vendor-details/<str:u_email>/', auth_api.VendorDetailsAPIView.as_view(), name='api_vendor_details'),
+    path('api/service-provider-details/<str:u_email>/', auth_api.ServiceProviderDetailsAPIView.as_view(), name='api_service_provider_details'),
+
+    path('api/user/profile/', api_of_rtg.UserProfileAPIView.as_view(), name='user_profile_api'),
+    path('api/user/profile/update/', api_of_rtg.UpdateProfileViewAPIView.as_view(), name='update_profile_api'),
+    path('api/gardening-profile/', api_of_rtg.GardeningProfileAPIView.as_view(), name='gardening_profile_api'),
+    path('api/update-gardening-profile/', api_of_rtg.UpdateGardeningProfileAPIView.as_view(), name='update_gardening_profile_api'),
+    path('api/add-activity/', api_of_rtg.AddActivityRequestAPIView.as_view(), name='add_activity_request_api'),
+    path('api/activity-list/', api_of_rtg.ActivityListAPIView.as_view(), name='activity_list_api'),
+    path('api/sell-produce/', api_of_rtg.SellProduceAPIView.as_view(), name='sell_produce_api'),
+    path('api/sell-produce-list/', api_of_rtg.SellProduceListAPIView.as_view(), name='sell_produce_list_api'),
+    path('api/green-commerce-product-community/', api_of_rtg.GreenCommerceProductCommunityAPIView.as_view(), name='green_commerce_product_community_api'),
+    path('api/buying-begins/<int:prod_id>/', api_of_rtg.BuyingBeginsAPIView.as_view(), name='buying_begins_api'),
+    path('api/buy-begins-seller/', api_of_rtg.BuyBeginsSellerAPIView.as_view(), name='buy_begins_seller_api'),
+    path('api/buy-begins-buyer/', api_of_rtg.BuyBeginsBuyerAPIView.as_view(), name='buy_begins_buyer_api'),
+    path('api/send-payment-link/<int:buy_id>/', api_of_rtg.SendPaymentLinkAPIView.as_view(), name='send_payment_link_api'),
+    path('api/reject-buy/<int:ord_id>/', api_of_rtg.RejectBuyAPIView.as_view(), name='reject_buy_api'),
+    path('api/produce-buy/<int:prod_id>/', api_of_rtg.ProduceBuyAPIView.as_view(), name='produce_buy_api'),
+    path('api/all-orders/', api_of_rtg.AllOrdersAPIView.as_view(), name='all_order_api'),
+
 ]
 
 #   app_common:register

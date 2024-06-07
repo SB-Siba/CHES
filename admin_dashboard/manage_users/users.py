@@ -20,11 +20,9 @@ class PendingUser(View):
         not_approvedlist = self.model.objects.filter(is_approved=False).order_by('-id')
         rtgardener_list = []
         vendor_list = []
-        gardener_list = []
         service_provider_list = []
         rtgarden_details_list = []
         vendor_details_list = []
-        gardener_details_list = []
         service_provider_details_list = []
         try:
             for i in not_approvedlist:
@@ -42,22 +40,17 @@ class PendingUser(View):
                     service_provider_details_list.append(s_provider_details)
             rtgardener_data = zip(rtgardener_list,rtgarden_details_list)
             vendor_data = zip(vendor_list,vendor_details_list)
-            gardener_data = zip(gardener_list,gardener_details_list)
             service_provider_data = zip(service_provider_list,service_provider_details_list)
         except Exception:
             rtgardener_list = []
             vendor_list = []
             rtgarden_details_list = []
             vendor_details_list = []
-            gardener_list = []
-            gardener_details_list = []
             service_provider_list = []
             service_provider_details_list = []
             rtgardener_data = zip(rtgardener_list,rtgarden_details_list)
             vendor_data = zip(vendor_list,vendor_details_list)
-            gardener_data = zip(gardener_list,gardener_details_list)
             service_provider_data = zip(service_provider_list,service_provider_details_list)
-        
         return render(request,self.template,locals())
         
 def ApproveUser(request, pk):

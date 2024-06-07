@@ -28,9 +28,8 @@ class Register(View):
     form_class = forms.RegisterForm
 
     def get(self,request):
-        initial_data = {'invitation_code':request.GET.get('ref_id', None)}
         context = {
-            'form': self.form_class(initial= initial_data)
+            'form': self.form_class()
         }
 
         return render(request, self.template, context)

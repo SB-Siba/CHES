@@ -154,44 +154,6 @@
                         </tbody>
                     </table>
                 </div>
-            {% elif n_approve.is_gardener %}
-                <div class="table-responsive">
-                    <table class="table table-hover table-nowrap">
-                        <thead class="table-light">
-                            <tr>
-                                <th scope="col">E-Mail</th>
-                                <th scope="col">Service For</th>
-                                <th scope="col">Hourly Rate</th>
-                                <th scope="col">Years Experience</th>
-                                <th scope="col">Available Days</th>
-                                <th scope="col">Action</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for gardener,gardener_detail in gardener_data %}
-                            <tr>
-                                <td>{{ gardener.email }}</td>
-                                <td>{{ gardener_detail.service_for|slice:"1:-1" }}</td>
-                                <td>{{ gardener_detail.hourly_rate }}</td>
-                                <td>{{ gardener_detail.years_experience }}</td>
-                                <td>{{ gardener_detail.available_days|slice:"1:-1"  }}</td>                          
-                                <td>
-                                    <div class="d-flex justify-content-arround">
-                                        <a href="{% url 'admin_dashboard:approve_user' gardener.id %}">
-                                            <span class="btn btn-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
-                                        </a>
-                                        <a href="{% url 'admin_dashboard:reject_user' gardener.id %}">
-                                            <span class="btn btn-danger mx-1"><i class="fa fa-ban" aria-hidden="true"></i></span>
-                                        </a>
-                                    </div>
-                                </td>
-                            
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
             {% endif %}
         {% endfor %}  
     </div>

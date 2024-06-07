@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views,api_views
 from .manage_users import users
 from admin_dashboard.orders import order
 
@@ -40,6 +40,16 @@ urlpatterns = [
     path('order/order_detail/<str:order_uid>', order.OrderDetail.as_view(), name='order_detail'),
     path('order/download_invoice/<str:order_uid>', order.DownloadInvoice.as_view(), name='download_invoice'),
     path('order/order_status_search', order.OrderStatusSearch.as_view(), name='order_status_search'),
+
+    # API---------------
+    path('pending-users/', api_views.PendingUserAPIView.as_view(), name='api_pending_users'),
+    path('approve-user/<int:pk>/', api_views.ApproveUserAPIView.as_view(), name='api_approve_user'),
+    path('reject-user/<int:pk>/', api_views.RejectUserAPIView.as_view(), name='api_reject_user'),
+    path('user-gardening-details/<int:pk>/', api_views.UserGardeningDetailsAPIView.as_view(), name='api_user_gardening_details'),
+    path('vendor-details/<int:pk>/', api_views.VendorDetailsAPIView.as_view(), name='api_vendor_details'),
+    path('service-provider-details/<int:pk>/', api_views.ServiceProviderDetailsAPIView.as_view(), name='api_service_provider_details'),
+    path('quiz-answers/<int:user_id>/', api_views.QuizAnswersAPIView.as_view(), name='api_quiz_answers'),
+
 ]
 
 #  admin_dashboard:users_list

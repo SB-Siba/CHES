@@ -28,6 +28,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "rest_framework.authtoken",
+    'drf_yasg',
 
     #apps
     "app_common",
@@ -156,4 +159,12 @@ MESSAGE_TAGS = {
     messages.INFO: 'alert-info',
     messages.SUCCESS: 'alert-success',
     messages.ERROR: 'alert-danger',
+}
+
+REST_FRAMEWORK = {
+   'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework.authentication.TokenAuthentication',
+    #    'rest_framework.authentication.SessionAuthentication',
+   ),
+   'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }

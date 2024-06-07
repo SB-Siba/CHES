@@ -172,7 +172,7 @@ class ContactePage(View):
         
         return redirect('user_dashboard:contactpage')
     
-class GardeningProfie(View):
+class GardeningProfile(View):
     template = app + "gardening_profile.html"
     model = app_commonmodels.GardeningProfile
 
@@ -476,9 +476,9 @@ def send_payment_link(request,buy_id):
 
 class ProduceBuyView(View):
     model = app_commonmodels.ProduceBuy
-    def get(self,request,prod_id):
+    def get(self,request,ord_id):
         user = request.user
-        buy_prod_obj = self.model.objects.get(id=prod_id)
+        buy_prod_obj = self.model.objects.get(id=ord_id)
         seller = buy_prod_obj.seller
         buyer = buy_prod_obj.buyer
         ammount_for_quantity_want = buy_prod_obj.ammount_based_on_quantity_buyer_want
@@ -523,30 +523,6 @@ class AllOrders(View):
 
     def get(self, request):
         orders = self.model.objects.filter(buyer=request.user)
-        # orders_list = []
-        # ratings_given = []
-        
-        # encountered_sellers = set()  # Track encountered sellers to avoid duplicates
-
-        # for order in orders:
-        #     orders_list.append(order)
-        #     seller = order.seller
-            
-            
-        #     # Check if we've already processed ratings for this seller
-        #     if order.id not in encountered_sellers:
-        #         encountered_sellers.add(order.id)
-        #         print(encountered_sellers)
-        #         ratings = seller.ratings
-        #         print(ratings)
-        #         # Check if the buyer has given ratings to this seller
-        #         rating_given = any(rating['buyer_name'] == request.user.full_name for rating in ratings)
-        #         if rating_given:
-        #             ratings_given.append("Given")
-        #         else:
-        #             ratings_given.append("NotGiven")
-        # print(ratings_given)
-        # order_and_ratings = zip(orders_list,ratings_given)
         return render(request , self.template , {'orders' : orders})
     
 class AllPosts(View):

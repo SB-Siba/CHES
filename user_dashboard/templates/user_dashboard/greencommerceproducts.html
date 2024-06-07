@@ -38,7 +38,7 @@
 
                 <div class="d-flex mb-3 justify-content-between " id="buy_now">
                     <div >
-                        <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" `onclick="setProductId({{ prod.id }})"`>
+                        <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick="setProductId({{ prod.id }})">
                            &nbsp;<b>Buy Now</b>
                         </a>
 
@@ -153,12 +153,6 @@
     </div>
     {% endfor %}
 
-    <script>
-        function setProductId(productId) {
-            document.getElementById('modalForm').action = "{% url 'user_dashboard:buybegins' 0 %}".replace('0', productId);
-        }
-    </script>
-
     <!-- Modal -->
     <div class="modal fade "  id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -169,7 +163,7 @@
                     <button type="button" class="btn-close close_btn" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="mt-2 "  id="modalForm" method="post" action="">
+                    <form class="mt-2" id="modalForm" method="post" action="">
                         {% include 'app_common/snippets/alert.html' %}
                         {% csrf_token %}
                         {{form.as_p}}
@@ -186,3 +180,10 @@
 
 </div>
 {% endblock content %}
+{% block scripts %}
+<script>
+    function setProductId(productId) {
+        document.getElementById('modalForm').action = "{% url 'user_dashboard:buybegins' 0 %}".replace('0', productId);
+    }
+</script>
+{% endblock scripts %}
