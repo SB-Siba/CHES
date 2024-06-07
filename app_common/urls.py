@@ -38,7 +38,12 @@ urlpatterns = [
     path('api/reject-buy/<int:ord_id>/', api_of_rtg.RejectBuyAPIView.as_view(), name='reject_buy_api'),
     path('api/produce-buy/<int:prod_id>/', api_of_rtg.ProduceBuyAPIView.as_view(), name='produce_buy_api'),
     path('api/all-orders/', api_of_rtg.AllOrdersAPIView.as_view(), name='all_order_api'),
-
+    path('api/all-posts/', api_of_rtg.AllPostsAPIView.as_view(), name='all_posts_api'),
+    path('api/posts/plus-like/', api_of_rtg.PlusLikeAPIView.as_view(), name='plus_like_api'),
+    path('api/posts/minus-like/', api_of_rtg.MinusLikeAPIView.as_view(), name='minus_like_api'),
+    path('api/posts/give-comment/', api_of_rtg.GiveCommentAPIView.as_view(), name='give_comment_api'),
+    path('api/posts/get-all-comments/', api_of_rtg.GetAllCommentsAPIView.as_view(), name='get_all_comments_api'),
+    path('api/rate-order/', api_of_rtg.RateOrderAPIView.as_view(), name='rate_order_api'),
 ]
 
 #   app_common:register

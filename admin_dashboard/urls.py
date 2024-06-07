@@ -42,13 +42,13 @@ urlpatterns = [
     path('order/order_status_search', order.OrderStatusSearch.as_view(), name='order_status_search'),
 
     # API---------------
-    path('pending-users/', api_views.PendingUserAPIView.as_view(), name='api_pending_users'),
-    path('approve-user/<int:pk>/', api_views.ApproveUserAPIView.as_view(), name='api_approve_user'),
-    path('reject-user/<int:pk>/', api_views.RejectUserAPIView.as_view(), name='api_reject_user'),
-    path('user-gardening-details/<int:pk>/', api_views.UserGardeningDetailsAPIView.as_view(), name='api_user_gardening_details'),
-    path('vendor-details/<int:pk>/', api_views.VendorDetailsAPIView.as_view(), name='api_vendor_details'),
-    path('service-provider-details/<int:pk>/', api_views.ServiceProviderDetailsAPIView.as_view(), name='api_service_provider_details'),
-    path('quiz-answers/<int:user_id>/', api_views.QuizAnswersAPIView.as_view(), name='api_quiz_answers'),
+    # path('pending-users/', api_views.PendingUserAPIView.as_view(), name='api_pending_users'),
+    # path('approve-user/<int:pk>/', api_views.ApproveUserAPIView.as_view(), name='api_approve_user'),
+    # path('reject-user/<int:pk>/', api_views.RejectUserAPIView.as_view(), name='api_reject_user'),
+    # path('user-gardening-details/<int:pk>/', api_views.UserGardeningDetailsAPIView.as_view(), name='api_user_gardening_details'),
+    # path('vendor-details/<int:pk>/', api_views.VendorDetailsAPIView.as_view(), name='api_vendor_details'),
+    # path('service-provider-details/<int:pk>/', api_views.ServiceProviderDetailsAPIView.as_view(), name='api_service_provider_details'),
+    # path('quiz-answers/<int:user_id>/', api_views.QuizAnswersAPIView.as_view(), name='api_quiz_answers'),
 
 ]
 

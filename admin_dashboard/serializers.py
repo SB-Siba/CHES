@@ -7,7 +7,7 @@ class PendingUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'full_name', 'email', 'is_rtg', 'is_vendor', 'is_serviceprovider']
 
 
-class GardeningProfileSerializer(serializers.ModelSerializer):
+class AdminSiteGardeningProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = common_models.GardeningProfile
         fields = '__all__'

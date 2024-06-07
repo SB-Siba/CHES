@@ -172,14 +172,16 @@ class ProduceBuySerializer(serializers.ModelSerializer):
         model = ProduceBuy
         fields = [
             'id',
+            'buyer',
+            'seller',
+            'sell_produce',
             'product_name',
             'SI_units',
             'buying_status',
             'quantity_buyer_want',
-            'ammount_based_on_quantity_buyer_want',
-            'payment_link'
+            'date_time'
         ]
-        read_only_fields = ['id','product_name', 'SI_units', 'buying_status', 'quantity_buyer_want','ammount_based_on_quantity_buyer_want','payment_link']
+        read_only_fields = ['id', 'buyer', 'seller', 'sell_produce', 'product_name', 'SI_units', 'buying_status', 'date_time']
 
 
 class SendPaymentLinkSerializer(serializers.ModelSerializer):
@@ -197,3 +199,35 @@ class RejectBuySerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'buying_status': {'required': True, 'default': 'BuyRejected'}
         }
+
+class AllActivitiesSerializer(serializers.ModelSerializer):
+    like_count = serializers.SerializerMethodField()
+    comment_count = serializers.SerializerMethodField()
+    user_liked = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserActivity
+        fields = ['id', 'is_accepted', 'likes', 'comments', 'like_count', 'comment_count', 'user_liked']
+
+    def get_like_count(self, obj):
+        return len(obj.likes)
+
+    def get_comment_count(self, obj):
+        return len(obj.comments)
+
+    def get_user_liked(self, obj):
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            return request.user.full_name in obj.likes
+        return False
+    
+class LikeSerializer(serializers.Serializer):
+    activity_id = serializers.IntegerField()
+
+class CommentSerializer(serializers.Serializer):
+    post_id = serializers.IntegerField()
+    comment = serializers.CharField(max_length=1000)
+
+class RateOrderSerializer(serializers.Serializer):
+    order_id = serializers.IntegerField(required=True)
+    rating = serializers.FloatField(required=True, min_value=0, max_value=5)

@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404, redirect, render
 from app_common import models as common_models
-from .serializers import PendingUserSerializer,GardeningProfileSerializer, VendorDetailsSerializer, ServiceProviderDetailsSerializer,QuizAnswersSerializer
+from .serializers import PendingUserSerializer,AdminSiteGardeningProfileSerializer, VendorDetailsSerializer, ServiceProviderDetailsSerializer,QuizAnswersSerializer
 from drf_yasg.utils import swagger_auto_schema
 from . import swagger_doc as swagger_documentation
 from django.contrib.auth.decorators import user_passes_test
@@ -58,12 +58,12 @@ class UserGardeningDetailsAPIView(APIView):
 
     @swagger_auto_schema(
         manual_parameters=swagger_documentation.gardening_details_get,
-        responses={200: GardeningProfileSerializer, 404: 'User not found'}
+        responses={200: AdminSiteGardeningProfileSerializer, 404: 'User not found'}
     )
     def get(self, request, pk):
         user = get_object_or_404(common_models.User, id=pk)
         gardening_data = get_object_or_404(common_models.GardeningProfile, user=user)
-        serializer = GardeningProfileSerializer(gardening_data)
+        serializer = AdminSiteGardeningProfileSerializer(gardening_data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

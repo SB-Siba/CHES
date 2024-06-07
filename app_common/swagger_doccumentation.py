@@ -72,10 +72,6 @@ update_profile_post = [
     openapi.Parameter('password', openapi.IN_FORM, description="New password for the user", type=openapi.TYPE_STRING),
 ]
 
-gardening_profile_get = [
-    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
-]
-
 update_gardening_profile_post = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
     openapi.Parameter('garden_area', openapi.IN_FORM, description="Garden area", type=openapi.TYPE_INTEGER),
@@ -141,4 +137,35 @@ produce_buy_get = [
 
 all_orders_get = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
+
+all_posts_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
+
+plus_like_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("activity_id", openapi.IN_QUERY, description="ID of the activity to like", required=True, type=openapi.TYPE_INTEGER),
+]
+
+minus_like_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("activity_id", openapi.IN_QUERY, description="ID of the activity to unlike", required=True, type=openapi.TYPE_INTEGER),
+]
+
+give_comment_post = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("post_id", openapi.IN_FORM, description="ID of the post to comment on", required=True, type=openapi.TYPE_INTEGER),
+    openapi.Parameter("comment", openapi.IN_FORM, description="Comment content", required=True, type=openapi.TYPE_STRING),
+]
+
+get_all_comments_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("post_id", openapi.IN_QUERY, description="ID of the post to get comments for", required=True, type=openapi.TYPE_INTEGER),
+]
+
+rate_order_post = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("order_id", openapi.IN_FORM, description="ID of the order to be rated", required=True, type=openapi.TYPE_INTEGER),
+    openapi.Parameter("rating", openapi.IN_FORM, description="Rating for the order (0-5, including decimals)", required=True, type=openapi.TYPE_NUMBER, format='float'),
 ]

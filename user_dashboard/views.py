@@ -529,11 +529,6 @@ class AllPosts(View):
     template = app + "all_posts.html"
     model = app_commonmodels.UserActivity
     def get(self,request):
-
-        # activity = self.model.objects.get(id=7)
-        # activity.likes = []
-        # activity.save()
-
         posts = self.model.objects.filter(is_accepted = "approved").order_by("-id")
         posts_list = []
         like_list = []

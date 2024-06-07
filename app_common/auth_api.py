@@ -22,6 +22,8 @@ from django.contrib.auth import authenticate, login, logout
 # views_api.py
 class RegisterAPIView(APIView):
     @swagger_auto_schema(
+        tags=["registration"],
+        operation_description="Registration API",
         manual_parameters=swagger_doccumentation.signup_post,
         responses={201: 'Registration successful', 400: 'Validation error'}
     )
@@ -34,6 +36,8 @@ class RegisterAPIView(APIView):
 
 class LoginAPIView(APIView):
     @swagger_auto_schema(
+        tags=["log_in"],
+        operation_description="Login API",
         manual_parameters=swagger_doccumentation.login_post,
         responses={
             200: openapi.Response('Login successful'),
@@ -81,6 +85,8 @@ class LogoutAPIView(APIView):
 
 class GardeningDetailsAPIView(APIView):
     @swagger_auto_schema(
+        tags=["gardening_detail_add"],
+        operation_description="Gardening Detail API",
         manual_parameters=swagger_doccumentation.gardening_details_post,
         responses={201: 'Details added successfully', 400: 'Validation error'}
     )
@@ -98,6 +104,8 @@ class GardeningDetailsAPIView(APIView):
 
 class GardeningQuizAPIView(APIView):
     @swagger_auto_schema(
+        tags=["gardening_quiz"],
+        operation_description="Gardening Quiz API",
         manual_parameters=swagger_doccumentation.gardening_quiz_post,
         responses={201: 'Quiz submitted successfully', 400: 'Validation error'}
     )
@@ -144,6 +152,8 @@ class GardeningQuizAPIView(APIView):
 
 class VendorDetailsAPIView(APIView):
     @swagger_auto_schema(
+        tags=["vendor_detail"],
+        operation_description="Vendor Data API",
         manual_parameters=swagger_doccumentation.vendor_details_post,
         responses={201: 'Details added successfully', 400: 'Validation error'}
     )
@@ -161,6 +171,8 @@ class VendorDetailsAPIView(APIView):
 
 class ServiceProviderDetailsAPIView(APIView):
     @swagger_auto_schema(
+        tags=["service_provider_detail"],
+        operation_description="Service provider Data API",
         manual_parameters=swagger_doccumentation.service_provider_details_post,
         responses={201: 'Details added successfully', 400: 'Validation error'}
     )
