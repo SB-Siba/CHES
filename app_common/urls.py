@@ -44,6 +44,14 @@ urlpatterns = [
     path('api/posts/give-comment/', api_of_rtg.GiveCommentAPIView.as_view(), name='give_comment_api'),
     path('api/posts/get-all-comments/', api_of_rtg.GetAllCommentsAPIView.as_view(), name='get_all_comments_api'),
     path('api/rate-order/', api_of_rtg.RateOrderAPIView.as_view(), name='rate_order_api'),
+    path('api/fetch-user-details/', api_of_rtg.FetchUserDetailsAPI.as_view(), name='fetch-user-details-api'),
+    path('api/chat/', api_of_rtg.ChatAPI.as_view(), name='chat-api'),
+    path('api/start-messages/<int:r_id>/', api_of_rtg.StartMessagesAPI.as_view(), name='start-messages-api'),
+    path('api/send-message/', api_of_rtg.SendMessageApi.as_view(), name='send-message-api'),
+    path('api/fetch-messages/', api_of_rtg.FetchMessageApi.as_view(), name='fetch-messages-api'),
+
+    path('api/vendor-products/', api_of_rtg.VendorsProductsAPI.as_view(), name='vendor_products_api'),
+    path('api/service-providers/', api_of_rtg.ServiceProvidersListAPIView.as_view(), name='service_providers_list'),
 ]
 
 #   app_common:register

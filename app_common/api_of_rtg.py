@@ -5,17 +5,24 @@ from drf_yasg import openapi
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view,permission_classes
+from chatapp.models import Message
 from rest_framework.parsers import FormParser, MultiPartParser
 from . import swagger_doccumentation
 from django.contrib.auth.hashers import make_password
-from .models import ProduceBuy, User, GardeningProfile,UserActivity,SellProduce
+from .models import ProduceBuy, ProductFromVendor, ServiceProviderDetails, User, GardeningProfile,UserActivity,SellProduce
 from .serializer import (
     CommentSerializer,
     LikeSerializer,
+    MessageSerializer,
     ProduceBuySerializer,
     GardeningProfileSerializer,
+    ProductFromVendorSerializer,
     RateOrderSerializer,
     SellProduceSerializer,
+    SendMessageSerializer,
+    ServiceProviderSerializer,
+    StartMessagesSerializer,
     UpdateProfileSerializer,
     UserProfileSerializer,
     GardeningProfileUpdateRequestSerializer,
@@ -23,7 +30,10 @@ from .serializer import (
     AllActivitiesSerializer
 )
 from django.contrib.auth import authenticate, login, logout
-
+import json
+from django.db.models import Q
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.utils import timezone
 
 class UserProfileAPIView(APIView):
     @swagger_auto_schema(
@@ -465,3 +475,193 @@ class RateOrderAPIView(APIView):
                 return Response({'message': 'Order not completed yet or order rejected'}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class VendorsProductsAPI(APIView):
+    @swagger_auto_schema(
+        tags=["Vendor Products"],
+        operation_description="Product from vendors",
+        manual_parameters=swagger_doccumentation.vendor_products_get,
+        responses={200: 'All Vendor Products', 400: 'Validation error', 404: 'Vendor Products not found'}
+    )
+
+    def get(self, request):
+        products = ProductFromVendor.objects.all().order_by("-id")
+        serializer = ProductFromVendorSerializer(products, many=True, context={'request': request})
+        return Response(serializer.data)
+    
+class FetchUserDetailsAPI(APIView):
+    @swagger_auto_schema(
+        tags=["UserDetails"],
+        operation_description="Fetch user details",
+        manual_parameters=swagger_doccumentation.fetch_user_details_get,
+        responses={200: "Success"}
+    )
+    def get(self, request):
+        user_id = request.GET.get('user_id')
+        user = get_object_or_404(User, pk=user_id)
+        user_details = {
+            'name': user.full_name,
+            'email': user.email,
+            'user_image': user.user_image.url if user.user_image else None
+        }
+        return JsonResponse(user_details)
+
+class ChatAPI(APIView):
+    @swagger_auto_schema(
+        tags=["Chat"],
+        operation_description="Retrieve chat messages",
+        responses={200: "Success"}
+    )
+    def get(self, request):
+        messages = Message.objects.filter(Q(receiver=request.user) | Q(sender=request.user))
+        sorted_messages = []
+        for msg in messages:
+            try:
+                message_data = json.loads(msg.messages)
+                last_message = message_data[-1]
+                timestamp = last_message.get('timestamp')
+                if timestamp:
+                    sorted_messages.append((timestamp, msg))
+            except (AttributeError, json.JSONDecodeError, IndexError):
+                pass
+
+        sorted_messages = [msg for _, msg in sorted(sorted_messages, key=lambda x: x[0], reverse=True)]
+
+        user_last_message = []
+        for message in sorted_messages:
+            try:
+                message_data = json.loads(message.messages)  # Assuming `message.messages` contains JSON data
+                last_message = message_data[-1]
+                timestamp = timezone.localtime(timezone.datetime.strptime(last_message['timestamp'], "%Y-%m-%dT%H:%M:%S.%f%z"))
+                formatted_time = timestamp.strftime("%I:%M %p")
+                user_last_message.append((last_message['message'], formatted_time))
+            except (json.JSONDecodeError, IndexError, KeyError):
+                pass
+
+        # zipped_messages = zip(sorted_messages, user_last_message)
+
+        # Serialize the zipped messages using MessageSerializer
+        serialized_messages = MessageSerializer(sorted_messages, many=True)
+
+        context = {'zipped_messages': serialized_messages.data,'last_message':user_last_message}
+        return Response(context)
+
+class StartMessagesAPI(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
+    @swagger_auto_schema(
+        tags=["Messages"],
+        operation_description="Start a new message conversation",
+        manual_parameters=swagger_doccumentation.start_message_post,
+        request_body=StartMessagesSerializer,
+        responses={
+            201: "Message started successfully",
+            400: "Message already exists",
+            404: "Receiver not found"
+        }
+    )
+    def post(self, request, r_id):
+        receiver = get_object_or_404(User, pk=r_id)
+        serializer = StartMessagesSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        product_name = serializer.validated_data.get('product_name', "None")
+        
+        initial_message = (
+            f"Hi {receiver.full_name}, I am interested in purchasing {product_name}."
+            if product_name != "None"
+            else f"Hi {receiver.full_name}, I would like to start a conversation with you."
+        )
+        sender = request.user
+
+        if Message.objects.filter(sender=sender, receiver=receiver).exists():
+            return Response({"detail": "Message already exists."}, status=400)
+
+        message_data = {
+            'sender': sender.id,
+            'message': initial_message,
+            'timestamp': timezone.now().isoformat(),
+        }
+        messages_json = json.dumps([message_data])
+        msg_obj = Message(sender=sender, receiver=receiver, message_status="Start", messages=messages_json)
+        msg_obj.save()
+
+        return Response({"detail": "Message started successfully."}, status=201)
+
+class SendMessageApi(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
+    @swagger_auto_schema(
+        tags=["Messages"],
+        operation_description="Send a message",
+        manual_parameters=swagger_doccumentation.send_message_post,
+        request_body=SendMessageSerializer,
+        responses={201: "Message sent successfully"}
+    )
+    def post(self,request):
+        sender = request.user
+        receiver_id = request.data.get('receiver_id')
+        receiver = get_object_or_404(User, pk=receiver_id)
+        message = request.data.get('message')
+
+        existing_messages = Message.objects.filter(Q(sender=request.user, receiver=receiver) | Q(sender=receiver, receiver=request.user)).values_list('messages', flat=True)
+        messages = json.loads(existing_messages[0]) if existing_messages and existing_messages[0] is not None else []
+
+        message_data = {
+            'sender': sender.id,
+            'message': message,
+            'timestamp': timezone.now().isoformat(),
+        }
+        messages.append(message_data)
+
+        messages_to_update = Message.objects.filter(Q(sender=request.user, receiver=receiver) | Q(sender=receiver, receiver=request.user))
+        for message in messages_to_update:
+            message.messages = json.dumps(messages)
+            message.is_read = False
+            message.save()
+
+        return Response({"detail": "Message sent successfully."}, status=201)
+
+class FetchMessageApi(APIView):
+    @swagger_auto_schema(
+        tags=["Messages"],
+        operation_description="Fetch messages between users",
+        manual_parameters=swagger_doccumentation.fetch_messages_get,
+        responses={200: "Success"}
+    )
+    def get(self,request):
+        receiver_id = request.GET.get('receiver_id')
+        receiver = get_object_or_404(User, pk=receiver_id)
+        messages = Message.objects.filter(Q(sender=request.user, receiver=receiver) | Q(sender=receiver, receiver=request.user)).values_list('messages', flat=True)
+
+        f_messages = [msg for msg in messages if msg is not None]
+        for message in Message.objects.filter(Q(receiver=request.user) | Q(sender=request.user)):
+            try:
+                messages_dict = json.loads(message.messages)
+                last_message_index = len(messages_dict) - 1
+                last_message = messages_dict[last_message_index]
+                if int(last_message['sender']) == request.user.id:
+                    message.is_read = True
+                else:
+                    message.is_read = False
+                message.save()
+            except:
+                pass
+
+        sender_id = request.user.id
+        response_data = {
+            'messages': json.loads(messages[0]) if f_messages else [],
+            'senderId': sender_id
+        }
+        return JsonResponse(response_data, safe=False)
+    
+class ServiceProvidersListAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["Service Providers"],
+        manual_parameters=swagger_doccumentation.service_provider_list_get,
+        operation_description="Get a list of approved service providers",
+        responses={200: ServiceProviderSerializer(many=True)}
+    )
+    def get(self, request):
+        service_providers = ServiceProviderDetails.objects.filter(provider__is_approved=True)
+        serializer = ServiceProviderSerializer(service_providers, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import (
     ProduceBuy,
+    ProductFromVendor,
     SellProduce,
     User, 
     GardeningProfile, 
@@ -11,6 +12,9 @@ from .models import (
     GardeningProfileUpdateRequest,
     UserActivity
 )
+from chatapp.models import Message
+from django.db.models import Q
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -231,3 +235,47 @@ class CommentSerializer(serializers.Serializer):
 class RateOrderSerializer(serializers.Serializer):
     order_id = serializers.IntegerField(required=True)
     rating = serializers.FloatField(required=True, min_value=0, max_value=5)
+
+class ProductFromVendorSerializer(serializers.ModelSerializer):
+    average_rating = serializers.FloatField(source='calculate_avg_rating', read_only=True)
+    discounted_price = serializers.DecimalField(source='calculate_discounted_price', max_digits=10, decimal_places=2, read_only=True)
+    has_message = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ProductFromVendor
+        fields = [
+            'id', 'vendor', 'name', 'description', 'discount_price', 'max_price',
+            'image', 'stock', 'category', 'reason', 'green_coins_required',
+            'discount_percentage', 'ratings', 'average_rating', 'discounted_price', 'has_message'
+        ]
+
+    def get_has_message(self, obj):
+        request = self.context.get('request')
+        if request:
+            user = request.user
+            msg_obj = Message.objects.filter(Q(receiver=obj.vendor, sender=user) | Q(receiver=user, sender=obj.vendor))
+            return msg_obj.exists()
+        return False
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'full_name', 'email', 'user_image']
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['id', 'message_status', 'messages', 'is_read']
+
+class SendMessageSerializer(serializers.Serializer):
+    receiver_id = serializers.IntegerField()
+    message = serializers.CharField()
+
+class StartMessagesSerializer(serializers.Serializer):
+    product_name = serializers.CharField(required=False)
+
+class ServiceProviderSerializer(serializers.ModelSerializer):
+    provider = UserSerializer()
+    class Meta:
+        model = ServiceProviderDetails
+        fields = '__all__'

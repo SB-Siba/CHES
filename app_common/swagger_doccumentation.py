@@ -169,3 +169,30 @@ rate_order_post = [
     openapi.Parameter("order_id", openapi.IN_FORM, description="ID of the order to be rated", required=True, type=openapi.TYPE_INTEGER),
     openapi.Parameter("rating", openapi.IN_FORM, description="Rating for the order (0-5, including decimals)", required=True, type=openapi.TYPE_NUMBER, format='float'),
 ]
+
+vendor_products_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
+
+fetch_user_details_get = [
+    openapi.Parameter("user_id", openapi.IN_QUERY, description="ID of the user", required=True, type=openapi.TYPE_INTEGER),
+]
+
+start_message_post = [
+    openapi.Parameter("r_id", openapi.IN_PATH, description="ID of the receiver", required=True, type=openapi.TYPE_INTEGER),
+    openapi.Parameter("product_name", openapi.IN_FORM, description="Name of the product (optional)", required=False, type=openapi.TYPE_STRING),
+]
+
+send_message_post = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("receiver_id", openapi.IN_FORM, description="ID of the receiver", required=True, type=openapi.TYPE_INTEGER),
+    openapi.Parameter("message", openapi.IN_FORM, description="Message to be sent", required=True, type=openapi.TYPE_STRING),
+]
+
+fetch_messages_get = [
+    openapi.Parameter("receiver_id", openapi.IN_QUERY, description="ID of the receiver", required=True, type=openapi.TYPE_INTEGER),
+]
+
+service_provider_list_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
