@@ -52,6 +52,10 @@ urlpatterns = [
 
     path('api/vendor-products/', api_of_rtg.VendorsProductsAPI.as_view(), name='vendor_products_api'),
     path('api/service-providers/', api_of_rtg.ServiceProvidersListAPIView.as_view(), name='service_providers_list'),
+
+    path('api/checkout/<int:vprod_id>/<str:vendor_email>/', api_of_rtg.CheckoutAPIView.as_view(), name='checkout_api'),
+    path('api/orders/from-vendors/', api_of_rtg.AllOrdersFromVendorsApi.as_view(), name='all_orders_from_vendors_api'),
+    path('api/rate-order-from-vendor/', api_of_rtg.RateOrderFromVendorApi.as_view(), name='rate_order_from_vendor_api'),
 ]
 
 #   app_common:register

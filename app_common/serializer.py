@@ -279,3 +279,16 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceProviderDetails
         fields = '__all__'
+
+class CheckoutFormSerializer(serializers.Serializer):
+    first_name = serializers.CharField(max_length=30)
+    last_name = serializers.CharField(max_length=30)
+    username = serializers.EmailField()
+    contact_number = serializers.CharField(max_length=15)
+    email = serializers.EmailField()
+    address = serializers.CharField(max_length=255)
+    city = serializers.CharField(max_length=50)
+    zip_code = serializers.CharField(max_length=10)
+    same_address = serializers.BooleanField(required=False)
+    save_info = serializers.BooleanField(required=False)
+    offer_discount = serializers.CharField(max_length=10, required=False)

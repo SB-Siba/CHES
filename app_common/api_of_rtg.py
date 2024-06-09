@@ -10,8 +10,9 @@ from chatapp.models import Message
 from rest_framework.parsers import FormParser, MultiPartParser
 from . import swagger_doccumentation
 from django.contrib.auth.hashers import make_password
-from .models import ProduceBuy, ProductFromVendor, ServiceProviderDetails, User, GardeningProfile,UserActivity,SellProduce
+from .models import Order, ProduceBuy, ProductFromVendor, ServiceProviderDetails, User, GardeningProfile,UserActivity,SellProduce
 from .serializer import (
+    CheckoutFormSerializer,
     CommentSerializer,
     LikeSerializer,
     MessageSerializer,
@@ -29,6 +30,7 @@ from .serializer import (
     UserActivitySerializer,
     AllActivitiesSerializer
 )
+from user_dashboard.serializers import DirectBuySerializer,OrderSerializer
 from django.contrib.auth import authenticate, login, logout
 import json
 from django.db.models import Q
@@ -665,3 +667,148 @@ class ServiceProvidersListAPIView(APIView):
         service_providers = ServiceProviderDetails.objects.filter(provider__is_approved=True)
         serializer = ServiceProviderSerializer(service_providers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class CheckoutAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
+    @swagger_auto_schema(
+        tags=["Checkout"],
+        operation_description="Fetch order details",
+        manual_parameters=swagger_doccumentation.checkout_get,
+        responses={200: 'Success', 404: 'Not Found'}
+    )
+    def get(self, request, vprod_id, vendor_email):
+        user = request.user
+        offer_discount = request.data.get('offer_discount', None)
+        print(offer_discount)
+        vendor_product_obj = get_object_or_404(ProductFromVendor, id=vprod_id)
+        serializer = DirectBuySerializer(vendor_product_obj, context={'offer_discount': offer_discount})
+        order_details = serializer.data
+
+        ord_meta_data = {}
+        for i, j in order_details.items():
+            ord_meta_data.update(j)
+
+        data = {
+            "vendor_product": vendor_product_obj.name,
+            "gross_amount": round(ord_meta_data['gross_value'], 2),
+            "our_price": round(ord_meta_data['our_price'], 2),
+            "discount_amount": '{:.2f}'.format(ord_meta_data['discount_amount']),
+            "discount_percentage": round(ord_meta_data['discount_percentage'], 2),
+            "gst": '{:.2f}'.format(float(ord_meta_data['charges']["GST"])),
+            "total": round(ord_meta_data['final_value'], 2),
+            "offer_discount": offer_discount,
+            "delivery_charge": float(ord_meta_data['charges']["Delivary"]),
+        }
+        return JsonResponse(data, safe=False)
+
+    @swagger_auto_schema(
+        tags=["Checkout"],
+        operation_description="Place an order",
+        request_body=CheckoutFormSerializer,
+        manual_parameters=swagger_doccumentation.checkout_post,
+        responses={200: 'Order Successful!', 400: 'Error while placing Order'}
+    )
+    def post(self, request, vprod_id, vendor_email):
+        serializer = CheckoutFormSerializer(data=request.data)
+        offer_discount = request.data.get('offer_discount', None)
+        
+        if serializer.is_valid():
+            user = request.user
+            customer_details = serializer.validated_data
+            
+            prod_obj = get_object_or_404(ProductFromVendor, id=vprod_id)
+            serializer = DirectBuySerializer(prod_obj, context={'offer_discount': offer_discount})
+            order_details = serializer.data
+            ord_meta_data = {}
+            for i, j in order_details.items():
+                ord_meta_data.update(j)
+            t_price = round(ord_meta_data['final_value'], 2)
+
+            try:
+                vendor = get_object_or_404(User, email=vendor_email)
+                order = Order(
+                    customer=user,
+                    vendor=vendor,
+                    products={prod_obj.name: 1},
+                    order_value=t_price,
+                    customer_details=customer_details,
+                    order_meta_data=ord_meta_data
+                )
+
+                if int(offer_discount) == 1:
+                    user.wallet -= float(prod_obj.green_coins_required)
+                    vendor.wallet += float(prod_obj.green_coins_required)
+                    user.save()
+                    vendor.save()
+
+                order.save()
+                prod_obj.stock -= 1
+                prod_obj.save()
+                return Response({"detail": "Order Successful!"}, status=status.HTTP_200_OK)
+            except Exception as e:
+                print(e)
+                return Response({"detail": "Error while placing Order."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class AllOrdersFromVendorsApi(APIView):
+    @swagger_auto_schema(
+        tags=["AllOrdersFromVendor"],
+        operation_description="See all orders",
+        manual_parameters=swagger_doccumentation.orders_from_vendors_parameters,
+        responses={200: OrderSerializer(many=True)}
+    )
+    def get(self, request):
+        user = request.user
+        orders = Order.objects.filter(customer=user).order_by("-uid")
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
+    
+class RateOrderFromVendorApi(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
+    @swagger_auto_schema(
+        tags=["RateOrderFromVendor"],
+        operation_description="Rate an order from a vendor",
+        request_body=RateOrderSerializer,
+        manual_parameters=swagger_doccumentation.rate_order_post,
+        responses={
+            200: "Rating submitted successfully",
+            400: "Validation error",
+            404: "Order or product not found"
+        }
+    )
+    def post(self, request):
+        serializer = RateOrderSerializer(data=request.data)
+        if serializer.is_valid():
+            order_id = serializer.validated_data['order_id']
+            rating = serializer.validated_data['rating']
+            
+            buy_obj = get_object_or_404(Order, id=order_id)
+            vendor = buy_obj.vendor
+            customer = buy_obj.customer
+            product = ""
+            
+            for i, j in buy_obj.products.items():
+                product = i
+            
+            product_obj = get_object_or_404(ProductFromVendor, name=product)
+            
+            if product_obj.ratings is None:
+                product_obj.ratings = []
+
+            new_rating = {
+                "buyer_name": customer.full_name,
+                "order_product": product,
+                "amount_paid": buy_obj.order_value,
+                "rating": rating,
+            }
+            
+            product_obj.ratings.append(new_rating)
+            buy_obj.rating_given = True
+            buy_obj.save()
+            product_obj.save()
+            
+            return Response({"detail": "Rating submitted successfully"}, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

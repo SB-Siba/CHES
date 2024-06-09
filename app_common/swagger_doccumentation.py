@@ -196,3 +196,27 @@ fetch_messages_get = [
 service_provider_list_get = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
 ]
+
+checkout_get = [
+    openapi.Parameter("offer_discount", openapi.IN_QUERY, description="Offer discount", type=openapi.TYPE_STRING),
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", type=openapi.TYPE_STRING, required=True),
+]
+
+checkout_post = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", type=openapi.TYPE_STRING, required=True),
+    openapi.Parameter("offer_discount", openapi.IN_FORM, description="Offer discount", type=openapi.TYPE_STRING, required=False),
+    openapi.Parameter("first_name", openapi.IN_FORM, description="First Name", type=openapi.TYPE_STRING, required=True),
+    openapi.Parameter("last_name", openapi.IN_FORM, description="Last Name", type=openapi.TYPE_STRING, required=True),
+    openapi.Parameter("username", openapi.IN_FORM, description="Username", type=openapi.TYPE_STRING, required=True),
+    openapi.Parameter("contact_number", openapi.IN_FORM, description="Contact Number", type=openapi.TYPE_STRING, required=True),
+    openapi.Parameter("email", openapi.IN_FORM, description="Email", type=openapi.TYPE_STRING, required=True),
+    openapi.Parameter("address", openapi.IN_FORM, description="Address", type=openapi.TYPE_STRING, required=True),
+    openapi.Parameter("city", openapi.IN_FORM, description="City", type=openapi.TYPE_STRING, required=True),
+    openapi.Parameter("zip_code", openapi.IN_FORM, description="Zip Code", type=openapi.TYPE_STRING, required=True),
+    openapi.Parameter("same_address", openapi.IN_FORM, description="Same Address", type=openapi.TYPE_BOOLEAN, required=False),
+    openapi.Parameter("save_info", openapi.IN_FORM, description="Save Info", type=openapi.TYPE_BOOLEAN, required=False),
+]
+
+orders_from_vendors_parameters = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", type=openapi.TYPE_STRING, required=True),
+]

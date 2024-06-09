@@ -8,9 +8,9 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Your API",
+        title="ICAR Green Project",
         default_version='v1',
-        description="API documentation",
+        description="API documentation of Green Project",
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
