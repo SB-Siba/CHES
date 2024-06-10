@@ -14,6 +14,19 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str
 from django.http import JsonResponse
 
+from django.views.generic.edit import FormView
+from .forms import CustomPasswordResetForm,CustomSetPasswordForm
+from django.views.generic.base import TemplateView
+from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from django.views.generic.edit import FormView
+from django.core.exceptions import ValidationError
+from django.urls import reverse_lazy
+from django.core.mail import send_mail
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes
+from django.template.loader import render_to_string
 
 from . import forms
 from helpers import utils
@@ -305,3 +318,70 @@ class Home(View):
             self.template
         )
     
+
+class CustomPasswordResetView(FormView):
+    template_name = app + "authentication/password_reset.html"
+    template_email = app + "authentication/password_reset_email.html"
+
+    form_class = CustomPasswordResetForm
+    success_url = reverse_lazy('app_common:password_reset_done')
+    token_generator = default_token_generator
+
+    def form_valid(self, form):
+        email = form.cleaned_data['email']
+        users = models.User._default_manager.filter(email=email)
+        if users.exists():
+            for user in users:
+                current_site = get_current_site(self.request)
+                mail_subject = 'Password reset link'
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                token = self.token_generator.make_token(user)
+                reset_link = reverse_lazy('app_common:password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+                reset_url = f"{self.request.scheme}://{current_site.domain}{reset_link}"
+                message = render_to_string(self.template_email, {
+                    'user': user,
+                    'reset_url': reset_url,
+                })
+                send_mail(mail_subject, message, 'admin@example.com', [email])
+        return super().form_valid(form)
+    
+class CustomPasswordResetDoneView(TemplateView):
+    template_name = app + "authentication/password_reset_done.html"
+
+UserModel = get_user_model()
+
+class CustomPasswordResetConfirmView(FormView):
+    template_name = app + "authentication/password_reset_confirm.html"
+    form_class = CustomSetPasswordForm
+    token_generator = default_token_generator
+    success_url = reverse_lazy('app_common:password_reset_complete')
+
+    def dispatch(self, *args, **kwargs):
+        self.user = self.get_user(kwargs['uidb64'])
+        if self.user is not None and self.token_generator.check_token(self.user, kwargs['token']):
+            return super().dispatch(*args, **kwargs)
+        return self.render_to_response(self.get_context_data(validlink=False))
+
+    def get_user(self, uidb64):
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            return UserModel._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist, ValidationError):
+            return None
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.user
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['validlink'] = True if self.user is not None else False
+        return context
+    
+class CustomPasswordResetCompleteView(TemplateView):
+    template_name = app + "authentication/password_reset_complete.html"

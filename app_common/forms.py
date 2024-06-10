@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.forms import PasswordChangeForm,PasswordResetForm,SetPasswordForm
+from django.contrib.auth import password_validation
 
 from . import models
 
@@ -65,7 +67,34 @@ class RegisterForm(forms.ModelForm):
             raise forms.ValidationError("Please select at least one: Gardener or Vendor or RTG or Service Provider")
 
         return cleaned_data
-    
+
+class PasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(label='Old Password',widget=forms.PasswordInput(attrs= {'autofocus':True,'autocomplete':'current-password','class':'form-control'}))
+    new_password1 = forms.CharField(label='New Password',widget=forms.PasswordInput(attrs= {'autocomplete':'current-password','class':'form-control'}))
+    new_password2 = forms.CharField(label='Cofirm Password',widget=forms.PasswordInput(attrs= {'autocomplete':'current-password','class':'form-control'}))
+
+class CustomPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        max_length=254,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control text-black',
+            'placeholder': 'Email Address'
+        })
+    )
+
+class CustomSetPasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        label="New Password",
+        widget=forms.PasswordInput(attrs={'autocomplete':'new-password','class': 'form-control text-black'}),
+        strip=False,
+        help_text=password_validation.password_validators_help_text_html(),
+    )
+    new_password2 = forms.CharField(
+        label="Confirm Password",
+        widget=forms.PasswordInput(attrs={'autocomplete':'new-password','class': 'form-control text-black'}),
+        strip=False,
+    )
+
 class GardeningForm(forms.ModelForm):
     class Meta:
         model = models.GardeningProfile
