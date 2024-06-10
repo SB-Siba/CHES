@@ -27,7 +27,7 @@ from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
-
+from smtplib import SMTPException
 from . import forms
 from helpers import utils
 from . import models
@@ -198,9 +198,22 @@ def gardening_quiz_view(request,u_email):
                 'What is the primary purpose of adding compost to soil?':q5,
             }
             quiz_obj = models.GaredenQuizModel(user = user_obj,questionANDanswer = data)
-            quiz_obj.save()
+            
+            try:
+                user_email = u_email
+                subject = "Registration Successfull."
+                message = f"""\
+                Hii Dear,
+                Your account has been created successfully on our site. You can login when admin approve."""
+                from_email = "forverify.noreply@gmail.com"
+                send_mail(subject, message, from_email,[user_email], fail_silently=False)
+                quiz_obj.save()
+            except SMTPException as e:
+                # Log the error if needed
+                print(f"Failed to send email: {e}")
+                user_obj.delete()
+                return redirect('app_common:register')
 
-            messages.success(request,f'Wait For Admin Approve Then You Can Login')
             return redirect('app_common:login')
     else:
         form = forms.GardeningQuizForm()
@@ -254,8 +267,24 @@ class VendorDetails(View):
                     website = website,
                     established_by = established_by
                     )
-                vendor_detail_obj.save()
-                messages.success(request,'Details Added Successfully.Now Please wait for admin approval for login.')
+                
+                try:
+                    user_email = u_email
+                    subject = "Registration Successful."
+                    message = (
+                        "Hi Dear,\n\n"
+                        "Your account has been created successfully on our site. "
+                        "You can login when admin approves."
+                    )
+                    from_email = "forverify.noreply@gmail.com"
+                    send_mail(subject, message, from_email, [user_email], fail_silently=False)
+                    vendor_detail_obj.save()
+
+                except SMTPException as e:
+                    # Log the error if needed
+                    print(f"Failed to send email: {e}")
+                    user_obj.delete()
+                    return redirect('app_common:register')
                 return redirect('app_common:login')
             except:
                 messages.error(request,'Failed to Add data')
@@ -297,8 +326,21 @@ class ServiceProviderDetails(View):
                     average_cost_per_hour = average_cost_per_hour,
                     years_experience = years_experience,
                     )
-                service_provider_detail_obj.save()
-                messages.success(request,'Details Added Successfully.Now Please wait for admin approval for login.')
+                try:
+                    user_email = u_email
+                    subject = "Registration Successfull."
+                    message = f"""\
+                    Hii Dear,
+                    Your account has been created successfully on our site. You can login when admin approve."""
+                    from_email = "forverify.noreply@gmail.com"
+                    send_mail(subject, message, from_email,[user_email], fail_silently=False)
+                    service_provider_detail_obj.save()
+                except SMTPException as e:
+                    # Log the error if needed
+                    print(f"Failed to send email: {e}")
+                    user_obj.delete()
+                    return redirect('app_common:register')
+                
                 return redirect('app_common:login')
             except:
                 messages.error(request,'Failed to Add data')
