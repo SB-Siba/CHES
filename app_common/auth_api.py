@@ -8,16 +8,26 @@ from rest_framework.authtoken.models import Token
 from . import swagger_doccumentation
 from .models import User, GardeningProfile, GaredenQuizModel, VendorDetails, ServiceProviderDetails
 from .serializer import (
+    ForgotPasswordSerializer,
     RegisterSerializer,
     LoginSerializer,
     GardeningProfileSerializer,
     GardeningQuizSerializer,
     GardeningQuizDetailSerializer,
     GardeningQuizQuestionSerializer,
+    ResetPasswordSerializer,
     VendorDetailsSerializer,
     ServiceProviderDetailsSerializer,
 )
+from rest_framework.parsers import FormParser, MultiPartParser
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import authenticate, login, logout
+from django.core.mail import send_mail
+from django.conf import settings
+from smtplib import SMTPException
+from django.urls import reverse_lazy
 
 # views_api.py
 class RegisterAPIView(APIView):
@@ -187,3 +197,67 @@ class ServiceProviderDetailsAPIView(APIView):
         except User.DoesNotExist:
             return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
+
+class ForgotPasswordAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+    @swagger_auto_schema(
+        tags=["forgot_password"],
+        operation_description="Forgot password link send to registered email.",
+        manual_parameters=swagger_doccumentation.forgot_password,
+        responses={201: 'forgot Password link send successfully', 400: 'Validation error'}
+    )
+    def post(self, request):
+        serializer = ForgotPasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            user = User.objects.filter(email=email).first()
+            if user:
+                token = default_token_generator.make_token(user)
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                reset_link = request.build_absolute_uri(
+                    reverse_lazy('app_common:password_reset_confirm_api', kwargs={'uidb64': uid, 'token': token})
+                )
+                subject = 'Password Reset Requested'
+                message = f"""
+                Hi {user.full_name},
+
+                Click the link below to reset your password:
+
+                {reset_link}
+
+                If you did not request a password reset, please ignore this email.
+
+                Thanks,
+                Your Website Team
+                """
+                try:
+                    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+                except SMTPException as e:
+                    return Response({"error": "Failed to send email. Please try again."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"message": "If an account with that email exists, a password reset link has been sent."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ResetPasswordAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
+    @swagger_auto_schema(
+        tags=["forgot_password"],
+        operation_description="Password rest done",
+        manual_parameters=swagger_doccumentation.reset_password,
+        responses={201: 'Password Reset successfully', 400: 'Validation error'}
+    )
+    def post(self, request, uidb64, token):
+        serializer = ResetPasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(pk=uid)
+            if default_token_generator.check_token(user, token):
+                new_password1 = serializer.validated_data['password']
+                new_password2 = serializer.validated_data['confirm_password']
+                if new_password1 == new_password2:
+                    user.set_password(new_password1)
+                    user.save()
+                    return Response({"message": "Password reset successful."}, status=status.HTTP_200_OK)
+                else:
+                    return Response({"error": "Passwords do not match."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

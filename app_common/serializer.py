@@ -292,3 +292,10 @@ class CheckoutFormSerializer(serializers.Serializer):
     same_address = serializers.BooleanField(required=False)
     save_info = serializers.BooleanField(required=False)
     offer_discount = serializers.CharField(max_length=10, required=False)
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+class ResetPasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(min_length=8)
+    confirm_password = serializers.CharField(min_length=8)

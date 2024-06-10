@@ -220,3 +220,12 @@ checkout_post = [
 orders_from_vendors_parameters = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", type=openapi.TYPE_STRING, required=True),
 ]
+
+forgot_password = [
+    openapi.Parameter("email", openapi.IN_FORM, description="User Email", type=openapi.TYPE_STRING, required=True),
+]
+
+reset_password = [
+    openapi.Parameter("password", openapi.IN_FORM, description="Password", type=openapi.TYPE_STRING, required=True),
+    openapi.Parameter("confirm_password", openapi.IN_FORM, description="Confirm Password", type=openapi.TYPE_STRING, required=True),
+]

@@ -25,6 +25,10 @@ urlpatterns = [
     path('api/register/', auth_api.RegisterAPIView.as_view(), name='api_register'),
     path('api/login/', auth_api.LoginAPIView.as_view(), name='api_login'),
     path('api/logout/', auth_api.LogoutAPIView.as_view(), name='api_logout'),
+
+    path('api/forgot-password/', auth_api.ForgotPasswordAPIView.as_view(), name='forgot_password_api'),
+    path('api/reset-password/<uidb64>/<token>/', auth_api.ResetPasswordAPIView.as_view(), name='password_reset_confirm_api'),
+
     path('api/gardening-details/<str:u_email>/', auth_api.GardeningDetailsAPIView.as_view(), name='api_gardening_details'),
     path('api/gardening-quiz/<str:u_email>/', auth_api.GardeningQuizAPIView.as_view(), name='api_gardening_quiz'),
     path('api/vendor-details/<str:u_email>/', auth_api.VendorDetailsAPIView.as_view(), name='api_vendor_details'),
