@@ -1,0 +1,139 @@
+from rest_framework import serializers
+from app_common import models
+from django.conf import settings
+from django.shortcuts import get_object_or_404
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        fields = ['full_name', 'email', 'password', 'confirm_password', 'contact', 'city']
+
+class GardeningDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.GardeningProfile
+        fields = ['garden_area', 'number_of_plants', 'number_of_unique_plants', 'garden_image']
+
+class GardenQuizSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.GaredenQuizModel
+        fields = ['user', 'questionANDanswer']
+
+# ----------------------------------------------------------------------
+class DirectBuySerializer(serializers.ModelSerializer):
+    products_data = serializers.SerializerMethodField()
+
+
+    def __init__(self, *args, user_has_subscription=False, **kwargs):
+        self.user_has_subscription = user_has_subscription
+        self.coupon = kwargs.pop('coupon', None)
+        super().__init__(*args, **kwargs)
+
+    def get_products_data(self,obj):
+        total_items = 1
+        total_value = 0
+        charges = {}
+        gross_value = 0 #market price or product_max_price
+        our_price = 0
+        final_payable_amount =0
+
+
+        products = {}
+        product_list = []
+        coin_exchange =  None
+        try:
+            product = get_object_or_404(models.ProductFromVendor,id = obj.id)
+            gross_value += float(product.max_price)
+            x = {}
+            #____________
+            if self.context.get('offer_discount') == "1":
+                discount_percentage = float(product.discount_percentage)
+                product_discounted_price = float(f"{float(product.discount_price) * (1 - (discount_percentage / 100)):.2f}")
+                our_price = product_discounted_price
+                d_price = product.calculate_discounted_price()
+                x['quantity'] = 1
+                x['price_per_unit'] = float(d_price)
+                x['total_price'] = float(our_price)
+                x["coinexchange"] = product.green_coins_required
+                x["forpercentage"] = float(product.discount_percentage)
+                coin_exchange = True
+            else:
+                product_discounted_price = float(product.discount_price)
+                our_price = product_discounted_price
+                x['quantity'] = 1
+                x['price_per_unit'] = float(our_price)
+                x['total_price'] = float(our_price)
+                x["coinexchange"] = None
+                x["forpercentage"] = None
+                coin_exchange = False
+
+            products[product.name] = x
+        
+        except Exception as e:
+            print(e)
+        discount_amount = gross_value - our_price
+        result = {
+            'products':products,
+            'total_items':total_items,
+            'gross_value': gross_value,
+            'our_price':our_price,
+            'discount_amount':discount_amount,
+            'discount_percentage': round((discount_amount/gross_value)*100,1),
+            'charges':charges,
+            'coin_exchange':coin_exchange
+        }
+
+        # calculating final amount by adding the charges
+        final_value = float(our_price)
+        if len(charges) > 0:
+            for key, value in charges.items():
+                final_value += value
+        
+        #checking is coupon service is on or not
+        # result['coupon_enable'] = settings.COUPON_ENABLE
+
+        result['final_value'] = final_value
+
+        #CALCULATE charges -------------------------------------------------
+
+        # GST
+        if settings.GST_CHARGE > 0:
+            gst_value = final_value * float(settings.GST_CHARGE)
+            charges['GST'] = '{:.2f}'.format(gst_value)
+        else:
+            charges['GST']=0
+        
+        #delivary
+        if result['final_value'] < settings.DELIVARY_FREE_ORDER_AMOUNT:
+            delevery_charge = total_items * float(settings.DELIVARY_CHARGE_PER_BAG)
+            charges['Delivary'] = '{:.2f}'.format(delevery_charge)
+        else:
+            charges['Delivary']= 0
+
+        for key, value in charges.items():
+            final_value += float(value)
+
+        #modifing coupon data
+        # if settings.COUPON_ENABLE and self.coupon:
+        #     cuopon_validation_response= self.coupon_validation(self.coupon, final_value)
+        #     result['cuopon_validation_result']=cuopon_validation_response
+
+        #     if cuopon_validation_response['valid'] == True:
+        #         result['final_value'] -= cuopon_validation_response['discount']
+
+        result['final_value'] = float(final_value)
+
+        return result
+    
+
+    class Meta:
+        model = models.ProductFromVendor
+        fields = [
+            "products_data",
+        ]
+
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Order
+        fields = '__all__'

@@ -1,0 +1,13 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}compose message{% endblock title %}
+
+{% block content %}
+<h1>Compose Message to {{ recipient.full_name }}</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send</button>
+</form>
+{% endblock content %}

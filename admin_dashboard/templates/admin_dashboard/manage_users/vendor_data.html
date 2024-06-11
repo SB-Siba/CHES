@@ -1,0 +1,76 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block title %}Gardening Details{% endblock title %}
+{% block content %}
+    <div class="page-wapper">
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="search_sec">
+               
+            <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
+                {% csrf_token %}
+                <div class="table_search_box">
+
+                    <select class="form-control selects" name="search_by" aria-label="Default select example">
+                        <option value="email">Email</option>
+                        <option value="contact">Contact</option>
+                    </select>
+    
+                    <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query" required/>
+    
+                    <button class="btn qry-sub" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+
+                </div>
+            </form>
+
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">business_name</th>
+                        <th scope="col">business_address</th>
+                        <th scope="col">business_license_number</th>
+                        <th scope="col">business_category</th>
+                        <th scope="col">establishment_year</th>
+                        <th scope="col">website</th>
+                        <th scope="col">established_by</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ vendor_data.business_name }}</td>
+                        <td>{{ vendor_data.business_address }}</td>
+                        <td>
+                            {{ vendor_data.business_license_number }}
+                        </td>
+                        <td>
+                            {{ vendor_data.business_category }}
+                        </td>
+                        <td>
+                            {{ vendor_data.establishment_year }}
+                        </td>
+                        <td>
+                            <a href="{{vendor_data.website}}">{{vendor_data.website}}</a>
+                        </td>
+                        <td>
+                            {{vendor_data.established_by}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
+    </div>
+
+
+
+
+<!-- wallet balance add modal -->
+
+
+{% endblock content %}
+{% block js %}
+<script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
+{% endblock js %}

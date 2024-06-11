@@ -1,0 +1,256 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block content %}
+
+<style>
+  
+</style>
+<div class="container-fluid">
+    <!-- Content Row -->
+    <div class="row my-4  ">
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card index-card shadow   py-2 dash-card1" style="height: 9rem;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-md-8">
+                            <div class="h5 mb-0 font-weight-bold text-white">{{ garden_obj.number_of_plants }}</div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                Total plants
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            <i class="fa-solid fa-tree fa-2x text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 ">
+            <div class="card index-card shadow  py-2 dash-card2" style="height: 9rem;" >
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-md-8">
+                            <div class="h5 mb-0 font-weight-bold text-white">{{garden_obj.garden_area}} sqr.ft.</div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                Total Gardening area
+                            </div>
+
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            <img src="{% static 'user_dashboard\img\n.png' %}" class="text-info" alt=""
+                                style="height: 40px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 ">
+            <div class="card index-card  shadow  py-2 dash-card3" style="height: 9rem;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 mr-3 font-weight-bold text-white">
+                                <i class="fas fa-donate fa-trophy"></i>
+                                {{rank}}
+                            </div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">My Ranking
+                            </div>
+
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-trophy fa-2x text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 ">
+            <div class="card index-card  shadow  py-2 dash-card4" style="height: 9rem;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 font-weight-bold text-white">Balance</div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                               <!-- <img src="{% static 'user_dashboard/images/coin.png' %}"> -->{{request.user.wallet}}
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-coins fa-2x text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <hr style="border: 2px solid gray;" >
+
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+            <div class="card leaderbaord mb-4">
+                <main>
+                    <div id="leaderboardheader">
+                        <p class="fw-bold pt-3" style="font-size: xx-large; color: black;">Leader Board</p>
+
+                        <div class="filter-container">
+                            <select id="city-filter" class="form-select">
+                                <option value="all">All</option>
+                                <option value="Bhubaneswar">Bhubaneswar</option>
+                                <option value="Cuttack">Cuttack</option>
+                                <option value="Brahmapur">Brahmapur</option>
+                                <option value="Puri">Puri</option>
+                                <option value="Balasore">Balasore</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="leaderboard">
+                        <table  class="" >
+                            {% for leader_user in users_orderby_coins %}
+                            <tr data-rank="" data-city="{{ leader_user.city }}" class="leaderRow ltr">
+                                <td class="number lc" style="font-size: x-large;">
+                                    {{ forloop.counter }}
+                                </td>
+                                <td class="name lc">{{ leader_user.full_name }}</td>
+                                <td class="points lc">
+                                    {{ leader_user.coins }}
+                                    {% if forloop.first %}
+                                    🏅 
+                                    {% endif %} 
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <!-- Content Column -->
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+
+            <!-- Project Card Example -->
+            <div class="card shadow mb-4">
+                <div class="card card-info">
+                    <div class="card-header  d-flex justify-content-between align-items-center p-3">
+                        <h3 class="card-title">My Activity</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart">
+                            <canvas id="lineChart"
+                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <!-- /.row -->
+</div>
+{% endblock content %}
+
+
+<script>
+    $(document).ready(function(){
+        var data_subjects = {{ subject_name|safe }};
+        var data_present = {{ data_present }};
+        var data_absent = {{ data_absent }};
+      //Data Set for Pie chart
+      var pieData = {
+        labels: [
+            'PRESENT',
+            'ABSENT',
+            'TOTAL ATTENDANCE'
+        ],
+        datasets: [
+          {
+            data: [{{ attendance_present }},{{ attendance_absent }},{{ attendance_total }}],
+            backgroundColor : ['#00a65a','#f56954','#00c0ef'],
+          }
+        ]
+      };
+
+      var areaChartData = {
+        
+        labels  : data_subjects,
+        datasets: [
+          {
+            label               : 'Present In Class',
+            backgroundColor     : 'rgba(60,141,188,0.9)',
+            borderColor         : 'rgba(60,141,188,0.8)',
+            pointRadius          : false,
+            pointColor          : '#3b8bba',
+            pointStrokeColor    : 'rgba(60,141,188,1)',
+            pointHighlightFill  : '#fff',
+            pointHighlightStroke: 'rgba(60,141,188,1)',
+            data                : data_present,
+          },
+          {
+            label               : 'Absent In Class',
+            backgroundColor     : 'rgba(210, 214, 222, 1)',
+            borderColor         : 'rgba(210, 214, 222, 1)',
+            pointRadius         : false,
+            pointColor          : 'rgba(210, 214, 222, 1)',
+            pointStrokeColor    : '#c1c7d1',
+            pointHighlightFill  : '#fff',
+            pointHighlightStroke: 'rgba(220,220,220,1)',
+            data                : data_absent,
+          },
+        ]
+      }
+
+      var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+      var pieOptions     = {
+        maintainAspectRatio : false,
+        responsive : true,
+      }
+      //Create pie or douhnut chart
+      // You can switch between pie and douhnut using the method below.
+      new Chart(pieChartCanvas, {
+        type: 'pie',
+        data: pieData,
+        options: pieOptions
+      });
+
+      var barChartCanvas = $('#barChart').get(0).getContext('2d')
+      var barChartData = $.extend(true, {}, areaChartData)
+      var temp0 = areaChartData.datasets[0]
+      var temp1 = areaChartData.datasets[1]
+      barChartData.datasets[0] = temp1
+      barChartData.datasets[1] = temp0
+
+      var barChartOptions = {
+        responsive              : true,
+        maintainAspectRatio     : false,
+        datasetFill             : false
+      }
+
+      new Chart(barChartCanvas, {
+        type: 'bar',
+        data: barChartData,
+        options: barChartOptions
+      })
+    })
+  </script>

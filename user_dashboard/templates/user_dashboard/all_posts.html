@@ -1,0 +1,183 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}All Posts{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="content" class="content content-full-width">
+                <!-- begin profile-content -->
+                <div class="profile-content">
+                    <!-- begin tab-content -->
+                    <div class="tab-content p-0">
+                        <!-- begin #profile-post tab -->
+                        <div class="tab-pane fade active show" id="profile-post">
+                            <!-- begin timeline -->
+                            <ul class="timeline">
+                                {% for post,like,like_count,cmnt_count in post_and_like %}
+                                <li>
+                                    <!-- begin timeline-time -->
+                                    <div class="timeline-time">
+                                        <span class="time">{{post.date_time}}</span>
+                                    </div>
+                                    <!-- end timeline-time -->
+                                    <!-- begin timeline-icon -->
+                                    <div class="timeline-icon">
+                                        <a href="javascript:;">&nbsp;</a>
+                                    </div>
+                                    <!-- end timeline-icon -->
+                                    <!-- begin timeline-body -->
+                                    <div class="timeline-body">
+                                        <div class="timeline-header">
+                                            <span class="userimage"><img src="{{post.user.user_image.url}}" alt=""></span>
+                                            <span class="username">{{post.user.full_name}} <small></small></span>
+                                        </div>
+                                        <div class="timeline-content">
+                                            <h5 class="text-black">{{post.activity_title}}</h5>
+                                            <div class="product-image">
+                                                <img class="pic-1" src="{{post.activity_image.url}}">
+                                            </div>
+                                            <p class="mt-2">
+                                                {{post.activity_content}}
+                                            </p>
+                                        </div>
+                                        <div class="timeline-likes">
+                                            <div class="stats-right">
+                                                <a class="btn text-black toggle-comments-btn" style="background-color: white;" data-post-id="{{ post.id }}">
+                                                    {{cmnt_count}} Comments
+                                                </a>
+                                            </div>
+                                            <div class="stats">
+                                                <span class="fa-stack fa-fw stats-icon">
+                                                    <i class="fa fa-circle fa-stack-2x text-danger"></i>
+                                                    <i class="fa fa-heart fa-stack-1x fa-inverse t-plus-1"></i>
+                                                </span>
+                                                <span class="stats-total">{{like_count}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="timeline-footer">
+                                            {% if like == 1 %}
+                                            <a aid='{{post.id}}' id="minus-like{{post.id}}" class="m-r-15 text-inverse-lighter text-danger" style="text-decoration: none;">
+                                                <i class="fa fa-heart fa-fw fa-lg m-r-3"></i>
+                                            </a>
+                                            {% else %}
+                                            <a aid='{{post.id}}' id="plus-like{{post.id}}" class="m-r-15 text-inverse-lighter text-black" style="text-decoration: none;">
+                                                <i class="fa fa-heart fa-fw fa-lg m-r-3"></i>
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                        <div class="timeline-comment-box">
+                                            <div class="user">
+                                                {% if request.user.user_image %}
+                                                <img src="{{request.user.user_image.url}}">
+                                                {% else %}
+                                                <img src="https://bootdey.com/img/Content/avatar/avatar3.png">
+                                                {% endif %}
+                                            </div>
+                                            <div class="input">
+                                                <form action="{% url 'user_dashboard:give_comment' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <div class="input-group">
+                                                        <input type="hidden" value="{{post.id}}" name="post">
+                                                        <input type="text" class="form-control rounded-corner" placeholder="Write a comment..." name="comment" required>
+                                                        <span class="input-group-btn p-l-10">
+                                                            <button class="btn btn-primary f-s-12 rounded-corner mx-2" type="submit">Comment</button>
+                                                        </span>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- Comment list section -->
+                                        <div class="comments-section" id="commentsSection{{ post.id }}" style="display: none;">
+                                            <!-- Comments will be dynamically loaded here -->
+                                        </div>
+                                    </div>
+                                    <!-- end timeline-body -->
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <!-- end timeline -->
+                        </div>
+                        <!-- end #profile-post tab -->
+                    </div>
+                    <!-- end tab-content -->
+                </div>
+                <!-- end profile-content -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        // Event delegation for plus-like buttons
+        $(document).on('click', '[id^="plus-like"]', function () {
+            var id = $(this).attr("aid").toString();
+            console.log("like")
+            $.ajax({
+                type: "GET",
+                url: "{% url 'user_dashboard:like' %}",
+                data: {
+                    activity_id: id
+                },
+                success: function (data) {
+                    window.location.reload();
+                }
+            });
+        });
+
+        // Event delegation for minus-like buttons
+        $(document).on('click', '[id^="minus-like"]', function () {
+            var id = $(this).attr("aid").toString();
+            console.log("dislike")
+            $.ajax({
+                type: "GET",
+                url: "{% url 'user_dashboard:dislike' %}",
+                data: {
+                    activity_id: id
+                },
+                success: function (data) {
+                    window.location.reload();
+                }
+            });
+        });
+
+        $(document).on('click', '.toggle-comments-btn', function () {
+            var postId = $(this).data('post-id');
+            var commentsSection = $('#commentsSection' + postId);
+
+            if (commentsSection.is(':visible')) {
+                commentsSection.hide();
+            } else {
+                fetchComments(postId, commentsSection);
+            }
+        });
+
+        function fetchComments(postId, commentsSection) {
+            $.ajax({
+                type: 'GET',
+                url: '{% url "user_dashboard:get_all_comments" %}',
+                data: { 'post_id': postId },
+                success: function (response) {
+                    console.log(response);
+                    var commentsHtml = '';
+                    if (response.length > 0) {
+                        for (var i = 0; i < response.length; i++) {
+                            commentsHtml += '<p><strong>' + response[i].commenter + ':</strong> ' + response[i].comment + '</p>';
+                        }
+                    } else {
+                        commentsHtml = '<p>No comments yet !!!</p>';
+                    }
+                    commentsSection.html(commentsHtml).show();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching comments:', error);
+                }
+            });
+        }
+    });
+</script>
+{% endblock scripts %}

@@ -1,0 +1,55 @@
+from django.urls import path
+from . import views,api_views
+from .manage_users import users
+from admin_dashboard.orders import order
+
+app_name = 'admin_dashboard'
+
+urlpatterns = [
+    path('', views.AdminDashboard.as_view(), name = "admin_dashboard"),
+
+    # manage users
+    path('add_user',users.AddUser.as_view(), name='add_user'),
+    path('pendingusers',users.PendingUser.as_view(), name='pending_user'),
+    path('quiz_answers/<int:user_id>',users.QuizAnswers.as_view(), name='quizanswers'),
+    path('approve_user/<int:pk>',users.ApproveUser, name='approve_user'),
+    path('reject_user/<int:pk>',users.RejectUser, name='reject_user'),
+    path('manage_users/serviceproviders_list',users.ServiceProvidersList.as_view(), name= 'serviceproviders_list'),
+    path('manage_users/RTgardeners_list',users.RTGList.as_view(), name= 'RTgardeners_list'),
+    path('manage_users/vendors_list',users.VendorList.as_view(), name= 'vendors_list'),
+    path('manage_users/delete_user/<int:pk>',users.Delete_User, name= 'delete_user'),
+
+    path('manage_users/users_gardening_data/<int:pk>',users.UserGardeningDetails.as_view(), name= 'gardening_details'),
+    path('manage_users/vendor_data/<int:pk>',users.VendorDetails.as_view(), name= 'vendor_details'),
+    path('manage_users/service_provider_data/<int:pk>',users.ServiceProviderDetails.as_view(), name= 'service_providor_details'),
+    path('manage_users/user_update/<str:user_id>',users.UserUpdate.as_view(), name= 'user_update'),
+    path('manage_users/search_user',users.SearchUser.as_view(), name= 'search_user'),
+    path('manage_users/add_wallet_balance',users.WalletBalanceAdd.as_view(), name= 'add_wallet_balance'),
+    path('gardeningprofileupdaterequest',users.UserGardeningProfileUpdateRequest.as_view(), name= 'gardeningprofileupdaterequest'),
+    path('approveprofie/<int:pk>',users.ApproveProfile, name= 'approveprofie'),
+    path('rejectprofile',users.RejectProfile, name= 'rejectprofile'),
+    path('useractivityrequest',users.UserActivityRequest.as_view(), name= 'useractivityrequest'),
+    path('approveactivity/<int:pk>',users.ApproveActivity, name= 'approveactivity'),
+    path('rejectactivity',users.RejectActivity, name= 'rejectpactivity'),
+    path('sellrequest',users.UserProduceSellRequest.as_view(), name= 'sellrequest'),
+    path('approvesellrequest',users.ApproveSellRequest, name= 'approvesellrequest'),
+    path('rejectsellrequest',users.RejectSellRequest, name= 'rejectpsellrequest'),
+    #Orders
+    path('order/admin_order_list', order.OrderList.as_view(), name='admin_order_list'),
+    path('order/admin_order_search', order.OrderSearch.as_view(), name='admin_order_search'),
+    path('order/order_detail/<str:order_uid>', order.OrderDetail.as_view(), name='order_detail'),
+    path('order/download_invoice/<str:order_uid>', order.DownloadInvoice.as_view(), name='download_invoice'),
+    path('order/order_status_search', order.OrderStatusSearch.as_view(), name='order_status_search'),
+
+    # API---------------
+    # path('pending-users/', api_views.PendingUserAPIView.as_view(), name='api_pending_users'),
+    # path('approve-user/<int:pk>/', api_views.ApproveUserAPIView.as_view(), name='api_approve_user'),
+    # path('reject-user/<int:pk>/', api_views.RejectUserAPIView.as_view(), name='api_reject_user'),
+    # path('user-gardening-details/<int:pk>/', api_views.UserGardeningDetailsAPIView.as_view(), name='api_user_gardening_details'),
+    # path('vendor-details/<int:pk>/', api_views.VendorDetailsAPIView.as_view(), name='api_vendor_details'),
+    # path('service-provider-details/<int:pk>/', api_views.ServiceProviderDetailsAPIView.as_view(), name='api_service_provider_details'),
+    # path('quiz-answers/<int:user_id>/', api_views.QuizAnswersAPIView.as_view(), name='api_quiz_answers'),
+
+]
+
+#  admin_dashboard:users_list

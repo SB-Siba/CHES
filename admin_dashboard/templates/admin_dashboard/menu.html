@@ -1,0 +1,134 @@
+  {% load static %}
+  <!-- Sidebar -->
+  <ul class="navbar-nav sidebar side-nav sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'admin_dashboard:admin_dashboard' %}">
+          <div class="sidebar-brand-text mx-3"><img src="{% static 'admin_dashboard/images/green-logo.png' %}" class="mt-5"/></div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+          <a class="nav-link" href="{% url 'admin_dashboard:admin_dashboard' %}">
+              <i class="fas fa-fw fa-tachometer-alt"></i>
+              <span>Admin Dashboard</span></a>
+      </li>
+
+      <!--Nav Item - Users -->
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_dashboard:pending_user' %}">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Users for Approve</span>
+            {% if not_approvedlist %}
+            <span class="badge badge-danger badge-counter">{{not_approvedlist.count}}</span>
+            {% endif %}
+        </a>
+        </li>
+        
+      <li class="nav-item">
+          <a class="nav-link" href="{% url 'admin_dashboard:serviceproviders_list' %}">
+              <i class="fa-solid fa-wallet"></i>
+              <span>Service Providers</span>
+          </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_dashboard:RTgardeners_list' %}">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Roof Top Gardeners</span>
+        </a>
+    </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_dashboard:vendors_list' %}">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Vendors</span>
+        </a>
+    </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_dashboard:gardeningprofileupdaterequest' %}">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Gardening Profile Update Request</span>
+            {% if profile_update_obj %}
+            <span class="badge badge-danger badge-counter">{{profile_update_obj.count}}</span>
+            {% endif %}
+        </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_dashboard:useractivityrequest' %}">
+                <i class="fa-solid fa-wallet"></i>
+                <span>User Activity Request</span>
+                {% if activity_request_obj %}
+                <span class="badge badge-danger badge-counter">{{activity_request_obj.count}}</span>
+                {% endif %}
+            </a>
+        </li>
+        
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_dashboard:sellrequest' %}">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Sell Request</span>
+                {% if gardener_sell_request_obj %}
+                <span class="badge badge-danger badge-counter">{{gardener_sell_request_obj.count}}</span>
+                {% endif %}
+            </a>
+        </li>
+
+      <!-- Nav Item - Charts -->
+      <li class="nav-item">
+          <a class="nav-link" href="#">
+              <i class="fa-solid fa-wallet"></i>
+              <span>Wallet</span>
+          </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_dashboard:admin_order_list' %}">
+            <i class="fa-solid fa-coins"></i>
+            <span>Gardener Orders</span></a>
+        </li>
+      <!-- Nav Item - Tables -->
+      <li class="nav-item">
+          <a class="nav-link" href="#">
+              <i class="fa-solid fa-coins"></i>
+              <span>Transaction</span></a>
+      </li>
+
+      <li class="nav-item">
+          <a class="nav-link" href="#">
+              <i class="fa-solid fa-address-card"></i>
+              <span>Post</span></a>
+      </li>
+
+      <li class="nav-item">
+          <a class="nav-link" href="#">
+              <i class="fa-solid fa-image"></i>
+              <span>My Photos</span></a>
+      </li>
+
+      <li class="nav-item">
+          <a class="nav-link" href="#">
+              <i class="fa-solid fa-headset"></i>
+              <span>Help & Support</span></a>
+      </li>
+
+      <li class="nav-item">
+          <a class="nav-link" href="#">
+              <i class="fa-solid fa-shield-halved"></i>
+              <span>Privacy Policy</span></a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="{% url 'app_common:logout' %}">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Logout</span></a>
+      </li>
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+          <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+      
+
+  </ul>
+  <!-- End of Sidebar -->

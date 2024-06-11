@@ -1,0 +1,59 @@
+{% extends 'app_common/authentication/master.html' %}
+{% block title %}Login{% endblock title %}
+{% load static %}
+
+{% block content %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
+
+<div class="container my_container">
+    <div class="row align-items-center justify-content-center mb-3">
+        <div class="col-lg-10 col-md-10 col-sm-12">
+            <div class="row bg-white rounded mt-3 p-3">
+                <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
+                    <!-- Lottie animation container -->
+                    <div id="lottie-animation" style="width: 100%; max-width: 350px; height: 400px;"></div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="login">
+                        <h3>Login</h3>
+                        <form method="post" action="" class="p-2 mt-4">
+                            {% include 'app_common/snippets/alert.html' %}
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div class="text-center">
+                                <button class="log_btn" type="submit">Login</button>
+                            </div>
+                            <p>Create New account <a href="{% url 'app_common:register' %}" style="text-decoration: none;"><b>SignUp</b></a></p>
+                            <p>Forgot Password <a href="{% url 'app_common:password-reset' %}" style="text-decoration: none;"><b>Forgot ??</b></a></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Load Lottie animation
+        var animation = lottie.loadAnimation({
+            container: document.getElementById('lottie-animation'), // the DOM element that will contain the animation
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: "{% static 'app_common/css/images/anim1.json' %}" // the path to the animation json
+        });
+
+        // Check if the animation is loaded correctly
+        animation.addEventListener('DOMLoaded', function() {
+            console.log('Lottie animation loaded successfully.');
+        });
+
+        animation.addEventListener('data_failed', function() {
+            console.error('Failed to load Lottie animation.');
+        });
+    });
+</script>
+
+{% endblock content %}

@@ -1,0 +1,166 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}User Profile{% endblock title %}
+
+{% block content %}
+<section class="" style="min-height: 150vh; overflow-y: hidden;">
+  <div class="container h-100">
+    <div class="row d-flex justify-content-center  user_profile-row  w-100" style="margin-top: 2rem;">
+      <div class="col-md-12 col-xl-12">
+        <div class="card text-success user_profile">
+          <div class="card-body text-center">
+            <div class="mt-2 mb-4">
+              {% if user.user_image %}
+              <img src="{{user.user_image.url}}" class="rounded-circle img-fluid" style="width: 100px;" />
+              {% else %}
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
+                class="rounded-circle img-fluid" style="width: 100px;" />
+              {% endif %}
+            </div>
+            <h4 class="mb-2">{{user.full_name}}</h4>
+            <p class="mb-2">
+              <span>{{user.email}}</span><span class="mx-2">|</span><span>{{user.contact}}</span>
+            </p>
+            <p class="">{{user.city}}</p>
+
+            <div class="mb-4 pb-2 d-flex justify-content-center">
+              <a href="{{user.facebook_link}} m-2">
+                <button type="button" class="btn social_btn">
+                  <i class="fab fa-facebook-f fa-lg"></i>
+                </button>
+              </a>
+              <a href="{{user.instagram_link}}">
+                <button type="button" class="btn social_btn">
+                  <i class="fab fa-instagram fa-lg"></i>
+                </button>
+              </a>
+              <a href="{{user.twitter_link}}">
+                <button type="button" class="btn social_btn">
+                  <i class="fab fa-twitter fa-lg"></i>
+                </button>
+              </a>
+              <a href="{{user.youtube_link}}">
+                <button type="button" class="btn social_btn">
+                  <i class="fab fa-youtube fa-lg"></i> <!-- YouTube -->
+                </button>
+              </a>
+            </div>
+
+         <div class="mt-5">
+             <a href="{% url 'user_dashboard:userprofileupdate' %}">
+              <button type="button" class="btn edit-details">
+                  <b>Edit Details</b>
+              </button>
+            </a>
+
+            <a href="{% url 'user_dashboard:gardeningprofile' %}">
+              <button type="button" class="btn gard-details">
+                <b>Gardening Details</b>
+              </button>
+            </a>
+         </div>
+
+            <div class="row mt-5">
+
+              <!-- Earnings (Monthly) Card Example -->
+              <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="wallet-card1 card border-left-primary shadow h-100 py-2">
+                      <div class="card-body">
+                          <div class="row no-gutters align-items-center text-left">
+                              <div class="col mr-2">
+                                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Wallets Balance</div>
+                                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{user.wallet}}</div>
+                              </div>
+                              <div class="col-auto">
+                                  <i class="fas fa-calendar fa-2x text-primary"></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Earnings (Monthly) Card Example -->
+              <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="card wallet-card2 border-left-success shadow h-100 py-2">
+                      <div class="card-body">
+                          <div class="row no-gutters align-items-center text-left">
+                              <div class="col mr-2">
+                                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Total Coins</div>
+                                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{user.coins}}</div>
+                              </div>
+                              <div class="col-auto">
+                                  <i class="fas fa-dollar-sign fa-2x text-success"></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Earnings (Monthly) Card Example -->
+              <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="card  wallet-card3 border-left-info shadow h-100 py-2">
+                      <div class="card-body">
+                          <div class="row no-gutters align-items-center text-left">
+                              <div class="col mr-2">
+                                  <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Income amounts
+                                  </div>
+                                  <div class="row no-gutters align-items-center">
+                                      <div class="col-auto">
+                                          <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{user.total_income}}</div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-auto">
+                                  <i class="fas fa-clipboard-list fa-2x text-info"></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Pending Requests Card Example -->
+              <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="card wallet-card4 border-left-secondary shadow h-100 py-2">
+                      <div class="card-body">
+                          <div class="row no-gutters align-items-center text-left">
+                              <div class="col mr-2">
+                                  <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Total Buy Amount</div>
+                                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{user.total_invest}}</div>
+                              </div>
+                              <div class="col-auto">
+                                  <i class="fas fa-comments fa-2x text-warning"></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <!-- Rating -->
+              <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card wallet-card5 border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center text-left">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                  Ratings</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{rating_of_user}}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-star fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,10 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}inbox message{% endblock title %}
+
+{% block content %}
+{% for conversation in conversations %}
+<a href="{% url 'chat:conversation' conversation.sender__full_name %}">{{ conversation.sender__full_name }}</a>
+{% endfor %}
+{% endblock content %}
