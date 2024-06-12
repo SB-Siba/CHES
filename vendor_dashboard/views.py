@@ -14,6 +14,8 @@ from django.utils import timezone
 from helpers import utils
 from chatapp.models import Message
 from admin_dashboard.orders.forms import OrderUpdateForm
+from django.utils.timezone import now
+from datetime import timedelta
 
 app = "vendor_dashboard/"
 
@@ -22,7 +24,57 @@ class VendorDashboard(View):
 
     def get(self, request):
         user = request.user 
-        return render(request, self.template)
+        vendors = common_models.User.objects.filter(is_vendor=True)
+        valid_order_statuses = ["Placed", "Accepted", "On_Way", "Delivered"]
+
+        def calculate_earnings(vendor, start_date, end_date):
+            orders = common_models.Order.objects.filter(
+                vendor=vendor, 
+                date__range=(start_date, end_date),
+                order_status__in=valid_order_statuses
+            )
+            return sum(order.order_value for order in orders)
+
+        today = now().date()
+        start_of_month = today.replace(day=1)
+        start_of_year = today.replace(month=1, day=1)
+        start_of_day = now().replace(hour=0, minute=0, second=0, microsecond=0)
+        end_of_day = now().replace(hour=23, minute=59, second=59, microsecond=999999)
+
+        vendor_and_sellamounts_today = [(vendor, calculate_earnings(vendor, start_of_day, end_of_day)) for vendor in vendors]
+        vendor_and_sellamounts_month = [(vendor, calculate_earnings(vendor, start_of_month, today)) for vendor in vendors]
+        vendor_and_sellamounts_year = [(vendor, calculate_earnings(vendor, start_of_year, today)) for vendor in vendors]
+
+        vendor_and_sellamounts_today.sort(key=lambda x: x[1], reverse=True)
+        vendor_and_sellamounts_month.sort(key=lambda x: x[1], reverse=True)
+        vendor_and_sellamounts_year.sort(key=lambda x: x[1], reverse=True)
+
+        max_earnings_today = max(vendor_and_sellamounts_today, key=lambda x: x[1])[1] if vendor_and_sellamounts_today else 0
+        max_earnings_month = max(vendor_and_sellamounts_month, key=lambda x: x[1])[1] if vendor_and_sellamounts_month else 0
+        max_earnings_year = max(vendor_and_sellamounts_year, key=lambda x: x[1])[1] if vendor_and_sellamounts_year else 0
+
+        vendor_and_percentages_today = [(vendor, amount, (amount / max_earnings_today * 100) if max_earnings_today else 0) for vendor, amount in vendor_and_sellamounts_today]
+        vendor_and_percentages_month = [(vendor, amount, (amount / max_earnings_month * 100) if max_earnings_month else 0) for vendor, amount in vendor_and_sellamounts_month]
+        vendor_and_percentages_year = [(vendor, amount, (amount / max_earnings_year * 100) if max_earnings_year else 0) for vendor, amount in vendor_and_sellamounts_year]
+
+
+        earnings_today = calculate_earnings(user, start_of_day, end_of_day)
+        earnings_month = calculate_earnings(user, start_of_month, today)
+        earnings_year = calculate_earnings(user, start_of_year, today)
+
+        context = {
+            'vendor_and_percentages_today': vendor_and_percentages_today,
+            'vendor_and_percentages_month': vendor_and_percentages_month,
+            'vendor_and_percentages_year': vendor_and_percentages_year,
+            'max_earnings_today': max_earnings_today,
+            'max_earnings_month': max_earnings_month,
+            'max_earnings_year': max_earnings_year,
+
+            'earnings_today': earnings_today,
+            'earnings_month': earnings_month,
+            'earnings_year': earnings_year
+        }
+        return render(request, self.template,context)
 
 class VendorProfile(View):
     template = app + "vendor_profile.html"

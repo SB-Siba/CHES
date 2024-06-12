@@ -14,6 +14,9 @@ from helpers import utils
 from chatapp.models import Message
 from . serializers import DirectBuySerializer,OrderSerializer
 import ast
+from django.core.mail import send_mail
+import datetime
+
 app = "user_dashboard/"
 
 class UserDashboard(View):
@@ -29,12 +32,17 @@ class UserDashboard(View):
                     i.delete()
         except Exception:
             pass
-        users_orderby_coins = app_commonmodels.User.objects.filter(is_superuser=False,is_rtg = True).order_by('-coins')[:10]
+        users_orderby_coins = app_commonmodels.User.objects.filter(is_superuser=False,is_rtg = True).order_by('-coins')[:5]
+        users_name = [u.full_name for u in users_orderby_coins]
+        user_coins = [u_coin.coins for u_coin in users_orderby_coins]
         garden_obj = get_object_or_404(app_commonmodels.GardeningProfile, user=user)
         rank = user.get_rank("rtg")
+        print(users_name,user_coins)
         context = {
             'user':user,
             'users_orderby_coins':users_orderby_coins,
+            'users_name':users_name,
+            'u_coins':user_coins,
             'garden_obj':garden_obj,
             'rank' : rank,
         }
@@ -582,6 +590,7 @@ def give_comment(request):
         post_obj = app_commonmodels.UserActivity.objects.get(id = int(post)) 
     
         comment_data = {
+            "id": str(datetime.datetime.now().timestamp()),  # unique ID for the comment
             "commenter": commenter,
             "comment": comment
         }
@@ -589,14 +598,30 @@ def give_comment(request):
         post_obj.save()
         return redirect('user_dashboard:allposts')
     
+def delete_comment(request, post_id, comment_id):
+    if request.method == "POST":
+        post_obj = app_commonmodels.UserActivity.objects.get(id=post_id)
+        
+        # Find the comment by its ID
+        post_obj.comments = [comment for comment in post_obj.comments if comment["id"] != comment_id]
+        
+        post_obj.save()
+        return redirect('user_dashboard:allposts')
+    
 def get_all_comments(request):
     post_id = request.GET.get('post_id')
     activity_obj = app_commonmodels.UserActivity.objects.filter(id=int(post_id)).first()
+    current_user = request.user.full_name
+    
     if activity_obj:
         comments_data = activity_obj.comments  # Assuming comments_data is a list of dictionaries
-        return JsonResponse(comments_data, safe=False)
+        response_data = {
+            'current_user': current_user,
+            'comments': comments_data
+        }
+        return JsonResponse(response_data, safe=False)
     else:
-        return JsonResponse([], safe=False)
+        return JsonResponse({'current_user': current_user, 'comments': []}, safe=False)
 
 class RateOrder(View):
     model = app_commonmodels.ProduceBuy
@@ -726,10 +751,10 @@ class CheckoutView(View):
 
             try:
                 vendor = get_object_or_404(app_commonmodels.User,email = vendor_email)
-                # subject = "Order Successfull."
-                # message = f"Dear {user.full_name},\nYour order of {prod_obj.title} has been placed successfully.\n\nPlease check your email for further instructions"
-                # from_email = "forverify.noreply@gmail.com"
-                # send_mail(subject, message, from_email,[user_email], fail_silently=False)
+                subject = "Order Successfull."
+                message = f"Dear {user.full_name},\nYour order of {prod_obj.name} has been placed successfully.\n\nPlease check your email for further instructions"
+                from_email = "forverify.noreply@gmail.com"
+                send_mail(subject, message, from_email,[user.email], fail_silently=False)
                 order = app_commonmodels.Order(
                     customer = user,
                     vendor = vendor,
@@ -748,8 +773,7 @@ class CheckoutView(View):
                     vendor.wallet += float(prod_obj.green_coins_required)
                     user.save()
                     vendor.save()
-                
-
+            
                 order.save()
                 prod_obj.stock -= 1
                 prod_obj.save()
@@ -760,6 +784,41 @@ class CheckoutView(View):
                 messages.error(request, "Error while placing Order.")
                 return redirect("user_dashboard:user_dashboard")
             
+        initial_data = {
+        'username': request.user.email,
+        }
+
+        form = self.form(initial=initial_data)
+        vendor_product_obj = get_object_or_404(app_commonmodels.ProductFromVendor,id = vprod_id)
+        serializer = DirectBuySerializer(vendor_product_obj,context={'offer_discount': offer_discount})
+        order_details = serializer.data
+        # print(order_details)
+        ord_meta_data = {}
+        for i,j in order_details.items():
+            ord_meta_data.update(j)
+
+        discount_amount = '{:.2f}'.format(ord_meta_data['discount_amount'])
+        gst = float(ord_meta_data['charges']["GST"])
+        gst = '{:.2f}'.format(gst)
+        delivery_charge = float(ord_meta_data['charges']["Delivary"])
+        # Using round() function for discount_percentage, t_price, and our_price
+        discount_percentage = round(ord_meta_data['discount_percentage'], 2)
+        t_price = round(ord_meta_data['final_value'], 2)
+        our_price = round(ord_meta_data['our_price'], 2)
+        gross_ammount = round(ord_meta_data['gross_value'], 2)
+        data = {
+            'form': form,
+            "vendor_product":vendor_product_obj,
+            "gross_ammount":gross_ammount,
+            "our_price":our_price,
+            "discount_ammount":discount_amount,
+            "discount_percentage":discount_percentage,
+            "gst":gst,
+            "total":t_price,
+            "offer_discount":offer_discount,
+            'delivery_charge':delivery_charge
+            }
+        return render(request, self.template, data)
     
 class AllOrdersFromVendors(View):
     model = app_commonmodels.Order

@@ -403,7 +403,7 @@ class MinusLikeAPIView(APIView):
 class GiveCommentAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
-        tags=["Givecomments"],
+        tags=["GiveComments"],
         operation_description="Add a comment to a post",
         manual_parameters=swagger_doccumentation.give_comment_post,
         responses={302: 'Comment added successfully'}
