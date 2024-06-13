@@ -1,3 +1,4 @@
+import datetime
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
@@ -378,6 +379,7 @@ def give_comment(request):
         post_obj = common_models.UserActivity.objects.get(id = int(post)) 
     
         comment_data = {
+            "id": str(datetime.datetime.now().timestamp()),  # unique ID for the comment
             "commenter": commenter,
             "comment": comment
         }
@@ -385,14 +387,29 @@ def give_comment(request):
         post_obj.save()
         return redirect('vendor_dashboard:allposts')
     
+def delete_comment(request, post_id, comment_id):    
+    post_obj = common_models.UserActivity.objects.get(id=post_id)
+        
+    # Find the comment by its ID
+    post_obj.comments = [comment for comment in post_obj.comments if comment["id"] != comment_id]
+        
+    post_obj.save()
+    return redirect('vendor_dashboard:allposts')
+
 def get_all_comments(request):
     post_id = request.GET.get('post_id')
     activity_obj = common_models.UserActivity.objects.filter(id=int(post_id)).first()
+    current_user = request.user.full_name
+    
     if activity_obj:
         comments_data = activity_obj.comments  # Assuming comments_data is a list of dictionaries
-        return JsonResponse(comments_data, safe=False)
+        response_data = {
+            'current_user': current_user,
+            'comments': comments_data
+        }
+        return JsonResponse(response_data, safe=False)
     else:
-        return JsonResponse([], safe=False)
+        return JsonResponse({'current_user': current_user, 'comments': []}, safe=False)
 
 
 class WalletView(View):

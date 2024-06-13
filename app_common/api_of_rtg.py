@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
@@ -405,7 +406,7 @@ class GiveCommentAPIView(APIView):
     @swagger_auto_schema(
         tags=["GiveComments"],
         operation_description="Add a comment to a post",
-        manual_parameters=swagger_doccumentation.give_comment_post,
+        manual_parameters=swagger_doccumentation.add_comment_post,
         responses={302: 'Comment added successfully'}
     )
     def post(self, request):
@@ -416,6 +417,7 @@ class GiveCommentAPIView(APIView):
             post_id = serializer.validated_data['post_id']
             post_obj = UserActivity.objects.get(id=post_id)
             comment_data = {
+                "id": str(datetime.datetime.now().timestamp()),  # unique ID for the comment
                 "commenter": commenter,
                 "comment": comment
             }
@@ -423,6 +425,25 @@ class GiveCommentAPIView(APIView):
             post_obj.save()
             return Response({'status': 'Comment added successfully'}, status=status.HTTP_302_FOUND)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DeleteCommentAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["DeleteComments"],
+        operation_description="Delete a comment from a post",
+        manual_parameters=swagger_doccumentation.delete_comment_delete,
+        responses={
+            204: 'Comment deleted successfully',
+            404: 'Comment or post not found'
+        }
+    )
+    def get(self, request, post_id, comment_id, format=None):
+        post_obj = get_object_or_404(UserActivity, id=post_id)
+
+        # Find the comment by its ID
+        post_obj.comments = [comment for comment in post_obj.comments if comment["id"] != comment_id]
+
+        post_obj.save()
+        return Response({"message": "Comment deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
 
 class GetAllCommentsAPIView(APIView):
     @swagger_auto_schema(

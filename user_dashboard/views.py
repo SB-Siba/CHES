@@ -598,15 +598,14 @@ def give_comment(request):
         post_obj.save()
         return redirect('user_dashboard:allposts')
     
-def delete_comment(request, post_id, comment_id):
-    if request.method == "POST":
-        post_obj = app_commonmodels.UserActivity.objects.get(id=post_id)
+def delete_comment(request, post_id, comment_id):    
+    post_obj = app_commonmodels.UserActivity.objects.get(id=post_id)
         
-        # Find the comment by its ID
-        post_obj.comments = [comment for comment in post_obj.comments if comment["id"] != comment_id]
+    # Find the comment by its ID
+    post_obj.comments = [comment for comment in post_obj.comments if comment["id"] != comment_id]
         
-        post_obj.save()
-        return redirect('user_dashboard:allposts')
+    post_obj.save()
+    return redirect('user_dashboard:allposts')
     
 def get_all_comments(request):
     post_id = request.GET.get('post_id')

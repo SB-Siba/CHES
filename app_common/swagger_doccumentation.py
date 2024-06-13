@@ -153,10 +153,16 @@ minus_like_get = [
     openapi.Parameter("activity_id", openapi.IN_QUERY, description="ID of the activity to unlike", required=True, type=openapi.TYPE_INTEGER),
 ]
 
-give_comment_post = [
+add_comment_post = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
-    openapi.Parameter("post_id", openapi.IN_FORM, description="ID of the post to comment on", required=True, type=openapi.TYPE_INTEGER),
+    openapi.Parameter("post", openapi.IN_FORM, description="ID of the post to comment on", required=True, type=openapi.TYPE_INTEGER),
     openapi.Parameter("comment", openapi.IN_FORM, description="Comment content", required=True, type=openapi.TYPE_STRING),
+]
+
+delete_comment_delete = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("post_id", openapi.IN_PATH, description="ID of the post", required=True, type=openapi.TYPE_INTEGER),
+    openapi.Parameter("comment_id", openapi.IN_PATH, description="ID of the comment to delete", required=True, type=openapi.TYPE_STRING),
 ]
 
 get_all_comments_get = [
