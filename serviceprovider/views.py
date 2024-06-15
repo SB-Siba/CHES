@@ -56,7 +56,6 @@ class ServiceProviderUpdateProfileView(View):
     def post(self, request):
         service_provider_details = get_object_or_404(self.model, provider=request.user)
         form = self.form_class(request.POST, request.FILES)
-        
         if form.is_valid():
             # Convert form data to string representations of lists
             service_provider_details.service_type = str(form.cleaned_data['service_type'])
@@ -70,7 +69,7 @@ class ServiceProviderUpdateProfileView(View):
             if 'image' in request.FILES:
                 user_obj.user_image = request.FILES['image']
             user_obj.save()
-            
+            service_provider_details.save()
             messages.success(request, "Your profile has been updated successfully.")
             return redirect('service_provider:service_provider_profile')
         else:

@@ -25,7 +25,7 @@ class VendorDashboard(View):
 
     def get(self, request):
         user = request.user 
-        vendors = common_models.User.objects.filter(is_vendor=True)
+        vendors = common_models.User.objects.filter(is_vendor=True)[:5]
         valid_order_statuses = ["Placed", "Accepted", "On_Way", "Delivered"]
 
         def calculate_earnings(vendor, start_date, end_date):

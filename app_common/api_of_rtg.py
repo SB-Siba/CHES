@@ -796,7 +796,8 @@ class RateOrderFromVendorApi(APIView):
         responses={
             200: "Rating submitted successfully",
             400: "Validation error",
-            404: "Order or product not found"
+            404: "Order or product not found",
+            409: "Rating already given for this order"
         }
     )
     def post(self, request):
@@ -806,6 +807,10 @@ class RateOrderFromVendorApi(APIView):
             rating = serializer.validated_data['rating']
             
             buy_obj = get_object_or_404(Order, id=order_id)
+
+            if buy_obj.rating_given:
+                return Response({"detail": "Rating already given for this order"}, status=status.HTTP_409_CONFLICT)
+            
             vendor = buy_obj.vendor
             customer = buy_obj.customer
             product = ""

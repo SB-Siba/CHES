@@ -75,7 +75,7 @@
                                                 {% endif %}
                                             </div>
                                             <div class="input">
-                                                <form action="{% url 'user_dashboard:give_comment' %}" method="post">
+                                                <form action="{% url 'vendor_dashboard:give_comment' %}" method="post">
                                                     {% csrf_token %}
                                                     <div class="input-group">
                                                         <input type="hidden" value="{{post.id}}" name="post">

@@ -2,7 +2,128 @@
 {% load static %}
 
 {% block s_vendor_content %}
-<section class="mt-2">
+<div class="emp-profile">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="profile-img">
+                {% if service_provider_obj.provider.user_image %}
+                    <img src="{{service_provider_obj.provider.user_image.url}}" style="height: 200px; width: 200px;" alt="...">
+                {% else %}
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog"
+                    alt="" />
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="profile-head">
+                <h3 class="fw-bold">
+                    {{service_provider_obj.provider.full_name}}
+                </h3>
+                <h6>
+                    Service Provider
+                </h6>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab"
+                            aria-controls="home" aria-selected="true">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab"
+                            aria-controls="profile" aria-selected="false">Details</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <a href="{% url 'service_provider:update_service_provider_profile' %}" class="badge rounded-pill text-bg-primary" name="btnAddMore" value="Edit Profile">Edit Profile</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-8">
+            <div class="tab-content profile-tab" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>User Id</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{service_provider_obj.provider.id}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Name</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{service_provider_obj.provider.full_name}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Email</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{service_provider_obj.provider.email}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Phone</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{service_provider_obj.provider.contact}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Profession</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>Service Provider</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Experience</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{service_provider_obj.years_experience}} Years</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Hourly Rate</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{service_provider_obj.average_cost_per_hour}}/hr</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Availability Area</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{ service_provider_obj.service_area|slice:"1:-1"  }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Service Type</label>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{ service_provider_obj.service_type|slice:"1:-1"  }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <section class="mt-2">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 mb-4 mb-sm-5">
@@ -49,5 +170,5 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 {% endblock s_vendor_content %}
