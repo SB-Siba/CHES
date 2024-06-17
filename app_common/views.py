@@ -31,6 +31,8 @@ from smtplib import SMTPException
 from . import forms
 from helpers import utils
 from . import models
+from django.utils.html import strip_tags
+from django.core.mail import EmailMultiAlternatives
 
 app = "app_common/"
 
@@ -384,7 +386,10 @@ class CustomPasswordResetView(FormView):
                     'user': user,
                     'reset_url': reset_url,
                 })
-                send_mail(mail_subject, message, 'admin@example.com', [email])
+                text_message = strip_tags(message)
+                msg = EmailMultiAlternatives(mail_subject, text_message, 'admin@example.com', [email])
+                msg.attach_alternative(message, "text/html")
+                msg.send()
         return super().form_valid(form)
     
 class CustomPasswordResetDoneView(TemplateView):
