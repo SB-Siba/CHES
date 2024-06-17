@@ -75,7 +75,7 @@
                                                 {% endif %}
                                             </div>
                                             <div class="input">
-                                                <form action="{% url 'user_dashboard:give_comment' %}" method="post">
+                                                <form action="{% url 'vendor_dashboard:give_comment' %}" method="post">
                                                     {% csrf_token %}
                                                     <div class="input-group">
                                                         <input type="hidden" value="{{post.id}}" name="post">
@@ -161,10 +161,16 @@
                 data: { 'post_id': postId },
                 success: function (response) {
                     console.log(response);
+                    var currentUser = response.current_user; // Ensure this is defined
                     var commentsHtml = '';
-                    if (response.length > 0) {
-                        for (var i = 0; i < response.length; i++) {
-                            commentsHtml += '<p><strong>' + response[i].commenter + ':</strong> ' + response[i].comment + '</p>';
+                    if (response.comments.length > 0) {
+                        for (var i = 0; i < response.comments.length; i++) {
+                            commentsHtml += '<div class="d-flex justify-content-between align-items-center">';
+                            commentsHtml += '<p><strong>' + response.comments[i].commenter + ':</strong> ' + response.comments[i].comment + '</p>';
+                            if (response.comments[i].commenter === currentUser) {
+                                commentsHtml += ' <a href="/vendor_dashboard/delete_comment/' + postId + '/' + response.comments[i].id + '/" class="delete-comment-btn" data-comment-id="' + response.comments[i].id + '" data-post-id="' + postId + '"><i class="fa fa-trash text-danger"></i></a>';
+                            }
+                            commentsHtml += '</div>';
                         }
                     } else {
                         commentsHtml = '<p>No comments yet !!!</p>';

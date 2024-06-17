@@ -18,7 +18,7 @@
                                 
                             </div>
                             <div class="col-lg-6 px-xl-10">
-                                <div class="d-lg-inline-block py-1-9 px-1-9 px-sm-6 mb-1-9 rounded">
+                                <div class="d-lg-inline-block py-1-9 px-1-9 mb-1-9 rounded">
                                     <h3 class="h2 text-dark mb-0">{{vendor_obj.vendor.full_name}}</h3>
                                     <span class="text-primary">Vendor</span>
                                 </div>
@@ -37,9 +37,9 @@
                                     <li class="display-28"><span
                                             class="display-26 text-secondary me-2 font-weight-600">Phone:</span> {{vendor_obj.vendor.contact}} </li>
                                 </ul>
-                                <ul>
-                                    <div class="d-flex justify-content-end">
-                                        <a href="{% url 'vendor_dashboard:update_vendor_profile' %}" class="btn btn-success btn-lg">Edit Profile</a>
+                                <ul style="padding-left: 0px;">
+                                    <div class="d-flex justify-content-start">
+                                        <a href="{% url 'vendor_dashboard:update_vendor_profile' %}" class=""><i class="fas fa-edit fs-3"></i></a>
                                     </div>
                                 </ul>
                             </div>

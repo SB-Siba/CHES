@@ -30,7 +30,8 @@
                                     <!-- begin timeline-body -->
                                     <div class="timeline-body">
                                         <div class="timeline-header">
-                                            <span class="userimage"><img src="{{post.user.user_image.url}}" alt=""></span>
+                                            <span class="userimage"><img src="{{post.user.user_image.url}}"
+                                                    alt=""></span>
                                             <span class="username">{{post.user.full_name}} <small></small></span>
                                         </div>
                                         <div class="timeline-content">
@@ -44,7 +45,8 @@
                                         </div>
                                         <div class="timeline-likes">
                                             <div class="stats-right">
-                                                <a class="btn text-black toggle-comments-btn" style="background-color: white;" data-post-id="{{ post.id }}">
+                                                <a class="btn text-black toggle-comments-btn"
+                                                    style="background-color: white;" data-post-id="{{ post.id }}">
                                                     {{cmnt_count}} Comments
                                                 </a>
                                             </div>
@@ -58,11 +60,15 @@
                                         </div>
                                         <div class="timeline-footer">
                                             {% if like == 1 %}
-                                            <a aid='{{post.id}}' id="minus-like{{post.id}}" class="m-r-15 text-inverse-lighter text-danger" style="text-decoration: none;">
+                                            <a aid='{{post.id}}' id="minus-like{{post.id}}"
+                                                class="m-r-15 text-inverse-lighter text-danger"
+                                                style="text-decoration: none;">
                                                 <i class="fa fa-heart fa-fw fa-lg m-r-3"></i>
                                             </a>
                                             {% else %}
-                                            <a aid='{{post.id}}' id="plus-like{{post.id}}" class="m-r-15 text-inverse-lighter text-black" style="text-decoration: none;">
+                                            <a aid='{{post.id}}' id="plus-like{{post.id}}"
+                                                class="m-r-15 text-inverse-lighter text-black"
+                                                style="text-decoration: none;">
                                                 <i class="fa fa-heart fa-fw fa-lg m-r-3"></i>
                                             </a>
                                             {% endif %}
@@ -80,16 +86,19 @@
                                                     {% csrf_token %}
                                                     <div class="input-group">
                                                         <input type="hidden" value="{{post.id}}" name="post">
-                                                        <input type="text" class="form-control rounded-corner" placeholder="Write a comment..." name="comment" required>
+                                                        <input type="text" class="form-control rounded-corner"
+                                                            placeholder="Write a comment..." name="comment" required>
                                                         <span class="input-group-btn p-l-10">
-                                                            <button class="btn btn-primary f-s-12 rounded-corner mx-2" type="submit">Comment</button>
+                                                            <button class="btn btn-primary f-s-12 rounded-corner mx-2"
+                                                                type="submit">Comment</button>
                                                         </span>
                                                     </div>
                                                 </form>
                                             </div>
                                         </div>
                                         <!-- Comment list section -->
-                                        <div class="comments-section" id="commentsSection{{ post.id }}" style="display: none;">
+                                        <div class="comments-section" id="commentsSection{{ post.id }}"
+                                            style="display: none;">
                                             <!-- Comments will be dynamically loaded here -->
                                         </div>
                                     </div>
@@ -163,10 +172,16 @@
                 data: { 'post_id': postId },
                 success: function (response) {
                     console.log(response);
+                    var currentUser = response.current_user;
                     var commentsHtml = '';
-                    if (response.length > 0) {
-                        for (var i = 0; i < response.length; i++) {
-                            commentsHtml += '<p><strong>' + response[i].commenter + ':</strong> ' + response[i].comment + '</p>';
+                    if (response.comments.length > 0) {
+                        for (var i = 0; i < response.comments.length; i++) {
+                            commentsHtml += '<div class="d-flex justify-content-between align-items-center">';
+                            commentsHtml += '<p><strong>' + response.comments[i].commenter + ':</strong> ' + response.comments[i].comment + '</p>';
+                            if (response.comments[i].commenter === currentUser) {
+                                commentsHtml += ' <a href="/user_dashboard/delete_comment/' + postId + '/' + response.comments[i].id + '/" class="delete-comment-btn" data-comment-id="' + response.comments[i].id + '" data-post-id="' + postId + '"><i class="fa fa-trash text-danger"></i></a>';
+                            }
+                            commentsHtml += '</div>';
                         }
                     } else {
                         commentsHtml = '<p>No comments yet !!!</p>';

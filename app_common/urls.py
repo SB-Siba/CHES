@@ -54,6 +54,7 @@ urlpatterns = [
     path('api/posts/plus-like/', api_of_rtg.PlusLikeAPIView.as_view(), name='plus_like_api'),
     path('api/posts/minus-like/', api_of_rtg.MinusLikeAPIView.as_view(), name='minus_like_api'),
     path('api/posts/give-comment/', api_of_rtg.GiveCommentAPIView.as_view(), name='give_comment_api'),
+    path('api/delete/comments/<int:post_id>/<str:comment_id>/', api_of_rtg.DeleteCommentAPIView.as_view(), name='delete_comment_api'),
     path('api/posts/get-all-comments/', api_of_rtg.GetAllCommentsAPIView.as_view(), name='get_all_comments_api'),
     path('api/rate-order/', api_of_rtg.RateOrderAPIView.as_view(), name='rate_order_api'),
     path('api/fetch-user-details/', api_of_rtg.FetchUserDetailsAPI.as_view(), name='fetch-user-details-api'),
