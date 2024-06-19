@@ -3,12 +3,17 @@ import os
 from django.contrib.messages import constants as messages
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+from dotenv import dotenv_values
 # from dotenv import load_dotenv
 # load_dotenv()
 # SECURITY WARNING: keep the secret key used in production secret!
+env_vars = dotenv_values(".env")
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env_vars['SECRET_KEY']
 
-SECRET_KEY = str(os.getenv('SECRET_KEY'))
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = env_vars['DEBUG']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -82,14 +87,13 @@ WSGI_APPLICATION = "project.wsgi.application"
 
 
 DATABASES = {
-    'default': {
-
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "cehs",
-        'USER': "postgres",
-        'PASSWORD': "root",
-        'HOST': 'localhost',
-        'PORT': '',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env_vars["DB_NAME"],
+        "USER": env_vars["DB_USER"],
+        "PASSWORD": env_vars["DB_PASSWORD"],
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
 }
 
