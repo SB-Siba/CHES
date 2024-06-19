@@ -27,6 +27,14 @@ class VendorDashboard(View):
         user = request.user 
         vendors = common_models.User.objects.filter(is_vendor=True)[:5]
         valid_order_statuses = ["Placed", "Accepted", "On_Way", "Delivered"]
+        # Deleting Expire Produce
+        try:
+            sell_produce_obj  = common_models.SellProduce.objects.all()
+            for i in sell_produce_obj:
+                if i.days_left_to_expire <= 0:
+                    i.delete()
+        except Exception:
+            pass
 
         def calculate_earnings(vendor, start_date, end_date):
             orders = common_models.Order.objects.filter(

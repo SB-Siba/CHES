@@ -257,7 +257,7 @@ class ResetPasswordAPIView(APIView):
                 if new_password1 == new_password2:
                     user.set_password(new_password1)
                     user.save()
-                    return Response({"message": "Password reset successful."}, status=status.HTTP_200_OK)
+                    return Response({"message": "Password Reset Successfully Done."}, status=status.HTTP_200_OK)
                 else:
-                    return Response({"error": "Passwords do not match."}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({"error": "Passwords doesn't match."}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
