@@ -40,8 +40,8 @@ h1, h2 , h3 ,h4 {
 
 .dash-card2{
     background: rgb(0,191,131);
-background: linear-gradient(349deg, rgb(32, 140, 106) 0%, rgb(42, 217, 144) 48%, rgba(0,193,111,1) 80%);
-border-left:5px solid  blue;
+    background: linear-gradient(349deg, rgb(32, 140, 106) 0%, rgb(42, 217, 144) 48%, rgba(0,193,111,1) 80%);
+    border-left:5px solid  blue;
 }
 
 .dash-card3{
