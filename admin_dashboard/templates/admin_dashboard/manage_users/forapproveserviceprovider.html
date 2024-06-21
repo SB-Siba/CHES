@@ -1,0 +1,69 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block title %}Room List{% endblock title %}
+{% block content %}
+<div class="page-wapper">
+    {% include 'app_common/snippets/alert.html' %}
+    <div class="search_sec">
+
+        <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
+            {% csrf_token %}
+            <div class="table_search_box">
+
+                <select class="form-control selects" name="search_by" aria-label="Default select example">
+                    <option value="email">Email</option>
+                    <option value="contact">Contact</option>
+                </select>
+
+                <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query"
+                    required />
+
+                <button class="btn qry-sub" type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+
+            </div>
+        </form>
+
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-nowrap">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">E-Mail</th>
+                    <th scope="col">Service Type</th>
+                    <th scope="col">Service Areas</th>
+                    <th scope="col">Average Cost Per Hour</th>
+                    <th scope="col">Years Experience</th>
+                    <th scope="col">Action</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s_provider,s_provider_detail in service_provider_data %}
+                <tr>
+                    <td>{{ s_provider.email }}</td>
+                    <td>{{ s_provider_detail.service_type|slice:"1:-1" }}</td>
+                    <td>{{ s_provider_detail.service_area|slice:"1:-1" }}</td>
+                    <td>{{ s_provider_detail.average_cost_per_hour }}</td>
+                    <td>{{s_provider_detail.years_experience}}</td>
+                    <td>
+                        <div class="d-flex justify-content-arround">
+                            <a href="{% url 'admin_dashboard:approve_user' s_provider.id %}">
+                                <span class="btn btn-success">Approve</span>
+                            </a>
+                            <a href="{% url 'admin_dashboard:reject_user' s_provider.id %}">
+                                <span class="btn btn-danger mx-1">Reject</span>
+                            </a>
+                        </div>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock content %}
