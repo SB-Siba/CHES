@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.forms import PasswordChangeForm,PasswordResetForm,SetPasswordForm
+from django.contrib.auth import password_validation
 
 from . import models
 
@@ -28,7 +30,7 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = models.User
-        fields = ["full_name", "email", "contact", "city", "password", "confirm_password","is_vendor"]
+        fields = ["full_name", "email", "contact", "city", "password", "confirm_password"]
 
     full_name = forms.CharField(max_length=255, label='Enter Full Name')
     full_name.widget.attrs.update({'class': 'form-control','type':'text','placeholder':'Full Name',"required":"required"})
@@ -45,15 +47,6 @@ class RegisterForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Enter Password'}))
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Confirm Password'}))
 
-    is_vendor = forms.BooleanField(required=False, label='Are you a Vendor?')
-    is_vendor.widget.attrs.update({'class': 'form-check-input'})
-
-    is_rtg = forms.BooleanField(required=False, label='Are you a RTG?')
-    is_rtg.widget.attrs.update({'class': 'form-check-input'})
-
-    is_serviceprovider = forms.BooleanField(required=False, label='Are you a Service Provider?')
-    is_serviceprovider.widget.attrs.update({'class': 'form-check-input'})
-
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
@@ -62,11 +55,35 @@ class RegisterForm(forms.ModelForm):
         if password != confirm_password:
             raise forms.ValidationError("Password Mismatched")
 
-        if not cleaned_data.get("is_vendor") and not cleaned_data.get("is_rtg") and not cleaned_data.get("is_serviceprovider"):
-            raise forms.ValidationError("Please select at least one: Gardener or Vendor or RTG or Service Provider")
-
         return cleaned_data
-    
+
+class PasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(label='Old Password',widget=forms.PasswordInput(attrs= {'autofocus':True,'autocomplete':'current-password','class':'form-control'}))
+    new_password1 = forms.CharField(label='New Password',widget=forms.PasswordInput(attrs= {'autocomplete':'current-password','class':'form-control'}))
+    new_password2 = forms.CharField(label='Cofirm Password',widget=forms.PasswordInput(attrs= {'autocomplete':'current-password','class':'form-control'}))
+
+class CustomPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        max_length=254,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control text-black',
+            'placeholder': 'Email Address'
+        })
+    )
+
+class CustomSetPasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        label="New Password",
+        widget=forms.PasswordInput(attrs={'autocomplete':'new-password','class': 'form-control text-black'}),
+        strip=False,
+        help_text=password_validation.password_validators_help_text_html(),
+    )
+    new_password2 = forms.CharField(
+        label="Confirm Password",
+        widget=forms.PasswordInput(attrs={'autocomplete':'new-password','class': 'form-control text-black'}),
+        strip=False,
+    )
+
 class GardeningForm(forms.ModelForm):
     class Meta:
         model = models.GardeningProfile
@@ -111,11 +128,11 @@ class VendorDetailsForm(forms.ModelForm):
     business_name = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Name'}))
     business_address = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Address'}))
     business_description = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'class': 'form-control', 'placeholder': 'Business Description'}))
-    business_license_number = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business License Number'}))
+    business_license_number = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'GST Number'}))
     business_category = forms.ChoiceField(choices=models.VendorDetails.BUSINESS_CATEGORIES, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Business Category'}))
     establishment_year = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Establishment Year'}))
     website = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Website'}))
-    established_by = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Established By'}))
+    established_by = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Owner Name'}))
 
 
 class ServiceProviderDetailsForm(forms.ModelForm):

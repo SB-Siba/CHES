@@ -1,128 +1,143 @@
 {% extends 'app_common/authentication/master.html' %} 
-{% block title %}SignUp{%endblock title %} 
+{% block title %}SignUp{% endblock title %} 
 {% load static %} 
 {% block content %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-lg-12 col-md-12 col-sm-12">
-      <div class="row bg-white rounded my-3 p-2">
-        <div class="col-lg-8 col-md-8 col-sm-12">
-          <div class=" register bg-white px-4 py-2 rounded">
-            <h1 class="text-center " style="color: green; font-weight: 700 ;">Registration</h1>
-            <form method="post" action="" class="p-4 text-black">
-              {% include 'app_common/snippets/alert.html' %} {% csrf_token %}
-                  <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="{{ form.full_name.id_for_label }}"></label>
-                          {{ form.full_name }}
-                        </div>
-                        <div class="form-group">
-                          <label for="{{ form.contact.id_for_label }}"
-                            ></label
-                          >
-                          {{ form.contact }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fa;
+    }
+    
+    .container {
+        margin-top: 50px;
+    }
+    .form-container {
+        background: #ffffffb3;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+    .form-container h3 {
+        color: #343a40;
+        font-weight: 700;
+    }
+    .form-group label {
+        font-weight: 500;
+        color: #495057;
+    }
+    .form-control {
+      width: 100%;
+  padding: 8px;
+  
+  margin-bottom:.1em;
+  border: none;
+  border-bottom: 2px solid #ced4da;
+  border-radius: none !important;
+  
+  transition: border-color 0.3s ease-in-out;
+    }
+    .form-control:focus {
+      border-color: #009730;
+  box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
+  outline: none;
+    }
+    .log_btn {
+        background-color: #009f10;
+        color: white;
+        border-radius: 50px;
+        padding: 10px 20px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+        border: none;
+    }
+    .log_btn:hover {
+        background-color: #037c15;
+    }
+    .lottie-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-11 col-md-10 col-sm-12 form-container p-4">
+            <div class="row">
+                <!-- Left Column -->
+                <div class="col-lg-7 col-md-6 col-sm-12 py-4 px-5">
+                    <h3 class="text-center mb-4 " style="color: #009f10;">Registration</h3>
+                    <form method="post" action="" class="text-black">
+                        {% include 'app_common/snippets/alert.html' %}
+                        {% csrf_token %}
+                        
+                        <div class="form-group mb-4">
+                           <!-- <label for="{{ form.full_name.id_for_label }}">Full Name</label>-->
+                            {{ form.full_name }}
                         </div>
                         
-              <div class="form-group">
-                <label for="{{ form.password.id_for_label }}"></label>
-                {{ form.password }}
-              </div>
-                      </div>
-                      <!--  -->
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="{{ form.email.id_for_label }}"></label>
-                          {{ form.email }}
+                        <div class="form-group mb-4"> 
+                          <!--  <label for="{{ form.email.id_for_label }}">Email</label> -->
+                            {{ form.email }}
                         </div>
-                        <div class="form-group2">
-                          <label for="{{ form.city.id_for_label }}"></label>
-                          {{ form.city }}
+                        
+                        <div class="form-group mb-4">
+                         <!--   <label for="{{ form.contact.id_for_label }}">Contact Number</label> -->
+                            {{ form.contact }}
                         </div>
-                           <div class="form-group">
-                <label for="{{ form.confirm_password.id_for_label }}"
-                  ></label
-                >
-                {{ form.confirm_password }}
-              </div>
-                      </div>
-                  </div>
-
-           
-
-              <div class="row mt-1">
-                <div class="row mt-4">
-                  <div class="form-check col-4 col-md-4">
-                    <label
-                      for="{{ form.is_rtg.id_for_label }}"
-                      class="form-check-label">
-                      {{ form.is_rtg }} Roof Top Gardener
-                    </label>
-                  </div>
-
-                  <div class="form-check col-4 col-md-4">
-                    <label
-                      for="{{ form.is_vendor.id_for_label }}"
-                      class="form-check-label">
-                      {{ form.is_vendor }} Vendor
-                    </label>
-                  </div>
-                  <div class="form-check col-4 col-md-4">
-                    <label
-                      for="{{ form.is_serviceprovider.id_for_label }}"
-                      class="form-check-label">
-                      {{ form.is_serviceprovider }} Service Provider
-                    </label>
-                  </div>
+                        
+                        <div class="form-group mb-4">
+                          <!--  <label for="{{ form.city.id_for_label }}">City</label> -->
+                            {{ form.city }}
+                        </div>
+                        
+                        <div class="form-group mb-4">
+                         <!--   <label for="{{ form.password.id_for_label }}">Password</label> -->
+                            {{ form.password }}
+                        </div>
+                        
+                        <div class="form-group mb-4">
+                         <!--   <label for="{{ form.confirm_password.id_for_label }}">Confirm Password</label> -->
+                            {{ form.confirm_password  }}
+                        </div>
+                        
+                        <div class="text-center">
+                            <button class="log_btn" type="submit">Sign Up</button>
+                        </div>
+                        
+                    </form>
+                    <p class="text-center mt-3">Already have an account? <a href="{% url 'app_common:login' %}" class="text-decoration-none"><b>Login</b></a></p>
                 </div>
-              </div>
-
-              <div  class="mt-3" style="text-align: center">
-                <button class="log_btn2" type="submit">SignUp</button>
-              </div>
-            </form>
-            <p class="text-center">
-              Already have an account?
-              <a
-                href="{% url 'app_common:login' %}"
-                class="text-decoration-none"
-                ><b>Login</b></a
-              >
-            </p>
-          </div>
+                <!-- Right Column -->
+                <div class="col-lg-4 col-md-5 col-sm-12 lottie-container">
+                    <div id="lottie-animation" style="width: 100%; max-width: 350px; height: 400px;"></div>
+                </div>
+            </div>
         </div>
-
-        <div
-          class="col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center  align-items-center lottie-img">
-          <div
-            id="lottie-animation"
-            style="width: 100%; max-width: 350px; height: 400px"></div>
-        </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    
-    var animation = lottie.loadAnimation({
-      container: document.getElementById("lottie-animation"), 
-      renderer: "svg",
-      loop: true,
-      autoplay: true,
-      path: "{% static 'app_common/css/images/anim2.json' %}", 
-    });
+    document.addEventListener("DOMContentLoaded", function () {
+        var animation = lottie.loadAnimation({
+            container: document.getElementById("lottie-animation"), 
+            renderer: "svg",
+            loop: true,
+            autoplay: true,
+            path: "{% static 'app_common/css/images/anim2.json' %}", 
+        });
 
-    animation.addEventListener("DOMLoaded", function () {
-      console.log("Lottie animation loaded successfully.");
-    });
+        animation.addEventListener("DOMLoaded", function () {
+            console.log("Lottie animation loaded successfully.");
+        });
 
-    animation.addEventListener("data_failed", function () {
-      console.error("Failed to load Lottie animation.");
+        animation.addEventListener("data_failed", function () {
+            console.error("Failed to load Lottie animation.");
+        });
     });
-  });
 </script>
 {% endblock content %}

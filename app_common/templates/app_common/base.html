@@ -23,16 +23,12 @@
     <div class="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
       
       {% include 'app_common/left_navbar.html' %}
-      {% include 'app_common/topbar.html' %}
-      <div class="flex-lg-1 h-screen overflow-y-lg-auto">
-
-        <main class="py-6 bg-surface-secondary">
-          {% block content %}
-      
-          {% endblock content %}
-        </main>
-      </div>
-
+      <!-- {% include 'app_common/topbar.html' %} -->
+      <main class="py-6 bg-surface-secondary">
+        {% block content %}
+    
+        {% endblock content %}
+      </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   </body>

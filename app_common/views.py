@@ -14,10 +14,25 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str
 from django.http import JsonResponse
 
-
+from django.views.generic.edit import FormView
+from .forms import CustomPasswordResetForm,CustomSetPasswordForm
+from django.views.generic.base import TemplateView
+from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from django.views.generic.edit import FormView
+from django.core.exceptions import ValidationError
+from django.urls import reverse_lazy
+from django.core.mail import send_mail
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes
+from django.template.loader import render_to_string
+from smtplib import SMTPException
 from . import forms
 from helpers import utils
 from . import models
+from django.utils.html import strip_tags
+from django.core.mail import EmailMultiAlternatives
 
 app = "app_common/"
 
@@ -27,15 +42,15 @@ class Register(View):
     template = app + "authentication/register.html"
     form_class = forms.RegisterForm
 
-    def get(self,request):
-        initial_data = {'invitation_code':request.GET.get('ref_id', None)}
+    def get(self,request,role):
+        print(role)
         context = {
-            'form': self.form_class(initial= initial_data)
+            'form': self.form_class()
         }
 
         return render(request, self.template, context)
 
-    def post(self,request):
+    def post(self,request,role):
         form = self.form_class(request.POST)
         if form.is_valid():
             full_name = form.cleaned_data['full_name']
@@ -47,19 +62,19 @@ class Register(View):
 
             try:
                 user_obj = models.User(full_name = full_name,email = email,contact = contact,city = city)
-                if form.cleaned_data['is_rtg']:
+                if role == "is_rtg":
                     user_obj.is_rtg = True
                     user_obj.set_password(password)
                     user_obj.save()
                     messages.success(request,"Now Please give your Gardening Details.")
                     return redirect('app_common:gardeningdetails',email)
-                elif form.cleaned_data['is_vendor']:
+                elif role == "is_vendor":
                     user_obj.is_vendor = True
                     user_obj.set_password(password)
                     user_obj.save()
                     messages.success(request,"Now Please give your Vendor Details.")
                     return redirect('app_common:vendordetails',email)
-                elif form.cleaned_data['is_serviceprovider']:
+                elif role == "is_serviceprovider":
                     user_obj.is_serviceprovider = True
                     user_obj.set_password(password)
                     user_obj.save()
@@ -67,14 +82,14 @@ class Register(View):
                     return redirect('app_common:serviceproviderdetails',email)
             except:
                 messages.error(request,'Failed to register')
-                return redirect('app_common:register')
+                return redirect('app_common:index')
             
         else:
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f'{field}: {error}')
 
-            return redirect('app_common:register')
+            return redirect('app_common:index')
 
 
 class Login(View):
@@ -186,9 +201,22 @@ def gardening_quiz_view(request,u_email):
                 'What is the primary purpose of adding compost to soil?':q5,
             }
             quiz_obj = models.GaredenQuizModel(user = user_obj,questionANDanswer = data)
-            quiz_obj.save()
+            
+            try:
+                user_email = u_email
+                subject = "Registration Successfull."
+                message = f"""\
+                Hii Dear,
+                Your account has been created successfully on our site. You can login when admin approve."""
+                from_email = "forverify.noreply@gmail.com"
+                send_mail(subject, message, from_email,[user_email], fail_silently=False)
+                quiz_obj.save()
+            except SMTPException as e:
+                # Log the error if needed
+                print(f"Failed to send email: {e}")
+                user_obj.delete()
+                return redirect('app_common:register')
 
-            messages.success(request,f'Wait For Admin Approve Then You Can Login')
             return redirect('app_common:login')
     else:
         form = forms.GardeningQuizForm()
@@ -242,8 +270,24 @@ class VendorDetails(View):
                     website = website,
                     established_by = established_by
                     )
-                vendor_detail_obj.save()
-                messages.success(request,'Details Added Successfully.Now Please wait for admin approval for login.')
+                
+                try:
+                    user_email = u_email
+                    subject = "Registration Successful."
+                    message = (
+                        "Hi Dear,\n\n"
+                        "Your account has been created successfully on our site. "
+                        "You can login when admin approves."
+                    )
+                    from_email = "forverify.noreply@gmail.com"
+                    send_mail(subject, message, from_email, [user_email], fail_silently=False)
+                    vendor_detail_obj.save()
+
+                except SMTPException as e:
+                    # Log the error if needed
+                    print(f"Failed to send email: {e}")
+                    user_obj.delete()
+                    return redirect('app_common:register')
                 return redirect('app_common:login')
             except:
                 messages.error(request,'Failed to Add data')
@@ -285,8 +329,21 @@ class ServiceProviderDetails(View):
                     average_cost_per_hour = average_cost_per_hour,
                     years_experience = years_experience,
                     )
-                service_provider_detail_obj.save()
-                messages.success(request,'Details Added Successfully.Now Please wait for admin approval for login.')
+                try:
+                    user_email = u_email
+                    subject = "Registration Successfull."
+                    message = f"""\
+                    Hii Dear,
+                    Your account has been created successfully on our site. You can login when admin approve."""
+                    from_email = "forverify.noreply@gmail.com"
+                    send_mail(subject, message, from_email,[user_email], fail_silently=False)
+                    service_provider_detail_obj.save()
+                except SMTPException as e:
+                    # Log the error if needed
+                    print(f"Failed to send email: {e}")
+                    user_obj.delete()
+                    return redirect('app_common:register')
+                
                 return redirect('app_common:login')
             except:
                 messages.error(request,'Failed to Add data')
@@ -306,3 +363,73 @@ class Home(View):
             self.template
         )
     
+
+class CustomPasswordResetView(FormView):
+    template_name = app + "authentication/password_reset.html"
+    template_email = app + "authentication/password_reset_email.html"
+
+    form_class = CustomPasswordResetForm
+    success_url = reverse_lazy('app_common:password_reset_done')
+    token_generator = default_token_generator
+
+    def form_valid(self, form):
+        email = form.cleaned_data['email']
+        users = models.User._default_manager.filter(email=email)
+        if users.exists():
+            for user in users:
+                current_site = get_current_site(self.request)
+                mail_subject = 'Password reset link'
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                token = self.token_generator.make_token(user)
+                reset_link = reverse_lazy('app_common:password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+                reset_url = f"{self.request.scheme}://{current_site.domain}{reset_link}"
+                message = render_to_string(self.template_email, {
+                    'user': user,
+                    'reset_url': reset_url,
+                })
+                text_message = strip_tags(message)
+                msg = EmailMultiAlternatives(mail_subject, text_message, 'admin@example.com', [email])
+                msg.attach_alternative(message, "text/html")
+                msg.send()
+        return super().form_valid(form)
+    
+class CustomPasswordResetDoneView(TemplateView):
+    template_name = app + "authentication/password_reset_done.html"
+
+UserModel = get_user_model()
+
+class CustomPasswordResetConfirmView(FormView):
+    template_name = app + "authentication/password_reset_confirm.html"
+    form_class = CustomSetPasswordForm
+    token_generator = default_token_generator
+    success_url = reverse_lazy('app_common:password_reset_complete')
+
+    def dispatch(self, *args, **kwargs):
+        self.user = self.get_user(kwargs['uidb64'])
+        if self.user is not None and self.token_generator.check_token(self.user, kwargs['token']):
+            return super().dispatch(*args, **kwargs)
+        return self.render_to_response(self.get_context_data(validlink=False))
+
+    def get_user(self, uidb64):
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            return UserModel._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist, ValidationError):
+            return None
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.user
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['validlink'] = True if self.user is not None else False
+        return context
+    
+class CustomPasswordResetCompleteView(TemplateView):
+    template_name = app + "authentication/password_reset_complete.html"

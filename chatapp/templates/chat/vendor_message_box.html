@@ -4,11 +4,9 @@
 {% block main_content %}
 <style>
   .container {
-    margin: 60px auto;
     background: #fff;
     padding: 0;
     border-radius: 7px;
-    margin-top: -54px;
   }
 
   .profile-image {
@@ -46,12 +44,12 @@
   }
 
   .search-box {
-    background: #fafafa;
+    background-color: #21312e;
     padding: 10px 13px;
   }
 
   .search-box .input-wrapper {
-    background: #fff;
+    background: #585353;
     border-radius: 40px;
   }
 
@@ -81,18 +79,17 @@
     padding: 10px 15px;
     display: flex;
     vertical-align: baseline;
-    background: #fff;
+    background-color: #374644;
     transition: 0.3s ease;
-    border-bottom: 1px solid lightgrey;
   }
 
   .text h6 {
-    color: #000;
+    color: #ffffff;
     font-weight: 600;
   }
 
   .active {
-    background: #f0f2f5;
+    background-color: 14453B;
   }
 
   .friend-drawer--grey {
@@ -113,14 +110,14 @@
   }
 
   .friend-drawer--onhover:hover {
-    background: #f5f6f6;
+    background: #374644;
     cursor: pointer;
   }
 
   .friend-drawer--onhover:hover p,
   .friend-drawer--onhover:hover h6,
   .friend-drawer--onhover:hover .time {
-    color: #000 !important;
+    color: #fefcfc !important;
   }
 
   hr {
@@ -129,12 +126,18 @@
   }
 
   .chat-bubble {
-    padding: 10px 14px;
-    background: #fff;
+    padding: 7px 14px;
+    background: #038035;
+    color: white;
     margin: 10px 30px;
-    border-radius: 9px;
+    border-radius: 10px;
     position: relative;
     animation: fadeIn 1s ease-in;
+    width: 80%;
+  }
+
+  .chat-bubble.chat-bubble--right {
+    margin-left: auto;
   }
 
   .chat-bubble:after {
@@ -150,14 +153,14 @@
 
   .chat-bubble--left:after {
     left: 0;
-    border-right-color: #fff;
+    border-right-color: #038035;
     border-left: 0;
     margin-left: -20px;
   }
 
   .chat-bubble--right:after {
     right: 0;
-    border-left-color: #00a682;
+    border-left-color: #038035;
     border-right: 0;
     margin-right: -20px;
   }
@@ -173,7 +176,7 @@
   }
 
   .offset-md-9 .chat-bubble {
-    background: #00a682;
+    background: #008134;
     color: #fff;
   }
 
@@ -208,8 +211,41 @@
   }
 
   .top-bar {
-    background-color: #00a682;
+    background-color: #14453B;
     height: 100px;
+  }
+
+  /* Custom scrollbar styles for chat panel */
+  #chat-panel::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  #chat-panel::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  #chat-panel::-webkit-scrollbar-thumb {
+    background-color: #038035;
+    border-radius: 10px;
+    border: 3px solid #f1f1f1;
+  }
+
+  #chat-panel::-webkit-scrollbar-thumb:hover {
+    background-color: #038035;
+  }
+
+  /* For Firefox */
+  #chat-panel {
+    scrollbar-width: thin;
+    scrollbar-color: #038035 #f1f1f1;
+  }
+
+  .background-image {
+    background-image: url("{% static 'user_dashboard/img/message2.jpg' %}");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 </style>
 <!--- <section>
@@ -296,11 +332,11 @@
 
 
 <section style="background:#e1e0dd;">
-  <div class="top-bar"></div>
+  <div class="top-bar mt-3" style="height: 3.7rem;"></div>
   <div class="container">
     <div class="row no-gutters">
-      <div class="col-md-4 border-right" style="overflow-y: auto;">
-        <div class="settings-tray">
+      <div class="col-md-4 border-right" style="overflow-y: auto; background-color: #21312e;">
+        <div class="settings-tray" style="background-color: #21312e; border-bottom: 1px solid gray;">
           {% if request.user.user_image %}
             <img class="profile-image" src="{{request.user.user_image.url}}" alt="Profile img">
           {% else %}
@@ -308,13 +344,13 @@
           {% endif %}
           
           <span class="settings-tray--right">
-            <i onclick="refreshPage()" class="fa-solid fa-arrows-rotate"></i>
+            <i onclick="refreshPage()" class="fa-solid fa-arrows-rotate text-white"></i>
           </span>
         </div>
         <div class="search-box">
           <div class="input-wrapper">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input placeholder="Search here" type="text">
+            <input style="background-color:  #585353; color: white;" placeholder="Search here" type="text">
           </div>
         </div>
         {% for i,l_message in zipped_messages %}
@@ -352,15 +388,15 @@
       
       <div class="col-md-8" style="background-color:#f6e6c466;">
         
-        <div class="settings-tray">
-          <div class="friend-drawer no-gutters friend-drawer--grey">
+        <div class="settings-tray " style="background-color:#21312e ;">
+          <div class="friend-drawer no-gutters friend-drawer--grey" style="background-color:#21312e ;">
             <img class="profile-image" id="chatpartner-profile-image" src="{% static 'user_dashboard\img\profile8.jpg'%}" alt="">
             <div class="text">
               <h6 id="chatpartner_name"></h6>
               <p class="text-muted">Layin' down the law since like before Christ...</p>
             </div>
             <span class="settings-tray--right">
-              <i onclick="refreshPage()" class="fa-solid fa-arrows-rotate"></i>
+              <i onclick="refreshPage()" class="fa-solid fa-arrows-rotate text-white"></i>
             </span>
           </div>
         </div>
@@ -370,12 +406,12 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <div class="chat-box-tray">
+            <div class="chat-box-tray" style="background-color: #21312e;">
               <form id="messageForm" action="{% url 'chat:send_message' %}" method="post" class="w-100">
                 {% csrf_token %}
                 <div class="row">
                   <div class="col-lg-10 col-md-10 col-xl-10 col-sm-10 col-10">
-                    <input type="hidden" id="receiverIdInput" name="receiver_id" value="">
+                    <input type="hidden" id="receiverIdInput" name="receiver_id" value="" style="background-color:#585353;">
                     <input type="text" name="message" placeholder="Type your message here..." class="w-100">
                   </div>
                   <div class="col-lg-2 col-md-2 col-xl-2 col-sm-2 col-2">

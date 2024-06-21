@@ -19,6 +19,7 @@ urlpatterns = [
     path("pluslike/",views.plus_like,name="like"),
     path('minuslike/',views.minus_like,name="dislike"),
     path('give-comment/',views.give_comment,name="give_comment"),
+    path('delete_comment/<int:post_id>/<str:comment_id>/', views.delete_comment, name='delete_comment'),
     path('all-comment/',views.get_all_comments,name="get_all_comments"),
     path('walletpage', views.WalletView.as_view(), name = "walletpage"),
 

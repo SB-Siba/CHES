@@ -10,19 +10,16 @@
             <div class="row">
                 <div class="col-12 col-md-4 ">
                     <div class="card border-left-primary shadow h-100 py-2 dash-card1">
-                        <div class="card-body py-4">
+                        <div class="card-body py-4" style="color: white;">
                             <h5 class="mb-2 fw-bold">
                                 My Progress
                             </h5>
                             <p class="mb-2 fw-bold">
-                                $72,540
+                                <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{earnings_today}}
                             </p>
                             <div class="mb-0">
-                                <span class="badge text-success me-2">
-                                    +9.0%
-                                </span>
                                 <span class=" fw-bold">
-                                    Since Last Month
+                                    Income Of Today
                                 </span>
                             </div>
                         </div>
@@ -30,19 +27,16 @@
                 </div>
                 <div class="col-12 col-md-4 ">
                     <div class="card border-left-success shadow h-100 py-2 dash-card2">
-                        <div class="card-body py-4">
+                        <div class="card-body py-4" style="color: white;">
                             <h5 class="mb-2 fw-bold">
                                 My Progress
                             </h5>
                             <p class="mb-2 fw-bold">
-                                $72,540
+                                <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{earnings_month}}
                             </p>
                             <div class="mb-0">
-                                <span class="badge text-success me-2">
-                                    +9.0%
-                                </span>
                                 <span class="fw-bold">
-                                    Since Last Month
+                                    Income Of This Month
                                 </span>
                             </div>
                         </div>
@@ -50,56 +44,106 @@
                 </div>
                 <div class="col-12 col-md-4 ">
                     <div class="card border-left-success shadow h-100 py-2 dash-card3">
-                        <div class="card-body py-4">
+                        <div class="card-body py-4" style="color: white;">
                             <h5 class="mb-2 fw-bold">
                                 My Progress
                             </h5>
                             <p class="mb-2 fw-bold">
-                                $72,540
+                                <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{earnings_year}}
                             </p>
                             <div class="mb-0">
-                                <span class="badge text-success me-2">
-                                    +9.0%
-                                </span>
                                 <span class="fw-bold">
-                                    Since Last Month
+                                    Income Of This Year
                                 </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <h3 class="fw-bold fs-4 my-3">Avg. Agent Earnings
-            </h3>
-            <div class="row">
-                <div class="col-12">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr class="highlight">
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Rajesh</td>
-                                <td>Padhihary</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Rajesh</td>
-                                <td>Padhihary</td>
-                                <td>@fat</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            
         </div>
     </div>
 </main>
+<div class="section" style="margin-bottom: 5rem;">
+    <div class="lboard_section">
+        <div class="lboard_tabs">
+            <div class="tabs">
+                <ul>
+                    <li data-li="today">Today</li>
+                    <li class="active" data-li="month">Month</li>
+                    <li data-li="year">Year</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="lboard_wrap">
+            <div class="lboard_item today" style="display: none;">
+                {% for vendor, amount, percentage in vendor_and_percentages_today %}
+                <div class="lboard_mem">
+                    <div class="img">
+                        {% if vendor.user_image %}
+                            <img src="{{ vendor.user_image.url }}" alt="picture_{{ forloop.counter }}">
+                        {% else %}
+                            <img src="pic_2.png" alt="picture_{{ forloop.counter }}">
+                        {% endif %}
+                    </div>
+                    <div class="name_bar">
+                        <p><span>{{ forloop.counter }}.</span> {{ vendor.full_name }}</p>
+                        <div class="bar_wrap">
+                            <div class="inner_bar" style="width: {{ percentage }}%;"></div>
+                        </div>
+                    </div>
+                    <div class="points">
+                        {{ amount|floatformat:2 }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="lboard_item month" style="display: block;">
+                {% for vendor, amount, percentage in vendor_and_percentages_month %}
+                <div class="lboard_mem">
+                    <div class="img">
+                        {% if vendor.user_image %}
+                            <img src="{{ vendor.user_image.url }}" alt="picture_{{ forloop.counter }}">
+                        {% else %}
+                            <img src="pic_2.png" alt="picture_{{ forloop.counter }}">
+                        {% endif %}
+                    </div>
+                    <div class="name_bar">
+                        <p><span>{{ forloop.counter }}.</span> {{ vendor.full_name }}</p>
+                        <div class="bar_wrap">
+                            <div class="inner_bar" style="width: {{ percentage }}%;"></div>
+                        </div>
+                    </div>
+                    <div class="points">
+                        {{ amount|floatformat:2 }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="lboard_item year" style="display: none;">
+                {% for vendor, amount, percentage in vendor_and_percentages_year %}
+                <div class="lboard_mem">
+                    <div class="img">
+                        {% if vendor.user_image %}
+                            <img src="{{ vendor.user_image.url }}" alt="picture_{{ forloop.counter }}">
+                        {% else %}
+                            <img src="pic_2.png" alt="picture_{{ forloop.counter }}">
+                        {% endif %}
+                    </div>
+                    <div class="name_bar">
+                        <p><span>{{ forloop.counter }}.</span> {{ vendor.full_name }}</p>
+                        <div class="bar_wrap">
+                            <div class="inner_bar" style="width: {{ percentage }}%;"></div>
+                        </div>
+                    </div>
+                    <div class="points">
+                        {{ amount|floatformat:2 }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock main_content %}

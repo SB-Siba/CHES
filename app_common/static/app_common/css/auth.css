@@ -34,13 +34,13 @@
 }
 .form-group input{
     border: none;
-    border-bottom: 2px solid rgb(109, 168, 109);
+    border-bottom: 2px solid rgb(162, 182, 162);
     border-radius: 0;
     outline: none;
 }
 .form-group2{
     border: none;
-    border-bottom: 2px solid rgb(109, 168, 109);
+    border-bottom: 2px solid rgb(162, 182, 162);
     border-radius: 0;
     outline: none;
     
@@ -101,3 +101,6 @@ form p b {
 .lottie-img{
     background-color: rgb(223, 229, 228);
 }
+
+/*Registration Form*/
+
