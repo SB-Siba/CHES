@@ -112,3 +112,24 @@
 #order_filter select{
     width: 70%;
 }
+
+.file-input-container {
+    position: relative;
+}
+.file-input-container input[type="file"] {
+    display: none;
+}
+.file-input-container::before {
+    content: attr(data-placeholder);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    pointer-events: none;
+    color: #999;
+}
