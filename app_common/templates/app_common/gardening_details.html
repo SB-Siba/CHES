@@ -18,15 +18,25 @@
                         </div>
                     </div>
                    
-                    <form method="post" action="" class="p-4" enctype="multipart/form-data">
-                        {% include 'app_common/snippets/alert.html' %}
+                    <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{form.as_p}}
-                        <div style="text-align:center;">
-                            <button class="log_btn" type="submit">
-                                Add data
-                            </button>
+                        <div class="form-group">
+                            {{ form.garden_area.label_tag }}
+                            {{ form.garden_area }}
                         </div>
+                        <div class="form-group">
+                            {{ form.number_of_plants.label_tag }}
+                            {{ form.number_of_plants }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.number_of_unique_plants.label_tag }}
+                            {{ form.number_of_unique_plants }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.garden_image.label_tag }}
+                            {{ form.garden_image }}
+                        </div>
+                        <button type="submit" class="btn btn-success btn-lg w-100 mt-2">Submit</button>
                     </form>
                 </div>
             </div>

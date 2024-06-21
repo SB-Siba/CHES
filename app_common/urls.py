@@ -5,8 +5,10 @@ from . forms import PasswordChangeForm
 app_name = 'app_common'
 
 urlpatterns = [
-    path('', views.Login.as_view(), name = "login"),
-    path('authentication/register', views.Register.as_view(), name = "register"),
+    path('', views.Home.as_view(), name='index'),
+
+    path('authentication/login', views.Login.as_view(), name = "login"),
+    path('authentication/register/<str:role>/', views.Register.as_view(), name = "register"),
     path('authentication/logout', views.Logout.as_view(), name = "logout"),
     path("passwordChange/",auth_view.PasswordChangeView.as_view(template_name = 'app_common/authentication/changepassword.html',form_class = PasswordChangeForm,success_url = '/passwordchangedone'),name='passwordchange'),
     path("passwordchangedone/",auth_view.PasswordChangeDoneView.as_view(template_name = 'app_common/authentication/changepassworddone.html'),name='passwordchangedone'),
@@ -15,7 +17,6 @@ urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(),name='password_reset_confirm'),
     path('password-reset-complete/',views.CustomPasswordResetCompleteView.as_view(),name='password_reset_complete'),
 
-    path('index', views.Home.as_view(), name='index'),
     path('add-gardening-details/<str:u_email>', views.GardeningDetails.as_view(), name='gardeningdetails'),
     path('gardening-quiz/<str:u_email>', views.gardening_quiz_view, name='gardeningquiz'),
     path('add-vendor-details/<str:u_email>', views.VendorDetails.as_view(), name='vendordetails'),

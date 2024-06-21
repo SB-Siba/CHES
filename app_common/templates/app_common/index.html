@@ -1,5 +1,16 @@
-{% extends 'app_common/base.html' %}
-{% block title %}Index{% endblock title %}
-
-{% block content %}
-{% endblock content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="d-flex justify-content-evenly">
+        <a href="{% url 'app_common:register' 'is_rtg' %}" class="btn btn-lg btn-primary mx-2">RTG Registration</a>
+        <a href="{% url 'app_common:register' 'is_vendor' %}" class="btn btn-lg btn-primary mx-2">Vendor Registration</a>
+        <a href="{% url 'app_common:register' 'is_serviceprovider' %}" class="btn btn-lg btn-primary mx-2">Service Provider Registration</a>
+        <a href="{% url 'app_common:login' %}" class="btn btn-lg btn-primary mx-2">Login</a>
+    </div>
+</body>
+</html>

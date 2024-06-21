@@ -42,14 +42,15 @@ class Register(View):
     template = app + "authentication/register.html"
     form_class = forms.RegisterForm
 
-    def get(self,request):
+    def get(self,request,role):
+        print(role)
         context = {
             'form': self.form_class()
         }
 
         return render(request, self.template, context)
 
-    def post(self,request):
+    def post(self,request,role):
         form = self.form_class(request.POST)
         if form.is_valid():
             full_name = form.cleaned_data['full_name']
@@ -61,19 +62,19 @@ class Register(View):
 
             try:
                 user_obj = models.User(full_name = full_name,email = email,contact = contact,city = city)
-                if form.cleaned_data['is_rtg']:
+                if role == "is_rtg":
                     user_obj.is_rtg = True
                     user_obj.set_password(password)
                     user_obj.save()
                     messages.success(request,"Now Please give your Gardening Details.")
                     return redirect('app_common:gardeningdetails',email)
-                elif form.cleaned_data['is_vendor']:
+                elif role == "is_vendor":
                     user_obj.is_vendor = True
                     user_obj.set_password(password)
                     user_obj.save()
                     messages.success(request,"Now Please give your Vendor Details.")
                     return redirect('app_common:vendordetails',email)
-                elif form.cleaned_data['is_serviceprovider']:
+                elif role == "is_serviceprovider":
                     user_obj.is_serviceprovider = True
                     user_obj.set_password(password)
                     user_obj.save()
@@ -81,14 +82,14 @@ class Register(View):
                     return redirect('app_common:serviceproviderdetails',email)
             except:
                 messages.error(request,'Failed to register')
-                return redirect('app_common:register')
+                return redirect('app_common:index')
             
         else:
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f'{field}: {error}')
 
-            return redirect('app_common:register')
+            return redirect('app_common:index')
 
 
 class Login(View):
