@@ -32,21 +32,52 @@
     align-items: center;
     justify-content: center;
 }
-.form-control {
-    border-radius: 50px!important;
-    border: 1px solid #81CC2A!important;
-    padding: 14px!important;
-    font-family: "Inter", sans-serif;
+.form-group input{
+    border: none;
+    border-bottom: 2px solid rgb(109, 168, 109);
+    border-radius: 0;
+    outline: none;
+}
+.form-group2{
+    border: none;
+    border-bottom: 2px solid rgb(109, 168, 109);
+    border-radius: 0;
+    outline: none;
+    
 }
 .log_btn {
-    background:#006633;      
-    border: 1px solid;
+    background:#fff;      
+    border: 2px solid;
     margin-bottom: 20px;
-    color: #fff;
+    color: green;
     border-radius: 50px;
     padding: 10px 30px;
     font-weight: 700;
     width: 100%;
+    margin-top: 1rem;
+    font-family: "Inter", sans-serif;
+}
+.log_btn:hover{
+ background: rgb(31,120,43);
+    background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%, rgba(31,120,43,1) 80%);
+    color: #fff!important;
+    padding: 10px 30px;
+}
+.log_btn2:hover{
+ background: rgb(31,120,43);
+    background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%, rgba(31,120,43,1) 80%);
+    color: #fff!important;
+    padding: 10px 30px;
+}
+.log_btn2 {
+    background:#fff;      
+    border: 2px solid;
+    margin-bottom: 20px;
+    color: green;
+    border-radius: 50px;
+    padding: 10px 30px;
+    font-weight: 700;
+    width: 50%;
     margin-top: 1rem;
     font-family: "Inter", sans-serif;
 }
@@ -67,4 +98,6 @@ form p label {
 form p b {
     color: #f50400;
 }
-
+.lottie-img{
+    background-color: rgb(223, 229, 228);
+}

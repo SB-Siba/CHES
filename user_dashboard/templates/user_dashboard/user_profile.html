@@ -4,7 +4,7 @@
 {% block title %}User Profile{% endblock title %}
 
 {% block content %}
-<section class="" style="min-height: 150vh; overflow-y: hidden;">
+<section class="" style="min-height: 180vh; overflow-y: hidden;">
   <div class="container h-100">
     <div class="row d-flex justify-content-center  user_profile-row  w-100" style="margin-top: 2rem;">
       <div class="col-md-12 col-xl-12">
@@ -123,7 +123,7 @@
 
               <!-- Pending Requests Card Example -->
               <div class="col-xl-3 col-md-6 mb-4">
-                  <div class="card wallet-card4 border-left-secondary shadow h-100 py-2">
+                  <div class="card wallet-card4 border-left-warning shadow h-100 py-2">
                       <div class="card-body">
                           <div class="row no-gutters align-items-center text-left">
                               <div class="col mr-2">
@@ -140,16 +140,16 @@
               </div>
               <!-- Rating -->
               <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card wallet-card5 border-left-warning shadow h-100 py-2">
+                <div class="card wallet-card5 border-left-danger shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center text-left">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                                   Ratings</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{rating_of_user}}</div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-star fa-2x text-gray-300"></i>
+                                <i class="fas fa-star fa-2x text-danger"></i>
                             </div>
                         </div>
                     </div>

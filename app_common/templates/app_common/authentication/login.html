@@ -3,10 +3,17 @@
 {% load static %}
 
 {% block content %}
+<style>
+    input:focus, textarea:focus, select:focus {
+        outline: none; 
+        box-shadow: none; 
+        border: none; 
+    }
+</style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
 
-<div class="container my_container">
+<div class="container my_container mt-4">
     <div class="row align-items-center justify-content-center mb-3">
         <div class="col-lg-10 col-md-10 col-sm-12">
             <div class="row bg-white rounded mt-3 p-3">
@@ -17,7 +24,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="login">
                         <h3>Login</h3>
-                        <form method="post" action="" class="p-2 mt-4">
+                        <form method="post" action="" class="p-2 mt-4 form-group">
                             {% include 'app_common/snippets/alert.html' %}
                             {% csrf_token %}
                             {{ form.as_p }}

@@ -1,132 +1,128 @@
-{% extends 'app_common/authentication/master.html' %}
-{% block title %}SignUp{% endblock title %}
-{% load static %}
-
+{% extends 'app_common/authentication/master.html' %} 
+{% block title %}SignUp{%endblock title %} 
+{% load static %} 
 {% block content %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-lg-10 col-md-10 col-sm-12">
-            <div class="row bg-white rounded my-3 p-2">
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="login register bg-white px-4 py-2 rounded">
-                <h3 class="text-center mb-4">Registration</h3>
-                <form method="post" action="" class="mb-2 ">
-                    {% include 'app_common/snippets/alert.html' %}
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <div class="text-center">
-                        <button class="log_btn " type="submit">SignUp</button>
-                    </div>
-<<<<<<< HEAD
-                   
-                    <form method="post" action="" class="p-4 text-black">
-                        {% include 'app_common/snippets/alert.html' %}
-                        {% csrf_token %}
-                        
+  <div class="row justify-content-center">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="row bg-white rounded my-3 p-2">
+        <div class="col-lg-8 col-md-8 col-sm-12">
+          <div class=" register bg-white px-4 py-2 rounded">
+            <h1 class="text-center " style="color: green; font-weight: 700 ;">Registration</h1>
+            <form method="post" action="" class="p-4 text-black">
+              {% include 'app_common/snippets/alert.html' %} {% csrf_token %}
+                  <div class="row">
+                      <div class="col-md-6">
                         <div class="form-group">
-                            <label for="{{ form.full_name.id_for_label }}">Full Name</label>
-                            {{ form.full_name }}
+                          <label for="{{ form.full_name.id_for_label }}"></label>
+                          {{ form.full_name }}
                         </div>
-                        
                         <div class="form-group">
-                            <label for="{{ form.email.id_for_label }}">Email</label>
-                            {{ form.email }}
+                          <label for="{{ form.contact.id_for_label }}"
+                            ></label
+                          >
+                          {{ form.contact }}
                         </div>
                         
+              <div class="form-group">
+                <label for="{{ form.password.id_for_label }}"></label>
+                {{ form.password }}
+              </div>
+                      </div>
+                      <!--  -->
+                      <div class="col-md-6">
                         <div class="form-group">
-                            <label for="{{ form.contact.id_for_label }}">Contact Number</label>
-                            {{ form.contact }}
+                          <label for="{{ form.email.id_for_label }}"></label>
+                          {{ form.email }}
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="{{ form.city.id_for_label }}">City</label>
-                            {{ form.city }}
+                        <div class="form-group2">
+                          <label for="{{ form.city.id_for_label }}"></label>
+                          {{ form.city }}
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="{{ form.password.id_for_label }}">Password</label>
-                            {{ form.password }}
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="{{ form.confirm_password.id_for_label }}">Confirm Password</label>
-                            {{ form.confirm_password }}
-                        </div>
-                        
-                        <div class="row mt-1">
-                            <div class="row">
-                                <div class="form-check col-12 col-md-6">
-                                    <label for="{{ form.is_rtg.id_for_label }}" class="form-check-label">
-                                        {{ form.is_rtg }} Roof Top Gardener
-                                    </label>
-                                </div>
-                                
-                                <div class="form-check col-12 col-md-6">
-                                    <label for="{{ form.is_vendor.id_for_label }}" class="form-check-label">
-                                        {{ form.is_vendor }} Vendor
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="form-check col-12 col-md-6">
-                                    <label for="{{ form.is_gardener.id_for_label }}" class="form-check-label">
-                                        {{ form.is_gardener }} Gardener
-                                    </label>
-                                </div>
-                                <div class="form-check col-12 col-md-6">
-                                    <label for="{{ form.is_serviceprovider.id_for_label }}" class="form-check-label">
-                                        {{ form.is_serviceprovider }} Service Provider
-                                    </label>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        
-                        <div style="text-align:center;">
-                            <button class="log_btn" type="submit">SignUp</button>
-                        </div>
-                        
-                        <p>Already have an account? <a href="{% url 'app_common:login' %}"><b>Login</b></a></p>
-                    </form>
-                </div>
-=======
-                </form>
-                <p class="text-center">Already have an account? <a href="{% url 'app_common:login' %}" class="text-decoration-none"><b>Login</b></a></p>
->>>>>>> 97e441db6564e6270a282b70df14f26a9f23a7bf
-            </div>
-            </div>
+                           <div class="form-group">
+                <label for="{{ form.confirm_password.id_for_label }}"
+                  ></label
+                >
+                {{ form.confirm_password }}
+              </div>
+                      </div>
+                  </div>
 
-            <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
-                
-                <div id="lottie-animation" style="width: 100%; max-width: 350px; height: 400px;"></div>
-            </div>
-    </div>
+           
+
+              <div class="row mt-1">
+                <div class="row mt-4">
+                  <div class="form-check col-4 col-md-4">
+                    <label
+                      for="{{ form.is_rtg.id_for_label }}"
+                      class="form-check-label">
+                      {{ form.is_rtg }} Roof Top Gardener
+                    </label>
+                  </div>
+
+                  <div class="form-check col-4 col-md-4">
+                    <label
+                      for="{{ form.is_vendor.id_for_label }}"
+                      class="form-check-label">
+                      {{ form.is_vendor }} Vendor
+                    </label>
+                  </div>
+                  <div class="form-check col-4 col-md-4">
+                    <label
+                      for="{{ form.is_serviceprovider.id_for_label }}"
+                      class="form-check-label">
+                      {{ form.is_serviceprovider }} Service Provider
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div  class="mt-3" style="text-align: center">
+                <button class="log_btn2" type="submit">SignUp</button>
+              </div>
+            </form>
+            <p class="text-center">
+              Already have an account?
+              <a
+                href="{% url 'app_common:login' %}"
+                class="text-decoration-none"
+                ><b>Login</b></a
+              >
+            </p>
+          </div>
         </div>
+
+        <div
+          class="col-lg-4 col-md-4 col-sm-12 d-flex justify-content-center  align-items-center lottie-img">
+          <div
+            id="lottie-animation"
+            style="width: 100%; max-width: 350px; height: 400px"></div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Load Lottie animation
-        var animation = lottie.loadAnimation({
-            container: document.getElementById('lottie-animation'), // the DOM element that will contain the animation
-            renderer: 'svg',
-            loop: true,
-            autoplay: true,
-            path: "{% static 'app_common/css/images/anim2.json' %}" // the path to the animation json
-        });
-
-        // Check if the animation is loaded correctly
-        animation.addEventListener('DOMLoaded', function() {
-            console.log('Lottie animation loaded successfully.');
-        });
-
-        animation.addEventListener('data_failed', function() {
-            console.error('Failed to load Lottie animation.');
-        });
+  document.addEventListener("DOMContentLoaded", function () {
+    
+    var animation = lottie.loadAnimation({
+      container: document.getElementById("lottie-animation"), 
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      path: "{% static 'app_common/css/images/anim2.json' %}", 
     });
+
+    animation.addEventListener("DOMLoaded", function () {
+      console.log("Lottie animation loaded successfully.");
+    });
+
+    animation.addEventListener("data_failed", function () {
+      console.error("Failed to load Lottie animation.");
+    });
+  });
 </script>
 {% endblock content %}
