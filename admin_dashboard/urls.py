@@ -10,7 +10,9 @@ urlpatterns = [
 
     # manage users
     path('add_user',users.AddUser.as_view(), name='add_user'),
-    path('pendingusers',users.PendingUser.as_view(), name='pending_user'),
+    path('pendingrtgs',users.PendingRtgs.as_view(), name='pending_rtg'),
+    path('pendingvendors',users.PendingVendors.as_view(), name='pending_vendor'),
+    path('pendingserviceproviders',users.PendingServiceProviders.as_view(), name='pending_service_provider'),
     path('quiz_answers/<int:user_id>',users.QuizAnswers.as_view(), name='quizanswers'),
     path('approve_user/<int:pk>',users.ApproveUser, name='approve_user'),
     path('reject_user/<int:pk>',users.RejectUser, name='reject_user'),

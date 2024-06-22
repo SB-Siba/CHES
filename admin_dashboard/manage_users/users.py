@@ -12,44 +12,63 @@ from django.shortcuts import get_object_or_404
 app = "admin_dashboard/manage_users/"
 
 
-class PendingUser(View):
+class PendingRtgs(View):
     model = models.User
-    template = app + "forapprove.html"
+    template = app + "forapprovertg.html"
     
     def get(self, request):
-        not_approvedlist = self.model.objects.filter(is_approved=False).order_by('-id')
-        rtgardener_list = []
-        vendor_list = []
-        service_provider_list = []
+        not_approvedlist = self.model.objects.filter(is_approved=False,is_rtg = True).order_by('-id')
+        rtgardener_list = []  
         rtgarden_details_list = []
+        try:
+            for i in not_approvedlist:
+                rtgardener_list.append(i)
+                garden_details = models.GardeningProfile.objects.get(user = i)
+                rtgarden_details_list.append(garden_details)
+            rtgardener_data = zip(rtgardener_list,rtgarden_details_list)
+        except Exception:
+            rtgardener_list = []
+            rtgarden_details_list = []
+            rtgardener_data = zip(rtgardener_list,rtgarden_details_list)
+        return render(request,self.template,locals())
+    
+class PendingVendors(View):
+    model = models.User
+    template = app + "forapprovevendor.html"
+    
+    def get(self, request):
+        not_approvedlist = self.model.objects.filter(is_approved=False,is_vendor = True).order_by('-id')
+        vendor_list = []
         vendor_details_list = []
+        try:
+            for i in not_approvedlist:
+                vendor_list.append(i)
+                vendor_details = models.VendorDetails.objects.get(vendor = i)
+                vendor_details_list.append(vendor_details)
+            vendor_data = zip(vendor_list,vendor_details_list)
+        except Exception:
+            vendor_list = []
+            vendor_details_list = []
+            vendor_data = zip(vendor_list,vendor_details_list)
+        return render(request,self.template,locals())
+    
+class PendingServiceProviders(View):
+    model = models.User
+    template = app + "forapproveserviceprovider.html"
+    
+    def get(self, request):
+        not_approvedlist = self.model.objects.filter(is_approved=False,is_serviceprovider = True).order_by('-id')
+        service_provider_list = []
         service_provider_details_list = []
         try:
             for i in not_approvedlist:
-                if i.is_rtg == True:
-                    rtgardener_list.append(i)
-                    garden_details = models.GardeningProfile.objects.get(user = i)
-                    rtgarden_details_list.append(garden_details)
-                elif i.is_vendor == True:
-                    vendor_list.append(i)
-                    vendor_details = models.VendorDetails.objects.get(vendor = i)
-                    vendor_details_list.append(vendor_details)
-                elif i.is_serviceprovider == True:
-                    service_provider_list.append(i)
-                    s_provider_details = models.ServiceProviderDetails.objects.get(provider = i)
-                    service_provider_details_list.append(s_provider_details)
-            rtgardener_data = zip(rtgardener_list,rtgarden_details_list)
-            vendor_data = zip(vendor_list,vendor_details_list)
+                service_provider_list.append(i)
+                s_provider_details = models.ServiceProviderDetails.objects.get(provider = i)
+                service_provider_details_list.append(s_provider_details)
             service_provider_data = zip(service_provider_list,service_provider_details_list)
         except Exception:
-            rtgardener_list = []
-            vendor_list = []
-            rtgarden_details_list = []
-            vendor_details_list = []
             service_provider_list = []
             service_provider_details_list = []
-            rtgardener_data = zip(rtgardener_list,rtgarden_details_list)
-            vendor_data = zip(vendor_list,vendor_details_list)
             service_provider_data = zip(service_provider_list,service_provider_details_list)
         return render(request,self.template,locals())
         
@@ -69,7 +88,7 @@ def ApproveUser(request, pk):
     else:
         msg = 'This account does not exist.'
         messages.error(request,msg)
-    return redirect("admin_dashboard:pending_user") 
+    return redirect("admin_dashboard:admin_dashboard") 
 
 def RejectUser(request, pk):
     user = get_object_or_404(models.User, id=pk)
@@ -80,7 +99,7 @@ def RejectUser(request, pk):
     else:
         msg = 'This account does not exist.'
         messages.error(request,msg)
-    return redirect("admin_dashboard:pending_user") 
+    return redirect("admin_dashboard:admin_dashboard") 
 
 class ServiceProvidersList(View):
     template = app + "serviceprovider_list.html"
@@ -278,7 +297,7 @@ class QuizAnswers(View):
             user_obj.quiz_score += int(quizPoints)
             user_obj.save()
             messages.success(request, 'Wallet Balance For Quiz Given Successfully')
-            return redirect("admin_dashboard:pending_user")
+            return redirect("admin_dashboard:admin_dashboard")
         except models.User.DoesNotExist:
             messages.error(request, 'Error While Giving Wallet Balance For Quiz ')
             return redirect("admin_dashboard:quizanswers",user_id)
