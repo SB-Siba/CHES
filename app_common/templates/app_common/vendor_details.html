@@ -18,16 +18,17 @@
                 border-bottom: 2px solid #ced4da;
                 border-radius: 5px !important;
                 transition: border-color 0.3s ease-in-out;
+                font-family:'Arial', sans-serif;
             }
             .form-control:focus {
                 border-color: #009f10;
                 box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
                 outline: none;
             }
-         
-         .form-group label{
-                font-family:'Arial', sans-serif;
-            }
+            h2 {
+        color: #009f10 !important;
+        
+    }
             img{
                 width: 7rem;
             }
@@ -42,10 +43,10 @@
 
     <div class="container">
         <div class="row d-flex align-items-center justify-content-center my-5">
-            <div class="col-lg-6 gardning-body d-flex justify-content-center">
+            <div class="col-lg-6 gardning-body d-flex justify-content-center ">
                 <div class="login">
                     <div
-                        class="d-flex justify-space-between"
+                        class="d-flex justify-space-between py-3 mt-4"
                         style="align-items: center;justify-content: center;">
                         <div class="auth_reg_logo mx-3">
                             <img src="{% static 'user_dashboard/images/green-logo.png' %}"/>
@@ -55,7 +56,7 @@
                         </div>
                     </div>
                    
-                    <form method="post" action="" class="p-4" enctype="multipart/form-data">
+                    <form method="post" action="" class="form-group p-4" enctype="multipart/form-data">
                         {% include 'app_common/snippets/alert.html' %}
                         {% csrf_token %}
                         {{form.as_p}}

@@ -91,6 +91,8 @@ border-left: 5px solid rgb(192, 1, 106);
     font-weight: 600;
     height: 53px;
 }
+
+
 .sell_btn:hover {
     background-color: #1F782B;
     color: #fff;
@@ -120,7 +122,7 @@ border-left: 5px solid rgb(192, 1, 106);
     background-color: #fff;
     border: none;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    height: 150vh!important;
+    height: 160vh!important;
 }
 .user_profile h4{
     color: #4CAF50;
@@ -133,25 +135,25 @@ border-left: 5px solid rgb(192, 1, 106);
 .user_profile .social_btn {
     border: 1px solid #14453b;
     background: #14453b;
-    border-radius: 50px;
-    width: 50px;
-    height: 50px;
+    border-radius: 50%;
+    width: 37px;
+    height: 37px;
     margin-left: 10px;
 }
 .user_profile .social_btn i {
-    color: #FFEB3B;
+    color: #f7f7f3;
 }
 .user_profile .social_btn:hover{
     background: rgb(31,120,43);
     background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%, rgba(31,120,43,1) 80%);
-    color: #fff!important;
+    color: #ffffff!important;
 }
 .edit-details{
     background-color: #14453b;
     color: #fff;
     font-size: 15px;
-    border-radius: 50px;
-    padding: 12px 30px;
+    border-radius: 10px;
+    padding: 7px 20px;
 }
 .edit-details:hover{
     background: rgb(31,120,43);
@@ -162,8 +164,8 @@ background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%,
     background-color: #1f782b;
     color: #fff;
     font-size: 15px;
-    border-radius: 50px;
-    padding: 12px 30px;
+    border-radius: 10px;
+    padding: 7px 10px;
 }
 .gard-details:hover{
     background: rgb(31,120,43);

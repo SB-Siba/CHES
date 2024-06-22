@@ -62,7 +62,7 @@ class UpdateProfileForm(forms.Form):
     address = forms.CharField(
         widget=forms.Textarea(
             attrs={
-                "class": "form-control",
+                "class": "form-controL",
                 "placeholder": "Enter Address here",
             }
         )
