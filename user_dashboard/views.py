@@ -16,7 +16,7 @@ from . serializers import DirectBuySerializer,OrderSerializer
 import ast
 from django.core.mail import send_mail
 import datetime
-
+from serviceprovider.forms import BookingForm,ReviewForm
 app = "user_dashboard/"
 
 class UserDashboard(View):
@@ -906,6 +906,52 @@ class ServiceProvidersList(View):
         context = {'providers_area_types':providers_area_types}
         return render(request,self.template,context)
     
+
+class ListOfServicesByServiceProviders(View):
+    template = app + "list_services.html"
+    model = app_commonmodels.Service
+
+    def get(self, request):
+        services = self.model.objects.all()
+        return render(request , self.template , {'services' : services})
+
+
+class ServiceDetails(View):
+    template = app + "service_details.html"
+    model = app_commonmodels.Service
+    form_class = BookingForm
+    def get(self,request, service_id):
+        form = BookingForm()
+        service = get_object_or_404(self.model, id=service_id)
+        service_booked_obj = app_commonmodels.Booking.objects.filter(service = service,gardener = request.user)
+        return render(request, self.template, {'service': service,"form":form,"service_booked_obj":service_booked_obj})
+    def post(self,request, service_id):
+        form = BookingForm(request.POST)
+        service = get_object_or_404(self.model, id=service_id)
+        service_booked_obj = app_commonmodels.Booking.objects.filter(service = service,gardener = request.user)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.service = service
+            booking.gardener = request.user
+            booking.save()
+            return redirect("user_dashboard:list_services")
+        return render(request, self.template, {'service': service,"form":form,"service_booked_obj":service_booked_obj})
+    
+class MyBookedServices(View):
+    template = app + "my_booked_services.html"
+    model = app_commonmodels.Booking
+    def get(self,request):
+        booked_services = self.model.objects.filter(gardener=request.user).exclude(status="declined")
+        # booked_services = self.model.objects.filter(gardener = request.user)
+        return render(request, self.template, {'booked_services': booked_services})
+
+def rtg_decline_booking(request, booking_id):
+    booking = get_object_or_404(app_commonmodels.Booking, id=booking_id)
+    if request.user == booking.gardener:
+        booking.status = 'declined'
+        booking.save()
+    return redirect('user_dashboard:my_booked_services')
+
 class RateOrderFromVendor(View):
     model = app_commonmodels.Order
 

@@ -1,0 +1,23 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}My Booked Services{% endblock title %}
+
+{% block content %}
+<ul class="list-group">
+    {% for booking in booked_services %}
+    <li class="list-group-item">
+        <h3>{{ booking.service.name }}</h3>
+        <p><strong>Provider:</strong> {{ booking.service.provider.full_name }}</p>
+        <p><strong>Booking Date:</strong> {{ booking.booking_date }}</p>
+        <p><strong>Status:</strong> {{ booking.status }}</p>
+        {% if booking.status == 'confirmed' %}
+            <a href="{% url 'user_dashboard:rtg_decline_booking' booking.id %}" class="btn btn-danger">Cancel Booking</a>
+        {% endif %}
+        <a href="{% url 'chat:startmessages' booking.service.provider.id 'None' %}" class="btn btn-primary">Message Provider</a>
+    </li>
+    {% empty %}
+    <li class="list-group-item">You have not booked any services yet.</li>
+    {% endfor %}
+</ul>
+{% endblock content %}

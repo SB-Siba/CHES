@@ -59,24 +59,24 @@
     <!-- Add_user -->
     <li class="nav-item">
         <a href="#" class="nav-link collapsed has-dropdown" data-bs-toggle="collapse"
-            data-bs-target="#Pending_Approvals" aria-expanded="false" aria-controls="Pending_Approvals">
+            data-bs-target="#add_users" aria-expanded="false" aria-controls="add_users">
             <i class="fa-solid fa-wallet"></i>
             <span>Add User</span>
         </a>
-        <ul id="Pending_Approvals" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+        <ul id="add_users" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
             <li class="sidebar-item">
-                <a href="{% url 'admin_dashboard:pending_rtg' %}" class="nav-link">
+                <a href="{% url 'app_common:register' 'is_rtg' %}" class="nav-link">
                     <span>Add Rtg</span>
                 </a>
                 
             </li>
             <li class="sidebar-item">
-                <a href="{% url 'admin_dashboard:pending_vendor' %}" class="nav-link">
+                <a href="{% url 'app_common:register' 'is_vendor' %}" class="nav-link">
                     <span>Add Vendor</span>
                 </a>
             </li>
             <li class="sidebar-item">
-                <a href="{% url 'admin_dashboard:pending_service_provider' %}" class="nav-link">
+                <a href="{% url 'app_common:register' 'is_serviceprovider' %}" class="nav-link">
                     <span>Add Service Provider</span>
                 </a>
             </li>

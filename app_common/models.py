@@ -391,3 +391,23 @@ class ServiceProviderDetails(models.Model):
 
     def __str__(self):
         return f"{self.provider.full_name} - {self.service_type}"
+
+class Service(models.Model):
+    provider = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    price_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class Booking(models.Model):
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    gardener = models.ForeignKey(User, on_delete=models.CASCADE)
+    booking_date = models.DateTimeField()
+    status = models.CharField(max_length=20, choices=(('pending', 'pending'), ('confirmed', 'confirmed'), ('completed', 'completed'), ('declined', 'declined')), default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class Review(models.Model):
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField()
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

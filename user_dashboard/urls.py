@@ -43,6 +43,10 @@ urlpatterns = [
     path('rate-order-from-vendor/',views.RateOrderFromVendor.as_view(),name="rate_order_from_vendor"),
 
     path('service-providers-list/',views.ServiceProvidersList.as_view(),name="service_providers"),
+    path('services/', views.ListOfServicesByServiceProviders.as_view(), name='list_services'),
+    path('service_details/<int:service_id>/', views.ServiceDetails.as_view(), name='service_details'),
+    path('my_booked_services/', views.MyBookedServices.as_view(), name='my_booked_services'),
+    path('rtg/decline_booking/<int:booking_id>', views.rtg_decline_booking, name='rtg_decline_booking'),
 
 ]
 
