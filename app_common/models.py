@@ -6,27 +6,7 @@ from .manager import MyAccountManager
 from helpers import utils
 from decimal import Decimal
 from django.utils import timezone
-
-
-class AdminIncome(models.Model):
-    amount = models.FloatField(default = 0.0)
-    date = models.DateField(null= True, blank= True)
-    
-
-class TempUser(models.Model):
-    # if the user sign up but not complted the verification
-    # after user verification the data of this table will go to User Table
-
-    email = models.EmailField(null=True,blank=True,unique=True)
-    password = models.TextField(null=True,blank=True)
-    contact = models.CharField(max_length= 10, null=True, blank=True)
-
-    is_active = models.BooleanField(default=True)
-    is_superuser = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
-
-
-
+ 
 
 class User(AbstractBaseUser, PermissionsMixin):
     CITIES = (
@@ -363,7 +343,7 @@ class Order(models.Model):
     vendor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,related_name="vendor")
     products = models.JSONField(default=dict, null=True, blank=True)
     coupon = models.CharField(max_length=255, null=True, blank=True)
-    order_value = models.FloatField(default=0.0)
+    order_value = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     order_meta_data = models.JSONField(default=dict, null=True, blank=True)
     order_status = models.CharField(max_length=255, choices= ORDER_STATUS, default="Placed")
     razorpay_payment_id = models.TextField(null= True, blank=True)
