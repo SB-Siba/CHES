@@ -297,7 +297,7 @@ class WalletView(View):
     def get(self,request):
         user = request.user
         try:
-            transactions = self.model.objects.filter((Q(buyer=user) | Q(seller=user)) & Q(buying_status="BuyCompleted")).order_by('-date_time')
+            transactions = self.model.objects.filter((Q(buyer=user) | Q(seller=user)) & Q(buying_status="PaymentDone") | Q(buying_status="BuyCompleted")).order_by('-date_time')
             list_of_transactions = []
             xyz = []
             for i in transactions:
@@ -505,7 +505,7 @@ class ProduceBuyView(View):
             sell_prod_obj = app_commonmodels.SellProduce.objects.get(id = sell_prod.id)
             sell_prod_obj.product_quantity = sell_prod_obj.product_quantity-buy_prod_obj.quantity_buyer_want
             sell_prod_obj.ammount_in_green_points = sell_prod_obj.ammount_in_green_points - ammount_for_quantity_want
-            buy_prod_obj.buying_status = "BuyCompleted"
+            buy_prod_obj.buying_status = "PaymentDone"
             buy_prod_obj.save()
             sell_prod_obj.save()
             buyer.save()

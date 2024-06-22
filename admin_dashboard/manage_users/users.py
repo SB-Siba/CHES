@@ -297,7 +297,7 @@ class QuizAnswers(View):
             user_obj.quiz_score += int(quizPoints)
             user_obj.save()
             messages.success(request, 'Wallet Balance For Quiz Given Successfully')
-            return redirect("admin_dashboard:admin_dashboard")
+            return redirect("admin_dashboard:pending_rtg")
         except models.User.DoesNotExist:
             messages.error(request, 'Error While Giving Wallet Balance For Quiz ')
             return redirect("admin_dashboard:quizanswers",user_id)
