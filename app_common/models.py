@@ -206,6 +206,7 @@ class ProduceBuy(models.Model):
     ]
     BUYINGSTATUS = [
         ('BuyInProgress', 'BuyInProgress'),
+        ('PaymentDone', 'PaymentDone'),
         ('BuyCompleted', 'BuyCompleted'),
         ('BuyRejected', 'BuyRejected'),
     ]

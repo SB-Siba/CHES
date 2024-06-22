@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            width: 100%;
+            margin: 20px;
+        }
+
+        .table thead {
+            background-color: #84B0CA;
+            color: #ffffff;
+        }
+
+        .badge-warning {
+            background-color: #ffc107;
+        }
+
+        @media print {
+            .print-hide {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex justify-content-center">
+        <div class="card">
+            <div class="card-body">
+                <div class="container mb-5 mt-3">
+                    <div class="row d-flex align-items-baseline">
+                        <div class="col-xl-9">
+                            <p style="color: #7e8d9f;font-size: 20px;">Invoice >> <strong>ID: #{{order.id}}</strong></p>
+                        </div>
+                        <hr>
+                    </div>
+
+                    <div class="container">
+                        <div class="col-md-12 text-center">
+                            <i class="fa fa-leaf fa-4x ms-0" style="color:#5d9fc5 ;"></i>
+                            <p class="pt-0">CHES</p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-4">
+                                <ul class="list-unstyled">
+                                    <li class="text-muted">Seller: <span style="color:#5d9fc5 ;">{{order.seller.full_name}}</span></li>
+                                    <li class="text-muted">{{order.seller.city}}</li>
+                                    <li class="text-muted"><i class="fa fa-phone"></i>{{order.seller.contact}}</li>
+                                </ul>
+                            </div>
+                            <div class="col-xl-4">
+                                <ul class="list-unstyled">
+                                    <li class="text-muted">Buyer: <span style="color:#5d9fc5 ;">{{order.buyer.full_name}}</span></li>
+                                    <li class="text-muted">{{order.buyer.city}}</li>
+                                    <li class="text-muted"><i class="fa fa-phone"></i>{{order.buyer.contact}}</li>
+                                </ul>
+                            </div>
+                            <div class="col-xl-4">
+                                <p class="text-muted">Invoice</p>
+                                <ul class="list-unstyled">
+                                    <li class="text-muted"><i class="fa fa-circle" style="color:#84B0CA ;"></i> <span class="fw-bold">Creation Date:</span>{{order.date_time}}</li>
+                                    <li class="text-muted"><i class="fa fa-circle" style="color:#84B0CA ;"></i> <span class="me-1 fw-bold">Status:</span> <span class="badge bg-warning text-black fw-bold">{{order.buying_status}}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="row my-2 mx-1 justify-content-center">
+                            <table class="table table-striped table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Qty</th>
+                                        <th scope="col">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{order.product_name}}</td>
+                                        <td>{{order.quantity_buyer_want}}</td>
+                                        <td>{{order.ammount_based_on_quantity_buyer_want}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- <div class="row">
+                        <div class="col-xl-8">
+                            <p class="ms-3">Add additional notes and payment information</p>
+                        </div>
+                        <div class="col-xl-4">
+                            <ul class="list-unstyled">
+                                <li class="text-muted ms-3"><span class="text-black me-4">SubTotal</span>$1110</li>
+                                <li class="text-muted ms-3 mt-2"><span class="text-black me-4">Tax(15%)</span>$111</li>
+                            </ul>
+                            <p class="text-black float-start"><span class="text-black me-3">Total Amount</span><span style="font-size: 25px;">$1221</span></p>
+                        </div>
+                    </div> -->
+                        <hr>
+                        <div class="row">
+                            <div class="col-xl-10">
+                                <p>Thank you for your purchase</p>
+                            </div>
+                            <div class="col-xl-2 text-end">
+                                <button onclick="window.print()" class="btn btn-light text-capitalize border-0 print-hide" style="background-color:#60bdf3 ;">
+                                    <i class="fa fa-print text-primary"></i> Print
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+</body>
+
+</html>

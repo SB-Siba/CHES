@@ -37,11 +37,11 @@ urlpatterns = [
     path('approvesellrequest',users.ApproveSellRequest, name= 'approvesellrequest'),
     path('rejectsellrequest',users.RejectSellRequest, name= 'rejectpsellrequest'),
     #Orders
-    path('order/admin_order_list', order.OrderList.as_view(), name='admin_order_list'),
-    path('order/admin_order_search', order.OrderSearch.as_view(), name='admin_order_search'),
-    path('order/order_detail/<str:order_uid>', order.OrderDetail.as_view(), name='order_detail'),
-    path('order/download_invoice/<str:order_uid>', order.DownloadInvoice.as_view(), name='download_invoice'),
-    path('order/order_status_search', order.OrderStatusSearch.as_view(), name='order_status_search'),
+    path('order/produce_order_list', order.ProduceOrderList.as_view(), name='produce_order_list'),
+    path('order/produce_order_search', order.ProduceOrderSearch.as_view(), name='produce_order_search'),
+    path('order/produce_order_detail/<str:order_id>', order.ProduceOrderDetail.as_view(), name='produce_order_detail'),
+    path('order/download_produce_order_invoice/<str:order_id>', order.DownloadProduceOrderInvoice.as_view(), name='download_produce_order_invoice'),
+    path('order/produce_order_status_search', order.ProduceOrderStatusSearch.as_view(), name='produce_order_status_search'),
 
     # API---------------
     # path('pending-users/', api_views.PendingUserAPIView.as_view(), name='api_pending_users'),
