@@ -20,3 +20,30 @@ class ServiceProviderUpdateForm(forms.Form):
     image = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
 
     
+class ServiceAddForm(forms.ModelForm):
+    class Meta:
+        model = models.Service
+        fields = ['name', 'description', 'price_per_hour']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'price_per_hour': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+class BookingForm(forms.ModelForm):
+    booking_date = forms.DateTimeField(
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'})
+    )
+
+    class Meta:
+        model = models.Booking
+        fields = ['booking_date']
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = models.Review
+        fields = ['rating', 'comment']
+        widgets = {
+            'rating': forms.NumberInput(attrs={'class': 'form-control'}),
+            'comment': forms.Textarea(attrs={'class': 'form-control'}),
+        }

@@ -1,0 +1,19 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Service List{% endblock title %}
+
+{% block content %}
+<h2>Available Services</h2>
+<ul class="list-group">
+    {% for service in services %}
+    <li class="list-group-item">
+        <h3>{{ service.name }}</h3>
+        <p><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
+        <a href="{% url 'user_dashboard:service_details' service.id %}" class="btn btn-primary">View Details</a>
+    </li>
+    {% empty %}
+    <li class="list-group-item">No services available.</li>
+    {% endfor %}
+</ul>
+{% endblock content %}
