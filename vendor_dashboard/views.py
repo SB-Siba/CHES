@@ -263,8 +263,8 @@ class VendorDownloadInvoice(View):
             price_per_unit.append(p_overview['price_per_unit'])
             total_prices.append(p_overview['total_price'])
             if coin_exchange:
-                coins_for_exchange += p_overview['coinexchange']
-                exchange_percentage += p_overview['forpercentage']
+                coins_for_exchange = p_overview['coinexchange']
+                exchange_percentage = p_overview['forpercentage']
         
         prod_quant = zip(products, quantities,price_per_unit,total_prices)
         
@@ -275,10 +275,10 @@ class VendorDownloadInvoice(View):
             'vendor':order.vendor,
             'productandquantity':prod_quant,
             'GST':data['order_meta_data']['charges']['GST'],
-            'delevery_charge':data['order_meta_data']['charges']['Delivary'],
+            'delevery_charge':data['order_meta_data']['charges']['Delivery'],
             'gross_amt':data['order_meta_data']['our_price'],
             'discount':data['order_meta_data']['discount_amount'],
-            'final_total':order.order_value,
+            'final_total':data['order_meta_data']['final_value'],
             'coin_exchange':coin_exchange,
             'coins_for_exchange':coins_for_exchange,
             'exchange_percentage':exchange_percentage
