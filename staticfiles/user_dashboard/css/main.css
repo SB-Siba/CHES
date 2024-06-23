@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+h1, h2 , h3 ,h4 {
+    font-family: 'Jost', sans-serif; 
+    color: #000;
+}
+.side-nav{
+    background-color: #1F782B!important;
+}
+.sidebar-brand{
+    background-color: #fff;
+   
+}
+.fa-bell{
+    color: #81CC2A;
+}
+.sidebar-dark .nav-item .nav-link{
+    color: #fff;
+    font-weight: 600;
+}
+
+.sidebar-dark .nav-item.active .nav-link {
+    color: #fff;
+    background-color: #14453B;
+}
+.sidebar-dark .nav-item.active .nav-link i{
+    color: #FFD600;
+}
+.sidebar-dark .nav-item .nav-link i{
+    color: #FFD600;
+    font-weight: 600;
+}
+.index-card{
+    height: 25vh;
+}
+.dash-card1{
+    background: rgb(3,17,94);
+    background: linear-gradient(355deg, rgba(3,17,94,1) 0%, rgb(23, 35, 202) 48%, rgba(18,23,94,1) 100%);
+    border-left:5px solid rgb(255, 0, 0);
+}
+
+.dash-card2{
+    background: rgb(0,191,131);
+    background: linear-gradient(349deg, rgb(32, 140, 106) 0%, rgb(42, 217, 144) 48%, rgba(0,193,111,1) 80%);
+    border-left:5px solid  blue;
+}
+
+.dash-card3{
+    background: rgb(126,55,148);
+background: linear-gradient(349deg, rgb(164, 30, 185) 0%, rgba(170,37,197,1) 48%, rgb(143, 1, 153) 80%);
+border-left: 5px solid rgb(98, 195, 8);
+}
+.dash-card4{
+    background: rgb(183,166,0);
+background: linear-gradient(349deg, rgba(183,166,0,1) 0%, rgba(197,196,37,1) 48%, rgba(152,149,30,1) 80%);
+border-left: 5px solid rgb(192, 1, 106);
+}
+.dash-card5{
+   background-color: #F39C13;
+}
+.dash-card6{
+    background-color: #F50909;
+}
+.dash-card7{
+    background-color: #8E44AD;
+}
+.dash-card8{
+    background-color: #F46D87;
+}
+.sell_wrapper{
+    background-color: #fff;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.sell_wrapper form p {
+    color: #000;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.sell_wrapper form .form-control {
+    padding: 10px;
+    border-radius: 0px;
+    height: 53px;
+    border: 1px solid #4CAF50;
+}
+.sell_btn {
+    background-color: #14453b;
+    color: #fff;
+    padding: 10px;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    height: 53px;
+}
+.sell_btn:hover {
+    background-color: #1F782B;
+    color: #fff;
+}
+.gardenning_profile{
+    background-color: #14453b;
+    color: #fff; 
+    border-top:5px solid #1F782B;
+}
+.gardenning_profile .edit_btn {
+    background-color: #1F782B;
+    color: #fff;
+    padding: 9px 30px;
+    margin-bottom: 1rem;
+    font-size: 16px;
+}
+.update-form{
+    display: flex;
+    flex-wrap: wrap;
+}
+.update-form p {
+    margin-left: 10px;
+    width: 100%;
+}
+
+.user_profile{
+    background-color: #fff;
+    border: none;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    height: 63vh!important;
+}
+.user_profile h4{
+    color: #4CAF50;
+}
+.user_profile p{
+    color: #14453b;
+    font-weight: 700;
+}
+.user_profile .social_btn {
+    border: 1px solid #14453b;
+    background: #14453b;
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+    margin-left: 10px;
+}
+.user_profile .social_btn i {
+    color: #FFEB3B;
+}
+.user_profile .social_btn:hover{
+    background-color: #4CAF50;
+}
+.edit-details{
+    background-color: #14453b;
+    color: #fff;
+    font-size: 15px;
+    border-radius: 50px;
+    padding: 12px 30px;
+}
+.edit-details:hover{
+    background: rgb(31,120,43);
+background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%, rgba(31,120,43,1) 80%);
+    color: #fff;
+}
+.gard-details{
+    background-color: #1f782b;
+    color: #fff;
+    font-size: 15px;
+    border-radius: 50px;
+    padding: 12px 30px;
+}
+.gard-details:hover{
+    background: rgb(31,120,43);
+    background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%, rgba(31,120,43,1) 80%);
+    color: #fff;
+}
+.form_sec{
+    display: flex;
+    flex-wrap: wrap;
+}
+ form .form_sec p {
+    color: #000;
+    font-size: 15px;
+    font-weight: 600;
+    margin-left: 8px;
+    margin-bottom: 24px;
+ }
+ .update {
+    width: 200px;
+ }
+.service-text h4{
+    color: #14453B;
+}
+.service-text p{
+    color: #000;
+}
+
+.service-text img {
+    height: 220px;
+}
+.service-text .btn {
+    background-color: #1f782b;
+    color: #fff;
+    padding: 10px 21px;
+    font-weight: 600;
+    font-size: 15px;
+}
+.service-text .btn i {
+    color: #fff;
+}
+
+.contact form .form-control {
+    padding: 10px;
+    border-radius: 0px;
+    height: 53px;
+    border: 1px solid #4CAF50;
+}
+.contact form p label{
+display: none;
+}
+.contact .btn{
+    background-color: #1f782b;
+    color: #fff;
+    padding: 10px 21px;
+    font-weight: 600;
+    font-size: 15px;
+}
+.wallet-card1{
+    background: rgb(234,244,243);
+    background: linear-gradient(349deg, rgb(99, 114, 232) 0%, rgb(190, 204, 244) 48%, rgb(233, 237, 246) 88%);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 3px !important;
+}
+.wallet-card2{
+    background: rgb(235,244,234);
+background: linear-gradient(349deg, rgb(67, 192, 53) 0%, rgb(198, 247, 194) 48%, rgb(230, 237, 227) 88%);
+box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 3px !important;
+}
+.wallet-card3{
+    background: rgb(234,243,244);
+background: linear-gradient(349deg, rgb(98, 220, 234) 0%, rgba(184,237,241,1) 48%, rgb(234, 241, 241) 88%);
+}
+.wallet-card4{
+    background: rgb(244,244,234);
+background: linear-gradient(349deg, rgb(237, 237, 113) 0%, rgba(240,241,184,1) 48%, rgb(247, 247, 232) 88%);
+}
