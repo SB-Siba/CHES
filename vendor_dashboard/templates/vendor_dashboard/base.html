@@ -45,7 +45,7 @@
                 <button class="toggle-btn" type="button">
                     <i class="fa fa-tree"></i>
                 </button>
-                <div class="sidebar-logo">
+                <div class="sidebar-logo"> 
                     <a href="#">CHES</a>
                 </div>
             </div>
@@ -185,7 +185,7 @@
                     </a>
                 </li>
                 <!---->
-            <li class="sidebar-item " style="margin-top: 200px;">
+            <li class="sidebar-item " style="margin-top: 50px;">
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                     data-bs-target="#Buying_selling" aria-expanded="false" aria-controls="Buying_selling">
                                     <img class="avatar img-fluid lni lni-protection " src="{% static 'vendor_dashboard/images/account.png' %}" alt="User avatar">
@@ -219,7 +219,7 @@
             </ul>
         </aside>
         <div class="main" style="padding: 0%;">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light px-4 py-3">
+            <nav class="navbar navbar-expand-lg navbar-light  px-4 py-2" style="background-color: rgba(204, 208, 210, 0.587);">
                 <div class="container-fluid d-flex justify-content-between">
                     <div>
                         <a href="{% url 'vendor_dashboard:vendor_dashboard' %}">
@@ -231,7 +231,7 @@
                         <div>
                             <a class="fw-bold fs-4 mb-3 text-dark" href="{% url 'vendor_dashboard:vendor_dashboard' %}">Vendor Dashboard</a>
                         </div>
-                        <ul class="navbar-nav ms-auto">
+                     <!-- <ul class="navbar-nav ms-auto">
                                
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
@@ -239,7 +239,7 @@
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.full_name }}</span>
                                     <img class="avatar img-fluid" src="{% static 'vendor_dashboard/images/account.png' %}" alt="User avatar">
                                 </a>
-                                <!-- Dropdown - User Information -->
+                                
                                 <ul class="dropdown-menu dropdown-menu-end shadow animated--grow-in" aria-labelledby="userDropdown">
                                     <li><a class="dropdown-item" href="{% url 'vendor_dashboard:vendor_profile' %}">
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -260,7 +260,7 @@
                                     </a></li>
                                 </ul>
                             </li>
-                        </ul>
+                        </ul> -->  
                     </div>
                 </div>
                 <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
