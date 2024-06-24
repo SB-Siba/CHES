@@ -171,3 +171,7 @@ EMAIL_HOST_PASSWORD = 'qukk ozby nejn ombm'
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Add additional configurations if required
+CORS_ALLOWED_ORIGINS = [
+    "http://3.7.243.15",
+    "http://localhost:8000",
+]
