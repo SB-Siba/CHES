@@ -21,14 +21,34 @@ class ServiceProviderUpdateForm(forms.Form):
 
     
 class ServiceAddForm(forms.ModelForm):
+    service_type = forms.ChoiceField(choices=[], required=False)
+
     class Meta:
         model = models.Service
-        fields = ['name', 'description', 'price_per_hour']
+        fields = ['name', 'description', 'price_per_hour', 'service_type']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control'}),
-            'price_per_hour': forms.NumberInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),  # Text input with form-control class
+            'description': forms.Textarea(attrs={'class': 'form-control'}),  # Textarea with form-control class
+            'price_per_hour': forms.NumberInput(attrs={'class': 'form-control'}),  # Number input with form-control class
+            'service_type': forms.Select(attrs={'class': 'form-control'}),  # Select dropdown with form-control class
         }
+        labels = {
+            'service_type': 'Service Type',  # Example label customization
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['service_type'].widget.attrs['class'] = 'form-control'  # Add form-control class
+        provider = self.initial.get('provider') or (self.instance.provider if self.instance.pk else None)
+        if provider:
+            provider_details = models.ServiceProviderDetails.objects.filter(provider=provider).first()
+            if provider_details:
+                service_types = [
+                    (service_type.strip('[] \'').strip(), service_type.strip('[] \'').strip()) 
+                    for service_type in provider_details.service_type.split(',')
+                ]
+                self.fields['service_type'].choices = service_types
+                self.fields['service_type'].initial = self.instance.service_type
 
 class BookingForm(forms.ModelForm):
     booking_date = forms.DateTimeField(

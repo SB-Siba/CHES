@@ -13,9 +13,33 @@
         {% if booking.status == 'pending' %}
             <a href="{% url 'service_provider:confirm_booking' booking.id %}" class="btn btn-success">Confirm Booking</a>
             <a href="{% url 'service_provider:decline_booking' booking.id %}" class="btn btn-danger">Decline Booking</a>
+        {% elif booking.status == 'confirmed' %}
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#markCompleteModal-{{ booking.id }}">
+                Mark As Complete
+            </button>
         {% endif %}
         <!-- <a href="{% url 'chat:startmessages' booking.gardener.id 'None' %}" class="btn btn-primary">Message RTG</a> -->
     </li>
+
+    <!-- Modal Structure for each booking -->
+    <div class="modal fade" id="markCompleteModal-{{ booking.id }}" tabindex="-1" aria-labelledby="markCompleteModalLabel-{{ booking.id }}" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="markCompleteModalLabel-{{ booking.id }}">Confirm Completion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to mark this booking as complete?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="{% url 'service_provider:mark_as_complete' booking.id %}" class="btn btn-success">Mark as Complete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {% empty %}
     <li class="list-group-item">No bookings found.</li>
     {% endfor %}

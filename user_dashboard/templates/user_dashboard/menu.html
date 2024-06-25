@@ -82,17 +82,18 @@
         </div>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'user_dashboard:my_booked_services' %}">
-            <img src="{% static 'user_dashboard\img\posts.png' %}" class="text-info" alt="" style="height: 15px;">
-            <span>My Booked Services</span>
-        </a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link" href="{% url 'user_dashboard:list_services' %}">
             <img src="{% static 'user_dashboard\img\posts.png' %}" class="text-info" alt="" style="height: 15px;">
             <span>List Of Services</span>
         </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'user_dashboard:my_booked_services' %}">
+            <img src="{% static 'user_dashboard\img\posts.png' %}" class="text-info" alt="" style="height: 15px;">
+            <span>My Booked Services</span>
+        </a>
+    </li>
+    
     <li class="nav-item">
         <a class="nav-link" href="{% url 'user_dashboard:allposts' %}">
             <img src="{% static 'user_dashboard\img\posts.png' %}" class="text-info" alt="" style="height: 15px;">

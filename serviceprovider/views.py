@@ -84,25 +84,25 @@ class ServiceList(View):
 
     def get(self,request):
         service_list = self.model.objects.filter(provider = request.user).order_by('-id')
+        form = self.form_class(initial={'provider': request.user})
         context = {
-            "form": self.form_class,
+            "form": form,
             "service_list":service_list,
         }
         return render(request, self.template, context)
     
     def post(self, request):
         form = self.form_class(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            description = form.cleaned_data['description']
-            price_per_hour = form.cleaned_data['price_per_hour']
-            service = self.model(provider=request.user, name=name, description=description, price_per_hour=price_per_hour)
-            service.save()
-            messages.success(request, f"{request.POST['name']} is added to service list.....")
-        else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f'{field}: {error}')
+        print("hii")
+        service_type = request.POST.get("service_type")
+        name = request.POST.get("name")
+        description = request.POST.get("description")
+        price_per_hour = request.POST.get("price_per_hour")
+
+        print(name,description,price_per_hour,service_type)
+        service = self.model(provider=request.user, name=name, description=description, price_per_hour=price_per_hour,service_type = service_type)
+        service.save()
+        messages.success(request, f"{request.POST['name']} is added to service list.....")
 
         return redirect("service_provider:service_list")
 
@@ -162,5 +162,12 @@ def decline_booking(request, booking_id):
     booking = get_object_or_404(common_models.Booking, id=booking_id)
     if request.user == booking.service.provider:
         booking.status = 'declined'
+        booking.save()
+    return redirect('service_provider:my_all_bookings')
+
+def mark_as_complete_booking(request, booking_id):
+    booking = get_object_or_404(common_models.Booking, id=booking_id)
+    if request.user == booking.service.provider:
+        booking.status = 'completed'
         booking.save()
     return redirect('service_provider:my_all_bookings')
