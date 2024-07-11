@@ -235,3 +235,58 @@ reset_password = [
     openapi.Parameter("password", openapi.IN_FORM, description="Password", type=openapi.TYPE_STRING, required=True),
     openapi.Parameter("confirm_password", openapi.IN_FORM, description="Confirm Password", type=openapi.TYPE_STRING, required=True),
 ]
+
+# ------------------------------------ Service Provider ----------------------------------
+service_provider_profile_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
+
+service_provider_update_profile_post = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter('service_type', openapi.IN_FORM, description="Service types provided by the service provider (comma-separated)", type=openapi.TYPE_STRING),
+    openapi.Parameter('service_area', openapi.IN_FORM, description="Service areas covered by the service provider (comma-separated)", type=openapi.TYPE_STRING),
+    openapi.Parameter('average_cost_per_hour', openapi.IN_FORM, description="Average cost per hour charged by the service provider", type=openapi.TYPE_NUMBER),
+    openapi.Parameter('years_experience', openapi.IN_FORM, description="Years of experience of the service provider", type=openapi.TYPE_INTEGER),
+    openapi.Parameter('image', openapi.IN_FORM, description="Image file of the service provider", type=openapi.TYPE_FILE),
+]
+
+service_list_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
+
+service_list_post = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter('service_type', openapi.IN_FORM, description="Type of service", type=openapi.TYPE_STRING),
+    openapi.Parameter('name', openapi.IN_FORM, description="Name of the service", type=openapi.TYPE_STRING),
+    openapi.Parameter('description', openapi.IN_FORM, description="Description of the service", type=openapi.TYPE_STRING),
+    openapi.Parameter('price_per_hour', openapi.IN_FORM, description="Price per hour for the service", type=openapi.TYPE_NUMBER),
+]
+
+service_update_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter('service_id', openapi.IN_PATH, description="ID of the service to retrieve", type=openapi.TYPE_INTEGER),
+]
+
+service_update_post = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter('service_id', openapi.IN_PATH, description="ID of the service to update", type=openapi.TYPE_INTEGER),
+    openapi.Parameter('name', openapi.IN_FORM, description="Name of the service", type=openapi.TYPE_STRING),
+    openapi.Parameter('description', openapi.IN_FORM, description="Description of the service", type=openapi.TYPE_STRING),
+    openapi.Parameter('price_per_hour', openapi.IN_FORM, description="Price per hour for the service", type=openapi.TYPE_NUMBER),
+]
+
+
+service_delete_params = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter('service_id', openapi.IN_PATH, description="ID of the service to delete", type=openapi.TYPE_INTEGER),
+]
+
+my_service_bookings_params = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
+
+booking_action_params = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter('booking_id', openapi.IN_PATH, description="ID of the booking", type=openapi.TYPE_INTEGER),
+    openapi.Parameter('action', openapi.IN_PATH, description="Action to perform (confirm, decline, complete)", type=openapi.TYPE_STRING),
+]

@@ -14,7 +14,7 @@ SECRET_KEY = env_vars['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env_vars['DEBUG'] == 'True'
 
-ALLOWED_HOSTS = ['3.7.243.15', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ["*"]
 
 AUTH_USER_MODEL = "app_common.User"
 AUTHENTICATION_BACKENDS = [
@@ -58,7 +58,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = "project.urls"
@@ -166,12 +165,3 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'forverify.noreply@gmail.com'
 EMAIL_HOST_PASSWORD = 'qukk ozby nejn ombm'
-
-# CORS configuration
-CORS_ALLOW_ALL_ORIGINS = True
-
-# Add additional configurations if required
-CORS_ALLOWED_ORIGINS = [
-    "http://3.7.243.15",
-    "http://localhost:8000",
-]
