@@ -31,5 +31,23 @@ class AdminDashboard(View):
         rtg_total_garden_area = sum([i.garden_area for i in rtg_garden_profile])
         rtg_total_plants = sum([i.number_of_plants for i in rtg_garden_profile])
 
+        bhubaneswar_rtg = common_models.User.objects.filter(is_rtg = True,city = "Bhubaneswar").count()
+        cuttack_rtg = common_models.User.objects.filter(is_rtg = True,city = "Cuttack").count()
+        brahmapur_rtg = common_models.User.objects.filter(is_rtg = True,city = "Brahmapur").count()
+        puri_rtg = common_models.User.objects.filter(is_rtg = True,city = "Puri").count()
+        balasore_rtg = common_models.User.objects.filter(is_rtg = True,city = "Balasore").count()
+
+        bhubaneswar_vendor = common_models.User.objects.filter(is_vendor = True,city = "Bhubaneswar").count()
+        cuttack_vendor = common_models.User.objects.filter(is_vendor = True,city = "Cuttack").count()
+        brahmapur_vendor = common_models.User.objects.filter(is_vendor = True,city = "Brahmapur").count()
+        puri_vendor = common_models.User.objects.filter(is_vendor = True,city = "Puri").count()
+        balasore_vendor = common_models.User.objects.filter(is_vendor = True,city = "Balasore").count()
+
+        bhubaneswar_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,city = "Bhubaneswar").count()
+        cuttack_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,city = "Cuttack").count()
+        brahmapur_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,city = "Brahmapur").count()
+        puri_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,city = "Puri").count()
+        balasore_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,city = "Balasore").count()
+
         return render(request, self.template,locals())
 
