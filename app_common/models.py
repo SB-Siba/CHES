@@ -398,6 +398,7 @@ class Service(models.Model):
     description = models.TextField()
     price_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
+    service_type = models.CharField(max_length=100, blank=True)
 
 class Booking(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE)

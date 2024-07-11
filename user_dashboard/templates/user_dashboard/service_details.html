@@ -7,7 +7,7 @@
 <h2>Service Details - {{ service.name }}</h2>
 <p><strong>Provider:</strong> {{ service.provider.full_name }}</p>
 <p><strong>Description:</strong> {{ service.description }}</p>
-<p><strong>Price/hour:</strong> ${{ service.price_per_hour }}</p>
+<p><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
 {% if service_booked_obj %}
     <a href="" class="btn btn-primary disabled">Already Booked</a>
 {% else %}

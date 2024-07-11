@@ -13,7 +13,7 @@ schema_view = get_schema_view(
         description="API documentation of Green Project",
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=[permissions.AllowAny],
 )
 
 urlpatterns = [
@@ -24,8 +24,22 @@ urlpatterns = [
     path("chat/", include("chatapp.urls")),
     path("vendor_dashboard/", include("vendor_dashboard.urls")),
     path("service_provider/", include("serviceprovider.urls")),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+     # ------------------------------------------------ swagger ---------------------------------
+    path(
+        "swagger/download/",
+        schema_view.without_ui(cache_timeout=0),
+        name="schema-json",
+    ),
+    path(
+        "swagger/",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    path(
+        "swagger/redoc/",
+        schema_view.with_ui("redoc", cache_timeout=0),
+        name="schema-redoc",
+    ),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
