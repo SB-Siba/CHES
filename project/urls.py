@@ -24,7 +24,7 @@ urlpatterns = [
     path("chat/", include("chatapp.urls")),
     path("vendor_dashboard/", include("vendor_dashboard.urls")),
     path("service_provider/", include("serviceprovider.urls")),
-     # ------------------------------------------------ swagger ---------------------------------
+    # ------------------------------------------------ swagger ---------------------------------
     path(
         "swagger/download/",
         schema_view.without_ui(cache_timeout=0),
