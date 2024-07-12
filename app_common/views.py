@@ -359,7 +359,7 @@ class ServiceProviderDetails(View):
 
 
 class Home(View):
-    template = app + 'index.html'
+    template = app + 'landing.html'
 
     def get(self, request):
         
