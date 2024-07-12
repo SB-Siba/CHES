@@ -356,3 +356,45 @@ vendor_sold_product_get = [
 sell_product_list_get = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
 ]
+update_product_post = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+
+    openapi.Parameter(
+        'product_id', openapi.IN_PATH, description="ID of the product to update", type=openapi.TYPE_INTEGER
+    ),
+    openapi.Parameter(
+        'name', openapi.IN_FORM, description="Product Name", type=openapi.TYPE_STRING, required=True
+    ),
+    openapi.Parameter(
+        'description', openapi.IN_FORM, description="Product Description", type=openapi.TYPE_STRING, required=True
+    ),
+    openapi.Parameter(
+        'discount_price', openapi.IN_FORM, description="Discount Price", type=openapi.TYPE_NUMBER, required=True
+    ),
+    openapi.Parameter(
+        'max_price', openapi.IN_FORM, description="Maximum Price", type=openapi.TYPE_NUMBER, required=True
+    ),
+    openapi.Parameter(
+        'image', openapi.IN_FORM, description="Product Image", type=openapi.TYPE_FILE, required=False
+    ),
+    openapi.Parameter(
+        'stock', openapi.IN_FORM, description="Product Stock", type=openapi.TYPE_INTEGER, required=True
+    ),
+    openapi.Parameter(
+        'category', openapi.IN_FORM, description="Product Category", type=openapi.TYPE_STRING, required=True
+    ),
+    openapi.Parameter(
+        'reason', openapi.IN_FORM, description="Reason", type=openapi.TYPE_STRING, required=False
+    ),
+    openapi.Parameter(
+        'green_coins_required', openapi.IN_FORM, description="Green Coins Required", type=openapi.TYPE_INTEGER, required=True
+    ),
+    openapi.Parameter(
+        'discount_percentage', openapi.IN_FORM, description="Discount Percentage", type=openapi.TYPE_NUMBER, required=True
+    )
+]
+
+delete_product_delete = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter('product_id', openapi.IN_PATH, description="ID of the product to delete", type=openapi.TYPE_INTEGER),
+]

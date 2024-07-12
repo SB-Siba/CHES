@@ -86,6 +86,11 @@ urlpatterns = [
     path('api/vendor/sell-product/', api_of_vendor.VendorSellProductAPIView.as_view(), name='vendor-sell-product-api'),
     path('api/vendor/sold-products/', api_of_vendor.VendorSoldProductsAPIView.as_view(), name='vendor-sold-products-api'),
     path('api/vendor/sell-products-list/', api_of_vendor.SellProductsListAPIView.as_view(), name='vendor-sell-products-list-api'),
+    path('api/vendor/update-product/<int:product_id>/', api_of_vendor.UpdateProductAPIView.as_view(), name='update-product-api'),
+    path('api/vendor/delete-product/<int:product_id>/', api_of_vendor.DeleteSellProductAPIView.as_view(), name='delete-product-api'),
+    path('api/vendor/add-activity/', api_of_vendor.AddActivityRequestVendorAPIView.as_view(), name='vendor-add_activity_request_api'),
+    path('api/vendor/activity-list/', api_of_vendor.ActivityListVendorAPIView.as_view(), name='vendor_activity_list_api'),
+
 ]
 
 #   app_common:register

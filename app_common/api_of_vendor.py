@@ -145,3 +145,61 @@ class SellProductsListAPIView(APIView):
         products = ProductFromVendor.objects.filter(vendor=user)
         serializer = ProductFromVendorSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class UpdateProductAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+    @swagger_auto_schema(
+        tags=["vendorupdateproduct"],
+        operation_description="Update a product",
+        request_body=ProductFromVendorSerializer,
+        manual_parameters=swagger_doccumentation.update_product_post,
+        responses={200: ProductFromVendorSerializer, 400: "Invalid data provided"},
+    )
+    def post(self, request, product_id):
+        product = get_object_or_404(ProductFromVendor, id=product_id, vendor=request.user)
+        serializer = ProductFromVendorSerializer(instance=product, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class DeleteSellProductAPIView(APIView):
+
+    @swagger_auto_schema(
+        tags=["vendordeleteproduct"],
+        operation_description="Delete a product",
+        manual_parameters=swagger_doccumentation.delete_product_delete,
+        responses={204: "Product deleted successfully", 404: "Product not found"},
+    )
+    def delete(self, request, product_id):
+        product = get_object_or_404(ProductFromVendor, id=product_id, vendor=request.user)
+        product.delete()
+        return Response({'success':'Product Deleted Successfully'},status=status.HTTP_204_NO_CONTENT)
+    
+class ActivityListVendorAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["activity_list_vendor"],
+        operation_description="Activity List API",
+        manual_parameters=swagger_doccumentation.activity_list_get,
+        responses={200: 'List of activities fetched successfully.'}
+    )
+    def get(self, request):
+        activities = UserActivity.objects.filter(user=request.user, is_accepted="approved").order_by('-date_time')
+        serializer = UserActivitySerializer(activities, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class AddActivityRequestVendorAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+    @swagger_auto_schema(
+        tags=["add_activity_vendor"],
+        operation_description="Add Activity API",
+        manual_parameters=swagger_doccumentation.add_activity_request_post,
+        responses={201: 'Activity sent for approval successfully.'}
+    )
+    def post(self, request):
+        serializer = UserActivitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response({'message': 'Activity sent for approval successfully'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
