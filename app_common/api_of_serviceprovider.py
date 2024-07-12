@@ -64,7 +64,7 @@ class ServiceProviderUpdateProfileAPI(APIView):
         manual_parameters=swagger_doccumentation.service_provider_update_profile_post,
         responses={200: "Profile updated successfully", 400: "Invalid data provided"},
     )
-    def put(self, request):
+    def post(self, request):
         service_provider_details = get_object_or_404(ServiceProviderDetails, provider=request.user)
         serializer = ServiceProviderProfileUpdateSerializer(instance=service_provider_details, data=request.data)
         if serializer.is_valid():

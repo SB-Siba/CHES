@@ -319,3 +319,11 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
         fields = '__all__'
+
+# ================================== VENDOR ============================================
+
+class VendorSerializer(serializers.ModelSerializer):
+    vendor = UserSerializer()
+    class Meta:
+        model = VendorDetails
+        fields = '__all__'

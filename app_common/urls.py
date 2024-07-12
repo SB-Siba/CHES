@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views,auth_api,api_of_rtg,api_of_serviceprovider
+from . import views,auth_api,api_of_rtg,api_of_serviceprovider,api_of_vendor
 from django.contrib.auth import views as auth_view
 from . forms import PasswordChangeForm
 app_name = 'app_common'
@@ -79,7 +79,13 @@ urlpatterns = [
     path('api/service/<int:service_id>/delete/', api_of_serviceprovider.ServiceDeleteAPIView.as_view(), name='service_delete_api'),
     path('api/my_service_bookings/', api_of_serviceprovider.MyServiceBookingsAPIView.as_view(), name='my_service_bookings_api'),
     path('api/booking/<int:booking_id>/<str:action>/', api_of_serviceprovider.BookingActionAPIView.as_view(), name='booking_action_api'),
+    # ----------------------------- Service Provider ------------------------------------
 
+    path('api/vendor/profile/', api_of_vendor.VendorProfileAPI.as_view(), name='vendor-profile-api'),
+    path('api/vendor/update-profile/', api_of_vendor.VendorUpdateProfileAPIView.as_view(), name='vendor-update-profile-api'),
+    path('api/vendor/sell-product/', api_of_vendor.VendorSellProductAPIView.as_view(), name='vendor-sell-product-api'),
+    path('api/vendor/sold-products/', api_of_vendor.VendorSoldProductsAPIView.as_view(), name='vendor-sold-products-api'),
+    path('api/vendor/sell-products-list/', api_of_vendor.SellProductsListAPIView.as_view(), name='vendor-sell-products-list-api'),
 ]
 
 #   app_common:register

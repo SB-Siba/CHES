@@ -290,3 +290,69 @@ booking_action_params = [
     openapi.Parameter('booking_id', openapi.IN_PATH, description="ID of the booking", type=openapi.TYPE_INTEGER),
     openapi.Parameter('action', openapi.IN_PATH, description="Action to perform (confirm, decline, complete)", type=openapi.TYPE_STRING),
 ]
+
+# ------------------------------------ Vendor ----------------------------------
+
+vendor_profile_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
+
+vendor_update_profile_post = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+
+    openapi.Parameter(
+        'business_name', openapi.IN_FORM, description="Business Name", type=openapi.TYPE_STRING, required=True
+    ),
+    openapi.Parameter(
+        'business_address', openapi.IN_FORM, description="Business Address", type=openapi.TYPE_STRING, required=True
+    ),
+    openapi.Parameter(
+        'business_description', openapi.IN_FORM, description="Business Description", type=openapi.TYPE_STRING, required=True
+    ),
+    openapi.Parameter(
+        'business_license_number', openapi.IN_FORM, description="Business License Number", type=openapi.TYPE_STRING, required=True
+    ),
+    openapi.Parameter(
+        'business_category', openapi.IN_FORM, description="Business Category", type=openapi.TYPE_STRING, required=True
+    ),
+    openapi.Parameter(
+        'establishment_year', openapi.IN_FORM, description="Establishment Year", type=openapi.TYPE_INTEGER, required=True
+    ),
+    openapi.Parameter(
+        'website', openapi.IN_FORM, description="Website", type=openapi.TYPE_STRING, required=True
+    ),
+    openapi.Parameter(
+        'established_by', openapi.IN_FORM, description="Established By", type=openapi.TYPE_STRING, required=True
+    ),
+    openapi.Parameter(
+        'image', openapi.IN_FORM, description="Profile Image", type=openapi.TYPE_FILE, required=False
+    ),
+]
+
+vendor_sell_product_post = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+
+    openapi.Parameter(
+        'product_name', openapi.IN_FORM, description="Product Name", type=openapi.TYPE_STRING, required=True
+    ),
+    openapi.Parameter(
+        'product_description', openapi.IN_FORM, description="Product Description", type=openapi.TYPE_STRING, required=True
+    ),
+    openapi.Parameter(
+        'product_image', openapi.IN_FORM, description="Product Image", type=openapi.TYPE_FILE, required=True
+    ),
+    openapi.Parameter(
+        'product_price', openapi.IN_FORM, description="Product Price", type=openapi.TYPE_NUMBER, required=True
+    ),
+    openapi.Parameter(
+        'product_category', openapi.IN_FORM, description="Product Category", type=openapi.TYPE_STRING, required=True
+    ),
+]
+
+vendor_sold_product_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
+
+sell_product_list_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
