@@ -18,6 +18,7 @@ from .serializer import (
     CommentSerializer,
     LikeSerializer,
     MessageSerializer,
+    OrderUpdateSerializer,
     ProduceBuySerializer,
     GardeningProfileSerializer,
     ProductFromVendorSerializer,
@@ -203,3 +204,52 @@ class AddActivityRequestVendorAPIView(APIView):
             return Response({'message': 'Activity sent for approval successfully'}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class OrderDetailAPIView(APIView):
+
+    parser_classes = [FormParser, MultiPartParser]
+    @swagger_auto_schema(
+        tags=["orderdetail"],
+        operation_description="Order Detail API",
+        manual_parameters=swagger_doccumentation.vendor_order_detail_get,
+        responses={201: 'Order Detail Fetched Successfully.'}
+    )
+    def get(self, request, order_uid):
+        order = get_object_or_404(Order, uid=order_uid)
+
+        product_list = []
+        product_quantity = []
+        total_quantity = 0
+        grand_total = order.order_meta_data.get('final_cart_value', order.order_meta_data.get('final_value', 0))
+
+        for product_name, quantity in order.products.items():
+            product = ProductFromVendor.objects.filter(name=product_name).first()
+            product_list.append(product)
+            product_quantity.append(quantity)
+            total_quantity += int(quantity)
+        
+        response_data = {
+            'order': OrderSerializer(order).data,
+            'grand_total': grand_total,
+            'products': [{'product': product, 'quantity': quantity} for product, quantity in zip(product_list, product_quantity)],
+            'total_quantity': total_quantity,
+            'customer_details': order.customer_details
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        tags=["orderdetailupdate"],
+        operation_description="Order Detail Update API",
+        manual_parameters=swagger_doccumentation.vendor_order_detail_post,
+        responses={201: 'Order Detail Updated Successfully.'}
+    )
+    def post(self, request, order_uid):
+        order = get_object_or_404(Order, uid=order_uid)
+        serializer = OrderUpdateSerializer(order, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

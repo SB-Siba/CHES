@@ -398,3 +398,17 @@ delete_product_delete = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
     openapi.Parameter('product_id', openapi.IN_PATH, description="ID of the product to delete", type=openapi.TYPE_INTEGER),
 ]
+
+vendor_order_detail_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("order_uid", openapi.IN_PATH, description="UID of the order", required=True, type=openapi.TYPE_STRING),
+]
+
+vendor_order_detail_post = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("order_uid", openapi.IN_PATH, description="UID of the order", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("order_status", openapi.IN_FORM, description="Status of the order", required=False, type=openapi.TYPE_STRING, enum=["Placed", "Accepted", "Cancel", "On_Way", "Refund", "Return", "Delivered"]),
+    openapi.Parameter("payment_status", openapi.IN_FORM, description="Payment status of the order", required=False, type=openapi.TYPE_STRING, enum=["Paid", "Pending", "Refunded"]),
+    openapi.Parameter("customer_details", openapi.IN_FORM, description="Customer details in JSON format", required=False, type=openapi.TYPE_STRING),
+    openapi.Parameter("more_info", openapi.IN_FORM, description="Additional information about the order", required=False, type=openapi.TYPE_STRING),
+]

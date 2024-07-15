@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import (
     Booking,
+    Order,
     ProduceBuy,
     ProductFromVendor,
     SellProduce,
@@ -327,3 +328,8 @@ class VendorSerializer(serializers.ModelSerializer):
     class Meta:
         model = VendorDetails
         fields = '__all__'
+
+class OrderUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['order_status', 'payment_status', 'customer_details', 'more_info']
