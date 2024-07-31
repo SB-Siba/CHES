@@ -172,7 +172,7 @@ class VendorDetailsAPIView(APIView):
             user = User.objects.get(email=u_email)
             serializer = VendorDetailsSerializer(data=request.data)
             if serializer.is_valid():
-                vendor_details = serializer.save(user=user)
+                vendor_details = serializer.save(vendor=user)
                 return Response({'message': 'Details added successfully'}, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:
@@ -191,7 +191,7 @@ class ServiceProviderDetailsAPIView(APIView):
             user = User.objects.get(email=u_email)
             serializer = ServiceProviderDetailsSerializer(data=request.data)
             if serializer.is_valid():
-                service_provider_details = serializer.save(user=user)
+                service_provider_details = serializer.save(provider=user)
                 return Response({'message': 'Details added successfully'}, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except User.DoesNotExist:

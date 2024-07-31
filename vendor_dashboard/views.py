@@ -643,7 +643,7 @@ class AllOrders(View):
         income =  sum(order.order_value for order in order_list)
         paginated_data = utils.paginate(request, order_list, 50)
         order_status_options = common_models.Order.ORDER_STATUS
-        print(order_list)
+        # print(order_list)
         context = {
             "order":order_list,
             "order_list":paginated_data,
@@ -707,7 +707,7 @@ class OrderDetail(View):
 
         for i,j in order.products.items():
             try:
-                p_obj = common_models.ProductFromVendor.objects.get(name= i)
+                p_obj = common_models.ProductFromVendor.objects.filter(name= i).first()
             except Exception:
                 p_obj = ""
             product_list.append(p_obj)
