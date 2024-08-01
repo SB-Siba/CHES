@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from app_common import models as common_models
-from . forms import ServiceProviderUpdateForm
+from . forms import ServiceProviderUpdateForm,ServiceAddForm
 from user_dashboard.serializers import OrderSerializer
 from user_dashboard.forms import ActivityAddForm, BuyAmmountForm,SellProduceForm,BuyQuantityForm
 from django.shortcuts import get_object_or_404
@@ -76,3 +76,91 @@ class ServiceProviderUpdateProfileView(View):
             messages.error(request, "Please correct the errors below.")
         
         return render(request, self.template_name, {'form': form})
+
+class ServiceList(View):
+    model = common_models.Service
+    form_class = ServiceAddForm
+    template = app + "service_list.html"
+
+    def get(self,request):
+        service_list = self.model.objects.filter(provider = request.user).order_by('-id')
+        context = {
+            "form": self.form_class,
+            "service_list":service_list,
+        }
+        return render(request, self.template, context)
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            description = form.cleaned_data['description']
+            price_per_hour = form.cleaned_data['price_per_hour']
+            service = self.model(provider=request.user, name=name, description=description, price_per_hour=price_per_hour)
+            service.save()
+            messages.success(request, f"{request.POST['name']} is added to service list.....")
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{field}: {error}')
+
+        return redirect("service_provider:service_list")
+
+class ServiceUpdate(View):
+    model = common_models.Service
+    form_class = ServiceAddForm
+    template = app + "service_update.html"
+
+    def get(self,request, service_id):
+        service = self.model.objects.get(id = service_id)
+        context = {
+            "form": self.form_class(instance=service),
+        }
+        return render(request, self.template, context)
+    
+    def post(self, request, service_id):
+        service = self.model.objects.get(id= service_id)
+        form = self.form_class(request.POST, request.FILES ,instance= service)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"{request.POST['name']} is updated successfully.....")
+            return redirect("service_provider:service_list")
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{field}: {error}')
+
+        return redirect("service_provider:service_update", service_id = service_id)
+
+
+class ServiceDelete(View):
+    model = common_models.Service
+
+    def get(self,request, service_id):
+        service = self.model.objects.get(id= service_id).delete()
+        messages.info(request, "Service is deleted successfully....")
+        return redirect("service_provider:service_list")
+    
+class MyServiceBookings(View):
+    model = common_models.Booking
+    template = app + "my_service_bookings.html"
+    def get(self,request):
+        bookings = self.model.objects.filter(service__provider=request.user)
+        context = {
+            "bookings": bookings,
+            }
+        return render(request, self.template, context)
+
+def confirm_booking(request, booking_id):
+    booking = get_object_or_404(common_models.Booking, id=booking_id)
+    if request.user == booking.service.provider:
+        booking.status = 'confirmed'
+        booking.save()
+    return redirect('service_provider:my_all_bookings')
+
+def decline_booking(request, booking_id):
+    booking = get_object_or_404(common_models.Booking, id=booking_id)
+    if request.user == booking.service.provider:
+        booking.status = 'declined'
+        booking.save()
+    return redirect('service_provider:my_all_bookings')

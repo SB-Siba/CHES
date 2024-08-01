@@ -43,7 +43,7 @@ class Register(View):
     form_class = forms.RegisterForm
 
     def get(self,request,role):
-        print(role)
+        print(request.user)
         context = {
             'form': self.form_class()
         }
@@ -216,7 +216,9 @@ def gardening_quiz_view(request,u_email):
                 print(f"Failed to send email: {e}")
                 user_obj.delete()
                 return redirect('app_common:register')
-
+            
+            if request.user.is_superuser:
+                return redirect('admin_dashboard:pending_rtg')
             return redirect('app_common:login')
     else:
         form = forms.GardeningQuizForm()
@@ -233,7 +235,7 @@ class VendorDetails(View):
     form_class = forms.VendorDetailsForm
 
     def get(self,request,u_email):
-        print(u_email)
+        print(request.user)
         try:
             user_obj = models.User.objects.get(email = u_email)
             form = self.form_class(instance=user_obj)
@@ -288,6 +290,8 @@ class VendorDetails(View):
                     print(f"Failed to send email: {e}")
                     user_obj.delete()
                     return redirect('app_common:register')
+                if request.user.is_superuser:
+                    return redirect('admin_dashboard:pending_vendor')
                 return redirect('app_common:login')
             except:
                 messages.error(request,'Failed to Add data')
@@ -343,7 +347,8 @@ class ServiceProviderDetails(View):
                     print(f"Failed to send email: {e}")
                     user_obj.delete()
                     return redirect('app_common:register')
-                
+                if request.user.is_superuser:
+                    return redirect('admin_dashboard:pending_service_provider')
                 return redirect('app_common:login')
             except:
                 messages.error(request,'Failed to Add data')

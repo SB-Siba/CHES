@@ -1,0 +1,23 @@
+{% extends 'service_provider/base.html' %}
+{% load static %}
+
+{% block s_vendor_content %}
+<h2>My Service Bookings</h2>
+<ul class="list-group">
+    {% for booking in bookings %}
+    <li class="list-group-item">
+        <h3>{{ booking.service.name }}</h3>
+        <p><strong>Gardener:</strong> {{ booking.gardener.full_name }}</p>
+        <p><strong>Booking Date:</strong> {{ booking.booking_date }}</p>
+        <p><strong>Status:</strong> {{ booking.status }}</p>
+        {% if booking.status == 'pending' %}
+            <a href="{% url 'service_provider:confirm_booking' booking.id %}" class="btn btn-success">Confirm Booking</a>
+            <a href="{% url 'service_provider:decline_booking' booking.id %}" class="btn btn-danger">Decline Booking</a>
+        {% endif %}
+        <!-- <a href="{% url 'chat:startmessages' booking.gardener.id 'None' %}" class="btn btn-primary">Message RTG</a> -->
+    </li>
+    {% empty %}
+    <li class="list-group-item">No bookings found.</li>
+    {% endfor %}
+</ul>
+{% endblock s_vendor_content %}

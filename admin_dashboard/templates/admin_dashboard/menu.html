@@ -55,6 +55,33 @@
             </li>
         </ul>
     </li>
+
+    <!-- Add_user -->
+    <li class="nav-item">
+        <a href="#" class="nav-link collapsed has-dropdown" data-bs-toggle="collapse"
+            data-bs-target="#add_users" aria-expanded="false" aria-controls="add_users">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Add User</span>
+        </a>
+        <ul id="add_users" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+            <li class="sidebar-item">
+                <a href="{% url 'app_common:register' 'is_rtg' %}" class="nav-link">
+                    <span>Add Rtg</span>
+                </a>
+                
+            </li>
+            <li class="sidebar-item">
+                <a href="{% url 'app_common:register' 'is_vendor' %}" class="nav-link">
+                    <span>Add Vendor</span>
+                </a>
+            </li>
+            <li class="sidebar-item">
+                <a href="{% url 'app_common:register' 'is_serviceprovider' %}" class="nav-link">
+                    <span>Add Service Provider</span>
+                </a>
+            </li>
+        </ul>
+    </li>
         
       <li class="nav-item">
           <a class="nav-link" href="{% url 'admin_dashboard:serviceproviders_list' %}">
@@ -105,46 +132,10 @@
 
       <!-- Nav Item - Charts -->
       <li class="nav-item">
-          <a class="nav-link" href="#">
-              <i class="fa-solid fa-wallet"></i>
-              <span>Wallet</span>
-          </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'admin_dashboard:admin_order_list' %}">
+        <a class="nav-link" href="{% url 'admin_dashboard:produce_order_list' %}">
             <i class="fa-solid fa-coins"></i>
-            <span>Gardener Orders</span></a>
+            <span>Produce Orders</span></a>
         </li>
-      <!-- Nav Item - Tables -->
-      <li class="nav-item">
-          <a class="nav-link" href="#">
-              <i class="fa-solid fa-coins"></i>
-              <span>Transaction</span></a>
-      </li>
-
-      <li class="nav-item">
-          <a class="nav-link" href="#">
-              <i class="fa-solid fa-address-card"></i>
-              <span>Post</span></a>
-      </li>
-
-      <li class="nav-item">
-          <a class="nav-link" href="#">
-              <i class="fa-solid fa-image"></i>
-              <span>My Photos</span></a>
-      </li>
-
-      <li class="nav-item">
-          <a class="nav-link" href="#">
-              <i class="fa-solid fa-headset"></i>
-              <span>Help & Support</span></a>
-      </li>
-
-      <li class="nav-item">
-          <a class="nav-link" href="#">
-              <i class="fa-solid fa-shield-halved"></i>
-              <span>Privacy Policy</span></a>
-      </li>
       <li class="nav-item">
           <a class="nav-link" href="{% url 'app_common:logout' %}">
               <i class="fa-solid fa-right-from-bracket"></i>

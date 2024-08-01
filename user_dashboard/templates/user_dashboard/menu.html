@@ -1,229 +1,365 @@
-    {% load static %}
+{% load static %}
 
-    <head>
-        <style>
-.sidebar.collapsed .nav-item .collapse {
-    display: none; 
-}
+<head>
+  <style>
+    .sidebar.collapsed .nav-item .collapse {
+      display: none;
+    }
 
-.sidebar.collapsed .nav-item:hover .collapse {
-    display: block; 
-    top: 0;
-    width: 210px; 
-    z-index: 1000;
-    color: black !important;
-}
+    .sidebar.collapsed .nav-item:hover .collapse {
+      display: block;
+      top: 0;
+      width: 210px;
+      z-index: 1000;
+      color: black !important;
+    }
 
-.sidebar.collapsed .nav-item:hover .collapse .collapse-inner {
-    display: block !important; 
-}
+    .sidebar.collapsed .nav-item:hover .collapse .collapse-inner {
+      display: block !important;
+    }
 
-.sidebar.collapsed .collapse-item span {
-    display: inline-block; 
-}
+    .sidebar.collapsed .collapse-item span {
+      display: inline-block;
+    }
 
-.sidebar.collapsed .nav-item .nav-link span {
-    display: none; 
-}
+    .sidebar.collapsed .nav-item .nav-link span {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <ul
+    class="navbar-nav sidebar side-nav sidebar-dark accordion"
+    id="accordionSidebar">
+    <!-- Sidebar - Brand -->
 
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0" />
 
-           </style>
-    </head>
-  <body>
-      <!-- Sidebar -->
-      <ul class="navbar-nav sidebar side-nav sidebar-dark accordion" id="accordionSidebar">
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'user_dashboard:user_dashboard' %}">
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>User Dashboard</span></a
+      >
+    </li>
 
-        <!-- Sidebar - Brand -->
-      
-
-        <!-- Divider -->
-        <hr class="sidebar-divider my-0">
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item"  >
-            <a class="nav-link" href="{% url 'user_dashboard:user_dashboard' %}">
-                <i class="fas fa-fw fa-tachometer-alt" ></i>
-                <span>User Dashboard</span></a>
-        </li>
-
-        
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
-                aria-expanded="true" aria-controls="collapseTwo">
-                <img src="{% static 'user_dashboard\img\gc.png' %}" class="text-info" alt="" style="height: 15px;">
-                <span>Green Commerce</span>
-            </a>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="{% url 'user_dashboard:sellproduce' %}">
-                        <img src="{% static 'user_dashboard\img\sell.png' %}" class="text-info" alt="" style="height: 15px;">
-                            <span class="text-dark">Sell Produce</span>
-                    </a>
-                    <a class="collapse-item" href="{% url 'user_dashboard:greencommerceproducts' %}">
-                        <img src="{% static 'user_dashboard\img\buy.png' %}" class="text-info" alt="" style="height: 15px;">
-                            <span>Buy From Community</span>
-                    </a>
-                    <a class="collapse-item" href="{% url 'user_dashboard:vendorproducts' %}">
-                        <img src="{% static 'user_dashboard\img\buy.png' %}" class="text-info" alt="" style="height: 15px;">
-                            <span>Buy From Vendors</span>
-                    </a>
-                    <a class="collapse-item" href="{% url 'user_dashboard:allorders' %}">
-                        <img src="{% static 'user_dashboard\img\s_cart.png' %}" class="text-info" alt="" style="height: 15px;">
-                            <span>My Community Orders</span>
-                    </a>
-                    <a class="collapse-item" href="{% url 'user_dashboard:allordersfromvendor' %}">
-                        <img src="{% static 'user_dashboard\img\s_cart.png' %}" class="text-info" alt="" style="height: 15px;">
-                            <span>My Orders From Vendor</span>
-                    </a>
-                    <a class="collapse-item" href="{% url 'user_dashboard:allsellrequests' %}">
-                        <img src="{% static 'user_dashboard\img\request.png' %}" class="text-info" alt="" style="height: 15px;">
-                            <span>Requests For Sell</span>
-                    </a>
-                </div>
-            </div>
-        </li>
-        <li class="nav-item" >
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
-                aria-expanded="true" aria-controls="collapseTwo">
-                <img src="{% static 'user_dashboard\img\gardening.png' %}" class="text-info" alt="" style="height: 15px;">
-                <span>Gardening Profile</span>
-            </a>
-            <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="{% url 'user_dashboard:gardeningprofile' %}">
-                        <img src="{% static 'user_dashboard\img\gardener.png' %}" class="text-info" alt="" style="height: 15px;">
-                            <span>Profile</span>
-                    </a>
-                    <a class="collapse-item" href="{% url 'user_dashboard:gardeningprofile' %}">
-                        <img src="{% static 'user_dashboard\img\park.png' %}" class="text-info" alt="" style="height: 15px;">
-                            <span>Plants in My Garden</span>
-                    </a>
-                </div>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'user_dashboard:service_providers' %}">
-                <img src="{% static 'user_dashboard\img\posts.png' %}" class="text-info" alt="" style="height: 15px;">
-                <span>Service Providers</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'user_dashboard:allposts' %}">
-                <img src="{% static 'user_dashboard\img\posts.png' %}" class="text-info" alt="" style="height: 15px;">
-                <span>Posts</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'user_dashboard:walletpage' %}">
-                <i class="fa-solid fa-wallet"></i>
-                <span> Green Wallet</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'chat:all_messages' %}">
-                <i class="fa-solid fa-message"></i>
-                <span> Messages</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFive"
-                aria-expanded="true" aria-controls="collapseTwo">
-                <img src="{% static 'user_dashboard\img\buy_sell.png' %}" class="text-info" alt="" style="height: 15px;">
-                <span>Buy/Sell Progress</span>
-            </a>
-            <div id="collapseFive" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="{% url 'user_dashboard:buybeginsbuyerview' %}">
-                        <img src="{% static 'user_dashboard\img\buy.png' %}" class="text-info" alt="" style="height: 15px;">
-                            <span>Buying Progress</span>
-                    </a>
-                    <a class="collapse-item" href="{% url 'user_dashboard:buybeginssellerview' %}">
-                        <img src="{% static 'user_dashboard\img\sell.png' %}" class="text-info" alt="" style="height: 15px;">
-                            <span>Selling Progress</span>
-                    </a>
-                </div>
-            </div>
-        </li>
-        <!-- Nav Item - Tables -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>Activity</span>
-            </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="{% url 'user_dashboard:addactivity' %}">
-                        <i class="far fa-plus-square text-success"></i>
-                            <span> Add Activity</span>
-                    </a>
-                    <a class="collapse-item" href="{% url 'user_dashboard:activitylist' %}">
-                        <i class="far fa-list-alt text-success"></i>
-                            <span>Activity List</span>
-                    </a>
-                </div>
-            </div>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'user_dashboard:contactpage' %}">
-                <i class="fa-solid fa-headset"></i>
-                <span>Help & Support</span></a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'user_dashboard:privacypolicy' %}">
-                <i class="fa-solid fa-shield-halved"></i>
-                <span>Privacy Policy</span></a>
-        </li>
-
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    <!-- Nav Item - Charts -->
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseThree"
+        aria-expanded="true"
+        aria-controls="collapseTwo">
+        <img
+          src="{% static 'user_dashboard\img\gc.png' %}"
+          class="text-info"
+          alt=""
+          style="height: 15px" />
+        <span>Green Commerce</span>
+      </a>
+      <div
+        id="collapseThree"
+        class="collapse"
+        aria-labelledby="headingTwo"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:sellproduce' %}">
+            <img
+              src="{% static 'user_dashboard\img\sell.png' %}"
+              class="text-info"
+              alt=""
+              style="height: 15px" />
+            <span class="text-dark">Sell Produce</span>
+          </a>
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:greencommerceproducts' %}">
+            <img
+              src="{% static 'user_dashboard\img\buy.png' %}"
+              class="text-info"
+              alt=""
+              style="height: 15px" />
+            <span>Buy From Community</span>
+          </a>
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:vendorproducts' %}">
+            <img
+              src="{% static 'user_dashboard\img\buy.png' %}"
+              class="text-info"
+              alt=""
+              style="height: 15px" />
+            <span>Buy From Vendors</span>
+          </a>
+          <a class="collapse-item" href="{% url 'user_dashboard:allorders' %}">
+            <img
+              src="{% static 'user_dashboard\img\s_cart.png' %}"
+              class="text-info"
+              alt=""
+              style="height: 15px" />
+            <span>My Community Orders</span>
+          </a>
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:allordersfromvendor' %}">
+            <img
+              src="{% static 'user_dashboard\img\s_cart.png' %}"
+              class="text-info"
+              alt=""
+              style="height: 15px" />
+            <span>My Orders From Vendor</span>
+          </a>
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:allsellrequests' %}">
+            <img
+              src="{% static 'user_dashboard\img\request.png' %}"
+              class="text-info"
+              alt=""
+              style="height: 15px" />
+            <span>Requests For Sell</span>
+          </a>
         </div>
-
-      <li class="nav-item " style="margin-bottom: 120px;">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUserProfile"
-            aria-expanded="true" aria-controls="collapseUserProfile">
-            <img class="img-profile rounded-circle" src="{% static 'user_dashboard/img/undraw_profile.svg' %}">
-            <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user }}</span>
-        </a>
-        <div id="collapseUserProfile" class="collapse" aria-labelledby="headingUserProfile" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{% url 'user_dashboard:userprofile' %}">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-success"></i>
-                    Profile
-                </a>
-                <a class="collapse-item" href="#">
-                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-success"></i>
-                    Settings
-                </a>
-                <a class="collapse-item" href="{% url 'user_dashboard:activitylist' %}">
-                    <i class="fas fa-list fa-sm fa-fw mr-2 text-success"></i>
-                    Activity Log
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="collapse-item" href="" data-toggle="modal" data-target="#logoutModal">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-success"></i>
-                    Logout
-                </a>
-            </div>
+      </div>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseFour"
+        aria-expanded="true"
+        aria-controls="collapseTwo">
+        <img
+          src="{% static 'user_dashboard\img\gardening.png' %}"
+          class="text-info"
+          alt=""
+          style="height: 15px" />
+        <span>Gardening Profile</span>
+      </a>
+      <div
+        id="collapseFour"
+        class="collapse"
+        aria-labelledby="headingTwo"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:gardeningprofile' %}">
+            <img
+              src="{% static 'user_dashboard\img\gardener.png' %}"
+              class="text-info"
+              alt=""
+              style="height: 15px" />
+            <span>Profile</span>
+          </a>
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:gardeningprofile' %}">
+            <img
+              src="{% static 'user_dashboard\img\park.png' %}"
+              class="text-info"
+              alt=""
+              style="height: 15px" />
+            <span>Plants in My Garden</span>
+          </a>
         </div>
-    </li> 
+      </div>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'user_dashboard:service_providers' %}">
+        <img
+          src="{% static 'user_dashboard\img\posts.png' %}"
+          class="text-info"
+          alt=""
+          style="height: 15px" />
+        <span>Service Providers</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'user_dashboard:allposts' %}">
+        <img
+          src="{% static 'user_dashboard\img\posts.png' %}"
+          class="text-info"
+          alt=""
+          style="height: 15px" />
+        <span>Posts</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'user_dashboard:walletpage' %}">
+        <i class="fa-solid fa-wallet"></i>
+        <span> Green Wallet</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'chat:all_messages' %}">
+        <i class="fa-solid fa-message"></i>
+        <span> Messages</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseFive"
+        aria-expanded="true"
+        aria-controls="collapseTwo">
+        <img
+          src="{% static 'user_dashboard\img\buy_sell.png' %}"
+          class="text-info"
+          alt=""
+          style="height: 15px" />
+        <span>Buy/Sell Progress</span>
+      </a>
+      <div
+        id="collapseFive"
+        class="collapse"
+        aria-labelledby="headingTwo"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:buybeginsbuyerview' %}">
+            <img
+              src="{% static 'user_dashboard\img\buy.png' %}"
+              class="text-info"
+              alt=""
+              style="height: 15px" />
+            <span>Buying Progress</span>
+          </a>
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:buybeginssellerview' %}">
+            <img
+              src="{% static 'user_dashboard\img\sell.png' %}"
+              class="text-info"
+              alt=""
+              style="height: 15px" />
+            <span>Selling Progress</span>
+          </a>
+        </div>
+      </div>
+    </li>
+    <!-- Nav Item - Tables -->
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseTwo"
+        aria-expanded="true"
+        aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-cog"></i>
+        <span>Activity</span>
+      </a>
+      <div
+        id="collapseTwo"
+        class="collapse"
+        aria-labelledby="headingTwo"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:addactivity' %}">
+            <i class="far fa-plus-square text-success"></i>
+            <span> Add Activity</span>
+          </a>
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:activitylist' %}">
+            <i class="far fa-list-alt text-success"></i>
+            <span>Activity List</span>
+          </a>
+        </div>
+      </div>
+    </li>
 
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'user_dashboard:contactpage' %}">
+        <i class="fa-solid fa-headset"></i>
+        <span>Help & Support</span></a
+      >
+    </li>
 
-    </ul>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-    const sidebar = document.getElementById('accordionSidebar');
-    const toggleButton = document.getElementById('sidebarToggle');
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'user_dashboard:privacypolicy' %}">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Privacy Policy</span></a
+      >
+    </li>
 
-    toggleButton.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+      <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+    <li class="nav-item" style="margin-bottom: 120px">
+      <a
+        class="nav-link collapsed"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseUserProfile"
+        aria-expanded="true"
+        aria-controls="collapseUserProfile">
+        <img
+          class="img-profile rounded-circle"
+          src="{% static 'user_dashboard/img/undraw_profile.svg' %}" />
+        <span class="mr-2 d-none d-lg-inline text-gray-600 small"
+          >{{ user }}</span
+        >
+      </a>
+      <div
+        id="collapseUserProfile"
+        class="collapse"
+        aria-labelledby="headingUserProfile"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:userprofile' %}">
+            <i class="fas fa-user fa-sm fa-fw mr-2 text-success"></i>
+            Profile
+          </a>
+          <a class="collapse-item" href="#">
+            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-success"></i>
+            Settings
+          </a>
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:activitylist' %}">
+            <i class="fas fa-list fa-sm fa-fw mr-2 text-success"></i>
+            Activity Log
+          </a>
+          <div class="dropdown-divider"></div>
+          <a
+            class="collapse-item"
+            href=""
+            data-toggle="modal"
+            data-target="#logoutModal">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-success"></i>
+            Logout
+          </a>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <script>
+    document.addEventListener("DOMContentLoaded", (event) => {
+      const sidebar = document.getElementById("accordionSidebar");
+      const toggleButton = document.getElementById("sidebarToggle");
+
+      toggleButton.addEventListener("click", () => {
+        sidebar.classList.toggle("collapsed");
+      });
     });
-});
-    
-    </script>
-    <!-- End of Sidebar -->
-  </body>
+  </script>
+  <!-- End of Sidebar -->
+</body>

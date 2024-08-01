@@ -156,12 +156,18 @@
                         </li>
                     </ul>
                 </li> -->
-                <!-- <li class="sidebar-item">
-                    <a href="{% url 'vendor_dashboard:allposts' %}" class="sidebar-link">
+                <li class="sidebar-item">
+                    <a href="{% url 'service_provider:service_list' %}" class="sidebar-link">
                         <i class="lni lni-popup"></i>
-                        <span>Posts</span>
+                        <span>Service List</span>
                     </a>
-                </li> -->
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'service_provider:my_all_bookings' %}" class="sidebar-link">
+                        <i class="lni lni-popup"></i>
+                        <span>All Bookings</span>
+                    </a>
+                </li>
                 <li class="sidebar-item">
                     <a href="{% url 'chat:all_messages' %}" class="sidebar-link">
                         <i class="lni lni-popup"></i>

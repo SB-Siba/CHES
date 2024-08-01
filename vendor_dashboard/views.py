@@ -263,8 +263,8 @@ class VendorDownloadInvoice(View):
             price_per_unit.append(p_overview['price_per_unit'])
             total_prices.append(p_overview['total_price'])
             if coin_exchange:
-                coins_for_exchange += p_overview['coinexchange']
-                exchange_percentage += p_overview['forpercentage']
+                coins_for_exchange = p_overview['coinexchange']
+                exchange_percentage = p_overview['forpercentage']
         
         prod_quant = zip(products, quantities,price_per_unit,total_prices)
         
@@ -275,10 +275,10 @@ class VendorDownloadInvoice(View):
             'vendor':order.vendor,
             'productandquantity':prod_quant,
             'GST':data['order_meta_data']['charges']['GST'],
-            'delevery_charge':data['order_meta_data']['charges']['Delivary'],
+            'delevery_charge':data['order_meta_data']['charges']['Delivery'],
             'gross_amt':data['order_meta_data']['our_price'],
             'discount':data['order_meta_data']['discount_amount'],
-            'final_total':order.order_value,
+            'final_total':data['order_meta_data']['final_value'],
             'coin_exchange':coin_exchange,
             'coins_for_exchange':coins_for_exchange,
             'exchange_percentage':exchange_percentage
@@ -427,7 +427,7 @@ class WalletView(View):
     def get(self,request):
         user = request.user
         try:
-            transactions = self.model.objects.filter((Q(buyer=user) | Q(seller=user)) & Q(buying_status="BuyCompleted")).order_by('-date_time')
+            transactions = self.model.objects.filter((Q(buyer=user) | Q(seller=user)) & Q(buying_status="PaymentDone") | Q(buying_status="BuyCompleted")).order_by('-date_time')
             list_of_transactions = []
             xyz = []
             for i in transactions:
@@ -640,6 +640,7 @@ class AllOrders(View):
 
     def get(self, request):
         order_list = self.model.objects.filter(vendor=request.user).order_by('-id')
+        income =  sum(order.order_value for order in order_list)
         paginated_data = utils.paginate(request, order_list, 50)
         order_status_options = common_models.Order.ORDER_STATUS
         print(order_list)
@@ -647,6 +648,7 @@ class AllOrders(View):
             "order":order_list,
             "order_list":paginated_data,
             "order_status_options":order_status_options,
+            "income":income
         }
         return render(request , self.template , context)
     
@@ -738,4 +740,3 @@ class OrderDetail(View):
                     messages.error(request, f'{field}: {error}')
 
         return redirect('vendor_dashboard:order_detail', order_uid = order_uid)
-

@@ -5,7 +5,7 @@
 {% block content %}
 <style>
   body {
-        font-family: 'Arial', sans-serif;
+        font-family: 'Arial', sans-serif !important;
         
     }
     .login-body{
@@ -27,6 +27,7 @@
   border-bottom: 2px solid #ced4da;
   border-radius: 5px !important;
   transition: border-color 0.3s ease-in-out;
+  font-family: 'Arial', sans-serif;
     }
     .form-control:focus {
       border-color: #009f10;
@@ -58,7 +59,7 @@
                             <div class="text-center mt-3">
                                 <button class="log_btn" type="submit">Login</button>
                             </div>
-                            <p class="pt-2">Forgot Password <a href="{% url 'app_common:password-reset' %}" style="text-decoration: none;"><b>Forgot ??</b></a></p>
+                            <p class="pt-2" style="font-family: 'Arial', sans-serif;">Forgot Password <a href="{% url 'app_common:password-reset' %}" style="text-decoration: none;"><b>Forgot ??</b></a></p>
                         </form>
                     </div>
                 </div>

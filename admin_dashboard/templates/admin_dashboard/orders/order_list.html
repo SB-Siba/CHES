@@ -25,7 +25,7 @@
           filter
         </button>
 
-        <form method="get" action="{% url 'admin_dashboard:admin_order_search' %}">
+        <form method="get" action="{% url 'admin_dashboard:produce_order_search' %}">
           {% csrf_token %}
           <input class="form-control" type="text" name="query" placeholder="SEARCH ID" required />
           <button class="btn">
@@ -41,33 +41,26 @@
               <tr>
                 <th scope="col">Order ID</th>
                 <th scope="col">Amount</th>
-                <th scope="col">Transaction Id</th>
+                <th scope="col">Quantity</th>
                 <th scope="col">Status</th>
-                <th scope="col">Payment</th>
+                <th scope="col">Time</th>
               </tr>
             </thead>
             <tbody id="test_table_tbody">
               {% for order in order_list %}
               <tr>
                 <td>
-                  <!-- <a target="_blank" href="{% url 'admin_dashboard:order_detail' order.uid %}">
-                    {{order.uid}}
-                  </a> -->
-                  
-                    {{order.uid}}
+                  <a target="_blank" href="{% url 'admin_dashboard:produce_order_detail' order.id %}">
+                    {{order.id}}
+                  </a>
                   
                 </td>
                 <td>
-                  <!-- {% if 'final_value' in order.order_meta_data %}
-                    {{ order.order_meta_data.final_value }}
-                  {% else %}
-                    {{ order.order_meta_data.final_cart_value }}
-                  {% endif %} -->
-                  {{order.order_value}}
+                  {{order.ammount_based_on_quantity_buyer_want}}
                 </td>
-                <td>{{order.transaction_id}}</td>
-                <td>{{order.order_status}}</td>
-                <td>{{order.payment_status}}</td>
+                <td>{{order.quantity_buyer_want}}</td>
+                <td>{{order.buying_status}}</td>
+                <td>{{order.date_time}}</td>
               </tr>
               {% endfor %}
 
@@ -90,7 +83,7 @@
       </div>
       <div id="order_filter">
 
-        <form id="" method="get" action="{% url 'admin_dashboard:order_status_search' %}">
+        <form id="" method="get" action="{% url 'admin_dashboard:produce_order_status_search' %}">
           {% csrf_token %}
           <div>
             <select class="form-select" aria-label="Default select example" name="filter_by">

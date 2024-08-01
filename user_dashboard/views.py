@@ -16,7 +16,7 @@ from . serializers import DirectBuySerializer,OrderSerializer
 import ast
 from django.core.mail import send_mail
 import datetime
-
+from serviceprovider.forms import BookingForm,ReviewForm
 app = "user_dashboard/"
 
 class UserDashboard(View):
@@ -297,7 +297,7 @@ class WalletView(View):
     def get(self,request):
         user = request.user
         try:
-            transactions = self.model.objects.filter((Q(buyer=user) | Q(seller=user)) & Q(buying_status="BuyCompleted")).order_by('-date_time')
+            transactions = self.model.objects.filter((Q(buyer=user) | Q(seller=user)) & Q(buying_status="PaymentDone") | Q(buying_status="BuyCompleted")).order_by('-date_time')
             list_of_transactions = []
             xyz = []
             for i in transactions:
@@ -505,7 +505,7 @@ class ProduceBuyView(View):
             sell_prod_obj = app_commonmodels.SellProduce.objects.get(id = sell_prod.id)
             sell_prod_obj.product_quantity = sell_prod_obj.product_quantity-buy_prod_obj.quantity_buyer_want
             sell_prod_obj.ammount_in_green_points = sell_prod_obj.ammount_in_green_points - ammount_for_quantity_want
-            buy_prod_obj.buying_status = "BuyCompleted"
+            buy_prod_obj.buying_status = "PaymentDone"
             buy_prod_obj.save()
             sell_prod_obj.save()
             buyer.save()
@@ -688,15 +688,17 @@ class CheckoutView(View):
         for i,j in order_details.items():
             ord_meta_data.update(j)
 
-        discount_amount = '{:.2f}'.format(ord_meta_data['discount_amount'])
+        discount_amount = float(ord_meta_data['discount_amount'])
+        discount_amount = '{:.2f}'.format(discount_amount)
         gst = float(ord_meta_data['charges']["GST"])
         gst = '{:.2f}'.format(gst)
-        delivery_charge = float(ord_meta_data['charges']["Delivary"])
+        delivery_charge = ord_meta_data['charges']["Delivery"]
         # Using round() function for discount_percentage, t_price, and our_price
-        discount_percentage = round(ord_meta_data['discount_percentage'], 2)
-        t_price = round(ord_meta_data['final_value'], 2)
-        our_price = round(ord_meta_data['our_price'], 2)
-        gross_ammount = round(ord_meta_data['gross_value'], 2)
+ 
+        discount_percentage = ord_meta_data['discount_percentage']
+        t_price = ord_meta_data['final_value']
+        our_price = ord_meta_data['our_price']
+        gross_ammount = ord_meta_data['gross_value']
         data = {
             'form': form,
             "vendor_product":vendor_product_obj,
@@ -745,8 +747,8 @@ class CheckoutView(View):
             ord_meta_data = {}
             for i,j in order_details.items():
                 ord_meta_data.update(j)
-            # print(ord_meta_data)
-            t_price = round(ord_meta_data['final_value'], 2)
+                
+            t_price = ord_meta_data['final_value']
 
             try:
                 vendor = get_object_or_404(app_commonmodels.User,email = vendor_email)
@@ -796,15 +798,13 @@ class CheckoutView(View):
         for i,j in order_details.items():
             ord_meta_data.update(j)
 
-        discount_amount = '{:.2f}'.format(ord_meta_data['discount_amount'])
-        gst = float(ord_meta_data['charges']["GST"])
-        gst = '{:.2f}'.format(gst)
+        discount_amount = ord_meta_data['discount_amount']
+        gst = ord_meta_data['charges']["GST"]
         delivery_charge = float(ord_meta_data['charges']["Delivary"])
-        # Using round() function for discount_percentage, t_price, and our_price
-        discount_percentage = round(ord_meta_data['discount_percentage'], 2)
-        t_price = round(ord_meta_data['final_value'], 2)
-        our_price = round(ord_meta_data['our_price'], 2)
-        gross_ammount = round(ord_meta_data['gross_value'], 2)
+        discount_percentage = ord_meta_data['discount_percentage']
+        t_price = ord_meta_data['final_value']
+        our_price = ord_meta_data['our_price']
+        gross_ammount = ord_meta_data['gross_value']
         data = {
             'form': form,
             "vendor_product":vendor_product_obj,
@@ -825,7 +825,7 @@ class AllOrdersFromVendors(View):
 
     def get(self,request):
         user = request.user
-        orders = self.model.objects.filter(customer=request.user).order_by("-uid")
+        orders = self.model.objects.filter(customer=request.user).order_by("-id")
         order_list = []
         products_list = []
         for order in orders:
@@ -863,14 +863,11 @@ class GardenerDownloadInvoice(View):
             price_per_unit.append(p_overview['price_per_unit'])
             total_prices.append(p_overview['total_price'])
             if coin_exchange:
-                coins_for_exchange += p_overview['coinexchange']
-                exchange_percentage += p_overview['forpercentage']
+                coins_for_exchange = p_overview['coinexchange']
+                exchange_percentage = p_overview['forpercentage']
         
         prod_quant = zip(products, quantities,price_per_unit,total_prices)
-        # try:
-        #     final_total = data['order_meta_data']['final_cart_value']
-        # except Exception:
-            # t_price = round(ord_meta_data['final_value'], 2)
+      
         
         context ={
             'order':data,
@@ -879,10 +876,10 @@ class GardenerDownloadInvoice(View):
             'vendor':order.vendor,
             'productandquantity':prod_quant,
             'GST':data['order_meta_data']['charges']['GST'],
-            'delevery_charge':data['order_meta_data']['charges']['Delivary'],
+            'delevery_charge':data['order_meta_data']['charges']['Delivery'],
             'gross_amt':data['order_meta_data']['our_price'],
             'discount':data['order_meta_data']['discount_amount'],
-            'final_total':order.order_value,
+            'final_total':data['order_meta_data']['final_value'],
             'coin_exchange':coin_exchange,
             'coins_for_exchange':coins_for_exchange,
             'exchange_percentage':exchange_percentage
@@ -909,6 +906,52 @@ class ServiceProvidersList(View):
         context = {'providers_area_types':providers_area_types}
         return render(request,self.template,context)
     
+
+class ListOfServicesByServiceProviders(View):
+    template = app + "list_services.html"
+    model = app_commonmodels.Service
+
+    def get(self, request):
+        services = self.model.objects.all()
+        return render(request , self.template , {'services' : services})
+
+
+class ServiceDetails(View):
+    template = app + "service_details.html"
+    model = app_commonmodels.Service
+    form_class = BookingForm
+    def get(self,request, service_id):
+        form = BookingForm()
+        service = get_object_or_404(self.model, id=service_id)
+        service_booked_obj = app_commonmodels.Booking.objects.filter(service = service,gardener = request.user)
+        return render(request, self.template, {'service': service,"form":form,"service_booked_obj":service_booked_obj})
+    def post(self,request, service_id):
+        form = BookingForm(request.POST)
+        service = get_object_or_404(self.model, id=service_id)
+        service_booked_obj = app_commonmodels.Booking.objects.filter(service = service,gardener = request.user)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.service = service
+            booking.gardener = request.user
+            booking.save()
+            return redirect("user_dashboard:list_services")
+        return render(request, self.template, {'service': service,"form":form,"service_booked_obj":service_booked_obj})
+    
+class MyBookedServices(View):
+    template = app + "my_booked_services.html"
+    model = app_commonmodels.Booking
+    def get(self,request):
+        booked_services = self.model.objects.filter(gardener=request.user).exclude(status="declined")
+        # booked_services = self.model.objects.filter(gardener = request.user)
+        return render(request, self.template, {'booked_services': booked_services})
+
+def rtg_decline_booking(request, booking_id):
+    booking = get_object_or_404(app_commonmodels.Booking, id=booking_id)
+    if request.user == booking.gardener:
+        booking.status = 'declined'
+        booking.save()
+    return redirect('user_dashboard:my_booked_services')
+
 class RateOrderFromVendor(View):
     model = app_commonmodels.Order
 
