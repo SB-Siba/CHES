@@ -21,7 +21,7 @@
     }
     .form-control {
       width: 100%;
-  padding: 8px;
+  padding: 5px;
   margin-bottom: 10px;
   border: none;
   border-bottom: 2px solid #ced4da;
@@ -34,6 +34,13 @@
   box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
   outline: none;
     }
+    .form-control::placeholder{
+        font-size: 14px;
+        padding-left: 5px;
+    }
+    .text-xs{
+        font-size: 14px;
+    }
 </style>
 
 
@@ -42,13 +49,13 @@
 
 <div class="container my_container mt-3">
     <div class="row align-items-center justify-content-center mt-5">
-        <div class="col-lg-9 col-md-10 col-sm-12">
+        <div class="col-lg-8 col-md-8  col-sm-12">
             <div class="row login-body rounded mt-3 p-2">
-                <div class="col-lg-5 col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
+                <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
                     <!-- Lottie animation container -->
                     <div id="lottie-animation" style="width: 100%; max-width: 300px; height: 300px;"></div>
                 </div>
-                <div class="col-lg-7 col-md-6 col-sm-12 my-4">
+                <div class="col-lg-6 col-md-6 col-sm-12 my-4">
                     <h2 class="text-center mt-3 mb-5" id="h3">Login</h2>
                     <div class="login px-4 ">
                         
@@ -59,7 +66,7 @@
                             <div class="text-center mt-3">
                                 <button class="log_btn" type="submit">Login</button>
                             </div>
-                            <p class="pt-2" style="font-family: 'Arial', sans-serif;">Forgot Password <a href="{% url 'app_common:password-reset' %}" style="text-decoration: none;"><b>Forgot ??</b></a></p>
+                            <p class="pt-2 text-xs" >Forgot Password <a href="{% url 'app_common:password-reset' %}" style="text-decoration: none;"><b>Forgot ??</b></a></p>
                         </form>
                     </div>
                 </div>

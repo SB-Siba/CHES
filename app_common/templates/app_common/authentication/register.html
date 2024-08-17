@@ -31,7 +31,7 @@
     }
     .form-control {
       width: 100%;
-  padding: 6px;
+  padding: 5px;
   margin-bottom:.1em;
   
   border: none;
@@ -39,19 +39,34 @@
   border-radius: 5px !important;
   transition: border-color 0.3s ease-in-out;
     }
+    .form-container input{
+        padding-left: 5px !important;
+    }
     .form-control:focus {
       border-color: #009730;
   box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
   outline: none;
     }
+    .form-control::placeholder{
+        font-size: 14px;
+        padding-left: 5px;
+    }
+    .form-container select{
+        font-size: 14px !important;
+        color: #595C5F;
+        padding-left: 5px;
+    }
     .log_btn {
-        background-color: #009f10;
-        color: white;
-        border-radius: 50px;
-        padding: 10px 20px;
-        font-weight: bold;
-        transition: background-color 0.3s;
-        border: none;
+        background:#d5f7d9;      
+    border: 2px solid rgb(4, 196, 4);
+    margin-bottom: 20px;
+    color: green;
+    border-radius: 10px;
+    padding: 7px 30px;
+    font-weight: 700;
+    width: 50%;
+    margin-top: 1rem;
+    font-family: "Inter", sans-serif;
     }
     .log_btn:hover {
         background-color: #037c15;
@@ -61,13 +76,16 @@
         align-items: center;
         justify-content: center;
     }
+    #city_choose{
+        font-size: 14px !important;
+    }
 </style>
  <body>
   
 
 <div class="container mb-5">
     <div class="row justify-content-center">
-        <div class="col-lg-10 col-md-10 col-sm-12 form-container p-4">
+        <div class="col-lg-9 col-md-10 col-sm-12 form-container p-4">
             <div class="row">
                 <!-- Left Column -->
                 <div class="col-lg-7 col-md-6 col-sm-12 py-4 px-5">
@@ -76,32 +94,32 @@
                         {% include 'app_common/snippets/alert.html' %}
                         {% csrf_token %}
                         
-                        <div class="form-group mb-4">
+                        <div class="form-group mb-3">
                            <!-- <label for="{{ form.full_name.id_for_label }}">Full Name</label>-->
                             {{ form.full_name }}
                         </div>
                         
-                        <div class="form-group mb-4"> 
+                        <div class="form-group mb-3"> 
                           <!--  <label for="{{ form.email.id_for_label }}">Email</label> -->
                             {{ form.email }}
                         </div>
                         
-                        <div class="form-group mb-4">
+                        <div class="form-group mb-3">
                          <!--   <label for="{{ form.contact.id_for_label }}">Contact Number</label> -->
                             {{ form.contact }}
                         </div>
                         
-                        <div class="form-group mb-4">
+                        <div class="form-group mb-3" id="city_choose">
                           <!--  <label for="{{ form.city.id_for_label }}">City</label> -->
                             {{ form.city }}
                         </div>
                         
-                        <div class="form-group mb-4">
+                        <div class="form-group mb-3">
                          <!--   <label for="{{ form.password.id_for_label }}">Password</label> -->
                             {{ form.password }}
                         </div>
                         
-                        <div class="form-group mb-4">
+                        <div class="form-group mb-3">
                          <!--   <label for="{{ form.confirm_password.id_for_label }}">Confirm Password</label> -->
                             {{ form.confirm_password  }}
                         </div>

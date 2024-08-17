@@ -13,4 +13,5 @@ urlpatterns = [
     path('my_all_bookings/', views.MyServiceBookings.as_view(), name='my_all_bookings'),
     path('bookings/confirm/<int:booking_id>/', views.confirm_booking, name='confirm_booking'),
     path('bookings/cancel/<int:booking_id>/', views.decline_booking, name='decline_booking'),
+    path('bookings/mark_as_complete/<int:booking_id>/', views.mark_as_complete_booking, name='mark_as_complete'),
 ]

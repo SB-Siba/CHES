@@ -5,6 +5,12 @@
 
 {% block content %}
 <h2>Available Services</h2>
+<div class="d-flex justify-content-end my-2">
+    <button class="btn btn-outline-primary my-1" data-bs-toggle="modal" data-bs-target="#service_filter">
+        <i class="fa-solid fa-filter mx-2" style="color: #005cfa;"></i>
+        Service Type Wise Filter
+    </button>
+</div>
 <ul class="list-group">
     {% for service in services %}
     <li class="list-group-item">
@@ -16,4 +22,33 @@
     <li class="list-group-item">No services available.</li>
     {% endfor %}
 </ul>
+<div class="modal fade" id="service_filter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-black">
+                <h5 class="modal-title" id="staticBackdropLabel">Filter By Service Type</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="service_filter">
+
+                <form id="serviceFilterForm" method="get" action="{% url 'user_dashboard:service_type_filter' %}">
+                    {% csrf_token %}
+                    <div class="text-center mx-3">
+                        <select class="form-select my-2" aria-label="Default select example" name="filter_by">
+                            <option value="all">All</option>
+                            {% for type in service_type_options %}
+                            <option value="{{ type }}">{{ type }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <button class="btn btn-primary my-2" type="submit">Search</button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 {% endblock content %}

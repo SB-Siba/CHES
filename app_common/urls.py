@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views,auth_api,api_of_rtg
+from . import views,auth_api,api_of_rtg,api_of_serviceprovider,api_of_vendor
 from django.contrib.auth import views as auth_view
 from . forms import PasswordChangeForm
 app_name = 'app_common'
@@ -70,6 +70,27 @@ urlpatterns = [
     path('api/checkout/<int:vprod_id>/<str:vendor_email>/', api_of_rtg.CheckoutAPIView.as_view(), name='checkout_api'),
     path('api/orders/from-vendors/', api_of_rtg.AllOrdersFromVendorsApi.as_view(), name='all_orders_from_vendors_api'),
     path('api/rate-order-from-vendor/', api_of_rtg.RateOrderFromVendorApi.as_view(), name='rate_order_from_vendor_api'),
+
+    # ----------------------------- Service Provider ------------------------------------
+    path('api/service_provider/profile/', api_of_serviceprovider.ServiceProviderProfileAPI.as_view(), name='service_provider_profile_api'),
+    path('api/service-provider-profile/update/', api_of_serviceprovider.ServiceProviderUpdateProfileAPI.as_view(), name='update-service-provider-profile'),
+    path('api/service-list/', api_of_serviceprovider.ServiceListAPIView.as_view(), name='service_list_api'),
+    path('api/service-update/<int:service_id>/', api_of_serviceprovider.ServiceUpdateAPIView.as_view(), name='service_update_api'),
+    path('api/service/<int:service_id>/delete/', api_of_serviceprovider.ServiceDeleteAPIView.as_view(), name='service_delete_api'),
+    path('api/my_service_bookings/', api_of_serviceprovider.MyServiceBookingsAPIView.as_view(), name='my_service_bookings_api'),
+    path('api/booking/<int:booking_id>/<str:action>/', api_of_serviceprovider.BookingActionAPIView.as_view(), name='booking_action_api'),
+    # ----------------------------- Service Provider ------------------------------------
+
+    path('api/vendor/profile/', api_of_vendor.VendorProfileAPI.as_view(), name='vendor-profile-api'),
+    path('api/vendor/update-profile/', api_of_vendor.VendorUpdateProfileAPIView.as_view(), name='vendor-update-profile-api'),
+    path('api/vendor/sell-product/', api_of_vendor.VendorSellProductAPIView.as_view(), name='vendor-sell-product-api'),
+    path('api/vendor/sold-products/', api_of_vendor.VendorSoldProductsAPIView.as_view(), name='vendor-sold-products-api'),
+    path('api/vendor/sell-products-list/', api_of_vendor.SellProductsListAPIView.as_view(), name='vendor-sell-products-list-api'),
+    path('api/vendor/update-product/<int:product_id>/', api_of_vendor.UpdateProductAPIView.as_view(), name='update-product-api'),
+    path('api/vendor/delete-product/<int:product_id>/', api_of_vendor.DeleteSellProductAPIView.as_view(), name='delete-product-api'),
+    path('api/vendor/add-activity/', api_of_vendor.AddActivityRequestVendorAPIView.as_view(), name='vendor-add_activity_request_api'),
+    path('api/vendor/activity-list/', api_of_vendor.ActivityListVendorAPIView.as_view(), name='vendor_activity_list_api'),
+    path('api/vendor/order/<str:order_uid>/', api_of_vendor.OrderDetailAPIView.as_view(), name='vendor_order_detail_api'),
 ]
 
 #   app_common:register

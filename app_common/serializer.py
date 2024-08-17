@@ -1,9 +1,12 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import (
+    Booking,
+    Order,
     ProduceBuy,
     ProductFromVendor,
     SellProduce,
+    Service,
     User, 
     GardeningProfile, 
     GaredenQuizModel, 
@@ -274,11 +277,6 @@ class SendMessageSerializer(serializers.Serializer):
 class StartMessagesSerializer(serializers.Serializer):
     product_name = serializers.CharField(required=False)
 
-class ServiceProviderSerializer(serializers.ModelSerializer):
-    provider = UserSerializer()
-    class Meta:
-        model = ServiceProviderDetails
-        fields = '__all__'
 
 class CheckoutFormSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=30)
@@ -299,3 +297,39 @@ class ForgotPasswordSerializer(serializers.Serializer):
 class ResetPasswordSerializer(serializers.Serializer):
     password = serializers.CharField(min_length=8)
     confirm_password = serializers.CharField(min_length=8)
+
+
+# ================================== SERVICE PROVIDER ============================================
+class ServiceProviderSerializer(serializers.ModelSerializer):
+    provider = UserSerializer()
+    class Meta:
+        model = ServiceProviderDetails
+        fields = '__all__'
+
+class ServiceProviderProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceProviderDetails
+        fields = ['service_type', 'service_area', 'average_cost_per_hour', 'years_experience']
+
+class ServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = ['id', 'service_type', 'name', 'description', 'price_per_hour']
+
+class BookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = '__all__'
+
+# ================================== VENDOR ============================================
+
+class VendorSerializer(serializers.ModelSerializer):
+    vendor = UserSerializer()
+    class Meta:
+        model = VendorDetails
+        fields = '__all__'
+
+class OrderUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['order_status', 'payment_status', 'customer_details', 'more_info']

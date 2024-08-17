@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Landing Page </title>
+  <link rel="stylesheet" href="{% static 'app_common/css/landing.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+</head>
+<body>
+  <nav>
+    <div class="menu">
+      <div class="logo">
+        <a href="#">CHES</a>
+      </div>
+      <input type="checkbox" id="check">
+      <label class="btn bars" for="check"><i class="fas fa-bars"></i></label>
+      <ul>
+        <label class="btn cancel" for="check"><i class="fas fa-times"></i></label>
+        <li><a href="{% url 'app_common:register' 'is_rtg' %}">RTG Registration</a></li>
+        <li><a href="{% url 'app_common:register' 'is_vendor' %}">Vendor Registration</a></li>
+        <li><a href="{% url 'app_common:register' 'is_serviceprovider' %}">Service Provider Registration</a></li>
+        <li><a href="{% url 'app_common:login' %}">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+  <!-- Your main content goes here -->
+  <div class="center">
+    <div class="upper">Welcome to CHES</div>
+    <div class="lower">Explore your options</div>
+  </div>
+</body>
+</html>
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="d-flex justify-content-evenly">
+        <a href="{% url 'app_common:register' 'is_rtg' %}" class="btn btn-lg btn-primary mx-2">RTG Registration</a>
+        <a href="{% url 'app_common:register' 'is_vendor' %}" class="btn btn-lg btn-primary mx-2">Vendor Registration</a>
+        <a href="{% url 'app_common:register' 'is_serviceprovider' %}" class="btn btn-lg btn-primary mx-2">Service Provider Registration</a>
+        <a href="{% url 'app_common:login' %}" class="btn btn-lg btn-primary mx-2">Login</a>
+    </div>
+</body>
+</html> -->

@@ -51,7 +51,7 @@
                             {{ gardening_data.number_of_unique_plants }}
                         </td>
                         <td>
-                            <img src="{{ gardening_data.garden_image.url }}" alt="Garden Image" style="height: 50px; width: 50px; border-radius: 5%;" class="zoom">
+                            <img src="{{ gardening_data.garden_image.url }}" alt="Garden Image" style="height: 50px; width: 50px; border-radius: 5%;" onclick="showImageModal(this.src)">
                         </td>
                     </tr>
                 </tbody>
@@ -60,13 +60,30 @@
         </div>
     </div>
 
-
-
-
-<!-- wallet balance add modal -->
-
-
+    <!-- Image Zoom Modal -->
+    <div class="modal fade" id="imageZoomModal" tabindex="-1" aria-labelledby="imageZoomModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageZoomModalLabel">Garden Image</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Garden Image" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
+
 {% block js %}
 <script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
+<script>
+    function showImageModal(src) {
+        var modalImage = document.getElementById('modalImage');
+        modalImage.src = src;
+        var imageZoomModal = new bootstrap.Modal(document.getElementById('imageZoomModal'));
+        imageZoomModal.show();
+    }
+</script>
 {% endblock js %}

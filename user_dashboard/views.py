@@ -913,8 +913,32 @@ class ListOfServicesByServiceProviders(View):
 
     def get(self, request):
         services = self.model.objects.all()
-        return render(request , self.template , {'services' : services})
+        service_types = [choice[0] for choice in app_commonmodels.ServiceProviderDetails.SERVICE_TYPES]
+        return render(request , self.template , {'services' : services,'service_type_options': service_types})
 
+class FilterServices(View):
+    model = app_commonmodels.Service
+    template = app + "list_services.html"
+
+    def get(self, request):
+        filter_by = request.GET.get('filter_by')
+        
+        # Get all service types from ServiceProviderDetails
+        service_types = [choice[0] for choice in app_commonmodels.ServiceProviderDetails.SERVICE_TYPES] 
+        if filter_by == "all":
+            return redirect("user_dashboard:list_services")
+        if filter_by in service_types:
+
+            services = self.model.objects.filter(
+                service_type=filter_by
+            )
+        paginated_data = utils.paginate(request, services, 50)
+        
+        context = {
+            'services': services,
+            'service_type_options': service_types,
+        }
+        return render(request, self.template, context)
 
 class ServiceDetails(View):
     template = app + "service_details.html"
@@ -923,7 +947,7 @@ class ServiceDetails(View):
     def get(self,request, service_id):
         form = BookingForm()
         service = get_object_or_404(self.model, id=service_id)
-        service_booked_obj = app_commonmodels.Booking.objects.filter(service = service,gardener = request.user)
+        service_booked_obj = app_commonmodels.Booking.objects.filter(service = service,gardener = request.user,status = "pending")
         return render(request, self.template, {'service': service,"form":form,"service_booked_obj":service_booked_obj})
     def post(self,request, service_id):
         form = BookingForm(request.POST)

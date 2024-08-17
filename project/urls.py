@@ -13,7 +13,7 @@ schema_view = get_schema_view(
         description="API documentation of Green Project",
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
+    permission_classes=[permissions.AllowAny],
 )
 
 urlpatterns = [
@@ -24,7 +24,7 @@ urlpatterns = [
     path("chat/", include("chatapp.urls")),
     path("vendor_dashboard/", include("vendor_dashboard.urls")),
     path("service_provider/", include("serviceprovider.urls")),
-     # ------------------------------------------------ swagger ---------------------------------
+    # ------------------------------------------------ swagger ---------------------------------
     path(
         "swagger/download/",
         schema_view.without_ui(cache_timeout=0),
