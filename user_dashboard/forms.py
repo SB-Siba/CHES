@@ -71,10 +71,6 @@ class UpdateProfileForm(forms.Form):
     user_image = forms.FileField(required=False)
     user_image.widget.attrs.update({"class": "form-control", "type": "file"})
 
-    password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"class": "form-control"}), required=False
-    )
-
 
 class contactForm(forms.Form):
     class Meta:

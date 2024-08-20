@@ -14,7 +14,6 @@
             width: 100%;
             padding: 6px;
             padding-left: 10px;
-            margin-bottom:;
             border: none;
             border-bottom: 2px solid #ced4da;
             border-radius: 5px !important;
@@ -76,14 +75,13 @@
         {% include 'app_common/snippets/alert.html' %}
         {% csrf_token %}
         {{form.as_p}}
-        
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="edit-btn text-center ">
+              Update Profile 
+          </button>
+        </div>
     </form>
-    <div class="d-flex justify-content-center">
-      <button type="submit" class=" edit-btn text-center ">
-          Update Profile 
-      </button>
-      </div>
-    </div>
+    
   </div>
 </div>
   
