@@ -14,7 +14,7 @@
             {% if i.payment_link == "Send" %}
                 <a href="{% url 'user_dashboard:producebuy' i.id %}" class="btn btn-primary">Pay <small><i class="fa-solid fa-indian-rupee-sign me-1 mx-2"></i></small>{{i.ammount_based_on_quantity_buyer_want}}</a>
             {% else %}
-                <small class="text-danger">Order Not Approved By The Seller Yet.</small>
+                <small class="text-danger">Order Not Approved By The Seller <Yet></Yet>.</small>
             {% endif %}
         </div>
         <hr>
