@@ -14,9 +14,10 @@ from helpers import utils
 from chatapp.models import Message
 from . serializers import DirectBuySerializer,OrderSerializer
 import ast
-from django.core.mail import send_mail
 import datetime
 from serviceprovider.forms import BookingForm,ReviewForm
+from EmailIntigration.views import send_template_email
+
 app = "user_dashboard/"
 
 class UserDashboard(View):
@@ -752,10 +753,7 @@ class CheckoutView(View):
 
             try:
                 vendor = get_object_or_404(app_commonmodels.User,email = vendor_email)
-                subject = "Order Successfull."
-                message = f"Dear {user.full_name},\nYour order of {prod_obj.name} has been placed successfully.\n\nPlease check your email for further instructions"
-                from_email = "forverify.noreply@gmail.com"
-                send_mail(subject, message, from_email,[user.email], fail_silently=False)
+                
                 order = app_commonmodels.Order(
                     customer = user,
                     vendor = vendor,
@@ -778,7 +776,14 @@ class CheckoutView(View):
                 order.save()
                 prod_obj.stock -= 1
                 prod_obj.save()
-                messages.success(request, "Order Successful!")
+
+                send_template_email(
+                    subject="Order Successfull",
+                    template_name="mail_template/successfull_order_mail.html",
+                    context={'full_name': user.full_name,"email":user.email,"order_number":order.uid,"order_date":order.date,"order_total":t_price},
+                    recipient_list=[user.email]
+                )
+
                 return redirect("user_dashboard:user_dashboard")
             except Exception as e:
                 print(e)

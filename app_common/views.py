@@ -7,7 +7,7 @@ from django.contrib import auth
 from django.contrib.auth import logout
 from django.conf import settings
 from django.contrib.auth.hashers import check_password,make_password
-
+from EmailIntigration.views import send_template_email
 #import requests
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
@@ -203,13 +203,13 @@ def gardening_quiz_view(request,u_email):
             quiz_obj = models.GaredenQuizModel(user = user_obj,questionANDanswer = data)
             
             try:
-                user_email = u_email
-                subject = "Registration Successfull."
-                message = f"""\
-                Hii Dear,
-                Your account has been created successfully on our site. You can login when admin approve."""
-                from_email = "forverify.noreply@gmail.com"
-                send_mail(subject, message, from_email,[user_email], fail_silently=False)
+                send_template_email(
+                    subject="Registration Successful",
+                    template_name="mail_template/registration_mail.html",
+                    context={'full_name': user_obj.full_name,"email":user_obj.email},
+                    recipient_list=[user_obj.email]
+                )
+
                 quiz_obj.save()
             except SMTPException as e:
                 # Log the error if needed
@@ -274,15 +274,13 @@ class VendorDetails(View):
                     )
                 
                 try:
-                    user_email = u_email
-                    subject = "Registration Successful."
-                    message = (
-                        "Hi Dear,\n\n"
-                        "Your account has been created successfully on our site. "
-                        "You can login when admin approves."
+                    send_template_email(
+                        subject="Registration Successful",
+                        template_name="mail_template/registration_mail.html",
+                        context={'full_name': user_obj.full_name,"email":user_obj.email},
+                        recipient_list=[user_obj.email]
                     )
-                    from_email = "forverify.noreply@gmail.com"
-                    send_mail(subject, message, from_email, [user_email], fail_silently=False)
+        
                     vendor_detail_obj.save()
 
                 except SMTPException as e:
@@ -334,13 +332,12 @@ class ServiceProviderDetails(View):
                     years_experience = years_experience,
                     )
                 try:
-                    user_email = u_email
-                    subject = "Registration Successfull."
-                    message = f"""\
-                    Hii Dear,
-                    Your account has been created successfully on our site. You can login when admin approve."""
-                    from_email = "forverify.noreply@gmail.com"
-                    send_mail(subject, message, from_email,[user_email], fail_silently=False)
+                    send_template_email(
+                        subject="Registration Successful",
+                        template_name="mail_template/registration_mail.html",
+                        context={'full_name': user_obj.full_name,"email":user_obj.email},
+                        recipient_list=[user_obj.email]
+                    )
                     service_provider_detail_obj.save()
                 except SMTPException as e:
                     # Log the error if needed
