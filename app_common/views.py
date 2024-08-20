@@ -359,11 +359,10 @@ class Home(View):
     template = app + 'landing.html'
 
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('user_dashboard:user_dashboard')
         
-        return render(
-            request,
-            self.template
-        )
+        return render(request,self.template)
     
 
 class CustomPasswordResetView(FormView):
