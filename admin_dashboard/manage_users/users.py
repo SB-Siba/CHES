@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from django.conf import settings
-
+from EmailIntigration.views import send_template_email
 from helpers import utils
 from app_common import models
 from .import forms
@@ -82,9 +82,15 @@ def ApproveUser(request, pk):
         else:
             user.wallet = 500 + user.quiz_score
         user.coins = 100
+
+        send_template_email(
+            subject="Successful Approval",
+            template_name="mail_template/successfull_approval_mail.html",
+            context={'full_name': user.full_name,"email":user.email},
+            recipient_list=[user.email]
+        )
+
         user.save()
-        msg = 'The account has been approved successfully!'
-        messages.success(request,msg)
     else:
         msg = 'This account does not exist.'
         messages.error(request,msg)
@@ -93,9 +99,13 @@ def ApproveUser(request, pk):
 def RejectUser(request, pk):
     user = get_object_or_404(models.User, id=pk)
     if user is not None:
+        send_template_email(
+            subject="Profile Rejected",
+            template_name="mail_template/account_rejected_mail.html",
+            context={'full_name': user.full_name,"email":user.email},
+            recipient_list=[user.email]
+        )
         user.delete()
-        msg = 'The account has been rejected and deleted.'
-        messages.warning(request,msg)
     else:
         msg = 'This account does not exist.'
         messages.error(request,msg)
@@ -337,11 +347,16 @@ def ApproveProfile(request, pk):
         p_obj_for_update.number_of_unique_plants = number_of_unique_plants
         p_obj_for_update.garden_image = garden_image
         
+        send_template_email(
+            subject="Gardening Profile Updated",
+            template_name="mail_template/gardening_profile_approve_mail.html",
+            context={'full_name': user.full_name,"email":user.email},
+            recipient_list=[user.email]
+        )
+
         # save the data to database and delete the update request object from db  
         p_obj_for_update.save()
         prof_obj.delete()
-        messages.info(request,"updated successfully.")
-    
     else:
         msg = 'This account does not exist.'
         messages.error(request,msg)
@@ -356,9 +371,14 @@ def RejectProfile(request):
         if prof_obj is not None:
             user = prof_obj.user
             reject_object = models.GardeningProfileUpdateReject(user = user,gardening_profile_update_id = prof_obj.id,reason = reason)
+            send_template_email(
+                subject="Gardening Profile Rejected",
+                template_name="mail_template/gardening_profile_rejected_mail.html",
+                context={'full_name': user.full_name,"email":user.email},
+                recipient_list=[user.email]
+            )
             reject_object.save()
             prof_obj.delete()
-            messages.warning(request,'The request has been rejected')
         else:
             msg = 'This account does not exist.'
             messages.error(request,msg)
@@ -380,6 +400,12 @@ def ApproveActivity(request, pk):
         req_obj.is_accepted = "approved"
         user = get_object_or_404(models.User,id = req_obj.user.id)
         user.coins += 100
+        send_template_email(
+            subject="Activity Approved",
+            template_name="mail_template/activity_approval_mail.html",
+            context={'full_name': user.full_name,"email":user.email},
+            recipient_list=[user.email]
+        )
         user.save()
         req_obj.save()
         # Send email to the user that his/her request has been approved
@@ -401,10 +427,13 @@ def RejectActivity(request):
         if req_obj is not None:
             req_obj.is_accepted = "rejected"
             req_obj.reject_reason = reason
+            send_template_email(
+                subject="Activity Rejected",
+                template_name="mail_template/activity_rejection_mail.html",
+                context={'full_name': req_obj.user.full_name,"email":req_obj.user.email,"reason":req_obj.reject_reason},
+                recipient_list=[req_obj.user.email]
+            )
             req_obj.save()
-            
-            # send an email to the user with rejection message
-            messages.success(request,'The request has been rejected')
         else:
             msg = 'This account does not exist.'
             messages.error(request,msg)
@@ -430,8 +459,13 @@ def ApproveSellRequest(request):
     if sell_obj is not None:
         sell_obj.is_approved = "approved"
         sell_obj.reason = reason
+        send_template_email(
+            subject="Sell Request Approved",
+            template_name="mail_template/sell_request_approve_mail.html",
+            context={'full_name': sell_obj.user.full_name,"email":sell_obj.user.email,"reason":sell_obj.reject_reason},
+            recipient_list=[sell_obj.user.email]
+        )
         sell_obj.save()
-        # Send email to the user that his/her request has been approved
         
     else:
         msg = 'This account does not exist.'
@@ -448,10 +482,16 @@ def RejectSellRequest(request):
         if sell_obj is not None:
             sell_obj.is_approved = "rejected"
             sell_obj.reason = reason
+
+            send_template_email(
+                subject="Sell Request Rejected",
+                template_name="mail_template/sell_request_reject_mail.html",
+                context={'full_name': sell_obj.user.full_name,"email":sell_obj.user.email,"reason":sell_obj.reject_reason},
+                recipient_list=[sell_obj.user.email]
+            )
+            
             sell_obj.save()
             
-            # send an email to the user with rejection message
-            messages.success(request,'The request has been rejected')
         else:
             msg = 'This account does not exist.'
             messages.error(request,msg)

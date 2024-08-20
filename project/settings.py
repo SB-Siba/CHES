@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'chatapp',
     'vendor_dashboard',
     'serviceprovider',
-
+    'EmailIntigration',
     # CORS headers
     'corsheaders',
 ]
