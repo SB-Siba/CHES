@@ -62,6 +62,7 @@ class UpdateProfileView(View):
     form = user_form.UpdateProfileForm
 
     def get(self,request):
+        print("lklk")
         user = request.user
 
         initial_data = {
@@ -74,7 +75,6 @@ class UpdateProfileView(View):
         'youtube_link':user.youtube_link,
         'address':user.address,
         'user_image':user.user_image,
-        'password': ''
         }
 
         form = self.form(initial=initial_data)
@@ -88,10 +88,8 @@ class UpdateProfileView(View):
     def post(self,request):
        
         form = self.form(request.POST,request.FILES)
-
         if form.is_valid():
             user_obj = request.user
-
             email = form.cleaned_data['email']
             fullName = form.cleaned_data['full_name']
             contact = form.cleaned_data['contact']
@@ -101,7 +99,6 @@ class UpdateProfileView(View):
             youtube_link = form.cleaned_data['youtube_link']
             address = form.cleaned_data['address']
             user_image = form.cleaned_data['user_image']
-            password = form.cleaned_data['password']
 
             try:
                 user = app_commonmodels.User.objects.get(id=user_obj.id)
@@ -120,9 +117,6 @@ class UpdateProfileView(View):
                     picture = user_image
 
                 user.user_image = picture
-            
-                if password != '':
-                    user.setPassword(password=password)
                 
                 user.save()
             
