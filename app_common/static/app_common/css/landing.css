@@ -144,7 +144,7 @@ nav label.cancel {
 }
 .lading_body h1{
   color: white;
-  font-size: 55px;
+  font-size: 65px;
 
   letter-spacing:4px;
   font-family: "Anton", sans-serif;
@@ -517,6 +517,23 @@ img {
   .heder_menu{
     padding: 0 0 20px 0;
   }
+
+  .lading_body{
+    margin-top: 110px;
+    padding-left: 60px;
+  }
+  .lading_body h1{
+    color: white;
+    font-size: 50px;
+  
+    letter-spacing:4px;
+    font-family: "Anton", sans-serif;
+  }
+  .lading_body h3{
+    color: #FFCD1E;
+    font-family: "Dancing Script", cursive;
+  }
+  
   .lading_body2 h1{
     color: rgb(0, 0, 0);
     font-size: 35px !important;
@@ -620,6 +637,19 @@ img {
   font-size: 17px;
  
   cursor: pointer;
+}
+.menu ul a {
+  margin: 0 8px;
+  text-decoration: none;
+  font-size: 14px;
+  color: #ffffff;
+  font-weight: 500;
+  display: inline-flex;
+  padding: 10px 12px;
+  transition: all 0.3s ease;
+}
+.heder_para1{
+    font-size: 14px;
 }
 } 
 
