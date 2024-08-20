@@ -348,7 +348,7 @@ class SellProduceView(View):
             return redirect('user_dashboard:user_dashboard')
         else:
             messages.error(request,"Error! Please check your inputs.")
-            return redirect('user_dashboard:addactivity')
+            return redirect('user_dashboard:sellproduce')
 
 
 def delete_expired_sell_produce(request):

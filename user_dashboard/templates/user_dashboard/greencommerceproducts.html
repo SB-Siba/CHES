@@ -1,5 +1,9 @@
-{% extends 'user_dashboard/starter.html' %} {% load static %} {% block title
-%}Available Products{% endblock title %} {% block content %}
+{% extends 'user_dashboard/starter.html' %}
+ {% load static %} 
+ {% block title%}
+ Available Products
+ {% endblock title %}
+  {% block content %}
 <div class="row">
   {% for prod,m_status,u_rating in zipped_value %}
   <div class="col-md-3 col-sm-6 card-div">
