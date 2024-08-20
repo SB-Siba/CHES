@@ -44,8 +44,7 @@ INSTALLED_APPS = [
     'chatapp',
     'vendor_dashboard',
     'serviceprovider',
-
-   
+    'EmailIntigration',
 ]
 
 MIDDLEWARE = [

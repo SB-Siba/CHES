@@ -385,7 +385,7 @@ class ServiceProviderDetails(models.Model):
     )
     provider = models.ForeignKey(User, on_delete=models.CASCADE)
     service_type = models.TextField()
-    service_area = models.TextField()  # Storing choices as comma-separated values
+    service_area = models.TextField()
     average_cost_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
     years_experience = models.IntegerField()
 
