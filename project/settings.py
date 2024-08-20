@@ -12,9 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env_vars['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env_vars['DEBUG'] == 'True'
+DEBUG = env_vars['DEBUG']
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = "app_common.User"
 AUTHENTICATION_BACKENDS = [
@@ -45,8 +45,6 @@ INSTALLED_APPS = [
     'vendor_dashboard',
     'serviceprovider',
     'EmailIntigration',
-    # CORS headers
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -165,3 +163,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'forverify.noreply@gmail.com'
 EMAIL_HOST_PASSWORD = 'qukk ozby nejn ombm'
+
