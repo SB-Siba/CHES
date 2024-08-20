@@ -462,7 +462,7 @@ def ApproveSellRequest(request):
         send_template_email(
             subject="Sell Request Approved",
             template_name="mail_template/sell_request_approve_mail.html",
-            context={'full_name': sell_obj.user.full_name,"email":sell_obj.user.email,"reason":sell_obj.reject_reason},
+            context={'full_name': sell_obj.user.full_name,"email":sell_obj.user.email,"reason":sell_obj.reason},
             recipient_list=[sell_obj.user.email]
         )
         sell_obj.save()

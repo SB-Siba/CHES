@@ -1002,7 +1002,7 @@ class RateOrderFromVendor(View):
         new_rating = {
             "buyer_name": customer.full_name,
             "order_product": product,
-            "ammount_paid": buy_obj.order_value,
+            "ammount_paid": float(buy_obj.order_value),
             "rating": rating,
         }
         product_obj.ratings.append(new_rating)
