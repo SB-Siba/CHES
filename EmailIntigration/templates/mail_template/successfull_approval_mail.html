@@ -101,7 +101,7 @@
         <div class="content">
             <h2>Hi Dear {{ full_name }},</h2>
             <p>We're excited to let you know that your account has been successfully approved. You can now log in and enjoy all the features available on our site.</p>
-            <a href="[Your Site URL]" class="btn">Log In Now</a>
+            <a href="{% url 'app_common:login' %}" class="btn">Log In Now</a>
         </div>
         <div class="footer">
             <p>If you have any questions, feel free to <a href="mailto:[Support Email]">contact us</a>.</p>
