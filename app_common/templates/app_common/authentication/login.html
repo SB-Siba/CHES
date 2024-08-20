@@ -3,28 +3,70 @@
 {% load static %}
 
 {% block content %}
+<style>
+  body {
+        font-family: 'Arial', sans-serif !important;
+        
+    }
+    .login-body{
+        background: #ffffffb3;
+    }
+    .form-group label {
+        font-weight: 500;
+        color: #495057;
+    }
+     #h3 {
+        color: #009f10;
+        
+    }
+    .form-control {
+      width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+  border: none;
+  border-bottom: 2px solid #ced4da;
+  border-radius: 5px !important;
+  transition: border-color 0.3s ease-in-out;
+  font-family: 'Arial', sans-serif;
+    }
+    .form-control:focus {
+      border-color: #009f10;
+  box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
+  outline: none;
+    }
+    .form-control::placeholder{
+        font-size: 14px;
+        padding-left: 5px;
+    }
+    .text-xs{
+        font-size: 14px;
+    }
+</style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
 
-<div class="container my_container">
-    <div class="row align-items-center justify-content-center mb-3">
-        <div class="col-lg-10 col-md-10 col-sm-12">
-            <div class="row bg-white rounded mt-3 p-3">
+<body>
+    
+
+<div class="container my_container mt-3">
+    <div class="row align-items-center justify-content-center mt-5">
+        <div class="col-lg-8 col-md-8  col-sm-12">
+            <div class="row login-body rounded mt-3 p-2">
                 <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
                     <!-- Lottie animation container -->
-                    <div id="lottie-animation" style="width: 100%; max-width: 350px; height: 400px;"></div>
+                    <div id="lottie-animation" style="width: 100%; max-width: 300px; height: 300px;"></div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                    <div class="login">
-                        <h3>Login</h3>
-                        <form method="post" action="" class="p-2 mt-4">
+                <div class="col-lg-6 col-md-6 col-sm-12 my-4">
+                    <h2 class="text-center mt-3 mb-5" id="h3">Login</h2>
+                    <div class="login px-4 ">
+                        
+                        <form method="post" action="" class=" m-0 p-o form-group">
                             {% include 'app_common/snippets/alert.html' %}
                             {% csrf_token %}
                             {{ form.as_p }}
-                            <div class="text-center">
+                            <div class="text-center mt-3">
                                 <button class="log_btn" type="submit">Login</button>
                             </div>
-                            <p>Forgot Password <a href="{% url 'app_common:password-reset' %}" style="text-decoration: none;"><b>Forgot ??</b></a></p>
+                            <p class="pt-2 text-xs" >Forgot Password <a href="{% url 'app_common:password-reset' %}" style="text-decoration: none;"><b>Forgot ??</b></a></p>
                         </form>
                     </div>
                 </div>
@@ -32,7 +74,7 @@
         </div>
     </div>
 </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Load Lottie animation
@@ -54,5 +96,5 @@
         });
     });
 </script>
-
+</body>
 {% endblock content %}

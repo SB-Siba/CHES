@@ -4,13 +4,28 @@
 {% block title %}User Profile{% endblock title %}
 
 {% block content %}
-<section class="" style="min-height: 150vh; overflow-y: hidden;">
+<section class="" style="min-height: 180vh; overflow-y: hidden;">
   <div class="container h-100">
-    <div class="row d-flex justify-content-center  user_profile-row  w-100" style="margin-top: 2rem;">
-      <div class="col-md-12 col-xl-12">
+    
+    <div class="row d-flex justify-content-center   user_profile-row  w-100" style="margin-top: 2rem;">
+      <div class="col-md-12 col-xl-12 ">
         <div class="card text-success user_profile">
+          
+         <div class="my-5 mx-4 d-flex justify-content-end">
+          <a href="{% url 'user_dashboard:userprofileupdate' %}">
+           <button type="button" class="btn mr-2 edit-details">
+               <b>Edit Details</b>
+           </button>
+         </a>
+
+         <a href="{% url 'user_dashboard:gardeningprofile' %}">
+           <button type="button" class="btn gard-details">
+             <b>Gardening Details</b>
+           </button>
+         </a>
+      </div>
           <div class="card-body text-center">
-            <div class="mt-2 mb-4">
+            <div class="">
               {% if user.user_image %}
               <img src="{{user.user_image.url}}" class="rounded-circle img-fluid" style="width: 100px;" />
               {% else %}
@@ -26,45 +41,32 @@
 
             <div class="mb-4 pb-2 d-flex justify-content-center">
               <a href="{{user.facebook_link}} m-2">
-                <button type="button" class="btn social_btn">
-                  <i class="fab fa-facebook-f fa-lg"></i>
+                <button type="button" class=" social_btn">
+                  <i class="fab fa-facebook-f "></i>
                 </button>
               </a>
               <a href="{{user.instagram_link}}">
-                <button type="button" class="btn social_btn">
-                  <i class="fab fa-instagram fa-lg"></i>
+                <button type="button" class=" social_btn">
+                  <i class="fab fa-instagram "></i>
                 </button>
               </a>
               <a href="{{user.twitter_link}}">
-                <button type="button" class="btn social_btn">
-                  <i class="fab fa-twitter fa-lg"></i>
+                <button type="button" class=" social_btn">
+                  <i class="fab fa-twitter "></i>
                 </button>
               </a>
               <a href="{{user.youtube_link}}">
-                <button type="button" class="btn social_btn">
+                <button type="button" class=" social_btn">
                   <i class="fab fa-youtube fa-lg"></i> <!-- YouTube -->
                 </button>
               </a>
             </div>
 
-         <div class="mt-5">
-             <a href="{% url 'user_dashboard:userprofileupdate' %}">
-              <button type="button" class="btn edit-details">
-                  <b>Edit Details</b>
-              </button>
-            </a>
-
-            <a href="{% url 'user_dashboard:gardeningprofile' %}">
-              <button type="button" class="btn gard-details">
-                <b>Gardening Details</b>
-              </button>
-            </a>
-         </div>
 
             <div class="row mt-5">
 
               <!-- Earnings (Monthly) Card Example -->
-              <div class="col-xl-3 col-md-6 mb-4">
+              <div class="col-xl-3 col-md-4 col-lg-4 mb-4">
                   <div class="wallet-card1 card border-left-primary shadow h-100 py-2">
                       <div class="card-body">
                           <div class="row no-gutters align-items-center text-left">
@@ -82,7 +84,7 @@
               </div>
 
               <!-- Earnings (Monthly) Card Example -->
-              <div class="col-xl-3 col-md-6 mb-4">
+              <div class="col-xl-3 col-md-4 col-lg-4 mb-4">
                   <div class="card wallet-card2 border-left-success shadow h-100 py-2">
                       <div class="card-body">
                           <div class="row no-gutters align-items-center text-left">
@@ -100,7 +102,7 @@
               </div>
 
               <!-- Earnings (Monthly) Card Example -->
-              <div class="col-xl-3 col-md-6 mb-4">
+              <div class="col-xl-3 col-md-4 col-lg-4 mb-4">
                   <div class="card  wallet-card3 border-left-info shadow h-100 py-2">
                       <div class="card-body">
                           <div class="row no-gutters align-items-center text-left">
@@ -122,8 +124,8 @@
               </div>
 
               <!-- Pending Requests Card Example -->
-              <div class="col-xl-3 col-md-6 mb-4">
-                  <div class="card wallet-card4 border-left-secondary shadow h-100 py-2">
+              <div class="col-xl-3 col-md-4 col-lg-4 mb-4">
+                  <div class="card wallet-card4 border-left-warning shadow h-100 py-2">
                       <div class="card-body">
                           <div class="row no-gutters align-items-center text-left">
                               <div class="col mr-2">
@@ -139,17 +141,17 @@
                   </div>
               </div>
               <!-- Rating -->
-              <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card wallet-card5 border-left-warning shadow h-100 py-2">
+              <div class="col-xl-3 col-md-4 col-lg-4 mb-4">
+                <div class="card wallet-card5 border-left-danger shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center text-left">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                                   Ratings</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{rating_of_user}}</div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-star fa-2x text-gray-300"></i>
+                                <i class="fas fa-star fa-2x text-danger"></i>
                             </div>
                         </div>
                     </div>

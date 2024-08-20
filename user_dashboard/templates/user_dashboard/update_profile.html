@@ -4,18 +4,88 @@
 {% block title %}User Profile{% endblock title %}
 
 {% block content %}
-<div class="container mt-3">
-  <div class="row d-flex align-items-center justify-content-center">
-    <div class="col-lg-8 sell_wrapper">
+
+<head>
+    <style>
+        body{
+        font-family:'Arial', sans-serif;
+    }
+        .form-control {
+            width: 100%;
+            padding: 6px;
+            padding-left: 10px;
+            margin-bottom:;
+            border: none;
+            border-bottom: 2px solid #ced4da;
+            border-radius: 5px !important;
+            transition: border-color 0.3s ease-in-out;
+        }
+        label{
+          font-weight: 600;
+        }
+        .form-control:focus {
+            border-color: #009f10;
+            box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
+            outline: none;
+        }
+        .edit-body {
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          background-color: #dfe1e455;
+        }
+        .address-textarea {
+            height: 50px; /* Adjust this value to set the desired height */
+        }
+        .form-controL {
+            width: 100%;
+            padding: 6px;
+            padding-left: 10px;
+            border: none;
+            height: 2.6rem;
+            border-bottom: 2px solid #ced4da;
+            border-radius: 5px !important;
+            transition: border-color 0.3s ease-in-out;
+        }
+        .form-controL:focus {
+            border-color: #009f10;
+            box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
+            outline: none;
+        }
+        .edit-btn {
+            background-color: #14453b;
+            color: #fff;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+            margin: 0 auto;
+        }
+        .edit-btn:hover{
+          background-color: #017c36;
+            color: #fff;
+            box-shadow: 2px 2px 2px #3b3e3c;
+        }
+    </style>
+</head>
+<body>
+<div class="container my-4">
+  <div class="row d-flex  align-items-center justify-content-center">
+    <div class="col-lg-8 edit-body pb-4">
       <form method="post" action="" class="p-4 update-form" enctype="multipart/form-data">
         {% include 'app_common/snippets/alert.html' %}
         {% csrf_token %}
         {{form.as_p}}
-        <button type="submit" class="btn-block sell_btn text-center">
-            Update Profile
-        </button>
+        
     </form>
+    <div class="d-flex justify-content-center">
+      <button type="submit" class=" edit-btn text-center ">
+          Update Profile 
+      </button>
+      </div>
     </div>
   </div>
 </div>
+  
+</body>
 {% endblock content %}

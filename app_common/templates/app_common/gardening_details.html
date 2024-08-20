@@ -3,22 +3,65 @@
 {% load static %}
 
 {% block content %}
-    <div class="container">
-        <div class="row d-flex align-items-center justify-content-center mb-5">
-            <div class="col-lg-6">
+
+<head>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .ganrning-body{
+            background: #ffffffb3;
+            border-radius: 10px;
+        }
+         h2 {
+        color: #009f10 !important;
+        
+    }
+        .form-control {
+            width: 100%;
+            padding: 6px;
+            margin-bottom: 1.5em;
+            border: none;
+            border-bottom: 2px solid #ced4da;
+            border-radius: 5px !important;
+            transition: border-color 0.3s ease-in-out;
+        }
+        .form-control:focus {
+            border-color: #009f10;
+            box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
+            outline: none;
+        }
+        .form-group label{
+            font-family:'Arial', sans-serif;
+        }
+        img{
+            width: 7rem;
+        }
+    
+        
+    </style>
+</head>
+
+<body>
+    
+
+    <div class="container" >
+        <div class="row d-flex align-items-center justify-content-center my-5">
+            <div class="col-lg-7 d-flex justify-content-center ganrning-body">
                 <div class="login">
                     <div
-                        class="d-flex justify-space-between"
-                        style="align-items: center;justify-content: space-evenly;">
-                        <div class="auth_reg_logo">
-                            <img src="{% static 'user_dashboard/images/green-logo.png' %}"/>
+                        class="d-flex justify-space-between py-5"
+                        style="align-items: center;justify-content:center;">
+                        <div class="auth_reg_logo mx-3">
+                            <img  src="{% static 'user_dashboard/images/green-logo.png' %}"/>
                         </div>
                         <div>
-                            <h3>Gardening Data</h3>
+                            <h2>Gardening Data</h2>
                         </div>
                     </div>
                    
-                    <form method="post" enctype="multipart/form-data">
+                    <form class="px-2" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
                             {{ form.garden_area.label_tag }}
@@ -36,10 +79,13 @@
                             {{ form.garden_image.label_tag }}
                             {{ form.garden_image }}
                         </div>
-                        <button type="submit" class="btn btn-success btn-lg w-100 mt-2">Submit</button>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="garden_btn w-50 mt-2 mb-4">Submit</button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+</body>
 {% endblock content %}

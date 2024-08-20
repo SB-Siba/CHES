@@ -91,6 +91,8 @@ border-left: 5px solid rgb(192, 1, 106);
     font-weight: 600;
     height: 53px;
 }
+
+
 .sell_btn:hover {
     background-color: #1F782B;
     color: #fff;
@@ -120,10 +122,11 @@ border-left: 5px solid rgb(192, 1, 106);
     background-color: #fff;
     border: none;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    height: 63vh!important;
+    height: 160vh!important;
 }
 .user_profile h4{
     color: #4CAF50;
+    font-weight: 700;
 }
 .user_profile p{
     color: #14453b;
@@ -132,23 +135,25 @@ border-left: 5px solid rgb(192, 1, 106);
 .user_profile .social_btn {
     border: 1px solid #14453b;
     background: #14453b;
-    border-radius: 50px;
-    width: 50px;
-    height: 50px;
+    border-radius: 50%;
+    width: 37px;
+    height: 37px;
     margin-left: 10px;
 }
 .user_profile .social_btn i {
-    color: #FFEB3B;
+    color: #f7f7f3;
 }
 .user_profile .social_btn:hover{
-    background-color: #4CAF50;
+    background: rgb(31,120,43);
+    background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%, rgba(31,120,43,1) 80%);
+    color: #ffffff!important;
 }
 .edit-details{
     background-color: #14453b;
     color: #fff;
     font-size: 15px;
-    border-radius: 50px;
-    padding: 12px 30px;
+    border-radius: 10px;
+    padding: 7px 20px;
 }
 .edit-details:hover{
     background: rgb(31,120,43);
@@ -159,8 +164,8 @@ background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%,
     background-color: #1f782b;
     color: #fff;
     font-size: 15px;
-    border-radius: 50px;
-    padding: 12px 30px;
+    border-radius: 10px;
+    padding: 7px 10px;
 }
 .gard-details:hover{
     background: rgb(31,120,43);
@@ -222,17 +227,29 @@ display: none;
     background: rgb(234,244,243);
     background: linear-gradient(349deg, rgb(99, 114, 232) 0%, rgb(190, 204, 244) 48%, rgb(233, 237, 246) 88%);
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 3px !important;
+    height: 8.2rem!important;
 }
 .wallet-card2{
     background: rgb(235,244,234);
 background: linear-gradient(349deg, rgb(67, 192, 53) 0%, rgb(198, 247, 194) 48%, rgb(230, 237, 227) 88%);
 box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 3px !important;
+height: 8.2rem!important;
 }
 .wallet-card3{
     background: rgb(234,243,244);
 background: linear-gradient(349deg, rgb(98, 220, 234) 0%, rgba(184,237,241,1) 48%, rgb(234, 241, 241) 88%);
+box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 3px !important;
+height: 8.2rem!important;
 }
 .wallet-card4{
     background: rgb(244,244,234);
 background: linear-gradient(349deg, rgb(237, 237, 113) 0%, rgba(240,241,184,1) 48%, rgb(247, 247, 232) 88%);
+box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 3px !important;
+height: 8.2rem!important;
+}
+.wallet-card5{
+    background: rgb(244,244,234);
+background: linear-gradient(349deg, rgb(237, 113, 113) 0%, rgb(241, 184, 191) 48%, rgb(247, 232, 234) 88%);
+box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 3px !important;
+height: 8.2rem!important;
 }

@@ -6,23 +6,23 @@
 {% block content %}
 <section class="main">
   <div class="main-top">
-    <h1>My Wallet</h1>
+    <h1 >My Wallet</h1>
   </div>
   <div class="users d-flex justify-content-between">
-    <div class="card bg-success text-white">
-      <h4 class="text-white">Total Balance</h4>
-      <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2"
-          style="font-weight: bold;">{{request.user.wallet}}</span></p>
+    <div class="card   " id="Wallet-card1">
+      <h4 class="mb-4" style="color: rgb(3, 63, 205);">Total Balance</h4>
+      <p><i class="fa-solid fa-coins fa-3x text-primary"></i> <span class="mx-2"
+          style="font-weight: bold; color: rgb(3, 63, 205); font-size: 1.3em;">{{request.user.wallet}}</span></p>
     </div>
-    <div class="card bg-warning text-white">
-      <h4 class="text-white">Total Purchase</h4>
-      <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2"
-          style="font-weight: bold;">{{request.user.total_invest}}</span></p>
+    <div class="card  " id="Wallet-card2">
+      <h4 class="mb-4 " style="color: rgb(198, 172, 2);">Total Purchase</h4>
+      <p><i class="fa-solid fa-coins text-warning fa-3x"></i> <span class="mx-2"
+          style="font-weight: bold; color: rgb(233, 156, 13); font-size: 1.3em;">{{request.user.total_invest}}</span></p>
     </div>
-    <div class="card bg-info text-white">
-      <h4 class="text-white">Total Earnings</h4>
-      <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2"
-          style="font-weight: bold;">{{request.user.total_income}}</span></p>
+    <div class="card" id="Wallet-card3">
+      <h4 class="text-danger  mb-4">Total Earnings</h4>
+      <p><i class="fa-solid fa-coins fa-3x text-danger"></i> <span class="mx-2"
+          style="font-weight: bold; color: red; font-size: 1.3em;">{{request.user.total_income}}</span></p>
     </div>
   </div>
 

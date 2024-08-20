@@ -20,6 +20,7 @@ class LoginForm(forms.ModelForm):
 
 class RegisterForm(forms.ModelForm):
     CITIES = (
+        ("Choose City", "Choose City"),
         ("Bhubaneswar","Bhubaneswar"),
         ("Cuttack","Cuttack"),
         ("Brahmapur","Brahmapur"),
