@@ -9,19 +9,12 @@ from django.utils import timezone
  
 
 class User(AbstractBaseUser, PermissionsMixin):
-    CITIES = (
-        ("Bhubaneswar","Bhubaneswar"),
-        ("Cuttack","Cuttack"),
-        ("Brahmapur","Brahmapur"),
-        ("Puri","Puri"),
-        ("Balasore","Balasore"),
-    )
     full_name = models.CharField(max_length = 255,null=True,blank=True)
     email = models.EmailField(null=True, blank = True,unique = True)
     password = models.TextField(null=True,blank=True)
     contact = models.CharField(max_length= 10, null=True, blank=True)
     address = models.JSONField(null=True, blank=True)
-    city = models.CharField(max_length=20, choices=CITIES,null=True,blank=True)
+    city = models.CharField(max_length=30,null=True,blank=True)
     quiz_score = models.IntegerField(default = 0,null= True, blank= True)
 
     user_image = models.ImageField(upload_to='userprofie/',null=True, blank=True)

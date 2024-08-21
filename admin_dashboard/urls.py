@@ -7,7 +7,7 @@ app_name = 'admin_dashboard'
 
 urlpatterns = [
     path('', views.AdminDashboard.as_view(), name = "admin_dashboard"),
-
+    path('city/<str:city_name>/', views.CityDetailView.as_view(), name='city_detail_view'),
     # manage users
     path('add_user',users.AddUser.as_view(), name='add_user'),
     path('pendingrtgs',users.PendingRtgs.as_view(), name='pending_rtg'),

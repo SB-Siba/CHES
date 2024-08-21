@@ -23,29 +23,27 @@
     }
     .form-container h2 {
         color: #009f10;
-        
     }
     .form-group label {
         font-weight: 500;
         color: #495057;
     }
     .form-control {
-      width: 100%;
-  padding: 5px;
-  margin-bottom:.1em;
-  
-  border: none;
-  border-bottom: 2px solid #ced4da;
-  border-radius: 5px !important;
-  transition: border-color 0.3s ease-in-out;
+        width: 100%;
+        padding: 5px;
+        margin-bottom:.1em;
+        border: none;
+        border-bottom: 2px solid #ced4da;
+        border-radius: 5px !important;
+        transition: border-color 0.3s ease-in-out;
     }
     .form-container input{
         padding-left: 5px !important;
     }
     .form-control:focus {
-      border-color: #009730;
-  box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
-  outline: none;
+        border-color: #009730;
+        box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
+        outline: none;
     }
     .form-control::placeholder{
         font-size: 14px;
@@ -58,15 +56,15 @@
     }
     .log_btn {
         background:#d5f7d9;      
-    border: 2px solid rgb(4, 196, 4);
-    margin-bottom: 20px;
-    color: green;
-    border-radius: 10px;
-    padding: 7px 30px;
-    font-weight: 700;
-    width: 50%;
-    margin-top: 1rem;
-    font-family: "Inter", sans-serif;
+        border: 2px solid rgb(4, 196, 4);
+        margin-bottom: 20px;
+        color: green;
+        border-radius: 10px;
+        padding: 7px 30px;
+        font-weight: 700;
+        width: 50%;
+        margin-top: 1rem;
+        font-family: "Inter", sans-serif;
     }
     .log_btn:hover {
         background-color: #037c15;
@@ -80,84 +78,96 @@
         font-size: 14px !important;
     }
 </style>
- <body>
-  
 
-<div class="container mb-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-9 col-md-10 col-sm-12 form-container p-4">
-            <div class="row">
-                <!-- Left Column -->
-                <div class="col-lg-7 col-md-6 col-sm-12 py-4 px-5">
-                    <h2 class="text-center mb-4 ">Registration</h2>
-                    <form method="post" action="" class="text-black">
-                        {% include 'app_common/snippets/alert.html' %}
-                        {% csrf_token %}
-                        
-                        <div class="form-group mb-3">
-                           <!-- <label for="{{ form.full_name.id_for_label }}">Full Name</label>-->
-                            {{ form.full_name }}
-                        </div>
-                        
-                        <div class="form-group mb-3"> 
-                          <!--  <label for="{{ form.email.id_for_label }}">Email</label> -->
-                            {{ form.email }}
-                        </div>
-                        
-                        <div class="form-group mb-3">
-                         <!--   <label for="{{ form.contact.id_for_label }}">Contact Number</label> -->
-                            {{ form.contact }}
-                        </div>
-                        
-                        <div class="form-group mb-3" id="city_choose">
-                          <!--  <label for="{{ form.city.id_for_label }}">City</label> -->
-                            {{ form.city }}
-                        </div>
-                        
-                        <div class="form-group mb-3">
-                         <!--   <label for="{{ form.password.id_for_label }}">Password</label> -->
-                            {{ form.password }}
-                        </div>
-                        
-                        <div class="form-group mb-3">
-                         <!--   <label for="{{ form.confirm_password.id_for_label }}">Confirm Password</label> -->
-                            {{ form.confirm_password  }}
-                        </div>
-                        
-                        <div class="text-center">
-                            <button class="log_btn" type="submit">Sign Up</button>
-                        </div>
-                        
-                    </form>
-                    <p class="text-center mt-3">Already have an account? <a href="{% url 'app_common:login' %}" class="text-decoration-none"><b>Login</b></a></p>
-                </div>
-                <!-- Right Column -->
-                <div class="col-lg-4 col-md-5 col-sm-12 lottie-container">
-                    <div id="lottie-animation" style="width: 100%; max-width: 350px; height: 400px;"></div>
+<body>
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-9 col-md-10 col-sm-12 form-container p-4">
+                <div class="row">
+                    <!-- Left Column -->
+                    <div class="col-lg-7 col-md-6 col-sm-12 py-4 px-5">
+                        <h2 class="text-center mb-4 ">Registration</h2>
+                        <form method="post" action="" class="text-black">
+                            {% include 'app_common/snippets/alert.html' %}
+                            {% csrf_token %}
+
+                            <div class="form-group mb-3">
+                                {{ form.full_name }}
+                            </div>
+
+                            <div class="form-group mb-3">
+                                {{ form.email }}
+                            </div>
+
+                            <div class="form-group mb-3">
+                                {{ form.contact }}
+                            </div>
+
+                            <div class="form-group mb-3" id="city_choose">
+                                {{ form.city }}
+                            </div>
+
+                            <div class="form-group mb-3" id="other_city_div" style="display: none;">
+                                {{ form.other_city }}
+                            </div>
+
+                            <div class="form-group mb-3">
+                                {{ form.password }}
+                            </div>
+
+                            <div class="form-group mb-3">
+                                {{ form.confirm_password  }}
+                            </div>
+
+                            <div class="text-center">
+                                <button class="log_btn" type="submit">Sign Up</button>
+                            </div>
+                        </form>
+                        <p class="text-center mt-3">Already have an account? <a href="{% url 'app_common:login' %}" class="text-decoration-none"><b>Login</b></a></p>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="col-lg-4 col-md-5 col-sm-12 lottie-container">
+                        <div id="lottie-animation" style="width: 100%; max-width: 350px; height: 400px;"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var animation = lottie.loadAnimation({
-            container: document.getElementById("lottie-animation"), 
-            renderer: "svg",
-            loop: true,
-            autoplay: true,
-            path: "{% static 'app_common/css/images/anim2.json' %}", 
-        });
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var animation = lottie.loadAnimation({
+                container: document.getElementById("lottie-animation"), 
+                renderer: "svg",
+                loop: true,
+                autoplay: true,
+                path: "{% static 'app_common/css/images/anim2.json' %}", 
+            });
 
-        animation.addEventListener("DOMLoaded", function () {
-            console.log("Lottie animation loaded successfully.");
-        });
+            animation.addEventListener("DOMLoaded", function () {
+                console.log("Lottie animation loaded successfully.");
+            });
 
-        animation.addEventListener("data_failed", function () {
-            console.error("Failed to load Lottie animation.");
+            animation.addEventListener("data_failed", function () {
+                console.error("Failed to load Lottie animation.");
+            });
+
+            const cityField = document.getElementById("id_city");
+            const otherCityDiv = document.getElementById("other_city_div");
+
+            cityField.addEventListener("change", function () {
+                if (cityField.value === "Other") {
+                    otherCityDiv.style.display = "block";
+                } else {
+                    otherCityDiv.style.display = "none";
+                }
+            });
+
+            // Trigger change event to handle page reloads
+            cityField.dispatchEvent(new Event('change'));
         });
-    });
-</script>
+    </script>
 </body>
+
 {% endblock content %}
