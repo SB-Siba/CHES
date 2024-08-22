@@ -27,34 +27,34 @@ class AdminDashboard(View):
         activity_request_obj = common_models.UserActivity.objects.filter(is_accepted='pending').order_by('-date_time')
         gardener_sell_request_obj = common_models.SellProduce.objects.filter(is_approved='pending').order_by('-date_time')
 
-        total_rt_gardeners = common_models.User.objects.filter(is_rtg = True).count()
-        total_vendors = common_models.User.objects.filter(is_vendor = True).count()
-        total_service_provider = common_models.User.objects.filter(is_serviceprovider = True).count()
+        total_rt_gardeners = common_models.User.objects.filter(is_rtg = True,is_approved = True).count()
+        total_vendors = common_models.User.objects.filter(is_vendor = True,is_approved = True).count()
+        total_service_provider = common_models.User.objects.filter(is_serviceprovider = True,is_approved = True).count()
         total_activities = common_models.UserActivity.objects.all().count()
         rtg_garden_profile = common_models.GardeningProfile.objects.all()
         rtg_total_garden_area = sum([i.garden_area for i in rtg_garden_profile])
         rtg_total_plants = sum([i.number_of_plants for i in rtg_garden_profile])
 
-        bhubaneswar_rtg = common_models.User.objects.filter(is_rtg = True,city = "Bhubaneswar").count()
-        cuttack_rtg = common_models.User.objects.filter(is_rtg = True,city = "Cuttack").count()
-        brahmapur_rtg = common_models.User.objects.filter(is_rtg = True,city = "Brahmapur").count()
-        sambalpur_rtg = common_models.User.objects.filter(is_rtg = True,city = "Sambalpur").count()
-        jaipur_rtg = common_models.User.objects.filter(is_rtg = True,city = "Jaipur").count()
-        other_cities_rtg = common_models.User.objects.filter(is_rtg=True).exclude(Q(city="Bhubaneswar") | Q(city="Cuttack") | Q(city="Brahmapur") | Q(city="Sambalpur") | Q(city="Jaipur")).count()
+        bhubaneswar_rtg = common_models.User.objects.filter(is_rtg = True,is_approved = True,city = "Bhubaneswar").count()
+        cuttack_rtg = common_models.User.objects.filter(is_rtg = True,is_approved = True,city = "Cuttack").count()
+        brahmapur_rtg = common_models.User.objects.filter(is_rtg = True,is_approved = True,city = "Brahmapur").count()
+        sambalpur_rtg = common_models.User.objects.filter(is_rtg = True,is_approved = True,city = "Sambalpur").count()
+        jaipur_rtg = common_models.User.objects.filter(is_rtg = True,is_approved = True,city = "Jaipur").count()
+        other_cities_rtg = common_models.User.objects.filter(is_rtg=True,is_approved = True).exclude(Q(city="Bhubaneswar") | Q(city="Cuttack") | Q(city="Brahmapur") | Q(city="Sambalpur") | Q(city="Jaipur")).count()
 
-        bhubaneswar_vendor = common_models.User.objects.filter(is_vendor = True,city = "Bhubaneswar").count()
-        cuttack_vendor = common_models.User.objects.filter(is_vendor = True,city = "Cuttack").count()
-        brahmapur_vendor = common_models.User.objects.filter(is_vendor = True,city = "Brahmapur").count()
-        sambalpur_vendor = common_models.User.objects.filter(is_vendor = True,city = "Sambalpur").count()
-        jaipur_vendor = common_models.User.objects.filter(is_vendor = True,city = "Jaipur").count()
-        other_cities_vendor = common_models.User.objects.filter(is_vendor=True).exclude(Q(city="Bhubaneswar") | Q(city="Cuttack") | Q(city="Brahmapur") | Q(city="Sambalpur") | Q(city="Jaipur")).count()
+        bhubaneswar_vendor = common_models.User.objects.filter(is_vendor = True,is_approved = True,city = "Bhubaneswar").count()
+        cuttack_vendor = common_models.User.objects.filter(is_vendor = True,is_approved = True,city = "Cuttack").count()
+        brahmapur_vendor = common_models.User.objects.filter(is_vendor = True,is_approved = True,city = "Brahmapur").count()
+        sambalpur_vendor = common_models.User.objects.filter(is_vendor = True,is_approved = True,city = "Sambalpur").count()
+        jaipur_vendor = common_models.User.objects.filter(is_vendor = True,is_approved = True,city = "Jaipur").count()
+        other_cities_vendor = common_models.User.objects.filter(is_vendor=True,is_approved = True).exclude(Q(city="Bhubaneswar") | Q(city="Cuttack") | Q(city="Brahmapur") | Q(city="Sambalpur") | Q(city="Jaipur")).count()
 
-        bhubaneswar_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,city = "Bhubaneswar").count()
-        cuttack_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,city = "Cuttack").count()
-        brahmapur_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,city = "Brahmapur").count()
-        sambalpur_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,city = "Sambalpur").count()
-        jaipur_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,city = "Jaipur").count()
-        other_cities_serviceprovider = common_models.User.objects.filter(is_serviceprovider=True).exclude(Q(city="Bhubaneswar") | Q(city="Cuttack") | Q(city="Brahmapur") | Q(city="Sambalpur") | Q(city="Jaipur")).count()
+        bhubaneswar_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,is_approved = True,city = "Bhubaneswar").count()
+        cuttack_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,is_approved = True,city = "Cuttack").count()
+        brahmapur_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,is_approved = True,city = "Brahmapur").count()
+        sambalpur_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,is_approved = True,city = "Sambalpur").count()
+        jaipur_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,is_approved = True,city = "Jaipur").count()
+        other_cities_serviceprovider = common_models.User.objects.filter(is_serviceprovider=True,is_approved = True).exclude(Q(city="Bhubaneswar") | Q(city="Cuttack") | Q(city="Brahmapur") | Q(city="Sambalpur") | Q(city="Jaipur")).count()
 
 
         # Define your default 5 cities
@@ -81,7 +81,23 @@ class AdminDashboard(View):
         # Prepare labels and data for the chart
         labels = list(city_counts.keys())
         chart_data = list(city_counts.values())
-        print(labels,chart_data)
+
+        all_users = common_models.User.objects.filter(is_approved = True).exclude(is_superuser = True)
+        user_activity_totals = (
+            common_models.UserActivity.objects
+            .filter(user__in=all_users)
+            .values('user')
+            .annotate(total_activity=Count('id'))
+            .order_by('-total_activity')
+        )
+
+        # Get top 5 users based on total activity
+        top_users = user_activity_totals[:5]
+        activity_data = [entry['total_activity'] for entry in top_users]
+        activity_label = [
+            common_models.User.objects.get(id=entry['user']).full_name
+            for entry in top_users
+        ]
         context = {
             'not_approvedlist': not_approvedlist,
             'not_approvedlist_rtg': not_approvedlist_rtg,
@@ -115,7 +131,9 @@ class AdminDashboard(View):
             'jaipur_serviceprovider': jaipur_serviceprovider,
             'other_cities_serviceprovider': other_cities_serviceprovider,
             'labels': labels,
-            'chart_data': chart_data
+            'chart_data': chart_data,
+            'activity_data':activity_data,
+            'activity_label':activity_label
         }
 
         return render(request, self.template, context)
@@ -278,7 +296,6 @@ class CityDetailView(View):
 
             labels = ['RTGs', 'Vendors', 'Service Providers']
             chart_data = [rtgs.count(), vendors.count(), service_providers.count()]
-        print(graph_data,labels,chart_data)
         # Pass data to template
         context = {
             'city_name': city_name,

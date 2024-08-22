@@ -192,17 +192,39 @@ class VendorDetailsForm(forms.ModelForm):
 
 
 class ServiceProviderDetailsForm(forms.ModelForm):
+    SERVICE_TYPES = [
+        ('Lawn Care', 'Lawn Care'),
+        ('Tree Trimming', 'Tree Trimming'),
+        ('Garden Design', 'Garden Design'),
+        ('Irrigation Systems', 'Irrigation Systems'),
+    ]
+    SERVICE_AREAS = (
+        ("Bhubaneswar", "Bhubaneswar"),
+        ("Cuttack", "Cuttack"),
+        ("Brahmapur", "Brahmapur"),
+        ("Sambalpur", "Sambalpur"),
+        ("Jaipur", "Jaipur"),
+    )
+
     class Meta:
         model = models.ServiceProviderDetails
         fields = ['service_type', 'service_area', 'average_cost_per_hour', 'years_experience']
 
     service_type = forms.MultipleChoiceField(
-        choices=models.ServiceProviderDetails.SERVICE_TYPES,
+        choices=SERVICE_TYPES,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
     )
     service_area = forms.MultipleChoiceField(
-        choices=models.ServiceProviderDetails.SERVICE_AREAS,
+        choices=SERVICE_AREAS,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
+    )
+    add_service_type = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Add More Service Types'})
+    )
+    add_service_area = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Add More Service Areas'})
     )
     average_cost_per_hour = forms.DecimalField(
         max_digits=10, decimal_places=2,

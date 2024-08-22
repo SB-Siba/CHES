@@ -395,7 +395,7 @@
                 <h6 class="m-0 font-weight-bold text-primary"> Activity Overview</h6>
             </div>
             <div class="card-body">
-                <img src="{% static 'admin_dashboard/images/line-charts.png' %}" class="img-fluid">
+                <canvas id="allActivityChart"></canvas>
             </div>
         </div>
 
@@ -469,6 +469,38 @@
                 },
                 cutoutPercentage: 80,
             },
+        });
+
+        var activityLabel = {{ activity_label|safe }}
+        var activityData = {{ activity_data|safe }};
+    
+        // Activity Chart
+        var ctxActivity = document.getElementById('allActivityChart').getContext('2d');
+        var allActivityChart = new Chart(ctxActivity, {
+            type: 'line',
+            data: {
+                labels: activityLabel, // Dynamic labels
+                datasets: [{
+                    label: 'User Activity',
+                    data: activityData, // Dynamic data
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Users' },
+                        beginAtZero: true
+                    },
+                    y: {
+                        title: { display: true, text: 'Activity Count' },
+                        beginAtZero: true
+                    }
+                }
+            }
         });
     </script> 
 {% endblock js %}

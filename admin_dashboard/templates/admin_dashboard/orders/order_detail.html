@@ -30,6 +30,7 @@
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Ammount</th>
+                    <th scope="col">Quantity</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -38,6 +39,7 @@
                       <th scope="row">{{order.id}}</th>
                       <td>{{order.product_name}}</td>
                       <td>{{order.ammount_based_on_quantity_buyer_want}}</td>
+                      <td>{{order.quantity_buyer_want}} {{order.SI_units}}</td>
                     </tr>
                 
                   <tr>

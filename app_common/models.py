@@ -362,20 +362,6 @@ class Order(models.Model):
         super().save(*args, **kwargs)
 
 class ServiceProviderDetails(models.Model):
-    SERVICE_TYPES = [
-        ('Lawn Care', 'Lawn Care'),
-        ('Tree Trimming', 'Tree Trimming'),
-        ('Garden Design', 'Garden Design'),
-        ('Irrigation Systems', 'Irrigation Systems'),
-        # Add more types as needed
-    ]
-    SERVICE_AREAS = (
-        ("Bhubaneswar","Bhubaneswar"),
-        ("Cuttack","Cuttack"),
-        ("Brahmapur","Brahmapur"),
-        ("Puri","Puri"),
-        ("Balasore","Balasore"),
-    )
     provider = models.ForeignKey(User, on_delete=models.CASCADE)
     service_type = models.TextField()
     service_area = models.TextField()

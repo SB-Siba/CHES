@@ -327,56 +327,75 @@ class ServiceProviderDetails(View):
     template = app + "serviceprovider_details.html"
     form_class = forms.ServiceProviderDetailsForm
 
-    def get(self,request,u_email):
+    def get(self, request, u_email):
         try:
-            user_obj = models.User.objects.get(email = u_email)
-            form = self.form_class(instance=user_obj)
-            context={'form':form}
-        except self.model.DoesNotExist:
-            messages.error(request,"No Data Found")
+            user_obj = models.User.objects.get(email=u_email)
+            form = self.form_class()
+            context = {'form': form}
+        except models.User.DoesNotExist:
+            messages.error(request, "No Data Found")
+            return redirect('app_common:serviceproviderdetails', u_email=u_email)
         
-        return render(request, self.template, context)     
+        return render(request, self.template, context)
 
-    def post(self,request,u_email):
+    def post(self, request, u_email):
         form = self.form_class(request.POST)
         if form.is_valid():
-            user_obj = models.User.objects.get(email = u_email)
+            user_obj = models.User.objects.get(email=u_email)
 
             service_type = form.cleaned_data['service_type']
             service_area = form.cleaned_data['service_area']
+
+            # Handle additional service types
+            additional_service_type = form.cleaned_data['add_service_type']
+            if additional_service_type:
+                additional_service_types = [s.strip() for s in additional_service_type.split(',')]
+                service_type.extend(additional_service_types)
+
+            # Handle additional service areas
+            additional_service_area = form.cleaned_data['add_service_area']
+            if additional_service_area:
+                additional_service_areas = [a.strip() for a in additional_service_area.split(',')]
+                service_area.extend(additional_service_areas)
+
             average_cost_per_hour = form.cleaned_data['average_cost_per_hour']
             years_experience = form.cleaned_data['years_experience']
+
             try:
                 service_provider_detail_obj = self.model(
-                    provider = user_obj,
-                    service_type = service_type,
-                    service_area = service_area,
-                    average_cost_per_hour = average_cost_per_hour,
-                    years_experience = years_experience,
-                    )
+                    provider=user_obj,
+                    service_type=service_type,
+                    service_area=service_area,
+                    average_cost_per_hour=average_cost_per_hour,
+                    years_experience=years_experience,
+                )
+                service_provider_detail_obj.save()
+
                 try:
                     send_template_email(
                         subject="Registration Successful",
                         template_name="mail_template/registration_mail.html",
-                        context={'full_name': user_obj.full_name,"email":user_obj.email},
+                        context={'full_name': user_obj.full_name, "email": user_obj.email},
                         recipient_list=[user_obj.email]
                     )
-                    service_provider_detail_obj.save()
                     request.session.pop('registration_step', None)
                     request.session.pop('registration_email', None)
                 except Exception as e:
-                    # Log the error if needed
-                    print(f"Failed : {e}")
-                    return redirect('app_common:serviceproviderdetails')
+                    print(f"Failed to send email: {e}")
+                    return redirect('app_common:serviceproviderdetails', u_email=u_email)
+
                 if request.user.is_superuser:
                     return redirect('admin_dashboard:pending_service_provider')
                 return redirect('app_common:login')
-            except:
-                messages.error(request,'Failed to Add data')
-                return redirect('app_common:serviceproviderdetails',u_email)
+
+            except Exception as e:
+                messages.error(request, 'Failed to Add data')
+                print(f"Failed to save service provider details: {e}")
+                return redirect('app_common:serviceproviderdetails', u_email=u_email)
+
         else:
-            messages.error(request,'Please correct the below errors.')
-            return redirect('app_common:serviceproviderdetails',u_email)
+            messages.error(request, 'Please correct the below errors.')
+            return redirect('app_common:serviceproviderdetails', u_email=u_email)
 
 
 class Home(View):
@@ -384,6 +403,8 @@ class Home(View):
 
     def get(self, request):
         if request.user.is_authenticated:
+            if request.user.is_superuser:
+                return redirect('admin_dashboard:admin_dashboard')
             return redirect('user_dashboard:user_dashboard')
         
         # Check if the user has a pending registration step

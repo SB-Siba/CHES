@@ -2,13 +2,36 @@ from django import forms
 from app_common import models
 
 class ServiceProviderUpdateForm(forms.Form):
+    SERVICE_TYPES = [
+        ('Lawn Care', 'Lawn Care'),
+        ('Tree Trimming', 'Tree Trimming'),
+        ('Garden Design', 'Garden Design'),
+        ('Irrigation Systems', 'Irrigation Systems'),
+    ]
+    SERVICE_AREAS = (
+        ("Bhubaneswar", "Bhubaneswar"),
+        ("Cuttack", "Cuttack"),
+        ("Brahmapur", "Brahmapur"),
+        ("Sambalpur", "Sambalpur"),
+        ("Jaipur", "Jaipur"),
+    )
+
+
     service_type = forms.MultipleChoiceField(
-        choices=models.ServiceProviderDetails.SERVICE_TYPES,
+        choices=SERVICE_TYPES,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
     )
     service_area = forms.MultipleChoiceField(
-        choices=models.ServiceProviderDetails.SERVICE_AREAS,
+        choices=SERVICE_AREAS,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
+    )
+    add_service_type = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Add More Service Types'})
+    )
+    add_service_area = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Add More Service Areas'})
     )
     average_cost_per_hour = forms.DecimalField(
         max_digits=10, decimal_places=2,
@@ -30,25 +53,9 @@ class ServiceAddForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),  # Text input with form-control class
             'description': forms.Textarea(attrs={'class': 'form-control'}),  # Textarea with form-control class
             'price_per_hour': forms.NumberInput(attrs={'class': 'form-control'}),  # Number input with form-control class
-            'service_type': forms.Select(attrs={'class': 'form-control'}),  # Select dropdown with form-control class
-        }
-        labels = {
-            'service_type': 'Service Type',  # Example label customization
+            'service_type': forms.TextInput(attrs={'class': 'form-control'}),  # Select dropdown with form-control class
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['service_type'].widget.attrs['class'] = 'form-control'  # Add form-control class
-        provider = self.initial.get('provider') or (self.instance.provider if self.instance.pk else None)
-        if provider:
-            provider_details = models.ServiceProviderDetails.objects.filter(provider=provider).first()
-            if provider_details:
-                service_types = [
-                    (service_type.strip('[] \'').strip(), service_type.strip('[] \'').strip()) 
-                    for service_type in provider_details.service_type.split(',')
-                ]
-                self.fields['service_type'].choices = service_types
-                self.fields['service_type'].initial = self.instance.service_type
 
 class BookingForm(forms.ModelForm):
     booking_date = forms.DateTimeField(
