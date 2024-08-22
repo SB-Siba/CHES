@@ -402,24 +402,7 @@ class Home(View):
     template = app + 'landing.html'
 
     def get(self, request):
-        if request.user.is_authenticated:
-            if request.user.is_superuser:
-                return redirect('admin_dashboard:admin_dashboard')
-            return redirect('user_dashboard:user_dashboard')
-        
-        # Check if the user has a pending registration step
-        if 'registration_step' in request.session and 'registration_email' in request.session:
-            step = request.session['registration_step']
-            email = request.session['registration_email']
-
-            if step == 'gardeningdetails':
-                return redirect('app_common:gardeningdetails', email)
-            elif step == 'gardeningquiz':
-                return redirect('app_common:gardeningquiz', email)
-            elif step == 'vendordetails':
-                return redirect('app_common:vendordetails', email)
-            elif step == 'serviceproviderdetails':
-                return redirect('app_common:serviceproviderdetails', email)
+  
         return render(request,self.template)
     
 

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'vendor_dashboard',
     'serviceprovider',
     'EmailIntigration',
+    'websiteLanding',
 ]
 
 MIDDLEWARE = [
