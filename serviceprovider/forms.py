@@ -2,27 +2,26 @@ from django import forms
 from app_common import models
 
 class ServiceProviderUpdateForm(forms.Form):
-    SERVICE_TYPES = [
+    DEFAULT_SERVICE_TYPES = [
         ('Lawn Care', 'Lawn Care'),
         ('Tree Trimming', 'Tree Trimming'),
         ('Garden Design', 'Garden Design'),
         ('Irrigation Systems', 'Irrigation Systems'),
     ]
-    SERVICE_AREAS = (
+    DEFAULT_SERVICE_AREAS = [
         ("Bhubaneswar", "Bhubaneswar"),
         ("Cuttack", "Cuttack"),
         ("Brahmapur", "Brahmapur"),
         ("Sambalpur", "Sambalpur"),
         ("Jaipur", "Jaipur"),
-    )
-
+    ]
 
     service_type = forms.MultipleChoiceField(
-        choices=SERVICE_TYPES,
+        choices=[],
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
     )
     service_area = forms.MultipleChoiceField(
-        choices=SERVICE_AREAS,
+        choices=[],
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
     )
     add_service_type = forms.CharField(
@@ -42,10 +41,26 @@ class ServiceProviderUpdateForm(forms.Form):
     )
     image = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
 
+    def __init__(self, *args, **kwargs):
+        self.existing_service_types = kwargs.pop('existing_service_types', [])
+        self.existing_service_areas = kwargs.pop('existing_service_areas', [])
+        super().__init__(*args, **kwargs)
+
+        # Combine existing service types/areas with default ones
+        service_types = list(set(self.DEFAULT_SERVICE_TYPES + [(item, item) for item in self.existing_service_types]))
+        service_areas = list(set(self.DEFAULT_SERVICE_AREAS + [(item, item) for item in self.existing_service_areas]))
+
+        # Sort choices alphabetically for consistency
+        service_types.sort(key=lambda x: x[1])
+        service_areas.sort(key=lambda x: x[1])
+
+        # Set the choices dynamically
+        self.fields['service_type'].choices = service_types
+        self.fields['service_area'].choices = service_areas
+
+
     
 class ServiceAddForm(forms.ModelForm):
-    service_type = forms.ChoiceField(choices=[], required=False)
-
     class Meta:
         model = models.Service
         fields = ['name', 'description', 'price_per_hour', 'service_type']

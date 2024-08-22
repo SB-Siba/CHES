@@ -17,6 +17,7 @@ import ast
 import datetime
 from serviceprovider.forms import BookingForm,ReviewForm
 from EmailIntigration.views import send_template_email
+from django.db.models.functions import Lower
 
 app = "user_dashboard/"
 
@@ -912,30 +913,31 @@ class ListOfServicesByServiceProviders(View):
 
     def get(self, request):
         services = self.model.objects.all()
-        service_types = [choice[0] for choice in app_commonmodels.ServiceProviderDetails.SERVICE_TYPES]
-        return render(request , self.template , {'services' : services,'service_type_options': service_types})
+        return render(request , self.template , {'services' : services})
 
-class FilterServices(View):
+class ServiceSearchView(View):
     model = app_commonmodels.Service
     template = app + "list_services.html"
 
     def get(self, request):
-        filter_by = request.GET.get('filter_by')
-        
-        # Get all service types from ServiceProviderDetails
-        service_types = [choice[0] for choice in app_commonmodels.ServiceProviderDetails.SERVICE_TYPES] 
-        if filter_by == "all":
-            return redirect("user_dashboard:list_services")
-        if filter_by in service_types:
+        search_query = request.GET.get('search_query')
 
-            services = self.model.objects.filter(
-                service_type=filter_by
+        if search_query:
+            # Convert the search query to lowercase
+            search_query_lower = search_query.lower()
+
+            # Filter services by converting both the name and service_type to lowercase
+            services = app_commonmodels.Service.objects.annotate(
+                name_lower=Lower('name'),
+                service_type_lower=Lower('service_type')
+            ).filter(
+                Q(name_lower__icontains=search_query_lower) | Q(service_type_lower__icontains=search_query_lower)
             )
-        paginated_data = utils.paginate(request, services, 50)
-        
+        else:
+            services = app_commonmodels.Service.objects.all()
+
         context = {
             'services': services,
-            'service_type_options': service_types,
         }
         return render(request, self.template, context)
 
