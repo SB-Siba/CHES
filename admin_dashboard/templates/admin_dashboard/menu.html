@@ -129,7 +129,12 @@
                 {% endif %}
             </a>
         </li>
-
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_dashboard:blogs_list' %}">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Blogs From Users</span>
+        </a>
+    </li>
       <!-- Nav Item - Charts -->
       <li class="nav-item">
         <a class="nav-link" href="{% url 'admin_dashboard:produce_order_list' %}">

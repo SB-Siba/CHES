@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     'drf_yasg',
     'drf_spectacular',
+    'ckeditor',
 
     # apps
     "app_common",
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'EmailIntigration',
     'websiteLanding',
     'EmailOTP',
+    'Blogs',
 ]
 
 MIDDLEWARE = [

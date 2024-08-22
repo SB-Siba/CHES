@@ -26,6 +26,7 @@ urlpatterns = [
     path("vendor_dashboard/", include("vendor_dashboard.urls")),
     path("service_provider/", include("serviceprovider.urls")),
     path("email_otp/", include("EmailOTP.urls")),
+    path("blog/", include("Blogs.urls")),
     # ------------------------------------------------ swagger ---------------------------------
     path(
         "swagger/download/",
