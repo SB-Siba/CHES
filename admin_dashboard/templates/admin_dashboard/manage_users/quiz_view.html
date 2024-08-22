@@ -33,9 +33,16 @@
             <form action="" method="post">
                 {% csrf_token %} 
                 <div class="d-flex justify-content-between mt-3">
-                    <input type="number" value="{{user_obj.quiz_score}}" class="form-control mr-3 w-50" name="quizPoints"/>
-                    <input type="submit" value="Give Points" class="btn btn-success btn-block float-right"/>
-                </div>
+                  <select name="quizPoints" class="form-control mr-3 w-50">
+                      <option value="0" {% if user_obj.quiz_score == 0 %}selected{% endif %}>0</option>
+                      <option value="100" {% if user_obj.quiz_score == 100 %}selected{% endif %}>100</option>
+                      <option value="200" {% if user_obj.quiz_score == 200 %}selected{% endif %}>200</option>
+                      <option value="300" {% if user_obj.quiz_score == 300 %}selected{% endif %}>300</option>
+                      <option value="400" {% if user_obj.quiz_score == 400 %}selected{% endif %}>400</option>
+                      <option value="500" {% if user_obj.quiz_score == 500 %}selected{% endif %}>500</option>
+                  </select>
+                  <input type="submit" value="Give Points" class="btn btn-success btn-block float-right"/>
+              </div>
             </form>
           </div>
         </div>

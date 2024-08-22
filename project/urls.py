@@ -25,6 +25,7 @@ urlpatterns = [
     path("chat/", include("chatapp.urls")),
     path("vendor_dashboard/", include("vendor_dashboard.urls")),
     path("service_provider/", include("serviceprovider.urls")),
+    path("email_otp/", include("EmailOTP.urls")),
     # ------------------------------------------------ swagger ---------------------------------
     path(
         "swagger/download/",

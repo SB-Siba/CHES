@@ -44,21 +44,27 @@
                 </tr>
             </thead>
             <tbody>
-                {% for v_user,vendor_detail in vendor_data %}
+                {% for v_user, vendor_detail in vendor_data %}
                 <tr>
                     <td>{{ v_user.email }}</td>
                     <td>{{ vendor_detail.business_name }}</td>
                     <td>{{ vendor_detail.business_address }}</td>
                     <td>{{ vendor_detail.business_license_number }}</td>
-                    <td>{{vendor_detail.business_category}}</td>
-                    <td>{{vendor_detail.establishment_year}}</td>
-                    <td>{{vendor_detail.website}}</td>
+                    <td>{{ vendor_detail.business_category }}</td>
+                    <td>{{ vendor_detail.establishment_year }}</td>
+                    <td>{{ vendor_detail.website }}</td>
                     <td>
-                        <input type="number" id="points-{{ v_user.id }}" max="500" min="0" step="1"
-                            placeholder="Give Points Between 0-500">
+                        <select id="points-{{ v_user.id }}" class="form-control" style="width: 70px;">
+                            <option value="0">0</option>
+                            <option value="100">100</option>
+                            <option value="200">200</option>
+                            <option value="300">300</option>
+                            <option value="400">400</option>
+                            <option value="500">500</option>
+                        </select>
                     </td>
                     <td>
-                        <div class="d-flex justify-content-arround">
+                        <div class="d-flex justify-content-around">
                             <a href="#" class="btn btn-success" onclick="approveVendor({{ v_user.id }})">
                                 <span>Approve</span>
                             </a>
@@ -67,7 +73,6 @@
                             </a>
                         </div>
                     </td>
-
                 </tr>
                 {% endfor %}
             </tbody>
@@ -77,16 +82,14 @@
 </div>
 {% endblock content %}
 {% block js %}
-<!-- <script src="{% static 'admin_dashboard/js/user_list.js'%}"></script> -->
 <script>
     function approveVendor(userId) {
         var points = document.getElementById('points-' + userId).value;
-        console.log(points)
         if (points !== "") {
             var url = "{% url 'admin_dashboard:approve_user' 0 %}".replace("0", userId) + "?coins=" + points;
             window.location.href = url;
         } else {
-            alert("Please enter points between 0 and 500.");
+            alert("Please select points from the dropdown.");
         }
     }
 </script>

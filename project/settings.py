@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'serviceprovider',
     'EmailIntigration',
     'websiteLanding',
+    'EmailOTP',
 ]
 
 MIDDLEWARE = [

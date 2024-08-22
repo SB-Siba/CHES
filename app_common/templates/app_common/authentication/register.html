@@ -37,7 +37,7 @@
         border-radius: 5px !important;
         transition: border-color 0.3s ease-in-out;
     }
-    .form-container input{
+    .form-container input {
         padding-left: 5px !important;
     }
     .form-control:focus {
@@ -45,17 +45,17 @@
         box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
         outline: none;
     }
-    .form-control::placeholder{
+    .form-control::placeholder {
         font-size: 14px;
         padding-left: 5px;
     }
-    .form-container select{
+    .form-container select {
         font-size: 14px !important;
         color: #595C5F;
         padding-left: 5px;
     }
     .log_btn {
-        background:#d5f7d9;      
+        background: #d5f7d9;      
         border: 2px solid rgb(4, 196, 4);
         margin-bottom: 20px;
         color: green;
@@ -74,8 +74,24 @@
         align-items: center;
         justify-content: center;
     }
-    #city_choose{
+    #city_choose {
         font-size: 14px !important;
+    }
+    .otp-container {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+    .otp-container input {
+        width: 70%;
+        margin-right: 10px;
+    }
+    .otp-container button {
+        width: 30%;
+    }
+    .otp-status {
+        margin-top: 10px;
+        color: green;
     }
 </style>
 
@@ -86,8 +102,8 @@
                 <div class="row">
                     <!-- Left Column -->
                     <div class="col-lg-7 col-md-6 col-sm-12 py-4 px-5">
-                        <h2 class="text-center mb-4 ">Registration</h2>
-                        <form method="post" action="" class="text-black">
+                        <h2 class="text-center mb-4">Registration</h2>
+                        <form id="registration-form" method="post" action="" class="text-black">
                             {% include 'app_common/snippets/alert.html' %}
                             {% csrf_token %}
 
@@ -96,7 +112,15 @@
                             </div>
 
                             <div class="form-group mb-3">
-                                {{ form.email }}
+                                <div class="input-group">
+                                    {{ form.email }}
+                                    <button type="button" id="send-otp-btn" class="btn btn-primary mx-1 rounded">Send OTP</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3 otp-container" id="otp-container" style="display: none;">
+                                <input type="text" id="otp-input" class="form-control" placeholder="Enter OTP">
+                                <button type="button" id="verify-otp-btn" class="btn btn-success">Verify OTP</button>
                             </div>
 
                             <div class="form-group mb-3">
@@ -120,7 +144,7 @@
                             </div>
 
                             <div class="text-center">
-                                <button class="log_btn" type="submit">Sign Up</button>
+                                <button class="log_btn" id="submit-btn" type="submit" disabled>Sign Up</button>
                             </div>
                         </form>
                         <p class="text-center mt-3">Already have an account? <a href="{% url 'app_common:login' %}" class="text-decoration-none"><b>Login</b></a></p>
@@ -138,11 +162,11 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var animation = lottie.loadAnimation({
-                container: document.getElementById("lottie-animation"), 
+                container: document.getElementById("lottie-animation"),
                 renderer: "svg",
                 loop: true,
                 autoplay: true,
-                path: "{% static 'app_common/css/images/anim2.json' %}", 
+                path: "{% static 'app_common/css/images/anim2.json' %}",
             });
 
             animation.addEventListener("DOMLoaded", function () {
@@ -155,12 +179,70 @@
 
             const cityField = document.getElementById("id_city");
             const otherCityDiv = document.getElementById("other_city_div");
+            const otpContainer = document.getElementById("otp-container");
+            const sendOtpBtn = document.getElementById("send-otp-btn");
+            const verifyOtpBtn = document.getElementById("verify-otp-btn");
+            const otpInput = document.getElementById("otp-input");
 
             cityField.addEventListener("change", function () {
                 if (cityField.value === "Other") {
                     otherCityDiv.style.display = "block";
                 } else {
                     otherCityDiv.style.display = "none";
+                }
+            });
+
+            sendOtpBtn.addEventListener("click", function () {
+                const email = document.getElementById("id_email").value;
+                if (email) {
+                    fetch("{% url 'email_otp:send_otp' %}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({ email: email })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            otpContainer.style.display = 'flex';
+                            sendOtpBtn.textContent = 'OTP Sent';
+                            sendOtpBtn.disabled = true;
+                            verifyOtpBtn.style.display = 'inline-block';
+                        } else {
+                            sendOtpBtn.textContent = 'OTP Not Sent';
+                        }
+                    });
+                } else {
+                    sendOtpBtn.textContent = 'Please enter a valid email.';
+                }
+            });
+
+            verifyOtpBtn.addEventListener("click", function () {
+                const email = document.getElementById("id_email").value;
+                const otpCode = otpInput.value;
+                if (email && otpCode) {
+                    fetch("{% url 'email_otp:verify_otp' %}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({ email: email, otp: otpCode })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            verifyOtpBtn.textContent = 'Verified';
+                            verifyOtpBtn.disabled = true;
+                            document.getElementById("submit-btn").disabled = false;
+                        } else {
+                            verifyOtpBtn.textContent = 'Not Verified';
+                        }
+                    });
+                } else {
+                    verifyOtpBtn.textContent = 'Please enter OTP.';
                 }
             });
 
