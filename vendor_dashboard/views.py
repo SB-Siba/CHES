@@ -16,7 +16,9 @@ from helpers import utils
 from chatapp.models import Message
 from admin_dashboard.orders.forms import OrderUpdateForm
 from django.utils.timezone import now
-from datetime import timedelta
+from django.db.models.functions import Lower
+import ast
+from serviceprovider.forms import BookingForm
 
 app = "vendor_dashboard/"
 
@@ -740,3 +742,95 @@ class OrderDetail(View):
                     messages.error(request, f'{field}: {error}')
 
         return redirect('vendor_dashboard:order_detail', order_uid = order_uid)
+
+
+class ServiceProvidersList(View):
+    model = common_models.ServiceProviderDetails
+    template = app + "service_providers_list.html"
+
+    def get(self,request):
+        service_providers = self.model.objects.filter(provider__is_approved = True)
+        providers = []
+        areas = []
+        types = []
+        for i in service_providers:
+            service_types = ast.literal_eval(i.service_type)
+            service_areas = ast.literal_eval(i.service_area)
+            providers.append(i)
+            types.append(service_types)
+            areas.append(service_areas)
+
+        providers_area_types = zip(providers,areas,types)
+        context = {'providers_area_types':providers_area_types}
+        return render(request,self.template,context)
+    
+
+class ListOfServicesByServiceProviders(View):
+    template = app + "list_services.html"
+    model = common_models.Service
+
+    def get(self, request):
+        services = self.model.objects.all()
+        return render(request , self.template , {'services' : services})
+
+class ServiceSearchView(View):
+    model = common_models.Service
+    template = app + "list_services.html"
+
+    def get(self, request):
+        search_query = request.GET.get('search_query')
+
+        if search_query:
+            # Convert the search query to lowercase
+            search_query_lower = search_query.lower()
+
+            # Filter services by converting both the name and service_type to lowercase
+            services = common_models.Service.objects.annotate(
+                name_lower=Lower('name'),
+                service_type_lower=Lower('service_type')
+            ).filter(
+                Q(name_lower__icontains=search_query_lower) | Q(service_type_lower__icontains=search_query_lower)
+            )
+        else:
+            services = common_models.Service.objects.all()
+
+        context = {
+            'services': services,
+        }
+        return render(request, self.template, context)
+
+class ServiceDetails(View):
+    template = app + "service_details.html"
+    model = common_models.Service
+    form_class = BookingForm
+    def get(self,request, service_id):
+        form = BookingForm()
+        service = get_object_or_404(self.model, id=service_id)
+        service_booked_obj = common_models.Booking.objects.filter(service = service,gardener = request.user,status = "pending")
+        return render(request, self.template, {'service': service,"form":form,"service_booked_obj":service_booked_obj})
+    def post(self,request, service_id):
+        form = BookingForm(request.POST)
+        service = get_object_or_404(self.model, id=service_id)
+        service_booked_obj = common_models.Booking.objects.filter(service = service,gardener = request.user)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.service = service
+            booking.gardener = request.user
+            booking.save()
+            return redirect("vendor_dashboard:list_services")
+        return render(request, self.template, {'service': service,"form":form,"service_booked_obj":service_booked_obj})
+    
+class MyBookedServices(View):
+    template = app + "my_booked_services.html"
+    model = common_models.Booking
+    def get(self,request):
+        booked_services = self.model.objects.filter(gardener=request.user).exclude(status="declined")
+        # booked_services = self.model.objects.filter(gardener = request.user)
+        return render(request, self.template, {'booked_services': booked_services})
+
+def vendor_decline_booking(request, booking_id):
+    booking = get_object_or_404(common_models.Booking, id=booking_id)
+    if request.user == booking.gardener:
+        booking.status = 'declined'
+        booking.save()
+    return redirect('vendor_dashboard:my_booked_services')

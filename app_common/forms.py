@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import PasswordChangeForm,PasswordResetForm,SetPasswordForm
 from django.contrib.auth import password_validation
-
+from django.core.exceptions import ValidationError
 from . import models
 
 
@@ -21,42 +21,98 @@ class LoginForm(forms.ModelForm):
 class RegisterForm(forms.ModelForm):
     CITIES = (
         ("Choose City", "Choose City"),
-        ("Bhubaneswar","Bhubaneswar"),
-        ("Cuttack","Cuttack"),
-        ("Brahmapur","Brahmapur"),
-        ("Puri","Puri"),
-        ("Balasore","Balasore"),
+        ("Bhubaneswar", "Bhubaneswar"),
+        ("Cuttack", "Cuttack"),
+        ("Brahmapur", "Brahmapur"),
+        ("Sambalpur", "Sambalpur"),
+        ("Jaipur", "Jaipur"),
+        ("Other", "Other"),
+    )
+
+    full_name = forms.CharField(
+        max_length=255, 
+        label='Enter Full Name', 
+        widget=forms.TextInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'Full Name', 
+            'required': 'required'
+        })
+    )
+
+    email = forms.EmailField(
+        label='Email', 
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'Enter Email', 
+            'required': 'required'
+        })
+    )
+
+    contact = forms.CharField(
+        max_length=10, 
+        label='Enter Contact Number', 
+        widget=forms.TextInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'Contact Number', 
+            'required': 'required'
+        })
+    )
+
+    city = forms.ChoiceField(
+        choices=CITIES, 
+        label='City', 
+        widget=forms.Select(attrs={
+            'class': 'form-control', 
+            'required': 'required'
+        })
+    )
+
+    other_city = forms.CharField(
+        max_length=100, 
+        label='Other City', 
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'Enter Your City'
+        })
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'Enter Password', 
+            'required': 'required'
+        })
+    )
+
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control', 
+            'placeholder': 'Confirm Password', 
+            'required': 'required'
+        })
     )
 
     class Meta:
         model = models.User
         fields = ["full_name", "email", "contact", "city", "password", "confirm_password"]
 
-    full_name = forms.CharField(max_length=255, label='Enter Full Name')
-    full_name.widget.attrs.update({'class': 'form-control','type':'text','placeholder':'Full Name',"required":"required"})
-
-    email = forms.EmailField(label='Email')
-    email.widget.attrs.update({'class': 'form-control','type':'email', "placeholder":"Enter Email","required":"required"})
-
-    contact = forms.CharField(max_length=10, label='Enter Contact Number')
-    contact.widget.attrs.update({'class': 'form-control','type':'text','placeholder':'Contact Number',"required":"required"})
-    
-    city = forms.ChoiceField(choices=CITIES)
-    city.widget.attrs.update({'class': 'form-control','placeholder':'Select City',"required":"required"})
-    
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Enter Password'}))
-    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Confirm Password'}))
-
     def clean(self):
         cleaned_data = super().clean()
+        city = cleaned_data.get("city")
+        other_city = cleaned_data.get("other_city")
+
+        if city == "Other" and not other_city:
+            self.add_error("other_city", "Please specify your city.")
+
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
 
         if password != confirm_password:
-            raise forms.ValidationError("Password Mismatched")
+            raise ValidationError("Passwords do not match.")
 
         return cleaned_data
-
+    
 class PasswordChangeForm(PasswordChangeForm):
     old_password = forms.CharField(label='Old Password',widget=forms.PasswordInput(attrs= {'autofocus':True,'autocomplete':'current-password','class':'form-control'}))
     new_password1 = forms.CharField(label='New Password',widget=forms.PasswordInput(attrs= {'autocomplete':'current-password','class':'form-control'}))
@@ -136,17 +192,39 @@ class VendorDetailsForm(forms.ModelForm):
 
 
 class ServiceProviderDetailsForm(forms.ModelForm):
+    SERVICE_TYPES = [
+        ('Lawn Care', 'Lawn Care'),
+        ('Tree Trimming', 'Tree Trimming'),
+        ('Garden Design', 'Garden Design'),
+        ('Irrigation Systems', 'Irrigation Systems'),
+    ]
+    SERVICE_AREAS = (
+        ("Bhubaneswar", "Bhubaneswar"),
+        ("Cuttack", "Cuttack"),
+        ("Brahmapur", "Brahmapur"),
+        ("Sambalpur", "Sambalpur"),
+        ("Jaipur", "Jaipur"),
+    )
+
     class Meta:
         model = models.ServiceProviderDetails
         fields = ['service_type', 'service_area', 'average_cost_per_hour', 'years_experience']
 
     service_type = forms.MultipleChoiceField(
-        choices=models.ServiceProviderDetails.SERVICE_TYPES,
+        choices=SERVICE_TYPES,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
     )
     service_area = forms.MultipleChoiceField(
-        choices=models.ServiceProviderDetails.SERVICE_AREAS,
+        choices=SERVICE_AREAS,
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
+    )
+    add_service_type = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Add More Service Types'})
+    )
+    add_service_area = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Add More Service Areas'})
     )
     average_cost_per_hour = forms.DecimalField(
         max_digits=10, decimal_places=2,

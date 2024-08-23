@@ -42,27 +42,50 @@ class ServiceProviderUpdateProfileView(View):
 
     def get(self, request):
         service_provider_details = get_object_or_404(self.model, provider=request.user)
-        
+
         # Convert string representation of lists to actual lists
+        existing_service_types = ast.literal_eval(service_provider_details.service_type)
+        existing_service_areas = ast.literal_eval(service_provider_details.service_area)
+        
         initial_data = {
-            'service_type': ast.literal_eval(service_provider_details.service_type),  # Convert string to list
-            'service_area': ast.literal_eval(service_provider_details.service_area),  # Convert string to list
+            'service_type': existing_service_types,
+            'service_area': existing_service_areas,
             'average_cost_per_hour': service_provider_details.average_cost_per_hour,
             'years_experience': service_provider_details.years_experience,
         }
-        form = self.form_class(initial=initial_data)
+        form = self.form_class(initial=initial_data, 
+                               existing_service_types=existing_service_types, 
+                               existing_service_areas=existing_service_areas)
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
         service_provider_details = get_object_or_404(self.model, provider=request.user)
-        form = self.form_class(request.POST, request.FILES)
+        form = self.form_class(request.POST, request.FILES,
+                               existing_service_types=ast.literal_eval(service_provider_details.service_type),
+                               existing_service_areas=ast.literal_eval(service_provider_details.service_area))
         if form.is_valid():
-            # Convert form data to string representations of lists
-            service_provider_details.service_type = str(form.cleaned_data['service_type'])
-            service_provider_details.service_area = str(form.cleaned_data['service_area'])
-            service_provider_details.average_cost_per_hour = form.cleaned_data['average_cost_per_hour']
-            service_provider_details.years_experience = form.cleaned_data['years_experience']
+            service_type = form.cleaned_data['service_type']
+            service_area = form.cleaned_data['service_area']
+
+            # Handle additional service types
+            additional_service_type = form.cleaned_data['add_service_type']
+            if additional_service_type:
+                additional_service_types = [s.strip() for s in additional_service_type.split(',')]
+                service_type.extend(additional_service_types)
+
+            # Handle additional service areas
+            additional_service_area = form.cleaned_data['add_service_area']
+            if additional_service_area:
+                additional_service_areas = [a.strip() for a in additional_service_area.split(',')]
+                service_area.extend(additional_service_areas)
+
+            average_cost_per_hour = form.cleaned_data['average_cost_per_hour']
+            years_experience = form.cleaned_data['years_experience']
             
+            service_provider_details.service_type = service_type
+            service_provider_details.service_area = service_area
+            service_provider_details.average_cost_per_hour = average_cost_per_hour
+            service_provider_details.years_experience = years_experience
             
             # Update user object if needed
             user_obj = get_object_or_404(common_models.User, id=service_provider_details.provider.id)
@@ -76,6 +99,7 @@ class ServiceProviderUpdateProfileView(View):
             messages.error(request, "Please correct the errors below.")
         
         return render(request, self.template_name, {'form': form})
+
 
 class ServiceList(View):
     model = common_models.Service

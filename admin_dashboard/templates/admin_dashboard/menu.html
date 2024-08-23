@@ -129,7 +129,15 @@
                 {% endif %}
             </a>
         </li>
-
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_dashboard:blogs_list' %}">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Blogs From Users</span>
+            {% if total_blogs_from_user %}
+                <span class="badge badge-danger badge-counter">{{total_blogs_from_user}}</span>
+            {% endif %}
+        </a>
+    </li>
       <!-- Nav Item - Charts -->
       <li class="nav-item">
         <a class="nav-link" href="{% url 'admin_dashboard:produce_order_list' %}">

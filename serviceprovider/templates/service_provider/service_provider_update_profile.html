@@ -2,47 +2,93 @@
 {% load static %}
 
 {% block s_vendor_content %}
+<style>
+    .btn-add-more {
+        background-color: #28a745; /* Green background */
+        color: white; /* White text */
+        border: none;
+        padding: 10px 15px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 25px; /* Rounded corners */
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    }
+
+    .btn-add-more:hover {
+        background-color: #218838; /* Darker green on hover */
+        transform: scale(1.05); /* Slightly larger on hover */
+    }
+
+    .btn-add-more:focus {
+        outline: none;
+        box-shadow: 0 0 8px rgba(40, 167, 69, 0.5); /* Green shadow on focus */
+    }
+</style>
 <div class="container mt-3">
     <div class="row d-flex align-items-center justify-content-center">
-      <div class="col-lg-8 sell_wrapper">
-        <form method="post" action="" class="p-4" enctype="multipart/form-data">
-            {% include 'app_common/snippets/alert.html' %}
-            {% csrf_token %}
-            <div class="form-group">
-                <label>Service Type:</label><br>
-                {% for service in form.service_type %}
+        <div class="col-lg-8 sell_wrapper">
+            <form method="post" action="" class="p-4" enctype="multipart/form-data">
+                {% include 'app_common/snippets/alert.html' %}
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Service Type:</label><br>
+                    {% for service in form.service_type %}
                     <div class="form-check form-check-inline">
                         {{ service }}
                     </div>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                <label>Service Area:</label><br>
-                {% for city in form.service_area %}
+                    {% endfor %}
+                </div>
+                <button type="button" class="btn btn-add-more btn-secondary" id="add-more-service-type">Add
+                    More</button>
+                <div id="additional-service-type" class="form-group" style="display: none;">
+                    {{ form.add_service_type.label_tag }}
+                    {{ form.add_service_type }}
+                </div>
+                <div class="form-group">
+                    <label>Service Area:</label><br>
+                    {% for city in form.service_area %}
                     <div class="form-check form-check-inline">
                         {{ city }}
                     </div>
-                {% endfor %}
-            </div>
-            <div class="form-group">
-                <label for="id_average_cost_per_hour">Average Cost per Hour:</label>
-                {{ form.average_cost_per_hour }}
-            </div>
-            <div class="form-group">
-                <label for="id_years_experience">Years of Experience:</label>
-                {{ form.years_experience }}
-            </div>
-            <div class="form-group">
-                <label for="id_image">Profile Image:</label>
-                {{ form.image }}
-            </div>
-            <div style="text-align:center;">
-                <button class="btn btn-success btn-lg" type="submit">
-                    Update Profile
-                </button>
-            </div>
-        </form>
-      </div>
+                    {% endfor %}
+                </div>
+                <button type="button" class="btn btn-add-more btn-secondary" id="add-more-service-area">Add
+                    More</button>
+                <div id="additional-service-area" class="form-group" style="display: none;">
+                    {{ form.add_service_area.label_tag }}
+                    {{ form.add_service_area }}
+                </div>
+                <div class="form-group">
+                    <label for="id_average_cost_per_hour">Average Cost per Hour:</label>
+                    {{ form.average_cost_per_hour }}
+                </div>
+                <div class="form-group">
+                    <label for="id_years_experience">Years of Experience:</label>
+                    {{ form.years_experience }}
+                </div>
+                <div class="form-group">
+                    <label for="id_image">Profile Image:</label>
+                    {{ form.image }}
+                </div>
+                <div style="text-align:center;">
+                    <button class="btn btn-success btn-lg" type="submit">
+                        Update Profile
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
+</div>
+<script>
+    document.getElementById('add-more-service-type').addEventListener('click', function() {
+        document.getElementById('additional-service-type').style.display = 'block';
+        this.style.display = 'none';
+    });
+
+    document.getElementById('add-more-service-area').addEventListener('click', function() {
+        document.getElementById('additional-service-area').style.display = 'block';
+        this.style.display = 'none';
+    });
+</script>
 {% endblock s_vendor_content %}

@@ -37,6 +37,7 @@
                     <tr>
                         <th scope="col">User-ID</th>
                         <th scope="col">Name</th>
+                        <th scope="col">E-mail</th>
                         <th scope="col">Wallet Balance</th>
                         <th scope="col">Details</th>
                         <th scope="col">Active Status</th>
@@ -49,6 +50,7 @@
                     <tr>
                         <td>{{ user.id }}</td>
                         <td>{{ user.full_name }}</td>
+                        <td>{{ user.email }}</td>
                         <td>{{ user.wallet }}</td>
                         <td><a href="{% url 'admin_dashboard:service_providor_details' user.id %}">Details</a></td>
                         <td>{{ user.is_active }}</td>
