@@ -2,6 +2,7 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from helpers import utils
 from django.template.defaultfilters import slugify
+from app_common.models import User
 
 class Blogs(models.Model):
     ACCEPTREJECT = (
@@ -9,6 +10,7 @@ class Blogs(models.Model):
         ("rejected","rejected"),
         ("pending","pending")
     )
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null= True, blank= True)
     slug = models.SlugField(max_length=255, null=True, blank=True, unique=True)
     title = models.CharField(max_length=255,null=True, blank=True)
     author = models.CharField(max_length=255,null=True, blank=True)

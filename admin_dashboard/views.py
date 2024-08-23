@@ -10,6 +10,7 @@ from django.db.models import Count
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
 from django.utils import timezone
+from Blogs.models import Blogs
 
 app = "admin_dashboard/"
 
@@ -56,6 +57,7 @@ class AdminDashboard(View):
         jaipur_serviceprovider = common_models.User.objects.filter(is_serviceprovider = True,is_approved = True,city = "Jaipur").count()
         other_cities_serviceprovider = common_models.User.objects.filter(is_serviceprovider=True,is_approved = True).exclude(Q(city="Bhubaneswar") | Q(city="Cuttack") | Q(city="Brahmapur") | Q(city="Sambalpur") | Q(city="Jaipur")).count()
 
+        total_blogs_from_user = Blogs.objects.filter(is_accepted = "pending").count()
 
         # Define your default 5 cities
         default_cities = ["Bhubaneswar", "Cuttack", "Jaipur", "Brahmapur", "Sambalpur"]
@@ -133,7 +135,8 @@ class AdminDashboard(View):
             'labels': labels,
             'chart_data': chart_data,
             'activity_data':activity_data,
-            'activity_label':activity_label
+            'activity_label':activity_label,
+            "total_blogs_from_user":total_blogs_from_user
         }
 
         return render(request, self.template, context)

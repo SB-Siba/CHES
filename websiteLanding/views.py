@@ -33,7 +33,6 @@ class WebsiteLanding(View):
             elif step == 'serviceproviderdetails':
                 return redirect('app_common:serviceproviderdetails', email)
             
-        
         return render(request, self.template)
 
     def post(self, request):

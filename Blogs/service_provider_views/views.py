@@ -9,11 +9,11 @@ from django.contrib import messages
 from ..forms import BlogForm
 from django.db.models import Q
 
-app = "blog/rtg/"
+app = "blog/serviceprovider/"
 
-class BlogList(View):
+class SpBlogList(View):
     model = Blogs
-    template = app + "rtg_blog_list.html"
+    template = app + "sp_blog_list.html"
 
     def get(self, request):
         blog_list = self.model.objects.filter(user = request.user).order_by('-id')
@@ -23,39 +23,37 @@ class BlogList(View):
         }
         return render(request, self.template, context)
     
-class BlogAdd(View):
+class SpBlogAdd(View):
     model = Blogs
     form_class = BlogForm
-    template = app + "rtg_blog_add.html"
+    template = app + "sp_blog_add.html"
 
-    def get(self, request):
+    def get(self,request):
         blog_list = self.model.objects.all().order_by('-id')
-        form = self.form_class()  # Instantiate the form
         context = {
-            "blog_list": blog_list,
-            "form": form,
+            "blog_list" : blog_list,
+            "form": self.form_class,
         }
         return render(request, self.template, context)
     
     def post(self, request):
+
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
             blog = form.save(commit=False)
             blog.user = request.user  # Set the current user as the author
             blog.save()
-            return redirect("blogs:rtg_blog_list")
+            return redirect("blogs:sp_blog_list")
         else:
-            blog_list = self.model.objects.all().order_by('-id')
-            context = {
-                "blog_list": blog_list,
-                "form": form,
-            }
-            return render(request, self.template, context)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    print(error)
+        return redirect("blogs:sp_blog_list")
 
-class BlogUpdate(View):
+class SpBlogUpdate(View):
     model = Blogs
     form_class = BlogForm
-    template = app + "rtg_blog_update.html"
+    template = app + "sp_blog_update.html"
 
     def get(self,request, blog_id):
         blog = get_object_or_404(self.model, id=blog_id)
@@ -74,16 +72,16 @@ class BlogUpdate(View):
         if form.is_valid():
             form.save()
             messages.success(request, f"Blog ({blog_id}) is updated successfully.....")
-            return redirect(reverse('blogs:rtg_blog_list'))
+            return redirect(reverse('blogs:sp_blog_list'))
         else:
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f'{field}: {error}')
 
-        return redirect("blogs:rtg_blog_update", blog_id = blog_id)
+        return redirect("blogs:sp_blog_update", blog_id = blog_id)
 
 
-class BlogDelete(View):
+class SpBlogDelete(View):
     model = Blogs
 
     def get(self,request, blog_id):
@@ -96,10 +94,10 @@ class BlogDelete(View):
         blog.delete()
         messages.info(request, 'Blog is deleted succesfully......')
 
-        return redirect("blogs:rtg_blog_list")
+        return redirect("blogs:sp_blog_list")
     
-class BlogView(View):
-    template_name = app + 'rtg_all_blog.html'
+class SpBlogView(View):
+    template_name = app + 'sp_all_blog.html'
 
     def get(self, request):
         blogs = Blogs.objects.filter(is_accepted = "approved")
@@ -109,8 +107,8 @@ class BlogView(View):
         return render(request, self.template_name,context)
     
 
-class BlogDetails(View):
-    template_name = app + 'rtg_blog_single.html'
+class SpBlogDetails(View):
+    template_name = app + 'sp_blog_single.html'
 
     def get(self, request, slug):
         blogdetail = get_object_or_404(Blogs, slug=slug)
@@ -120,10 +118,10 @@ class BlogDetails(View):
         return render(request, self.template_name, context)
     
 
-class BlogSearch(View):
+class SpBlogSearch(View):
     model = Blogs
     form_class = BlogForm
-    template = app + "rtg_blog_list.html"
+    template = app + "sp_blog_list.html"
 
     def post(self,request):
         query = request.POST.get('query', '')

@@ -3,22 +3,30 @@
 {% block title %}All Blogs From Users{% endblock title %}
 
 {% block content %}
+<style>
+    .disabled-link {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+</style>
 <main class="py-6">
     <div class=container>
     <h4>All Blogs</h4>
         <div class="vstack gap-4">
             <div class="d-flex justify-content-between flex-column flex-sm-row gap-3">
-                <form class="my-3 mx-2" action="" method="post">
+                <form class="my-3 mx-2" action="{% url 'admin_dashboard:blog_search' %}" method="post">
                     {% csrf_token %}
                     <div class="hstack gap-2">
                         <select style="width: 6rem;" name="filter_by" class="form-select form-select1" aria-label="Default select example">
-                            <option selected value="pk">All</option>
+                            <option value="all">All</option>
                             <option value="id">ID</option>
                             <option value="name">Name</option>
                         </select>
                         <span class="input-group">
                             <input type="text" name="query" placeholder="Search Here" class="form-control form-select1" required />
-                            <button type="submit" class="input-group-text form-select1"><i class='bx bx-search-alt-2'></i></button>
+                            <button type="submit" class="input-group-text form-select1"><i class='fa fa-search'></i></button>
                         </span>
                     </div>
                 </form>
@@ -67,20 +75,24 @@
                                     </a>
                                     {% elif blog.is_accepted == "approved" %}
                                     <!-- Disable buttons if the blog is already approved -->
-                                    <button class="btn btn-sm btn-square btn-success" disabled>
-                                        <i class="fa-solid fa-check"></i> Approved
-                                    </button>
-                                    <button class="btn btn-sm btn-square btn-danger" disabled>
-                                        <i class="fa-solid fa-xmark"></i> Decline
-                                    </button>
-                                    {% elif blog.is_accepted == "declined" %}
-                                    <!-- Disable buttons if the blog is already declined -->
-                                    <button class="btn btn-sm btn-square btn-success" disabled>
+                                    <a href="{% url 'admin_dashboard:blogs_approve' blog.id %}"
+                                        class="btn btn-sm btn-square btn-success {% if blog.is_accepted == 'approved' %}disabled-link{% endif %}">
                                         <i class="fa-solid fa-check"></i> Approve
-                                    </button>
-                                    <button class="btn btn-sm btn-square btn-danger" disabled>
-                                        <i class="fa-solid fa-xmark"></i> Declined
-                                    </button>
+                                    </a>
+                                    <a href="{% url 'admin_dashboard:blog_reject' blog.id %}"
+                                        class="btn btn-sm btn-square btn-danger">
+                                        <i class="fa-solid fa-xmark"></i> Decline
+                                    </a>
+                                    {% elif blog.is_accepted == "rejected" %}
+                                    <!-- Disable buttons if the blog is already declined -->
+                                    <a href="{% url 'admin_dashboard:blogs_approve' blog.id %}"
+                                        class="btn btn-sm btn-square btn-success">
+                                        <i class="fa-solid fa-check"></i> Approve
+                                    </a>
+                                    <a href="{% url 'admin_dashboard:blog_reject' blog.id %}"
+                                        class="btn btn-sm btn-square btn-danger {% if blog.is_accepted == 'rejected' %}disabled-link{% endif %}">
+                                        <i class="fa-solid fa-xmark"></i> Decline
+                                    </a>
                                     {% endif %}
                                 </td>
                                 <td class="tb-body">
