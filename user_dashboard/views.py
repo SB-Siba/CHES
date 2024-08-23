@@ -550,7 +550,7 @@ class AllPosts(View):
                 like_count_per_activity.append(len(i.likes))
                 comment_count_per_activity.append(len(i.comments))
                 like_list.append(0)
-     
+        
         # print(posts_list,"\n",like_list,"\n",like_count_per_activity,"\n",comment_count_per_activity)
         post_and_like = zip(posts_list,like_list,like_count_per_activity,comment_count_per_activity)
         return render(request , self.template ,locals())

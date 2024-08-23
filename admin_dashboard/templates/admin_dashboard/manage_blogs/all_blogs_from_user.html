@@ -50,8 +50,9 @@
                             {% for blog in blog_list %}
                             <tr>
                                 <td class="tb-body">
+                                    
                                     <a class="text-heading text-primary-hover font-semibold"
-                                            href="{% url 'blogs:rtg_blog_update' blog.id %}">
+                                            href="{% url 'admin_dashboard:blog_update' blog.id %}">
                                             {{ blog.id }}
                                         </a>
                                 </td>
