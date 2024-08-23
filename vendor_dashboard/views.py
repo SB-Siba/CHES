@@ -177,8 +177,13 @@ class VendorSellProduct(View):
         if form.is_valid(): 
             product = form.save(commit=False)  # Don't save the form yet
             product.vendor = user  # Set the vendor to the current logged-in user
+            # Handle the custom category if "Other" is selected
+            category = form.cleaned_data.get('category')
+            custom_category = form.cleaned_data.get('custom_category')
+            
+            if 'other' in category:
+                product.category = custom_category
             product.save() 
-            messages.success(request,'Request for sell Sent Successfully')
             return redirect('vendor_dashboard:vendor_dashboard')
         else:
             messages.error(request,"Error! Please check your inputs.")
@@ -220,7 +225,7 @@ class SellProductsList(View):
         return render(request,self.template,{'products':product_objs})
 
 class UpdateProduct(View):
-    template = app + "update_sold_products.html"
+    template = app + "update_sell_products.html"
     model = common_models.ProductFromVendor
     form_class = common_forms.ProductFromVendorForm
     def get(self,request, product_id):
@@ -231,7 +236,13 @@ class UpdateProduct(View):
         product = get_object_or_404(common_models.ProductFromVendor, id=product_id, vendor=request.user)
         form = self.form_class(request.POST, request.FILES, instance=product)
         if form.is_valid():
-            form.save()
+            product = form.save(commit=False)  # Don't save the form yet
+            category = form.cleaned_data.get('category')
+            custom_category = form.cleaned_data.get('custom_category')
+            
+            if 'other' in category:
+                product.category = custom_category
+            product.save() 
             return redirect('vendor_dashboard:vendor_sell_product_list')
         
         return render(request, self.template, {'form': form, 'product': product})
@@ -251,32 +262,44 @@ class VendorDownloadInvoice(View):
     def get(self,request, order_uid):
         order = self.model.objects.get(uid = order_uid)
         data = OrderSerializer(order).data
-        products = []
-        quantities = []
-        price_per_unit = []
-        total_prices = []
+        product = ""
+        quantity = 0
+        price_per_unit = 0
+        total_price = 0
+        our_price = 0
+        cgst = 0
+        sgst = 0
+        taxable_price = 0
         coin_exchange = data['order_meta_data']['coin_exchange']
         coins_for_exchange = 0
         exchange_percentage = 0
         
         for product,p_overview in data['order_meta_data']['products'].items():
-            products.append(product)
-            quantities.append(p_overview['quantity'])
-            price_per_unit.append(p_overview['price_per_unit'])
-            total_prices.append(p_overview['total_price'])
+            product = product
+            quantity = p_overview['quantity']
+            price_per_unit = p_overview['price_per_unit']
+            total_price = p_overview['total_price']
+            our_price = p_overview['our_price']
+            cgst = p_overview['cgst']
+            sgst = p_overview['sgst']
+            taxable_price = p_overview['taxable_price']
             if coin_exchange:
                 coins_for_exchange = p_overview['coinexchange']
-                exchange_percentage = p_overview['forpercentage']
-        
-        prod_quant = zip(products, quantities,price_per_unit,total_prices)
+                exchange_percentage = p_overview['forpercentage']      
         
         context ={
             'order':data,
             'details':data['customer_details'],
             'customer':order.customer,
             'vendor':order.vendor,
-            'productandquantity':prod_quant,
-            'GST':data['order_meta_data']['charges']['GST'],
+            'product':product,
+            'quantity':quantity,
+            'price_per_unit':price_per_unit,
+            'total_price':total_price,
+            "our_price":our_price,
+            'cgst':cgst,
+            'sgst':sgst,
+            'taxable_price':taxable_price,
             'delevery_charge':data['order_meta_data']['charges']['Delivery'],
             'gross_amt':data['order_meta_data']['our_price'],
             'discount':data['order_meta_data']['discount_amount'],

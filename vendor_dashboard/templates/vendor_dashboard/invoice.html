@@ -81,13 +81,13 @@
                                                         style="display: flex;box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;padding-top: 1rem;justify-content: space-between;"
                                                         valign="top">
                                                         <div>
-                                                            <h4 style="margin-bottom: -9px;">Customer Name</h4>
+                                                            <h4 style="margin-bottom: -9px;">Invoiced To:</h4>
                                                             <p style="margin-bottom: -9px;">{{details.first_name}}&nbsp;{{details.last_name}}</p>
                                                             <p style="margin-bottom: -9px;">{{details.email}}</p>
                                                             <p style="margin-bottom: -9px;">{{details.contact_number}}</p>
                                                         </div>
                                                         <div style="margin-left: auto;">
-                                                            <h4 style="margin-bottom: -9px;">Seller Name</h4>
+                                                            <h4 style="margin-bottom: -9px;">Pay To:</h4>
                                                             <p style="margin-bottom: -9px;">{{vendor.full_name}}</p>
                                                             <p style="margin-bottom: -9px;">{{vendor.email}}</p>
                                                             <p style="margin-bottom: -9px;">{{vendor.contact}}</p>
@@ -131,6 +131,15 @@
                                                                 <th
                                                                     style="border-bottom: 1px solid #dddddd; background-color: #0000000f;">
                                                                 </th>
+                                                                <th
+                                                                    style="border-bottom: 1px solid #dddddd; background-color: #0000000f;">
+                                                                </th>
+                                                                <th
+                                                                    style="border-bottom: 1px solid #dddddd; background-color: #0000000f;">
+                                                                </th>
+                                                                <th
+                                                                    style="border-bottom: 1px solid #dddddd; background-color: #0000000f;">
+                                                                </th>
                                                             </tr>
 
                                                             <tr>
@@ -147,40 +156,71 @@
                                                                     price/unit
                                                                 </th>
                                                                 <th
+                                                                    style=" border-bottom: 1px solid #dddddd;text-align: left;padding:11px">
+                                                                    cgst
+                                                                </th>
+                                                                <th
+                                                                    style=" border-bottom: 1px solid #dddddd;text-align: left;padding:11px">
+                                                                    gst
+                                                                </th>
+                                                                <th
                                                                     style=" border-bottom: 1px solid #dddddd;text-align: end; padding:11px">
-                                                                    Amount
+                                                                    Taxable Amount
+                                                                </th>
+                                                                <th
+                                                                    style=" border-bottom: 1px solid #dddddd;text-align: end; padding:11px">
+                                                                    Total Amount
                                                                 </th>
                                                             </tr>
 
-                                                            {% for product,quantity,price_per_unit,total_price in productandquantity %}
-                                                                <tr>
-                                                                    <td
-                                                                        style="border-bottom: 1px solid #dddddd;padding:11px">
-                                                                        {{product}}
-                                                                    </td>
-                                                                    <td
-                                                                        style="border-bottom: 1px solid #dddddd;padding:11px">
-                                                                        {{quantity}}
-                                                                    </td>
-                                                                    <td
-                                                                        style="border-bottom: 1px solid #dddddd; padding:11px">
-                                                                        {{price_per_unit}}
-                                                                    </td>
-                                                                    <td
-                                                                        style="border-bottom: 1px solid #dddddd;text-align: end; padding:11px">
-                                                                        {{total_price}}
-                                                                    </td>
-                                                                </tr>
-                                                            {% endfor %}
-
+                                                            <tr>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;padding:11px">
+                                                                    {{product}}
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;padding:11px">
+                                                                    {{quantity}}
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd; padding:11px">
+                                                                    {{price_per_unit}}
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd; padding:11px">
+                                                                    {{cgst}}&nbsp;%
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd; padding:11px">
+                                                                    {{sgst}}&nbsp;%
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd; padding:11px">
+                                                                    {{taxable_price}}
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;text-align: end; padding:11px">
+                                                                    {{our_price}}
+                                                                </td>
+                                                            </tr>
+                                                    
                                                             {% if coin_exchange %}
                                                                 <tr>
                                                                     <td
-                                                                        style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
-                                                                    </td>
-                                                                    <td
                                                                     style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
-                                                                    </td>
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
+                                                                <td
+                                                                style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
                                                                     <th
                                                                         style="border-bottom: 1px solid #dddddd;text-align: left; padding-left:9px;background-color: #0000000f;">
                                                                         Coin Exchange:
@@ -192,11 +232,20 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td
-                                                                        style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
-                                                                    </td>
-                                                                    <td
                                                                     style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
-                                                                    </td>
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
+                                                                <td
+                                                                style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
                                                                     <th
                                                                         style="border-bottom: 1px solid #dddddd;text-align: left; padding-left:9px;background-color: #0000000f;">
                                                                         Discount For Green Coins:
@@ -212,6 +261,15 @@
                                                                     style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
                                                                 </td>
                                                                 <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
+                                                                <td
                                                                 style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
                                                                 </td>
                                                                 <th
@@ -223,40 +281,16 @@
                                                                     {{gross_amt}}
                                                                 </td>
                                                             </tr>
-                                                            <!-- <tr>
-                                                                <td
-                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
-                                                                </td>
-                                                                <td
-                                                                style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
-                                                                </td>
-                                                                <th
-                                                                    style="border-bottom: 1px solid #dddddd;text-align: left; padding-left:9px;background-color: #0000000f;">
-                                                                    Discount:
-                                                                </th>
-                                                                <td
-                                                                    style="border-bottom: 1px solid #dddddd;text-align: end; padding:11px;background-color: #0000000f;">
-                                                                    {{discount}}
-                                                                </td>
-                                                            </tr> -->
-
                                                             <tr>
                                                                 <td
                                                                     style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
                                                                 </td>
                                                                 <td
-                                                                style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
                                                                 </td>
-                                                                <th
-                                                                    style="border-bottom: 1px solid #dddddd;text-align: left; padding-left:9px;background-color: #0000000f;">
-                                                                    GST:
-                                                                </th>
                                                                 <td
-                                                                    style="border-bottom: 1px solid #dddddd;text-align: end; padding:11px;background-color: #0000000f;">
-                                                                    {{GST}}
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
                                                                 </td>
-                                                            </tr>
-                                                            <tr>
                                                                 <td
                                                                     style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
                                                                 </td>
@@ -273,6 +307,15 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
+                                                                <td
+                                                                    style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
+                                                                </td>
                                                                 <td
                                                                     style="border-bottom: 1px solid #dddddd;background-color: #0000000f;">
                                                                 </td>
