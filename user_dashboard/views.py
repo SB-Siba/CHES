@@ -550,7 +550,7 @@ class AllPosts(View):
                 like_count_per_activity.append(len(i.likes))
                 comment_count_per_activity.append(len(i.comments))
                 like_list.append(0)
-     
+        
         # print(posts_list,"\n",like_list,"\n",like_count_per_activity,"\n",comment_count_per_activity)
         post_and_like = zip(posts_list,like_list,like_count_per_activity,comment_count_per_activity)
         return render(request , self.template ,locals())
@@ -670,7 +670,7 @@ class CheckoutView(View):
     def get(self,request,vprod_id,vendor_email):
         user = request.user
         offer_discount = request.GET.get('offer_discount', None)
-       
+        
         initial_data = {
         'username': user.email,
         }
@@ -686,8 +686,6 @@ class CheckoutView(View):
 
         discount_amount = float(ord_meta_data['discount_amount'])
         discount_amount = '{:.2f}'.format(discount_amount)
-        gst = float(ord_meta_data['charges']["GST"])
-        gst = '{:.2f}'.format(gst)
         delivery_charge = ord_meta_data['charges']["Delivery"]
         # Using round() function for discount_percentage, t_price, and our_price
  
@@ -695,6 +693,7 @@ class CheckoutView(View):
         t_price = ord_meta_data['final_value']
         our_price = ord_meta_data['our_price']
         gross_ammount = ord_meta_data['gross_value']
+        # print(ord_meta_data)
         data = {
             'form': form,
             "vendor_product":vendor_product_obj,
@@ -702,7 +701,6 @@ class CheckoutView(View):
             "our_price":our_price,
             "discount_ammount":discount_amount,
             "discount_percentage":discount_percentage,
-            "gst":gst,
             "total":t_price,
             "offer_discount":offer_discount,
             'delivery_charge':delivery_charge
@@ -849,33 +847,44 @@ class GardenerDownloadInvoice(View):
     def get(self,request, order_uid):
         order = self.model.objects.get(uid = order_uid)
         data = OrderSerializer(order).data
-        products = []
-        quantities = []
-        price_per_unit = []
-        total_prices = []
+        product = ""
+        quantity = 0
+        price_per_unit = 0
+        total_price = 0
+        our_price = 0
+        cgst = 0
+        sgst = 0
+        taxable_price = 0
         coin_exchange = data['order_meta_data']['coin_exchange']
         coins_for_exchange = 0
         exchange_percentage = 0
         
         for product,p_overview in data['order_meta_data']['products'].items():
-            products.append(product)
-            quantities.append(p_overview['quantity'])
-            price_per_unit.append(p_overview['price_per_unit'])
-            total_prices.append(p_overview['total_price'])
+            product = product
+            quantity = p_overview['quantity']
+            price_per_unit = p_overview['price_per_unit']
+            total_price = p_overview['total_price']
+            our_price = p_overview['our_price']
+            cgst = p_overview['cgst']
+            sgst = p_overview['sgst']
+            taxable_price = p_overview['taxable_price']
             if coin_exchange:
                 coins_for_exchange = p_overview['coinexchange']
-                exchange_percentage = p_overview['forpercentage']
-        
-        prod_quant = zip(products, quantities,price_per_unit,total_prices)
-      
+                exchange_percentage = p_overview['forpercentage']      
         
         context ={
             'order':data,
             'details':data['customer_details'],
             'customer':order.customer,
             'vendor':order.vendor,
-            'productandquantity':prod_quant,
-            'GST':data['order_meta_data']['charges']['GST'],
+            'product':product,
+            'quantity':quantity,
+            'price_per_unit':price_per_unit,
+            'total_price':total_price,
+            "our_price":our_price,
+            'cgst':cgst,
+            'sgst':sgst,
+            'taxable_price':taxable_price,
             'delevery_charge':data['order_meta_data']['charges']['Delivery'],
             'gross_amt':data['order_meta_data']['our_price'],
             'discount':data['order_meta_data']['discount_amount'],
@@ -884,6 +893,7 @@ class GardenerDownloadInvoice(View):
             'coins_for_exchange':coins_for_exchange,
             'exchange_percentage':exchange_percentage
         }
+        
         return render(request,self.template,context)
     
 class ServiceProvidersList(View):
