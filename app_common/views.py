@@ -42,54 +42,73 @@ class Register(View):
     template = app + "authentication/register.html"
     form_class = forms.RegisterForm
 
-    def get(self,request,role):
-        print(request.user)
+    def get(self, request, role):
+        # Check if the user has already started registration
+        if 'registration_step' in request.session:
+            step = request.session['registration_step']
+            email = request.session.get('registration_email')
+            if step == 'gardeningdetails':
+                return redirect('app_common:gardeningdetails', email)
+            elif step == 'vendordetails':
+                return redirect('app_common:vendordetails', email)
+            elif step == 'serviceproviderdetails':
+                return redirect('app_common:serviceproviderdetails', email)
+
         context = {
             'form': self.form_class()
         }
-
         return render(request, self.template, context)
 
-    def post(self,request,role):
+    def post(self, request, role):
         form = self.form_class(request.POST)
         if form.is_valid():
             full_name = form.cleaned_data['full_name']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            confirm_password = form.cleaned_data['confirm_password']
             contact = form.cleaned_data['contact']
             city = form.cleaned_data['city']
+            if city == "Other":
+                city = form.cleaned_data['other_city']
 
             try:
-                user_obj = models.User(full_name = full_name,email = email,contact = contact,city = city)
+                user_obj = models.User(full_name=full_name, email=email, contact=contact, city=city)
+                user_obj.set_password(password)
+
                 if role == "is_rtg":
                     user_obj.is_rtg = True
-                    user_obj.set_password(password)
                     user_obj.save()
-                    messages.success(request,"Now Please give your Gardening Details.")
-                    return redirect('app_common:gardeningdetails',email)
+                    request.session['registration_step'] = 'gardeningdetails'
+                    request.session['registration_email'] = email
+                    messages.success(request, "Now Please give your Gardening Details.")
+                    return redirect('app_common:gardeningdetails', email)
+
                 elif role == "is_vendor":
                     user_obj.is_vendor = True
-                    user_obj.set_password(password)
                     user_obj.save()
-                    messages.success(request,"Now Please give your Vendor Details.")
-                    return redirect('app_common:vendordetails',email)
+                    request.session['registration_step'] = 'vendordetails'
+                    request.session['registration_email'] = email
+                    messages.success(request, "Now Please give your Vendor Details.")
+                    return redirect('app_common:vendordetails', email)
+
                 elif role == "is_serviceprovider":
                     user_obj.is_serviceprovider = True
-                    user_obj.set_password(password)
                     user_obj.save()
-                    messages.success(request,"Now Please give your Vendor Details.")
-                    return redirect('app_common:serviceproviderdetails',email)
+                    request.session['registration_step'] = 'serviceproviderdetails'
+                    request.session['registration_email'] = email
+                    messages.success(request, "Now Please give your Vendor Details.")
+                    return redirect('app_common:serviceproviderdetails', email)
+
             except:
-                messages.error(request,'Failed to register')
+                messages.error(request, 'Failed to register')
                 return redirect('app_common:index')
-            
+
         else:
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f'{field}: {error}')
 
             return redirect('app_common:index')
+
 
 
 class Login(View):
@@ -146,47 +165,49 @@ class GardeningDetails(View):
     template = app + "gardening_details.html"
     form_class = forms.GardeningForm
 
-    def get(self,request,u_email):
-        print(u_email)
+    def get(self, request, u_email):
         try:
-            user_obj = models.User.objects.get(email = u_email)
+            user_obj = models.User.objects.get(email=u_email)
             form = self.form_class(instance=user_obj)
-            context={'form':form}
+            context = {'form': form}
+            return render(request, self.template, context)
         except self.model.DoesNotExist:
-            messages.error(request,"No Data Found")
-        
-        return render(request, self.template, context)     
+            messages.error(request, "No Data Found")
+            return redirect('app_common:index')
 
-    def post(self,request,u_email):
-        form = self.form_class(request.POST,request.FILES)
+    def post(self, request, u_email):
+        form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-            user_obj = models.User.objects.get(email = u_email)
+            user_obj = models.User.objects.get(email=u_email)
 
             garden_area = form.cleaned_data['garden_area']
             number_of_plants = form.cleaned_data['number_of_plants']
             number_of_unique_plants = form.cleaned_data['number_of_unique_plants']
             garden_image = form.cleaned_data['garden_image']
-           
 
             try:
-                gardening_obj = self.model(user = user_obj,garden_area = garden_area,number_of_plants = number_of_plants,number_of_unique_plants = number_of_unique_plants,garden_image = garden_image)
+                gardening_obj = self.model(user=user_obj, garden_area=garden_area, 
+                                           number_of_plants=number_of_plants, 
+                                           number_of_unique_plants=number_of_unique_plants, 
+                                           garden_image=garden_image)
                 gardening_obj.save()
-                messages.success(request,'Data Added Successfully.Now Please answer these questions.')
-                return redirect('app_common:gardeningquiz',u_email)
+                request.session['registration_step'] = 'gardeningquiz'
+                messages.success(request, 'Data Added Successfully. Now Please answer these questions.')
+                return redirect('app_common:gardeningquiz', u_email)
             except:
-                messages.error(request,'Failed to Add data')
-                return redirect('app_common:gardeningdetails',u_email)
+                messages.error(request, 'Failed to Add data')
+                return redirect('app_common:gardeningdetails', u_email)
         else:
-            messages.error(request,'Please correct the below errors.')
-            return redirect('app_common:gardeningdetails',u_email)
+            messages.error(request, 'Please correct the below errors.')
+            return redirect('app_common:gardeningdetails', u_email)
 
 
-def gardening_quiz_view(request,u_email):
-    print(u_email)
+
+def gardening_quiz_view(request, u_email):
     if request.method == 'POST':
         form = forms.GardeningQuizForm(request.POST)
         if form.is_valid():
-            user_obj = models.User.objects.get(email = u_email)
+            user_obj = models.User.objects.get(email=u_email)
             q1 = form.cleaned_data['q1']
             q2 = form.cleaned_data['q2']
             q3 = form.cleaned_data['q3']
@@ -194,39 +215,41 @@ def gardening_quiz_view(request,u_email):
             q5 = form.cleaned_data['q5']
 
             data = {
-                'What is the process of cutting off dead or overgrown branches called?':q1,
-                'Which of the following is a perennial flower?':q2,
-                'What is the best time of day to water plants?':q3,
-                'Which type of soil holds water the best?':q4,
-                'What is the primary purpose of adding compost to soil?':q5,
+                'What is the process of cutting off dead or overgrown branches called?': q1,
+                'Which of the following is a perennial flower?': q2,
+                'What is the best time of day to water plants?': q3,
+                'Which type of soil holds water the best?': q4,
+                'What is the primary purpose of adding compost to soil?': q5,
             }
-            quiz_obj = models.GaredenQuizModel(user = user_obj,questionANDanswer = data)
+            quiz_obj = models.GaredenQuizModel(user=user_obj, questionANDanswer=data)
             
             try:
                 send_template_email(
                     subject="Registration Successful",
                     template_name="mail_template/registration_mail.html",
-                    context={'full_name': user_obj.full_name,"email":user_obj.email},
+                    context={'full_name': user_obj.full_name, "email": user_obj.email},
                     recipient_list=[user_obj.email]
                 )
 
                 quiz_obj.save()
-            except SMTPException as e:
-                # Log the error if needed
-                print(f"Failed to send email: {e}")
-                user_obj.delete()
-                return redirect('app_common:register')
+                # Clear session data after successful registration
+                request.session.pop('registration_step', None)
+                request.session.pop('registration_email', None)
+            except Exception as e:
+                print(f"Failed : {e}")
+                return redirect('app_common:gardeningquiz')
             
             if request.user.is_superuser:
                 return redirect('admin_dashboard:pending_rtg')
             return redirect('app_common:login')
     else:
         form = forms.GardeningQuizForm()
-        context={
-            "form":form,
-            "u_email":u_email
-            }
+        context = {
+            "form": form,
+            "u_email": u_email
+        }
     return render(request, 'app_common/gardening_quiz.html', context)
+
 
 
 class VendorDetails(View):
@@ -282,12 +305,12 @@ class VendorDetails(View):
                     )
         
                     vendor_detail_obj.save()
-
-                except SMTPException as e:
+                    request.session.pop('registration_step', None)
+                    request.session.pop('registration_email', None)
+                except Exception as e:
                     # Log the error if needed
-                    print(f"Failed to send email: {e}")
-                    user_obj.delete()
-                    return redirect('app_common:register')
+                    print(f"Failed : {e}")
+                    return redirect('app_common:vendordetails')
                 if request.user.is_superuser:
                     return redirect('admin_dashboard:pending_vendor')
                 return redirect('app_common:login')
@@ -304,64 +327,82 @@ class ServiceProviderDetails(View):
     template = app + "serviceprovider_details.html"
     form_class = forms.ServiceProviderDetailsForm
 
-    def get(self,request,u_email):
+    def get(self, request, u_email):
         try:
-            user_obj = models.User.objects.get(email = u_email)
-            form = self.form_class(instance=user_obj)
-            context={'form':form}
-        except self.model.DoesNotExist:
-            messages.error(request,"No Data Found")
+            user_obj = models.User.objects.get(email=u_email)
+            form = self.form_class()
+            context = {'form': form}
+        except models.User.DoesNotExist:
+            messages.error(request, "No Data Found")
+            return redirect('app_common:serviceproviderdetails', u_email=u_email)
         
-        return render(request, self.template, context)     
+        return render(request, self.template, context)
 
-    def post(self,request,u_email):
+    def post(self, request, u_email):
         form = self.form_class(request.POST)
         if form.is_valid():
-            user_obj = models.User.objects.get(email = u_email)
+            user_obj = models.User.objects.get(email=u_email)
 
             service_type = form.cleaned_data['service_type']
             service_area = form.cleaned_data['service_area']
+
+            # Handle additional service types
+            additional_service_type = form.cleaned_data['add_service_type']
+            if additional_service_type:
+                additional_service_types = [s.strip() for s in additional_service_type.split(',')]
+                service_type.extend(additional_service_types)
+
+            # Handle additional service areas
+            additional_service_area = form.cleaned_data['add_service_area']
+            if additional_service_area:
+                additional_service_areas = [a.strip() for a in additional_service_area.split(',')]
+                service_area.extend(additional_service_areas)
+
             average_cost_per_hour = form.cleaned_data['average_cost_per_hour']
             years_experience = form.cleaned_data['years_experience']
+
             try:
                 service_provider_detail_obj = self.model(
-                    provider = user_obj,
-                    service_type = service_type,
-                    service_area = service_area,
-                    average_cost_per_hour = average_cost_per_hour,
-                    years_experience = years_experience,
-                    )
+                    provider=user_obj,
+                    service_type=service_type,
+                    service_area=service_area,
+                    average_cost_per_hour=average_cost_per_hour,
+                    years_experience=years_experience,
+                )
+                service_provider_detail_obj.save()
+
                 try:
                     send_template_email(
                         subject="Registration Successful",
                         template_name="mail_template/registration_mail.html",
-                        context={'full_name': user_obj.full_name,"email":user_obj.email},
+                        context={'full_name': user_obj.full_name, "email": user_obj.email},
                         recipient_list=[user_obj.email]
                     )
-                    service_provider_detail_obj.save()
-                except SMTPException as e:
-                    # Log the error if needed
+                    request.session.pop('registration_step', None)
+                    request.session.pop('registration_email', None)
+                except Exception as e:
                     print(f"Failed to send email: {e}")
-                    user_obj.delete()
-                    return redirect('app_common:register')
+                    return redirect('app_common:serviceproviderdetails', u_email=u_email)
+
                 if request.user.is_superuser:
                     return redirect('admin_dashboard:pending_service_provider')
                 return redirect('app_common:login')
-            except:
-                messages.error(request,'Failed to Add data')
-                return redirect('app_common:serviceproviderdetails',u_email)
+
+            except Exception as e:
+                messages.error(request, 'Failed to Add data')
+                print(f"Failed to save service provider details: {e}")
+                return redirect('app_common:serviceproviderdetails', u_email=u_email)
+
         else:
-            messages.error(request,'Please correct the below errors.')
-            return redirect('app_common:serviceproviderdetails',u_email)
+            messages.error(request, 'Please correct the below errors.')
+            return redirect('app_common:serviceproviderdetails', u_email=u_email)
 
 
 class Home(View):
     template = app + 'landing.html'
 
     def get(self, request):
-        if request.user.is_authenticated:
-            return redirect('user_dashboard:user_dashboard')
-        
+  
         return render(request,self.template)
     
 

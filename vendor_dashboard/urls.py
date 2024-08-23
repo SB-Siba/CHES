@@ -38,4 +38,11 @@ urlpatterns = [
     path('order/vendor_order_search', views.OrderSearch.as_view(), name='vendor_order_search'),
     path('order/order_detail/<str:order_uid>', views.OrderDetail.as_view(), name='order_detail'),
     path('order/order_status_search', views.OrderStatusSearch.as_view(), name='order_status_search'),
+
+    path('service-providers-list/',views.ServiceProvidersList.as_view(),name="service_providers"),
+    path('service/service_search', views.ServiceSearchView.as_view(), name='service_search'),
+    path('services/', views.ListOfServicesByServiceProviders.as_view(), name='list_services'),
+    path('service_details/<int:service_id>/', views.ServiceDetails.as_view(), name='service_details'),
+    path('my_booked_services/', views.MyBookedServices.as_view(), name='my_booked_services'),
+    path('rtg/decline_booking/<int:booking_id>', views.vendor_decline_booking, name='vendor_decline_booking'),
 ]

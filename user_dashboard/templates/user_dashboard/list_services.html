@@ -4,51 +4,67 @@
 {% block title %}Service List{% endblock title %}
 
 {% block content %}
-<h2>Available Services</h2>
-<div class="d-flex justify-content-end my-2">
-    <button class="btn btn-outline-primary my-1" data-bs-toggle="modal" data-bs-target="#service_filter">
-        <i class="fa-solid fa-filter mx-2" style="color: #005cfa;"></i>
-        Service Type Wise Filter
-    </button>
-</div>
-<ul class="list-group">
-    {% for service in services %}
-    <li class="list-group-item">
-        <h3>{{ service.name }}</h3>
-        <p><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
-        <a href="{% url 'user_dashboard:service_details' service.id %}" class="btn btn-primary">View Details</a>
-    </li>
-    {% empty %}
-    <li class="list-group-item">No services available.</li>
-    {% endfor %}
-</ul>
-<div class="modal fade" id="service_filter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-black">
-                <h5 class="modal-title" id="staticBackdropLabel">Filter By Service Type</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Custom CSS -->
+<style>
+    .search-input {
+        border-radius: 25px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-btn {
+        border-radius: 25px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .service-card {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .service-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .service-image {
+        height: 200px;
+        object-fit: cover;
+    }
+</style>
+<div class="container my-4">
+    <h2 class="mb-4">Available Services</h2>
+
+    <!-- Search Form -->
+    <div class="d-flex justify-content-end mb-4">
+        <form method="get" action="{% url 'user_dashboard:service_search' %}" class="d-flex w-50">
+            <input type="text" name="search_query" class="form-control me-2 search-input" placeholder="Search for services..." aria-label="Search">
+            <button class="btn btn-outline-primary search-btn" type="submit">
+                <i class="fa-solid fa-search"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- Services List -->
+    <div class="row">
+        {% for service in services %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm service-card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ service.name }}</h5>
+                    <p class="card-text"><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
+                    <a href="{% url 'user_dashboard:service_details' service.id %}" class="btn btn-primary">View Details</a>
+                </div>
             </div>
-            <div id="service_filter">
-
-                <form id="serviceFilterForm" method="get" action="{% url 'user_dashboard:service_type_filter' %}">
-                    {% csrf_token %}
-                    <div class="text-center mx-3">
-                        <select class="form-select my-2" aria-label="Default select example" name="filter_by">
-                            <option value="all">All</option>
-                            {% for type in service_type_options %}
-                            <option value="{{ type }}">{{ type }}</option>
-                            {% endfor %}
-                        </select>
-
-                        <button class="btn btn-primary my-2" type="submit">Search</button>
-                    </div>
-                </form>
-
-            </div>
-
         </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info" role="alert">
+                No services available.
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock content %}

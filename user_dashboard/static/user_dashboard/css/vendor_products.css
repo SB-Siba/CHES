@@ -1,0 +1,108 @@
+.v_product_img-container {
+    overflow: hidden;
+    position: relative;
+    border-radius: 5px; /* Optional: for consistency with the image */
+  }
+  
+  /* Image styling */
+  .v_product_img {
+    height: 220px;
+    border-radius: 5px;
+    transition: transform 0.3s ease; /* Smooth zoom effect */
+  }
+  
+  /* Zoom effect on hover */
+  .v_product_img-container:hover .v_product_img {
+    transform: scale(1.05); /* Adjust scale as needed */
+  }
+  
+    .rating-container {
+    background-color: green;
+    color: white;
+    width: 45px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px; 
+  
+    font-size: 12px; 
+    line-height: 1; 
+  }
+  
+  .rating-container i.fa-star {
+    margin-right: 2px;
+    font-size: 12px;
+    display: inline-block;
+    vertical-align: middle; 
+  }
+  
+  .rating-container p {
+    margin: 0;
+    line-height: 1; 
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .disc_price{
+    font-size: 12px;
+  }
+  .check_para{
+    padding-left: 20px;
+    font-size: 11px;
+  }
+  /* Default unchecked state */
+  .offer-discount-checkbox {
+    accent-color: green; 
+    border: 2px solid green;
+  }
+  
+  .offer-discount-checkbox:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .offer-discount-checkbox:checked {
+    background-color: green;
+    border-color: green;
+    box-shadow: none; 
+  }
+  .green_text{
+    color: green;
+  }
+  .btn-outline{
+    background-color: green;
+    border: 1.5px solid green;
+    color: white;
+  }
+  .btn-outline:hover{
+    background-color: white;
+    border: 1.5px solid green;
+    color: green;
+  }
+  
+  
+/* =============checkout============== */
+
+.form-control {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 7px;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+    border-bottom-color: #37af2c;
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-block:hover{
+    color: green;
+    background-color: white;
+}
+#my_col_1{
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}

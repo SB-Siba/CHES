@@ -2,13 +2,35 @@ from django import forms
 from app_common import models
 
 class ServiceProviderUpdateForm(forms.Form):
+    DEFAULT_SERVICE_TYPES = [
+        ('Lawn Care', 'Lawn Care'),
+        ('Tree Trimming', 'Tree Trimming'),
+        ('Garden Design', 'Garden Design'),
+        ('Irrigation Systems', 'Irrigation Systems'),
+    ]
+    DEFAULT_SERVICE_AREAS = [
+        ("Bhubaneswar", "Bhubaneswar"),
+        ("Cuttack", "Cuttack"),
+        ("Brahmapur", "Brahmapur"),
+        ("Sambalpur", "Sambalpur"),
+        ("Jaipur", "Jaipur"),
+    ]
+
     service_type = forms.MultipleChoiceField(
-        choices=models.ServiceProviderDetails.SERVICE_TYPES,
+        choices=[],
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
     )
     service_area = forms.MultipleChoiceField(
-        choices=models.ServiceProviderDetails.SERVICE_AREAS,
+        choices=[],
         widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
+    )
+    add_service_type = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Add More Service Types'})
+    )
+    add_service_area = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Add More Service Areas'})
     )
     average_cost_per_hour = forms.DecimalField(
         max_digits=10, decimal_places=2,
@@ -19,10 +41,26 @@ class ServiceProviderUpdateForm(forms.Form):
     )
     image = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
 
+    def __init__(self, *args, **kwargs):
+        self.existing_service_types = kwargs.pop('existing_service_types', [])
+        self.existing_service_areas = kwargs.pop('existing_service_areas', [])
+        super().__init__(*args, **kwargs)
+
+        # Combine existing service types/areas with default ones
+        service_types = list(set(self.DEFAULT_SERVICE_TYPES + [(item, item) for item in self.existing_service_types]))
+        service_areas = list(set(self.DEFAULT_SERVICE_AREAS + [(item, item) for item in self.existing_service_areas]))
+
+        # Sort choices alphabetically for consistency
+        service_types.sort(key=lambda x: x[1])
+        service_areas.sort(key=lambda x: x[1])
+
+        # Set the choices dynamically
+        self.fields['service_type'].choices = service_types
+        self.fields['service_area'].choices = service_areas
+
+
     
 class ServiceAddForm(forms.ModelForm):
-    service_type = forms.ChoiceField(choices=[], required=False)
-
     class Meta:
         model = models.Service
         fields = ['name', 'description', 'price_per_hour', 'service_type']
@@ -30,25 +68,9 @@ class ServiceAddForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),  # Text input with form-control class
             'description': forms.Textarea(attrs={'class': 'form-control'}),  # Textarea with form-control class
             'price_per_hour': forms.NumberInput(attrs={'class': 'form-control'}),  # Number input with form-control class
-            'service_type': forms.Select(attrs={'class': 'form-control'}),  # Select dropdown with form-control class
-        }
-        labels = {
-            'service_type': 'Service Type',  # Example label customization
+            'service_type': forms.TextInput(attrs={'class': 'form-control'}),  # Select dropdown with form-control class
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['service_type'].widget.attrs['class'] = 'form-control'  # Add form-control class
-        provider = self.initial.get('provider') or (self.instance.provider if self.instance.pk else None)
-        if provider:
-            provider_details = models.ServiceProviderDetails.objects.filter(provider=provider).first()
-            if provider_details:
-                service_types = [
-                    (service_type.strip('[] \'').strip(), service_type.strip('[] \'').strip()) 
-                    for service_type in provider_details.service_type.split(',')
-                ]
-                self.fields['service_type'].choices = service_types
-                self.fields['service_type'].initial = self.instance.service_type
 
 class BookingForm(forms.ModelForm):
     booking_date = forms.DateTimeField(

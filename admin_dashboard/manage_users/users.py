@@ -304,7 +304,7 @@ class QuizAnswers(View):
             user_obj = get_object_or_404(models.User, id = user_id)
             quizPoints = request.POST['quizPoints']
 
-            user_obj.quiz_score += int(quizPoints)
+            user_obj.quiz_score = int(quizPoints)
             user_obj.save()
             messages.success(request, 'Wallet Balance For Quiz Given Successfully')
             return redirect("admin_dashboard:pending_rtg")

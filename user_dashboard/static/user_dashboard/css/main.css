@@ -68,7 +68,7 @@ border-left: 5px solid rgb(192, 1, 106);
 }
 .sell_wrapper{
     background-color: #fff;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 .sell_wrapper form p {
     color: #000;
@@ -77,11 +77,61 @@ border-left: 5px solid rgb(192, 1, 106);
 }
 
 .sell_wrapper form .form-control {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 7px;
     padding: 10px;
-    border-radius: 0px;
-    height: 53px;
-    border: 1px solid #4CAF50;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
+.sell_wrapper form .form-control:focus {
+    border-bottom-color: #37af2c;
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+#button {
+    padding: 1em 2em;
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: #37af2c;
+    transition: all 1000ms;
+    font-size: 15px;
+    position: relative;
+    overflow: hidden;
+    outline: 2px solid #4daf2c;
+  }
+  
+  #button:hover {
+    color: #ffffff;
+    transform: scale(1.1);
+    outline: 2px solid #73ca70;
+    box-shadow: 4px 5px 17px -4px #167111;
+  }
+  
+  #button::before {
+    content: "";
+    position: absolute;
+    left: -50px;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background-color: #188810;
+    transform: skewX(45deg);
+    z-index: -1;
+    transition: width 1000ms;
+  }
+  
+  #button:hover::before {
+    width: 250%;
+  }
+  #sells_form{
+      border-radius: 10px;
+  }
 .sell_btn {
     background-color: #14453b;
     color: #fff;

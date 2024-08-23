@@ -2,12 +2,13 @@ from django.urls import path
 from . import views,api_views
 from .manage_users import users
 from admin_dashboard.orders import order
+from .manage_blogs import blogs
 
 app_name = 'admin_dashboard'
 
 urlpatterns = [
     path('', views.AdminDashboard.as_view(), name = "admin_dashboard"),
-
+    path('city/<str:city_name>/', views.CityDetailView.as_view(), name='city_detail_view'),
     # manage users
     path('add_user',users.AddUser.as_view(), name='add_user'),
     path('pendingrtgs',users.PendingRtgs.as_view(), name='pending_rtg'),
@@ -52,6 +53,12 @@ urlpatterns = [
     # path('service-provider-details/<int:pk>/', api_views.ServiceProviderDetailsAPIView.as_view(), name='api_service_provider_details'),
     # path('quiz-answers/<int:user_id>/', api_views.QuizAnswersAPIView.as_view(), name='api_quiz_answers'),
 
+    # Manage Blogs
+    path('blogs_list',blogs.AllBlogsFromUsers.as_view(), name='blogs_list'),
+    path('approve_blog/<int:blog_id>',blogs.ApproveBlog.as_view(), name='blogs_approve'),
+    path('reject_blog/<int:blog_id>',blogs.DeclineBlog.as_view(), name='blog_reject'),
+    path('delete_blog/<int:blog_id>',blogs.DeleteBlog.as_view(), name='blog_delete'),
+    path('blog_search/',blogs.BlogSearch.as_view(), name='blog_search'),
 ]
 
 #  admin_dashboard:users_list

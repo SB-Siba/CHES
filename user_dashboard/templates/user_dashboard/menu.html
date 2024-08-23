@@ -198,7 +198,6 @@
         <span>My Wallet</span>
       </a>
     </li>
- 
     <li class="nav-item">
       <a class="nav-link" href="{% url 'chat:all_messages' %}">
         <i class="fa-solid fa-message"></i>
@@ -283,6 +282,39 @@
       </div>
     </li>
 
+    <!-- Blogs -->
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseManageBlogs"
+        aria-expanded="true"
+        aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-cog"></i>
+        <span>Manage Blogs</span>
+      </a>
+      <div
+        id="collapseManageBlogs"
+        class="collapse"
+        aria-labelledby="headingTwo"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a
+            class="collapse-item"
+            href="{% url 'blogs:rtg_all_blogs' %}">
+            <i class="far fa-plus-square text-success"></i>
+            <span> All Blogs</span>
+          </a>
+          <a
+            class="collapse-item"
+            href="{% url 'blogs:rtg_blog_list' %}">
+            <i class="far fa-list-alt text-success"></i>
+            <span>My Blogs</span>
+          </a>
+        </div>
+      </div>
+    </li>
     <li class="nav-item">
       <a class="nav-link" href="{% url 'user_dashboard:contactpage' %}">
         <i class="fa-solid fa-headset"></i>

@@ -1,0 +1,243 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Dashboard - {{ city_name }}{% endblock title %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="my-4">{{ city_name }} - Detailed Information</h2>
+    
+    <!-- Card Section -->
+    <div class="row">
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <h4 class="card-title">RTG Users</h4>
+                    <ul class="list-group">
+                        {% for rtg in rtgs %}
+                        <li class="list-group-item">
+                            <strong>{{ rtg.username }}</strong> - {{ rtg.email }}
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item">No RTG users found.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <h4 class="card-title">Vendors</h4>
+                    <ul class="list-group">
+                        {% for vendor in vendors %}
+                        <li class="list-group-item">
+                            <strong>{{ vendor.username }}</strong> - {{ vendor.email }}
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item">No vendors found.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <h4 class="card-title">Service Providers</h4>
+                    <ul class="list-group">
+                        {% for service_provider in service_providers %}
+                        <li class="list-group-item">
+                            <strong>{{ service_provider.username }}</strong> - {{ service_provider.email }}
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item">No service providers found.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Charts Section -->
+    <div class="row">
+        <!-- <div class="col-lg-6 mb-4">
+            <div class="card shadow h-100 py-2">
+                <div class="card-body">
+                    <h4 class="card-title">Users of {{ city_name }}</h4>
+                    <canvas id="usersChart"></canvas>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow py-2">
+                <div class="card-body">
+                    <canvas id="myUsersChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow h-100 py-2">
+                <div class="card-body">
+                    <h4 class="card-title">Activity Chart</h4>
+                    <canvas id="activityChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow h-100 py-2">
+                <div class="card-body">
+                    <h4 class="card-title">RTG Sales Chart</h4>
+                    <canvas id="rtgSalesChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow h-100 py-2">
+                <div class="card-body">
+                    <h4 class="card-title">Vendor Sales Chart</h4>
+                    <canvas id="vendorSalesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Data from context
+    var graphData = {{ graph_data|safe }};
+    
+    // Activity Chart
+    var ctxActivity = document.getElementById('activityChart').getContext('2d');
+    var activityChart = new Chart(ctxActivity, {
+        type: 'line',
+        data: {
+            labels: graphData.activity_label, // Dynamic labels
+            datasets: [{
+                label: 'User Activity',
+                data: graphData.activity_data, // Dynamic data
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: { display: true, text: 'Users' },
+                    beginAtZero: true
+                },
+                y: {
+                    title: { display: true, text: 'Activity Count' },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // RTG Sales Chart
+    var ctxRtgSales = document.getElementById('rtgSalesChart').getContext('2d');
+    var rtgSalesChart = new Chart(ctxRtgSales, {
+        type: 'bar',
+        data: {
+            labels: graphData.rtg_sales_label, // Dynamic labels
+            datasets: [{
+                label: 'RTG Sales',
+                data: graphData.rtg_sales_data, // Dynamic data
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: { display: true, text: 'RTG' },
+                    beginAtZero: true
+                },
+                y: {
+                    title: { display: true, text: 'Sales Amount' },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Vendor Sales Chart
+    var ctxVendorSales = document.getElementById('vendorSalesChart').getContext('2d');
+    var vendorSalesChart = new Chart(ctxVendorSales, {
+        type: 'bar',
+        data: {
+            labels: graphData.vendor_sales_label, // Dynamic labels
+            datasets: [{
+                label: 'Vendor Sales',
+                data: graphData.vendor_sales_data, // Dynamic data
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: { display: true, text: 'Vendor' },
+                    beginAtZero: true
+                },
+                y: {
+                    title: { display: true, text: 'Sales Amount' },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+<script>
+    // Users Count Chart
+    var labels = {{ labels|safe }};
+    var data = {{ chart_data|safe }};
+
+    // Create the pie chart
+    var ctx = document.getElementById("myUsersChart");
+    var myUsersChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796'],
+                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#dda20a', '#d93d3b', '#636363'],
+                hoverBorderColor: "rgba(234, 236, 244, 1)",
+            }],
+        },
+        options: {
+            maintainAspectRatio: false,
+            tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                borderColor: '#dddfeb',
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                caretPadding: 10,
+            },
+            legend: {
+                display: false
+            },
+            cutoutPercentage: 80,
+        },
+    });
+</script>
+{% endblock js %}
