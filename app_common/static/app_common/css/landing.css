@@ -9,6 +9,10 @@
   font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
 }
+::selection {
+  background-color: #0dff00; /* Replace with your desired background color */
+  color: #000000; /* Optional: Change the text color */
+}
 h3,h5,h1,h2,h4,p,h6{
   overflow-y: hidden;
 }
@@ -27,7 +31,7 @@ nav {
 }
 
 nav .menu-container {
-  max-width: 1270px;
+  max-width: 3000px;
   margin: auto;
   padding: 0 20px;
 }
@@ -59,7 +63,7 @@ nav .menu {
   left: 0;
   width: 100%;
   z-index: 1000;
-  padding: 20px 92px 0 92px ;
+  padding: 20px 68px 0 68px ;
   display: flex;
   align-items: center;
   background-color: #0e2207;
@@ -509,7 +513,7 @@ img {
     width: 100%;
     z-index: 1000;
     display: flex;
-    padding: 5px 10px;
+    padding: 5px 68px;
     align-items: center;
     background-color: #0e2207;
   }

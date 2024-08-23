@@ -2,6 +2,7 @@
 
 <head>
   <style>
+
     .sidebar.collapsed .nav-item .collapse {
       display: none;
     }
@@ -191,6 +192,13 @@
             <span>Posts</span>
         </a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'user_dashboard:walletpage' %}">
+        <i class="fa-solid fa-message"></i>
+        <span>My Wallet</span>
+      </a>
+    </li>
+ 
     <li class="nav-item">
       <a class="nav-link" href="{% url 'chat:all_messages' %}">
         <i class="fa-solid fa-message"></i>

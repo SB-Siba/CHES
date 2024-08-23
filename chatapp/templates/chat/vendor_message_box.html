@@ -2,339 +2,24 @@
 {% load static %}
 
 {% block main_content %}
+<head>
+  <link rel="stylesheet" href="{% static 'css/messages.css' %}">
+</head>
 <style>
-  .container {
-    background: #fff;
-    padding: 0;
-    border-radius: 7px;
-  }
-
-  .profile-image {
-    width: 50px;
-    height: 50px;
-    border-radius: 40px;
-    object-fit: cover;
-  }
-
-  .settings-tray {
-    background: #eee;
-    padding: 10px 15px;
-    height: 65px;
-  }
-
-  .settings-tray .no-gutters {
-    padding: 0;
-  }
-
-  .settings-tray--right {
-    float: right;
-  }
-
-  .settings-tray--right i {
-    margin-top: 10px;
-    font-size: 25px;
-    color: grey;
-    margin-left: 14px;
-    transition: 0.3s;
-  }
-
-  .settings-tray--right i:hover {
-    color: #74b9ff;
-    cursor: pointer;
-  }
-
-  .search-box {
-    background-color: #21312e;
-    padding: 10px 13px;
-  }
-
-  .search-box .input-wrapper {
-    background: #585353;
-    border-radius: 40px;
-  }
-
-  .search-box .input-wrapper i {
-    color: grey;
-    margin-left: 7px;
-    vertical-align: middle;
-  }
-
-  input {
-    border: none;
-    border-radius: 30px;
-    width: 80%;
-  }
-
-  input::placeholder {
-    color: #e3e3e3;
-    font-weight: 300;
-    margin-left: 20px;
-  }
-
-  input:focus {
-    outline: none;
-  }
-
-  .friend-drawer {
-    padding: 10px 15px;
-    display: flex;
-    vertical-align: baseline;
-    background-color: #374644;
-    transition: 0.3s ease;
-  }
-
-  .text h6 {
-    color: #ffffff;
-    font-weight: 600;
-  }
-
-  .active {
-    background-color: 14453B;
-  }
-
-  .friend-drawer--grey {
-    background: #eee;
-  }
-
-  .friend-drawer .text {
-    margin-left: 12px;
-    width: 70%;
-  }
-
-  .friend-drawer .text p {
-    margin: 0;
-  }
-
-  .friend-drawer .time {
-    color: grey;
-  }
-
-  .friend-drawer--onhover:hover {
-    background: #374644;
-    cursor: pointer;
-  }
-
-  .friend-drawer--onhover:hover p,
-  .friend-drawer--onhover:hover h6,
-  .friend-drawer--onhover:hover .time {
-    color: #fefcfc !important;
-  }
-
-  hr {
-    margin: 5px auto;
-    width: 60%;
-  }
-
-  .chat-bubble {
-    padding: 7px 14px;
-    background: #038035;
-    color: white;
-    margin: 10px 30px;
-    border-radius: 10px;
-    position: relative;
-    animation: fadeIn 1s ease-in;
-    width: 80%;
-  }
-
-  .chat-bubble.chat-bubble--right {
-    margin-left: auto;
-  }
-
-  .chat-bubble:after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 0;
-    height: 0;
-    border: 20px solid transparent;
-    border-bottom: 0;
-    margin-top: -10px;
-  }
-
-  .chat-bubble--left:after {
-    left: 0;
-    border-right-color: #038035;
-    border-left: 0;
-    margin-left: -20px;
-  }
-
-  .chat-bubble--right:after {
-    right: 0;
-    border-left-color: #038035;
-    border-right: 0;
-    margin-right: -20px;
-  }
-
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-    }
-
-    100% {
-      opacity: 1;
-    }
-  }
-
-  .offset-md-9 .chat-bubble {
-    background: #008134;
-    color: #fff;
-  }
-
-  .chat-box-tray {
-    background: #eee;
-    display: flex;
-    align-items: baseline;
-    padding: 10px 15px;
-    align-items: center;
-    margin-top: 19px;
-    bottom: 0;
-  }
-
-  .chat-box-tray input {
-    margin: 0 10px;
-    padding: 6px 2px;
-  }
-
-  .chat-box-tray i {
-    color: grey;
-    font-size: 30px;
-    vertical-align: middle;
-  }
-
-  .chat-box-tray i:hover {
-    color: #74b9ff;
-    cursor: pointer;
-  }
-
-  .chat-box-tray i:last-of-type {
-    margin-left: 25px;
-  }
-
-  .top-bar {
-    background-color: #14453B;
-    height: 100px;
-  }
-
-  /* Custom scrollbar styles for chat panel */
-  #chat-panel::-webkit-scrollbar {
-    width: 12px;
-  }
-
-  #chat-panel::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-  }
-
-  #chat-panel::-webkit-scrollbar-thumb {
-    background-color: #038035;
-    border-radius: 10px;
-    border: 3px solid #f1f1f1;
-  }
-
-  #chat-panel::-webkit-scrollbar-thumb:hover {
-    background-color: #038035;
-  }
-
-  /* For Firefox */
-  #chat-panel {
-    scrollbar-width: thin;
-    scrollbar-color: #038035 #f1f1f1;
-  }
-
-  .background-image {
-    background-image: url("{% static 'user_dashboard/img/message2.jpg' %}");
+   .background-image {
+    background-image: url("{% static 'images/message2.jpg' %}");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
   }
 </style>
-<!--- <section>
-    <div class="container py-5">
-  
-      <div class="row">
-  
-        <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0">  
-          <div class="card">
-            <div class="card-body">
-                <ul class="list-unstyled mb-0">
-                    {% for time, message in all_messages %}
-                        <div class="d-flex justify-content-start">
-                        {% if message.sender == user %}
-                          {% if message.recipient.user_image %}
-                              <img src="{{message.recipient.user_image.url}}" alt="avatar"
-                              class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60" height="60">
-                          {% else %}
-                              <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-2.webp" alt="avatar"
-                              class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
-                          {% endif %}
-                         
-                          <li class="mx-3 mt-2">
-                              <p class="fw-bold mb-0">
-                              <a href="#" class="recipient-name uuuser" data-recipient="{{ message.recipient.full_name }}">{{ message.recipient.full_name }}</a>
-                              </p>
-                              <p class="small text-muted">{{ message.content }} <small>({{ time }})</small></p>
-                          </li>
-                          </div>
-                          <hr style="font-size: 10px; color: black;">
-                        {% else %}
-                          {% if message.sender.user_image %}
-                              <img src="{{message.sender.user_image.url}}" alt="avatar"
-                              class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60" height="60">
-                          {% else %}
-                              <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-2.webp" alt="avatar"
-                              class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60">
-                          {% endif %}
-                         
-                          <li class="mx-3 mt-2">
-                              <p class="fw-bold mb-0">
-                              <a href="#" class="sender-name uuuser" data-sender="{{ message.sender.full_name }}">{{ message.sender.full_name }}</a>
-                              </p>
-                              <p class="small text-muted">{{ message.content }} <small>({{ time }})</small></p>
-                          </li>
-                          </div>
-                          <hr style="font-size: 10px; color: black;">
-                        {% endif %}
-                    {% endfor %}
-                  </ul>
-            </div>
-          </div>
-  
-        </div>
-  
-        <div class="col-md-6 col-lg-7 col-xl-8">
-  
-          <ul class="list-unstyled">
-            <div class="messages-container" style='max-height: 300px; overflow-y: auto;'>
-
-            </div>
-            <form class="w-100 msg_Form">
-              {% csrf_token %}
-                <li class="mb-3 row">
-                    <input type="hidden" id="recipientFullName" name="recipient_full_name" value="">
-                    <div class="form-outline col-md-7 col-lg-9 col-9">
-                      {% csrf_token %}
-                      {{ form.as_p }}
-                    </div>
-                    <div class="col-md-5 col-lg-3 col-3">
-                      <button type="submit" class="btn btn-info btn-rounded w-100">Send</button>
-                    </div>
-                  </li>
-            </form>
-            
-          </ul>
-  
-        </div>
-  
-      </div>
-  
-    </div>
-</section>-->
 
 
-<section style="background:#e1e0dd;">
-  <div class="top-bar mt-3" style="height: 3.7rem;"></div>
+<section style="background:#ffffff;">
+  
   <div class="container">
     <div class="row no-gutters">
+      <div class="top-bar mt-3" style="height: 3.7rem;"> </div>
       <div class="col-md-4 border-right" style="overflow-y: auto; background-color: #21312e;">
         <div class="settings-tray" style="background-color: #21312e; border-bottom: 1px solid gray;">
           {% if request.user.user_image %}
@@ -344,7 +29,7 @@
           {% endif %}
           
           <span class="settings-tray--right">
-            <i onclick="refreshPage()" class="fa-solid fa-arrows-rotate text-white"></i>
+            <i onclick="refreshPage()" class="fa-solid fa-arrows-rotate "></i>
           </span>
         </div>
         <div class="search-box">
@@ -363,9 +48,9 @@
               {% endif %}
               <div class="text">
                 <h6>{{i.sender.full_name}}</h6>
-                <p class="text-muted">{{ l_message.0 }}</p>
+                <p class=" time small" >{{ l_message.0 }} </p>
               </div>
-              <span class="time text-muted small">{{ l_message.1 }}</span>
+              <span class="time small">{{ l_message.1 }}</span>
             </div>
             <hr>
             {% else %}
@@ -377,7 +62,7 @@
               {% endif %}
               <div class="text">
                 <h6>{{i.receiver.full_name}}</h6>
-                <p class="text-muted">{{ l_message.0 }}</p>
+                <p class=" time text-muted small">{{ l_message.0 }}</p>
               </div>
               <span class="time text-muted small">{{ l_message.1 }}</span>
             </div>
@@ -386,9 +71,9 @@
         {% endfor %}
       </div>
       
-      <div class="col-md-8" style="background-color:#f6e6c466;">
+      <div class="col-md-8 ps-1 pe-0 background-image" >
         
-        <div class="settings-tray " style="background-color:#21312e ;">
+        <div class="settings-tray px-0" style="background-color:#21312e ;">
           <div class="friend-drawer no-gutters friend-drawer--grey" style="background-color:#21312e ;">
             <img class="profile-image" id="chatpartner-profile-image" src="{% static 'user_dashboard\img\profile8.jpg'%}" alt="">
             <div class="text">
@@ -396,23 +81,23 @@
               <p class="text-muted">Layin' down the law since like before Christ...</p>
             </div>
             <span class="settings-tray--right">
-              <i onclick="refreshPage()" class="fa-solid fa-arrows-rotate text-white"></i>
+              <i onclick="refreshPage()" class="fa-solid fa-arrows-rotate "></i>
             </span>
           </div>
         </div>
 
-        <div class="chat-panel" id="chat-panel" style="height: 400px; overflow-y: auto;">
+        <div class="chat-panel " id="chat-panel"  overflow-y: auto;">
 
         </div>
-        <div class="row">
+        <div class="row" style="height: 80px;">
           <div class="col-12">
             <div class="chat-box-tray" style="background-color: #21312e;">
               <form id="messageForm" action="{% url 'chat:send_message' %}" method="post" class="w-100">
                 {% csrf_token %}
-                <div class="row">
-                  <div class="col-lg-10 col-md-10 col-xl-10 col-sm-10 col-10">
+                <div class="row ">
+                  <div class="col-lg-10 col-md-10 col-xl-10 col-sm-10 col-10"  >
                     <input type="hidden" id="receiverIdInput" name="receiver_id" value="" style="background-color:#585353;">
-                    <input type="text" name="message" placeholder="Type your message here..." class="w-100">
+                    <input type="text" name="message" placeholder="Type your message here..." class="w-100" style="background-color:#585353; color: white; padding-left: 20px; height: 40px;">
                   </div>
                   <div class="col-lg-2 col-md-2 col-xl-2 col-sm-2 col-2">
                     <i id="submitMessage" class="fa-solid fa-paper-plane"></i>
