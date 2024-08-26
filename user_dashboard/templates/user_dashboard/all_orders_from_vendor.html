@@ -4,184 +4,186 @@
 {% block title %}All Orders From Vendor{% endblock title %}
 {% block content %}
 <style>
-  .star-rating {
-      direction: ltr; /* Ensure stars fill from left to right */
-  }
+    .star-rating {
+        direction: ltr; /* Ensure stars fill from left to right */
+        position: relative;
+    }
 
-  .star-rating .star,
-  .star-rating .star-half {
-      font-size: 2rem;
-      color: #ddd;
-      cursor: pointer;
-      display: inline-block;
-      position: relative;
-  }
+    .star-rating .star,
+    .star-rating .star-half {
+        font-size: 2rem;
+        color: #ddd;
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: color 0.2s; /* Smooth color transition */
+    }
 
-  .star-rating .star.selected,
-  .star-rating .star-half.selected {
-      color: #f39c12;
-  }
+    .star-rating .star.selected,
+    .star-rating .star-half.selected {
+        color: #f39c12; /* Color for selected stars */
+    }
 
-  /* Hover effect from left to right */
-  .star-rating .star:hover,
-  .star-rating .star:hover ~ .star,
-  .star-rating .star-half:hover,
-  .star-rating .star-half:hover ~ .star,
-  .star-rating .star-half:hover ~ .star-half {
-      color: #f39c12;
-  }
+    /* Hover effect: highlight star and all stars to its left */
+    .star-rating .star:hover,
+    .star-rating .star:hover ~ .star,
+    .star-rating .star-half:hover,
+    .star-rating .star-half:hover ~ .star,
+    .star-rating .star-half:hover ~ .star-half {
+        color: #f39c12; /* Color for hovered star and stars to its left */
+    }
 
-  /* Reset to empty stars */
-  .star-rating .star:hover ~ .star-half {
-      color: #ddd;
-  }
+    /* Reset stars to default color for stars to the right */
+    .star-rating .star:hover ~ .star,
+    .star-rating .star-half:hover ~ .star,
+    .star-rating .star-half:hover ~ .star-half {
+        color: #ddd; /* Default color for stars to the right */
+    }
 </style>
-
-    <div class="page-wapper">
-        {% include 'app_common/snippets/alert.html' %}
-        <div class="table-responsive">
-            <table class="table table-hover table-nowrap">
-                <thead class="table-light">
-                    <tr>
-                        <th scope="col">ORD_ID</th>
-                        <th scope="col">Products</th>
-                        <th scope="col">Order Ammount</th>
-                        <th scope="col">status</th>
-                        <th scope="col">Rate Product</th>
-                        <th>Invoice</th>
-                    </tr>
-                </thead>
-                <tbody id="test_table_tbody">
-                    {% for order,product in order_and_products %}
-                    <tr>
-                      <td>
-                        <a>
-                          {{order.uid}}
-                        </a>
-                      </td>
-                      <td>
-                        {% for i,j in order.products.items %}
-                        {{i}} : {{j}} <br>
-                        {% endfor %}
-                      </td>
-                      <td>
-                        {{order.order_value}}
-                      </td>
-                      {% if order.order_status == "Accepted" %}
-                      <td>
-                        <p class="text-success">
-                          {{order.order_status}}
-                        </p>
-                      </td>
-                      {% else %}
-                      <td>
-                        <p class="text-black">
-                          {{order.order_status}}
-                        </p>
-                      </td>
-                      {% endif %}
-                      <td>
-                        {% if not order.rating_given and order.order_status == "Delivered" %}
-                            <a type="button" class="btn btn-sm btn-square btn-neutral btn-primary rate-order-btn" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">
-                                Rate This
-                            </a>
-                        {% elif order.rating_given %}
-                            <p class="btn btn-sm btn-square btn-neutral btn-secondary" style="width: 130px;" disabled>Rated <span class="mx-1">{{ order.rating }} <i class="fas fa-star star mx-0 text-warning"></i></span></p>
-                        {% else %}
-                            <p class="btn btn-sm btn-square btn-neutral btn-secondary" disabled>Not Yet</p>
-                        {% endif %}   
-                      </td>
-                      <td>
-                        <a href="{% url 'user_dashboard:invoice' order.uid %}"
-                          class="btn btn-sm btn-square btn-neutral btn-primary">
-                          Invoice
-                        </a>
-                      </td>
-                    </tr>
-
+<div class="page-wapper">
+    {% include 'app_common/snippets/alert.html' %}
+    <div class="table-responsive">
+        <table class="table table-hover table-nowrap">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">ORD_ID</th>
+                    <th scope="col">Products</th>
+                    <th scope="col">Order Ammount</th>
+                    <th scope="col">status</th>
+                    <th scope="col">Rate Product</th>
+                    <th>Invoice</th>
+                </tr>
+            </thead>
+            <tbody id="test_table_tbody">
+                {% for order,product in order_and_products %}
+                <tr>
+                    <td>
+                    <a>
+                        {{order.uid}}
+                    </a>
+                    </td>
+                    <td>
+                    {% for i,j in order.products.items %}
+                    {{i}} : {{j}} <br>
                     {% endfor %}
-                  </tbody>
-            </table>
-            {% include 'app_common/snippets/pagination.html' %}
+                    </td>
+                    <td>
+                    {{order.order_value}}
+                    </td>
+                    {% if order.order_status == "Accepted" %}
+                    <td>
+                    <p class="text-success">
+                        {{order.order_status}}
+                    </p>
+                    </td>
+                    {% else %}
+                    <td>
+                    <p class="text-black">
+                        {{order.order_status}}
+                    </p>
+                    </td>
+                    {% endif %}
+                    <td>
+                    {% if not order.rating_given and order.order_status == "Delivered" %}
+                        <a type="button" class="btn btn-sm btn-square btn-neutral btn-primary rate-order-btn" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">
+                            Rate This
+                        </a>
+                    {% elif order.rating_given %}
+                        <p class="btn btn-sm btn-square btn-neutral btn-secondary" style="width: 130px;" disabled>Rated <span class="mx-1">{{ order.rating }} <i class="fas fa-star star mx-0 text-warning"></i></span></p>
+                    {% else %}
+                        <p class="btn btn-sm btn-square btn-neutral btn-secondary" disabled>Not Yet</p>
+                    {% endif %}   
+                    </td>
+                    <td>
+                    <a href="{% url 'user_dashboard:invoice' order.uid %}"
+                        class="btn btn-sm btn-square btn-neutral btn-primary">
+                        Invoice
+                    </a>
+                    </td>
+                </tr>
+
+                {% endfor %}
+                </tbody>
+        </table>
+        {% include 'app_common/snippets/pagination.html' %}
+    </div>
+</div>
+<!-- Rate Order Modal -->
+<div class="modal fade" id="rateOrderModal" tabindex="-1" role="dialog" aria-labelledby="rateOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rateOrderModalLabel">Rate Order</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="rateOrderForm" action="{% url 'user_dashboard:rate_order_from_vendor' %}" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" id="orderId" name="order_id">
+                    <div class="form-group">
+                        <label for="rating">Rating:</label>
+                        <div id="star-rating" class="star-rating">
+                            {% for i in "12345" %}
+                                <i class="far fa-star star" data-value="{{ i }}"></i>
+                                {% if i != "5" %}
+                                <i class="far fa-star-half-alt star-half" data-value="{{ i }}.5"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" id="rating" name="rating" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit Rating</button>
+                </div>
+            </form>
         </div>
     </div>
-    <!-- Rate Order Modal -->
-    <div class="modal fade" id="rateOrderModal" tabindex="-1" role="dialog" aria-labelledby="rateOrderModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title" id="rateOrderModalLabel">Rate Order</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
-              <form id="rateOrderForm" action="{% url 'user_dashboard:rate_order_from_vendor' %}" method="post">
-                  {% csrf_token %}
-                  <div class="modal-body">
-                      <input type="hidden" id="orderId" name="order_id">
-                      <div class="form-group">
-                          <label for="rating">Rating:</label>
-                          <div id="star-rating" class="star-rating">
-                              {% for i in "12345" %}
-                                  <i class="far fa-star star" data-value="{{ i }}"></i>
-                                  {% if i != "5" %}
-                                  <i class="far fa-star-half-alt star-half" data-value="{{ i }}.5"></i>
-                                  {% endif %}
-                              {% endfor %}
-                          </div>
-                          <input type="hidden" id="rating" name="rating" required>
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary">Submit Rating</button>
-                  </div>
-              </form>
-          </div>
-      </div>
-  </div>
+</div>
   
   
 {% endblock content %}
 {% block scripts %}
 <script>
-  $(document).ready(function () {
-    // Handle rate order button click
-    $('.rate-order-btn').on('click', function () {
-        var orderId = $(this).data('order-id');
-        $('#orderId').val(orderId);
-        resetStars(); // Reset stars to default state
-    });
-
-    // Handle star click
-    $('#star-rating .star, #star-rating .star-half').on('click', function () {
-        var rating = $(this).data('value');
-        $('#rating').val(rating); // Set the rating value in the hidden input
-        updateStars(rating);
-    });
-
-    // Function to update the stars based on rating
-    function updateStars(rating) {
-        $('#star-rating .star').removeClass('fas selected').addClass('far'); // Reset all stars to empty
-        $('#star-rating .star-half').removeClass('fas selected').addClass('far'); // Reset all half-stars to empty
-        
-        // Loop through each star and half-star and update class
-        $('#star-rating .star, #star-rating .star-half').each(function() {
-            var value = $(this).data('value');
-            if (value <= rating) {
-                $(this).removeClass('far').addClass('fas selected'); // Filled star or half-star
-            }
-        });
-    }
-
-    // Reset stars when modal is shown
-    function resetStars() {
-        $('#star-rating .star').removeClass('fas selected').addClass('far'); // All stars empty
-        $('#star-rating .star-half').removeClass('fas selected').addClass('far'); // All half-stars empty
-        $('#rating').val(''); // Clear the rating value
-    }
-});
-
+    $(document).ready(function () {
+      // Handle rate order button click
+      $('.rate-order-btn').on('click', function () {
+          var orderId = $(this).data('order-id');
+          $('#orderId').val(orderId);
+          resetStars(); // Reset stars to default state
+      });
+  
+      // Handle star click
+      $('#star-rating .star, #star-rating .star-half').on('click', function () {
+          var rating = $(this).data('value');
+          $('#rating').val(rating); // Set the rating value in the hidden input
+          updateStars(rating);
+      });
+  
+      // Function to update the stars based on rating
+      function updateStars(rating) {
+          $('#star-rating .star').removeClass('fas selected').addClass('far'); // Reset all stars to empty
+          $('#star-rating .star-half').removeClass('fas selected').addClass('far'); // Reset all half-stars to empty
+          
+          // Loop through each star and half-star and update class
+          $('#star-rating .star, #star-rating .star-half').each(function() {
+              var value = $(this).data('value');
+              if (value <= rating) {
+                  $(this).removeClass('far').addClass('fas selected'); // Filled star or half-star
+              }
+          });
+      }
+  
+      // Reset stars when modal is shown
+      function resetStars() {
+          $('#star-rating .star').removeClass('fas selected').addClass('far'); // All stars empty
+          $('#star-rating .star-half').removeClass('fas selected').addClass('far'); // All half-stars empty
+          $('#rating').val(''); // Clear the rating value
+      }
+  });
 </script>
 
 {% endblock scripts %}
