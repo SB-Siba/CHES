@@ -1013,6 +1013,7 @@ class RateOrderFromVendor(View):
         }
         product_obj.ratings.append(new_rating)
         buy_obj.rating_given = True
+        buy_obj.rating = rating
         buy_obj.save()
         product_obj.save()
         return redirect('user_dashboard:allordersfromvendor')

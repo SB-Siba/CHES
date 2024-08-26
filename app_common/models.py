@@ -359,6 +359,8 @@ class Order(models.Model):
     transaction_id = models.TextField(null= True, blank=True)
     can_edit = models.BooleanField(default=True) # id a order is canceled or refunded, make it non editable
     rating_given = models.BooleanField(default=False,null=True,blank=True)
+    rating = models.FloatField(default=0.0,null=True,blank=True)
+
     def __str__(self):
         return self.uid
 
