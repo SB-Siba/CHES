@@ -3,19 +3,22 @@
 
 {% block title %}All Orders{% endblock title %}
 {% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/user_dashboard/css/tables.css '%}">
+</head>
     <div class="page-wapper">
         {% include 'app_common/snippets/alert.html' %}
         <div class="table-responsive">
             <table class="table table-hover table-nowrap">
                 <thead class="table-light">
                     <tr>
-                        <th scope="col">Request-ID</th>
-                        <th scope="col">P_Name</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Units</th>
-                        <th scope="col">Ammount</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Rating</th>
+                        <th id="t-Head"  scope="col">Request-ID</th>
+                        <th id="t-Head" scope="col">P_Name</th>
+                        <th id="t-Head" scope="col">Quantity</th>
+                        <th id="t-Head" scope="col">Units</th>
+                        <th id="t-Head" scope="col">Ammount</th>
+                        <th id="t-Head" scope="col">Status</th>
+                        <th id="t-Head" scope="col">Rating</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,8 +31,8 @@
                         <td>{{ order.ammount_based_on_quantity_buyer_want }}</td>
                         
                         <td>
-                            {% if order.buying_status == "BuyCompleted" %}
-                                <span class="text-success">Completed</span>
+                            {% if order.buying_status == "PaymentDone" %}
+                                <span class="text-success">Payment Completed</span>
                             {% elif order.buying_status == "BuyRejected" %}
                                 <span class="text-danger">Rejected</span>
                             {% else %}
@@ -37,8 +40,8 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if not order.rating_given and order.buying_status == "BuyCompleted" %}
-                                <a type="button" class="btn btn-primary rate-order-btn" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">
+                            {% if not order.rating_given and order.buying_status == "PaymentDone" %}
+                                <a type="button" class="btn btn-success rate-order-btn" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">
                                     Rate This
                                 </a>
                             {% elif order.buying_status == "BuyInProgress" %}
@@ -67,7 +70,7 @@
     <div class="modal fade" id="rateOrderModal" tabindex="-1" role="dialog" aria-labelledby="rateOrderModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" id="t-Head" >
                     <h5 class="modal-title" id="rateOrderModalLabel">Rate Order</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -84,7 +87,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit Rating</button>
+                        <button type="submit" class="btn btn-success">Submit Rating</button>
                     </div>
                 </form>
             </div>

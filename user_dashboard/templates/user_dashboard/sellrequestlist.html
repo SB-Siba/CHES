@@ -3,19 +3,23 @@
 
 {% block title %}Sell Request List{% endblock title %}
 {% block content %}
+
+<head>
+  <link rel="stylesheet" href="{% static '/user_dashboard/css/tables.css '%}">
+</head>
     <div class="page-wapper">
         {% include 'app_common/snippets/alert.html' %}
         <div class="table-responsive">
             <table class="table table-hover table-nowrap">
                 <thead class="table-light">
                     <tr>
-                        <th scope="col">Request ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Units</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Status</th>
+                        <th id="t-Head" scope="col">Request ID</th>
+                        <th id="t-Head" scope="col">Name</th>
+                        <th id="t-Head" scope="col">Quantity</th>
+                        <th id="t-Head" scope="col">Units</th>
+                        <th id="t-Head" scope="col">Image</th>
+                        <th id="t-Head" scope="col">Amount</th>
+                        <th id="t-Head" scope="col">Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -25,7 +29,7 @@
                         <td>{{ sell_request.product_name }}</td>
                         <td>{{ sell_request.product_quantity }}</td>
                         <td>{{ sell_request.SI_units }}</td>
-                        <td><img src="{{ sell_request.product_image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class="zoom"></td>
+                        <td><img src="{{ sell_request.product_image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class=""></td>
                         <td>{{ sell_request.ammount_in_green_points }}</td>
                         
                         <td>
@@ -41,7 +45,7 @@
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                           <div class="modal-content">
-                            <div class="modal-header">
+                            <div class="modal-header" id="t-Head">
                               <h5 class="modal-title" id="exampleModalLabel">Reject Reason</h5>
                               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -56,7 +60,7 @@
                     <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                           <div class="modal-content">
-                            <div class="modal-header">
+                            <div class="modal-header" id="t-Head">
                               <h5 class="modal-title" id="exampleModalLabel">Approve Reason</h5>
                               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>

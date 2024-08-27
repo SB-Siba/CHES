@@ -3,18 +3,22 @@
 
 {% block title %}All Orders From Vendor{% endblock title %}
 {% block content %}
+
+<head>
+  <link rel="stylesheet" href="{% static '/user_dashboard/css/tables.css '%}">
+</head>
     <div class="page-wapper">
         {% include 'app_common/snippets/alert.html' %}
         <div class="table-responsive">
             <table class="table table-hover table-nowrap">
                 <thead class="table-light">
                     <tr>
-                        <th scope="col">ORD_ID</th>
-                        <th scope="col">Products</th>
-                        <th scope="col">Order Ammount</th>
-                        <th scope="col">status</th>
-                        <th scope="col">Rate Product</th>
-                        <th>Invoice</th>
+                        <th id="t-Head" scope="col">ORD_ID</th>
+                        <th id="t-Head" scope="col">Products</th>
+                        <th id="t-Head" scope="col">Order Ammount</th>
+                        <th id="t-Head" scope="col">status</th>
+                        <th id="t-Head" scope="col">Rate Product</th>
+                        <th id="t-Head">Invoice</th>
                     </tr>
                 </thead>
                 <tbody id="test_table_tbody">
@@ -59,7 +63,7 @@
                       </td>
                       <td>
                         <a href="{% url 'user_dashboard:invoice' order.uid %}"
-                          class="btn btn-sm btn-square btn-neutral btn-primary">
+                          class="btn btn-sm btn-square btn-neutral btn-success">
                           Invoice
                         </a>
                       </td>
