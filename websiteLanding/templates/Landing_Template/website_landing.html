@@ -1,128 +1,354 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Landing</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        body {
-            background-color: #f0f2f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-        }
-        header {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
-        header .nav-link {
-            color: white;
-            margin: 0 15px;
-            font-size: 1.1rem;
-            text-decoration: none;
-        }
-        header .nav-link:hover {
-            text-decoration: underline;
-        }
-        .main-container {
-            display: flex;
-            justify-content: flex-end;
-            padding: 20px;
-            margin-top: 50px; /* Space for fixed header */
-        }
-        .disclaimer-container {
-            width: 50%;
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-        .disclaimer-container h1 {
-            color: #007bff;
-            font-size: 2rem;
-        }
-        .alert-info {
-            background-color: #d1ecf1;
-            border-color: #bee5eb;
-            color: #0c5460;
-            padding: 20px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-        }
-        .form-check-input:checked {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            padding: 10px 20px;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
-        }
-        .btn-primary:disabled {
-            background-color: #d6d6d6;
-            border-color: #d6d6d6;
-        }
-        .alert-warning {
-            background-color: #fff3cd;
-            border-color: #ffeeba;
-            color: #856404;
-            display: none;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-        .form-check-label {
-            font-size: 1.1rem;
-        }
-    </style>
+    <link rel="stylesheet" href="{%  static 'app_common/css/website_landing.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+
 </head>
 <body>
-    <header>
+    <!-- <header>
         <nav class="container">
             <a href="{% url 'app_common:login' %}" class="nav-link">Login</a>
             <a href="#" class="nav-link">Service</a>
             <a href="#" class="nav-link">Privacy Policy</a>
         </nav>
-    </header>
+    </header> -->
 
-    <div class="main-container">
-        <div class="disclaimer-container">
-            <h1>Important Disclaimer</h1>
-            <div class="alert alert-info">
-                <p><strong>Disclaimer:</strong> Our services are currently established and operational exclusively in the state of Odisha. If you are accessing this page from a different region or state, please be aware that our services may not be available in your location at this time.</p>
+    <div >
+        <nav class=" fixed-top">
+          <div class="  mx-lg-5">
+        
+            <div class="menu" id="second-menu">
+              <div class="logo">
+                <a href="#">CHES</a>
+              </div>
+              <input type="checkbox" id="check">
+              <label class="btn bars text-white" for="check"><i class="fas fa-bars "></i></label>
+              <ul>
+                <label class="btn cancel" for="check"><i class="fas fa-times text-white"></i></label>
+                <li><a class="logo_an" href="">About Us</a></li>
+                <li><a class="logo_an" href="">Contact Us</a></li>
+                <li><a class="logo_an" href="">Privacy Policy</a></li>
+                <li><a class="logo_an" href="{% url 'app_common:login' %}">Login</a></li>
+              </ul>
             </div>
-            <form id="disclaimerForm" method="post">
-                {% csrf_token %}
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="disclaimerCheckbox" name="disclaimer_agreed">
-                    <label class="form-check-label" for="disclaimerCheckbox">
-                        I have read and agree to the disclaimer.
-                    </label>
+          </div>
+        </nav>
+      
+    
+      </div>
+<!-- HEro Section -->
+
+<div id="heroCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active" id="carousel-item-1">
+      <div class="carousel-caption text-start">
+        <h1 class="service_hd_2">Nurture Your Garden</h1>
+        <p class="text-white">Discover the best tips and tools for a flourishing garden.</p>  
+        
+      </div>
+    </div>
+    <div class="carousel-item" id="carousel-item-2">
+      <div class="carousel-caption text-start">
+        <h1 class="service_hd_2">Explore Rare Plants</h1>
+        <p class="text-white">Add unique and exotic plants to your collection.</p>
+        
+      </div>
+    </div>
+    <div class="carousel-item" id="carousel-item-3">
+      <div class="carousel-caption text-start">
+        <h1 class="service_hd_2">Sustainable Gardening</h1>
+        <p class="text-white">Adopt eco-friendly practices for a greener future.</p>
+        
+      </div>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+  
+<!-- HEro Section -->
+<!-- main Content  -->
+<div class="row mx-lg-5 mx-2 mb-5">
+  <div class="col-md-6">
+      <div class="card my-card p-4">
+          <h2 class="heAd2 pb-2">Important Disclaimer</h2>
+          <div class="alert alert-info">
+              <p><strong>Disclaimer:</strong> Our services are currently established and operational exclusively in the state of Odisha. If you are accessing this page from a different region or state, please be aware that our services may not be available in your location at this time.</p>
+          </div>
+          <form id="disclaimerForm" method="post">
+              {% csrf_token %}
+              <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="disclaimerCheckbox" name="disclaimer_agreed">
+                  <label class="form-check-label" for="disclaimerCheckbox">
+                      I have read and agree to the disclaimer.
+                  </label>
+              </div>
+              <div class="text-center mt-3">
+                  <button id="proceedButton" type="submit" class="btn btn-success" disabled>Proceed</button>
+                  <div id="alertMessage" class="alert alert-warning text-center mt-2">
+                      Please read and agree to the disclaimer before proceeding.
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
+  <div class="col-md-6 d-none d-md-block">
+      <!-- Empty column on the right side for large screens -->
+       <h2>Welcome To CHES</h2>
+  </div>
+</div>
+<!-- main Content  --> 
+<!-- service -->
+<div class="row mx-lg-5 mx-2 justify-content-center">
+  <!-- Service 1 -->
+  <div class="col-md-4 mb-4">
+      <div class="service-box">
+          <img src="{% static 'app_common/css/images/serv1.png' %}" alt="Care of Garden">
+          <h5 class="service-title">Flower Garden</h5>
+          <p class="service-description">Ut sit amet ipsum sit amet nibh rutrum faucibus gravida a eros orci varius.</p>
+          <a href="#" class="read-more">Read More</a>
+      </div>
+  </div>
+  <!-- Service 2 -->
+  <div class="col-md-4 mb-4">
+      <div class="service-box">
+          <img src="{% static 'app_common/css/images/serv2.png' %}" alt="Flower Service">
+          <h5 class="service-title">Planting</h5>
+          <p class="service-description">Natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus nibh.</p>
+          <a href="#" class="read-more">Read More</a>
+      </div>
+  </div>
+  <!-- Service 3 -->
+  <div class="col-md-4 mb-4">
+      <div class="service-box">
+          <img src="{% static 'app_common/css/images/serv3.png' %}" alt="Spinach Service">
+          <h5 class="service-title">Care Of Garden</h5>
+          <p class="service-description">Velit nec sodales iaculis nisi arcu vehicula odio nec dictum augue elit ante.</p>
+          <a href="#" class="read-more">Read More</a>
+      </div>
+  </div>
+</div>
+<!-- service -->
+
+<!-- faq -->
+ <div class="row mx-lg-5 mx-2  mb-5">
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+    <div class="accordion" id="faqsAccordion">
+        <div class="accordion-item mb-2">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    What is the National Horticulture Program?
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqsAccordion">
+                <div class="accordion-body">
+                    The National Horticulture Program is an initiative aimed at promoting sustainable horticulture practices, supporting farmers, and enhancing the production and quality of fruits, vegetables, and other horticultural crops in the country.
                 </div>
-                <div class="text-center mt-3">
-                    <button id="proceedButton" type="submit" class="btn btn-primary" disabled>Proceed</button>
-                    <div id="alertMessage" class="alert alert-warning text-center mt-2">
-                        Please read and agree to the disclaimer before proceeding.
-                    </div>
+            </div>
+        </div>
+        <div class="accordion-item mb-2">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    How can I participate in the program?
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqsAccordion">
+                <div class="accordion-body">
+                    You can participate in the National Horticulture Program by registering through the official website, attending workshops and training sessions, and applying for grants and subsidies available for horticultural projects.
                 </div>
-            </form>
+            </div>
+        </div>
+        <div class="accordion-item mb-2">
+            <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    What types of crops are supported under the program?
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqsAccordion">
+                <div class="accordion-body">
+                    The program supports a wide range of horticultural crops including fruits, vegetables, spices, medicinal plants, floriculture, and plantation crops like tea and coffee.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item mb-2">
+            <h2 class="accordion-header" id="headingFour">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Are there any financial aids available?
+                #aeadadn>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqsAccordion">
+                <div class="accordion-body">
+                    Yes, the National Horticulture Program offers various financial aids including subsidies, grants, and loans to support farmers and entrepreneurs in the horticulture sector.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item mb-2">
+            <h2 class="accordion-header" id="headingFive">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    How can I get access to training and resources?
+                </button>
+            </h2>
+            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqsAccordion">
+                <div class="accordion-body">
+                    Training and resources are provided through various channels including online courses, workshops, and agricultural extension services. You can also access educational materials and guides from the program's official website.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item mb-2">
+            <h2 class="accordion-header" id="headingSix">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                    Who can I contact for more information?
+                </button>
+            </h2>
+            <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqsAccordion">
+                <div class="accordion-body">
+                    You can contact the National Horticulture Program's customer service through the official website or reach out to your local agricultural extension office for more personalized assistance.
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
+
+ </div>
+<!-- faq -->
+<!-- footer -->
+
+<footer class="footer">
+    <div class=" mt-5">
+        <div class="row mx-5">
+              <div class="col-md-5">
+                <div class="row">
+      <!-- Logo and Newsletter Column -->
+            <div class="col-md-7">
+              <h3 class="mb-5">CHES </h3>
+              <p class="mb-4">Makes a fantastic textural info contrast to steel planters filled with asparagus.</p>
+              <h5 class="mb-4">Newsletter</h5>
+              <div class=" position-relative">
+                <input type="email" class="form-control" placeholder="Your Email" style="padding-right: 50px;">
+                <button style="position: absolute; top: 0; right: 0; height: 100%; border: none; background-color: #5e7d0e; color: white; padding: 0 15px;">
+                    <i class="fas fa-envelope"></i>
+                </button>
+            </div>
+            
+          </div>
+          
+          <!-- Quick Links Column -->
+          <div class="col-md-5">
+              <h5 class="mb-5">Quick Links</h5>
+              <ul class="list-unstyled quick-links">
+                  <a href="">
+                    <li class="mb-4"><i class="fas fa-seedling "></i>
+                      Get Started</li>
+                  </a>
+                  <a href="">
+                    <li class="mb-4"><i class="fas fa-seedling"></i>
+                      Our Team  </li>
+
+                 <a href="">
+                  <li class="mb-4"><i class="fas fa-seedling"></i>
+                    About Us</li>
+                 </a>
+                  <a href="">
+                    <li class="mb-4"><i class="fas fa-seedling"></i>
+                      Need Help</li>
+                  </a>
+                 <a href="">
+                  <li class="mb-4"><i class="fas fa-seedling"></i>
+                    Contact Us</li>
+                 </a>
+              </ul>
+          </div>
+                </div>
+          
+
+              </div>
+              
+              <div class="col-md-7">
+                <div class="row">
+                                  <!-- Event News Column -->
+            <div class="col-md-6">
+              <h5 class="mb-5">Event News</h5>
+              <ul class="list-unstyled event-news">
+                  <li class="d-flex mb-3">
+                      <img class="foot_img1" src="{% static 'app_common/css/images/footer1.webp' %}" alt="Event 1" class="img-fluid">
+                      <div class="ms-3">
+                        <p>An attractive side-yard garden. For the best effect, match<br> <br><i class="fas fa-calendar-alt"></i> Nov 20, 2024</p>
+                      </div>
+                  </li>
+                  <li class="d-flex">
+                      <img class="foot_img1" src="{% static 'app_common/css/images/footer2.jpg' %}" alt="Event 2" class="img-fluid">
+                        <div class="ms-3">
+                          <p>Creates a beautiful screen and casts lovely filtered shade<br> <br><i class="fas fa-calendar-alt"></i> Nov 20, 2024</p>
+                        </div>
+                  </li>
+              </ul>
+          </div>
+          
+          <!-- Our Gallery Column -->
+          <div class="col-md-6">
+              <h5 class="mb-5">Our Gallery</h5>
+              <div class="gallery-grid">
+                <img src="{% static 'app_common/css/images/footer3.jpeg' %}" alt="Gallery 1" class="img-fluid">
+                <img src="{% static 'app_common/css/images/footer6.webp' %}" alt="Gallery 2" class="img-fluid">
+                <img src="{% static 'app_common/css/images/footer4.jpeg' %}" alt="Gallery 3" class="img-fluid">
+                <img src="{% static 'app_common/css/images/footer8.jpeg' %}" alt="Gallery 4" class="img-fluid">
+                <img src="{% static 'app_common/css/images/footer7.png' %}" alt="Gallery 5" class="img-fluid">
+                <img src="{% static 'app_common/css/images/footer9.jpg' %}" alt="Gallery 6" class="img-fluid">
+            </div>
+            
+          </div>
+
+                </div>
+
+              </div>
+
+              <div class="row pt-4 pb-2 mt-5 px-lg-5" style="background-color: #5E9E02; border-radius: 5px;">
+                <div class="col-12 col-md-6 d-flex justify-content-md-start justify-content-center footer_2div">
+                    <p class="text-center text-md-start">©Copyright - All Right Reserved. Designed ❤️ by 
+                        <a href="https://techaviait.com/" style="color: white;" target="_blank">Techavia IT Solutions</a>
+                    </p>
+                </div>
+                <div class="col-12 col-md-6 d-flex justify-content-md-end justify-content-center footer_2div">
+                    <p class="heder_para1 mb-0">
+                        <a class="social_icon" href="">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                        <a class="social_icon mx-lg-2" href="">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a class="social_icon mx-lg-2" href="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
+                                <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
+                            </svg>
+                        </a>
+                        <a class="social_icon mx-lg-2" href="">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                    </p>
+                </div>
+            </div>
+            
+    </div>
+</footer>
+<!-- footer -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const checkbox = document.getElementById('disclaimerCheckbox');
