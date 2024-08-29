@@ -33,6 +33,8 @@ urlpatterns = [
     path('buybeginsbuyerview', views.BuyBeginsBuyerView.as_view(), name = "buybeginsbuyerview"),
     path('producebuy/<int:prod_id>', views.ProduceBuyView.as_view(), name = "producebuy"),
     path('buyreject/<int:ord_id>', views.reject_buy, name = "buyreject"),
+    path('all-orders-from-community/', views.AllOrdersFromCommunity.as_view(), name = "allordersfromcommunity"),
+    path('rate-order-from-comunity/',views.RateOrderFromComunity.as_view(),name="rate_order_from_community"),
     #Orders
     path('order/vendor_order_list', views.AllOrders.as_view(), name='vendor_order_list'),
     path('order/vendor_order_search', views.OrderSearch.as_view(), name='vendor_order_search'),

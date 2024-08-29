@@ -3,9 +3,45 @@
 
 {% block title %}All Orders{% endblock title %}
 {% block content %}
-<head>
-    <link rel="stylesheet" href="{% static '/user_dashboard/css/tables.css '%}">
-</head>
+<style>
+    #starRating {
+        direction: rtl;
+        display: flex;
+        justify-content: center;
+        font-size: 2em;
+        user-select: none;
+    }
+
+    #starRating input[type="radio"] {
+        display: none;
+    }
+
+    #starRating label {
+        color: #ddd; /* Default star color */
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+    }
+
+    #starRating label::before {
+        content: '\2605'; /* Unicode character for a star */
+        font-size: 2em;
+    }
+
+    #starRating input[type="radio"]:checked ~ label {
+        color: #ffc107; /* Yellow color for selected stars */
+    }
+
+    #starRating input[type="radio"]:checked ~ label:hover,
+    #starRating input[type="radio"]:checked ~ label:hover ~ label {
+        color: #ffc107; /* Yellow color for stars on hover */
+    }
+
+    #starRating input[type="radio"]:not(:checked) ~ label:hover,
+    #starRating input[type="radio"]:not(:checked) ~ label:hover ~ label {
+        color: #ffc107; /* Yellow color for stars on hover */
+    }
+</style>
     <div class="page-wapper">
         {% include 'app_common/snippets/alert.html' %}
         <div class="table-responsive">
@@ -72,7 +108,7 @@
             <div class="modal-content">
                 <div class="modal-header" id="t-Head" >
                     <h5 class="modal-title" id="rateOrderModalLabel">Rate Order</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -82,12 +118,18 @@
                         <input type="hidden" id="orderId" name="order_id">
                         <div class="form-group">
                             <label for="rating">Rating:</label>
-                            <input type="number" class="form-control" id="rating" name="rating" step="0.1" min="0" max="5" required>
+                            <div id="starRating">
+                                <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="5 stars"></label>
+                                <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="4 stars"></label>
+                                <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="3 stars"></label>
+                                <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="2 stars"></label>
+                                <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="1 star"></label>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Submit Rating</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit Rating</button>
                     </div>
                 </form>
             </div>

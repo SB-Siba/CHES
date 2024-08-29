@@ -14,8 +14,8 @@ body {
     overflow-x: hidden;
   }
   ::selection {
-    background-color: #0d480a; /* Replace with your desired background color */
-    color: #000000; /* Optional: Change the text color */
+    background-color: #077701; /* Replace with your desired background color */
+    color: #403f3f; /* Optional: Change the text color */
   }
   h3,h5,h1,h2,h4,p,h6{
     overflow-y: hidden;
@@ -153,7 +153,7 @@ body {
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 .btn-success:hover {
-  background-color: #00b324;
+  background-color: #016414;
   border-color: #007033;
 }
 .btn-success:disabled {
@@ -172,7 +172,118 @@ body {
 .form-check-label {
   font-size: 1.1rem;
 }
-
+.main_content_img{
+  width: 100%;
+  height: 400px;
+}
+.display-5 {
+  color: rgb(0, 0, 0);
+  font-size: 40px;
+  font-weight: 600;
+  overflow-y: hidden;
+}
+.lead1{
+  font-size: 14px;
+  line-height: 1.7rem;
+  text-align: justify;
+  word-break:keep-all;
+  color: rgb(96, 96, 96);
+}
+/* From Uiverse.io by cssbuttons-io */ 
+button {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+  border: 0;
+  vertical-align: middle;
+  text-decoration: none;
+  background: transparent;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  overflow-y: hidden !important;
+ }
+ 
+ button.learn-more {
+  width: 12rem;
+  height: auto;
+  overflow-y: hidden !important;
+ }
+ 
+ button.learn-more .circle {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  position: relative;
+  display: block;
+  margin: 0;
+  width: 3rem;
+  height: 3rem;
+  background: #01590e;
+  border-radius: 1.625rem;
+  overflow-y: hidden !important;
+ }
+ 
+ button.learn-more .circle .icon {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  background: #fff;
+  overflow-y: hidden !important;
+ }
+ 
+ button.learn-more .circle .icon.arrow {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  left: 0.625rem;
+  width: 1.125rem;
+  height: 0.125rem;
+  background: none;
+  overflow-y: hidden !important;
+ }
+ 
+ button.learn-more .circle .icon.arrow::before {
+  position: absolute;
+  content: "";
+  top: -0.29rem;
+  right: 0.0625rem;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-top: 0.125rem solid #fff;
+  border-right: 0.125rem solid #fff;
+  transform: rotate(45deg);
+  overflow-y: hidden !important;
+ }
+ 
+ button.learn-more .button-text {
+  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.75rem 0;
+  margin: 0 0 0 1.85rem;
+  color: #282936;
+  font-weight: 700;
+  line-height: 1.6;
+  text-align: center;
+  text-transform: uppercase;
+  overflow-y: hidden !important;
+ }
+ 
+ button:hover .circle {
+  width: 100%;
+ }
+ 
+ button:hover .circle .icon.arrow {
+  background: #fff;
+  transform: translate(1rem, 0);
+ }
+ 
+ button:hover .button-text {
+  color: #fff;
+ }
 /* Hero Section */
 #heroCarousel .carousel-item {
   height: 100vh; /* Fullscreen height */
@@ -423,6 +534,46 @@ body {
 }
 
 /* ==========Service========== */
+/* ==========Gallery========== */
+.bg_row_service {
+  background: url(images/bg_serv.jpg) no-repeat center bottom;
+  background-size: cover;
+  background-attachment: fixed;
+  height: auto;
+  width: 100%;
+  padding: 50px 0; /* Add some padding for spacing */
+  filter: contrast(1) saturate(1) brightness(100%);
+}
+.gallery-container {
+  text-align: center;
+}
+
+.gallery-heading {
+  font-size: 2rem; /* Adjust size as necessary */
+  margin-bottom: 30px; /* Spacing between heading and gallery */
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  grid-gap: 15px; /* space between images */
+}
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid rgb(2, 119, 47);
+  border-radius: 1px 50px 1px 50px;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 230px;
+  object-fit: cover; /* Ensures the image covers the entire container without distortion */
+  display: block;
+}
+
+/* ==========Gallery========== */
 /* =======FAQ========= */
 .accordion-item{
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
@@ -584,6 +735,18 @@ body {
   }
 }  
 
+
+@media (max-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for small tablets/large phones */
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery {
+    grid-template-columns: 1fr; /* 1 column for mobile screens */
+  }
+}
 
 @media (max-width: 768px) {
 

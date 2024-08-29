@@ -90,34 +90,66 @@
 <!-- HEro Section -->
 <!-- main Content  -->
 <div class="row mx-lg-5 mx-2 mb-5">
-<div class="col-md-6">
-    <div class="card my-card p-4">
-        <h2 class="heAd2 pb-2">Important Disclaimer</h2>
-        <div class="alert alert-info">
-            <p><strong>Disclaimer:</strong> Our services are currently established and operational exclusively in the state of Odisha. If you are accessing this page from a different region or state, please be aware that our services may not be available in your location at this time.</p>
+    <!-- Left side: Image -->
+    <div class="col-lg-6">
+        <img class="main_content_img" src="{% static 'app_common/css/images/landing11.jpg'%}" alt="">
+    </div>
+    
+    <!-- Right side: Heading, Description, and Button -->
+    <div class="col-lg-6 d-flex flex-column justify-content-center">
+        <h1 class="display-5  mb-4">Welcome to CHES</h1>
+        <p class="lead1  mb-4">
+            The Central Horticulture Experimental Station (CHES) is committed to enhancing the quality of horticultural research and development across the region. We provide expert services and solutions exclusively in the state of Odisha. Before proceeding, please make sure to read the important disclaimer regarding our service availability.
+        </p>
+        
+        <!-- Button to trigger modal -->
+        <div class=" mt-3" style="overflow: hidden;">
+          
+            <button class="learn-more" data-bs-toggle="modal" data-bs-target="#disclaimerModal">
+                <span class="circle" aria-hidden="true">
+                
+                </span>
+                <span class="button-text">Learn More</span>
+              </button>
         </div>
-        <form id="disclaimerForm" method="post">
-            {% csrf_token %}
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="disclaimerCheckbox" name="disclaimer_agreed">
-                <label class="form-check-label" for="disclaimerCheckbox">
-                    I have read and agree to the disclaimer.
-                </label>
-            </div>
-            <div class="text-center mt-3">
-                <button id="proceedButton" type="submit" class="btn btn-success" disabled>Proceed</button>
-                <div id="alertMessage" class="alert alert-warning text-center mt-2">
-                    Please read and agree to the disclaimer before proceeding.
-                </div>
-            </div>
-        </form>
     </div>
 </div>
-<div class="col-md-6 d-none d-md-block">
-    <!-- Empty column on the right side for large screens -->
-    <h2>Welcome To CHES</h2>
+
+<!-- Modal structure remains the same as before -->
+
+
+<!-- Modal structure -->
+<div class="modal fade" id="disclaimerModal" tabindex="-1" aria-labelledby="disclaimerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="disclaimerModalLabel">Important Disclaimer</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <p><strong>Disclaimer:</strong> Our services are currently established and operational exclusively in the state of Odisha. If you are accessing this page from a different region or state, please be aware that our services may not be available in your location at this time.</p>
+                </div>
+                <form id="disclaimerForm" method="post">
+                    {% csrf_token %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="disclaimerCheckbox" name="disclaimer_agreed">
+                        <label class="form-check-label" for="disclaimerCheckbox">
+                            I have read and agree to the disclaimer.
+                        </label>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button id="proceedButton" type="submit" class="btn btn-success" disabled>Proceed</button>
+                        <div id="alertMessage" class="alert alert-warning text-center mt-2">
+                            Please read and agree to the disclaimer before proceeding.
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
+
 <!-- main Content  --> 
 
 <!-- =========== About ========== -->
@@ -175,6 +207,64 @@
 
 <!-- ======== service ========== -->
 
+<!-- ========== Gallery ========= -->
+<div class="row mx-0 my-5 bg_row_service px-5 gallery-container">
+    <h2 class="gallery-heading text-white">Our Gallery</h2>
+    <div class="gallery">
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery5.jpg'%}" alt="Gallery Image 1">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery1.jpeg'%}" alt="Gallery Image 2">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery8.jpg'%}" alt="Gallery Image 3">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery7.jpg'%}" alt="Gallery Image 4">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery4.jpg'%}" alt="Gallery Image 5">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery2.jpg'%}" alt="Gallery Image 6">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery9.jpg'%}" alt="Gallery Image 7">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery10.jpg'%}" alt="Gallery Image 8">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery6.jpg'%}" alt="Gallery Image 9">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery11.webp'%}" alt="Gallery Image 10">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery16.jpg'%}" alt="Gallery Image 11">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery13.jpg'%}" alt="Gallery Image 12">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery12.webp'%}" alt="Gallery Image 13">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery14.jpg'%}" alt="Gallery Image 14">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery15.jpg'%}" alt="Gallery Image 15">
+      </div>
+      <div class="gallery-item">
+        <img src="{% static 'app_common/css/images/gallery17.webp'%}" alt="Gallery Image 16">
+      </div>
+    </div>
+  </div>
+  
+  
+<!-- ========== Gallery ========= -->
+
 <!-- ======= Counter ========= -->
 <div class="row mx-lg-5 mx-2 counter-section">
     <div class="row">
@@ -205,7 +295,7 @@
 
 <!-- faq -->
 <div class="row mx-lg-5 mx-2  mb-5">
-<div class="container mt-5">
+<div class="px-0 mt-5">
 <h2 class="text-center mb-4">Frequently Asked Questions</h2>
 <div class="accordion" id="faqsAccordion">
     <div class="accordion-item mb-2">
