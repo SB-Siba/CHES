@@ -657,8 +657,40 @@ def reject_buy(request,ord_id):
     order_obj.save()
     return redirect('vendor_dashboard:buybeginssellerview')
 
-    
+class AllOrdersFromCommunity(View):
+    template = app + "all_orders_from_community.html"
+    model = common_models.ProduceBuy
 
+    def get(self, request):
+        orders = self.model.objects.filter(buyer=request.user)
+        return render(request , self.template , {'orders' : orders})
+
+class RateOrderFromComunity(View):
+    model = common_models.ProduceBuy
+
+    def post(self,request):
+        order_id = request.POST.get("order_id")
+        rating = request.POST.get("rating")
+        # print(order_id,rating)
+        buy_obj = get_object_or_404(self.model,id = order_id)
+        seller = buy_obj.seller
+        buyer = buy_obj.buyer
+        if seller.ratings is None:
+            seller.ratings = []
+
+        new_rating = {
+            "buyer_name": buyer.full_name,
+            "order_product": buy_obj.product_name,
+            "quantity": buy_obj.quantity_buyer_want,
+            "ammount_paid": buy_obj.ammount_based_on_quantity_buyer_want,
+            "rating": rating,
+        }
+        seller.ratings.append(new_rating)
+        buy_obj.rating_given = True
+        buy_obj.save()
+        seller.save()
+        return redirect('vendor_dashboard:allordersfromcommunity')
+    
 class AllOrders(View):
     template = app + "order_list.html"
     model = common_models.Order

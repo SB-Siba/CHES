@@ -26,6 +26,7 @@
                     <tr>
                         <th scope="col">User-ID</th>
                         <th scope="col">Name</th>
+                        <th scope="col">Email</th>
                         <th scope="col">Wallet Balance</th>
                         <th scope="col">Gardening Details</th>
                         <th scope="col">Active Status</th>
@@ -38,6 +39,7 @@
                     <tr>
                         <td>{{ user.id }}</td>
                         <td>{{ user.full_name }}</td>
+                        <td>{{ user.email }}</td>
                         <td>{{ user.wallet }}</td>
                         <td><a href="{% url 'admin_dashboard:gardening_details' user.id %}">Gardening Details</a></td>
                         <td>{{ user.is_active }}</td>

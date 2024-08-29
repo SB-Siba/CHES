@@ -455,27 +455,6 @@ def send_payment_link(request,buy_id):
         buy_obj.save()
 
         return redirect('user_dashboard:buybeginssellerview')
-#     send email with payment link to the buyer 
-#     subject = 'Payment Link for GreenCommerce Product - YourGreenLife'
-#     message = f'''Dear {buy_obj.buyer},<br/>
-#                Your Payment has been initiated for the product "{buy_obj.product.name}" which you purchased from the GreenCommerce platform <br/> You can now pay for the product <br/> Please use the following Payment Link
-#                You can pay for the product "{buy_obj.product.name}" by clicking on the following Payment Link.<br/>
-#                Please click on the below Payment Link and make the payment.<br/>
-#                <a href="{buy_obj.payment_link}">{buy_obj.payment_link}</a><br/>
-#                Once you have made the payment, please mark it as Paid from My Orders section of our website.
-#                Thank You for shopping with us.
-#                Regards,<br/>
-#                The GreenCommerce Team.
-#               '''
-#     msg = EmailMessage(subject,message,'info@yourgreenlife.com',[buy_obj.buyer.email])
-#     try:
-#         msg.content_subtype='html'
-#         msg.send()
-#         messages.success(request,"We have sent a Payment Link to your registered Email Id.")
-#     except Exception as e:
-#         messages.error(request,str(e))
-    
-    
 
 
 class ProduceBuyView(View):
@@ -501,7 +480,7 @@ class ProduceBuyView(View):
             sell_prod_obj = app_commonmodels.SellProduce.objects.get(id = sell_prod.id)
             sell_prod_obj.product_quantity = sell_prod_obj.product_quantity-buy_prod_obj.quantity_buyer_want
             sell_prod_obj.ammount_in_green_points = sell_prod_obj.ammount_in_green_points - ammount_for_quantity_want
-            buy_prod_obj.buying_status = "PaymentDone"
+            buy_prod_obj.buying_status = "BuyCompleted"
             buy_prod_obj.save()
             sell_prod_obj.save()
             buyer.save()
