@@ -2,6 +2,7 @@ from django.urls import path
 from . rtg_views import views as rtgBlogs
 from . vendor_views import views as vendorBlogs
 from . service_provider_views import views as spBlogs
+from .admin_views import views as adminBlogs
 
 app_name = 'blogs'
 
@@ -30,5 +31,14 @@ urlpatterns = [
     path('sp_all_blogs/', spBlogs.SpBlogView.as_view(), name='sp_all_blogs'),
     path('sp_blog_details/<slug:slug>/', spBlogs.SpBlogDetails.as_view(), name='sp_blog_details'),
     path("sp_blog_search", spBlogs.SpBlogSearch.as_view(), name="sp_blog_search"),
+
+    # Admin
+    path("admin_blog_add", adminBlogs.AdminBlogAdd.as_view(), name="admin_blog_add"),
+    path("admin_blog_list", adminBlogs.AdminBlogList.as_view(), name="admin_blog_list"),
+    path("admin_blog_update/<str:blog_id>", adminBlogs.AdminBlogUpdate.as_view(), name="admin_blog_update"),
+    path("admin_blog_delete/<str:blog_id>", adminBlogs.AdminBlogDelete.as_view(), name="admin_blog_delete"),
+    path('admin_all_blogs/', adminBlogs.AdminBlogView.as_view(), name='admin_all_blogs'),
+    path('admin_blog_details/<slug:slug>/', adminBlogs.AdminBlogDetails.as_view(), name='admin_blog_details'),
+    path("admin_blog_search", adminBlogs.AdminBlogSearch.as_view(), name="admin_blog_search"),
 
 ]

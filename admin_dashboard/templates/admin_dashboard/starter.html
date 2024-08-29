@@ -25,8 +25,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app_common/css/utilities.css'%}">
     <link rel="stylesheet" type="text/css" href="{% static 'app_common/css/style.css'%}">
     <link href="{% static 'admin_dashboard/css/image_hover.css'%}" rel="stylesheet">
-
-
+    <link href="{% static 'admin_dashboard/css/blog.css'%}" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -163,14 +162,37 @@
                     {% endif %}
                 </a>
             </li>
+
+        <!-- Blogs -->
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'admin_dashboard:blogs_list' %}">
+            <a href="#" class="nav-link collapsed has-dropdown" data-bs-toggle="collapse"
+                data-bs-target="#blogs" aria-expanded="false" aria-controls="blogs">
                 <i class="fa-solid fa-wallet"></i>
-                <span>Blogs From Users</span>
+                <span>Blogs</span>
                 {% if total_blogs_from_user_count > 0 %}
                     <span class="badge badge-danger badge-counter">{{total_blogs_from_user_count}}</span>
                 {% endif %}
             </a>
+            <ul id="blogs" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                    <a href="{% url 'blogs:admin_blog_list' %}" class="nav-link">
+                        <span>My Blogs</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'blogs:admin_all_blogs' %}" class="nav-link">
+                        <span>All Blogs</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="nav-link" href="{% url 'admin_dashboard:blogs_list' %}">
+                        <span>Blogs From Users</span>
+                        {% if total_blogs_from_user_count > 0 %}
+                            <span class="badge badge-danger badge-counter">{{total_blogs_from_user_count}}</span>
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
         </li>
             <!-- Nav Item - Charts -->
             <li class="nav-item">
