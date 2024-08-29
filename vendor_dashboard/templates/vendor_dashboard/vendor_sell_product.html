@@ -6,10 +6,28 @@
   .form-group{
     width: 100%;
   }
+.sell_wrapper form .form-control {
+  border: none;
+  border-bottom: 2px solid #ccc;
+  border-radius: 7px;
+  padding: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.sell_wrapper form .form-control:focus {
+  border-bottom-color: #37af2c;
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+label
+{
+    margin-bottom: 10px;    
+}
 </style>
-<div class="container mt-3">
+<div class="container my-5">
     <div class="row d-flex align-items-center justify-content-center">
-        <div class="col-lg-8 sell_wrapper">
+        <div class="col-lg-6 sell_wrapper">
             <form method="post" action="" class="p-4 update-form" enctype="multipart/form-data">
                 {% include 'app_common/snippets/alert.html' %}
                 {% csrf_token %}
@@ -74,7 +92,7 @@
                     {{ form.gst_rate }}
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-2 w-100">
+                <button type="submit" class="btn mt-2 py-2 w-100" id="editb">
                     Sell
                 </button>
             </form>

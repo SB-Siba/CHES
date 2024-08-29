@@ -2,22 +2,28 @@
 {% load static %}
 
 {% block main_content %}
+<style>
+  #box
+{
+  background-color: green;
+}
+</style>
 <section class="main">
-  <div class="main-top">
+  <div class="main-top mx-4">
     <h1>My Wallet</h1>
   </div>
   <div class="users d-flex justify-content-between">
-    <div class="card bg-success text-white">
+    <div class="card text-white" id="box">
       <h4 class="text-white">Total Balance</h4>
       <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2"
           style="font-weight: bold;">{{request.user.wallet}}</span></p>
     </div>
-    <div class="card bg-warning text-white">
+    <div class="card text-white" id="box">
       <h4 class="text-white">Total Purchase</h4>
       <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2"
           style="font-weight: bold;">{{request.user.total_invest}}</span></p>
     </div>
-    <div class="card bg-info text-white">
+    <div class="card text-white" id="box">
       <h4 class="text-white">Total Earnings</h4>
       <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2"
           style="font-weight: bold;">{{request.user.total_income}}</span></p>
@@ -31,11 +37,11 @@
     <table class="table">
       <thead>
         <tr style="color: black;">
-          <th>Product Name</th>
-          <th>Quantity</th>
-          <th>Amount</th>
-          <th>Date & Time</th>
-          <th>Details</th>
+          <th id="t-Head">Product Name</th>
+          <th id="t-Head">Quantity</th>
+          <th id="t-Head">Amount</th>
+          <th id="t-Head">Date & Time</th>
+          <th id="t-Head">Details</th>
         </tr>
       </thead>
 
