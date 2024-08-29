@@ -239,8 +239,8 @@ class CityDetailView(View):
 
             activity_label = []
             activity_data = []
-            rtg_sales_label = []
-            rtg_sales_data = []
+            rtg_vendor_sales_data = []
+            rtg_vendor_sales_label = []
             vendor_sales_label = []
             vendor_sales_data = []
 
@@ -262,17 +262,17 @@ class CityDetailView(View):
             ]
 
             # Calculate sales data for RTGs
-            for rtg in rtgs:
-                total_amount = common_models.ProduceBuy.objects.filter(seller=rtg).aggregate(
+            for rtgandvendor in rtgs_and_vendors:
+                total_amount = common_models.ProduceBuy.objects.filter(seller=rtgandvendor).aggregate(
                     total_amount=Sum('ammount_based_on_quantity_buyer_want')
                 )['total_amount'] or 0
-                rtg_sales_data.append(total_amount)
-                rtg_sales_label.append(rtg.full_name)
+                rtg_vendor_sales_data.append(total_amount)
+                rtg_vendor_sales_label.append(rtgandvendor.full_name)
 
             # Get top 5 RTG sales
-            top_rtg_sales = sorted(zip(rtg_sales_data, rtg_sales_label), reverse=True)[:5]
-            top_sales_data = [data for data, _ in top_rtg_sales]
-            top_sales_label = [label for _, label in top_rtg_sales]
+            top_rtg_vendor_sales = sorted(zip(rtg_vendor_sales_data, rtg_vendor_sales_label), reverse=True)[:5]
+            top_sales_data = [data for data, _ in top_rtg_vendor_sales]
+            top_sales_label = [label for _, label in top_rtg_vendor_sales]
 
             # Calculate sales data for vendors
             for vendor in vendors:
@@ -291,12 +291,12 @@ class CityDetailView(View):
             graph_data = {
                 'activity_label': activity_label,
                 'activity_data': activity_data,
-                'rtg_sales_data': top_sales_data,
-                'rtg_sales_label': top_sales_label,
+                'rtg_vendor_sales_data': top_sales_data,
+                'rtg_vendor_sales_label': top_sales_label,
                 'vendor_sales_data': vendor_top_sales_data,
                 'vendor_sales_label': vendor_top_sales_label,
             }
-
+            print(graph_data)
             labels = ['RTGs', 'Vendors', 'Service Providers']
             chart_data = [rtgs.count(), vendors.count(), service_providers.count()]
         # Pass data to template
