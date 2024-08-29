@@ -47,21 +47,31 @@ class DirectBuySerializer(serializers.ModelSerializer):
                 discount_percentage = float(product.discount_percentage)
                 product_discounted_price = float(f"{float(product.discount_price) * (1 - (discount_percentage / 100)):.2f}")
                 our_price = product_discounted_price
-                d_price = product.calculate_discounted_price()
                 x['quantity'] = 1
-                x['price_per_unit'] = f"{float(d_price):.2f}"
+                x['price_per_unit'] = f"{float(product.discount_price):.2f}"
+                x['our_price'] = f"{float(product.discount_price):.2f}"
                 x['total_price'] = f"{our_price:.2f}"
                 x["coinexchange"] = f"{float(product.green_coins_required):.2f}" if product.green_coins_required is not None else None
                 x["forpercentage"] = f"{discount_percentage:.2f}"
+                x["taxable_price"] = f"{product.taxable_price:.2f}"
+                x["gst"] = f"{product.gst_rate:.2f}"
+                x["cgst"] = f"{product.cgst:.2f}"
+                x["sgst"] = f"{product.sgst:.2f}"
+
                 coin_exchange = True
             else:
                 product_discounted_price = float(product.discount_price)
                 our_price = product_discounted_price
                 x['quantity'] = 1
-                x['price_per_unit'] = f"{our_price:.2f}"
+                x['price_per_unit'] = f"{float(product.discount_price):.2f}"
+                x['our_price'] = f"{our_price:.2f}"
                 x['total_price'] = f"{our_price:.2f}"
                 x["coinexchange"] = None
                 x["forpercentage"] = None
+                x["taxable_price"] = f"{product.taxable_price:.2f}"
+                x["gst"] = f"{product.gst_rate:.2f}"
+                x["cgst"] = f"{product.cgst:.2f}"
+                x["sgst"] = f"{product.sgst:.2f}"
                 coin_exchange = False
 
             products[product.name] = x
@@ -87,13 +97,6 @@ class DirectBuySerializer(serializers.ModelSerializer):
         if len(charges) > 0:
             for key, value in charges.items():
                 final_value += float(value)
-
-        # GST
-        if settings.GST_CHARGE > 0:
-            gst_value = final_value * float(settings.GST_CHARGE)
-            charges['GST'] = f"{gst_value:.2f}"
-        else:
-            charges['GST'] = "0.00"
 
         # delivery
         if final_value < settings.DELIVARY_FREE_ORDER_AMOUNT:

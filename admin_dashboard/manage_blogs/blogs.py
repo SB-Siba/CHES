@@ -68,3 +68,34 @@ class BlogSearch(View):
             "blog_list":blog_list,
         }
         return render(request, self.template, context)
+
+
+class BlogUpdate(View):
+    model = Blogs
+    form_class = BlogForm
+    template = app + "blog_update.html"
+
+    def get(self,request, blog_id):
+        blog = get_object_or_404(self.model, id=blog_id)
+ 
+        context = {
+            "blog" : blog,
+            "form": self.form_class(instance=blog),
+        }
+        return render(request, self.template, context)
+    
+    def post(self,request, blog_id):
+
+        blog = self.model.objects.get(id = blog_id)
+        form = self.form_class(request.POST, request.FILES, instance=blog)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Blog ({blog_id}) is updated successfully.....")
+            return redirect(reverse('admin_dashboard:blogs_list'))
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{field}: {error}')
+
+        return redirect("admin_dashboard:blog_update", blog_id = blog_id)

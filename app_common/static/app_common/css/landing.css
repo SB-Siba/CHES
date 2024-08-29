@@ -17,7 +17,7 @@ h3,h5,h1,h2,h4,p,h6{
   overflow-y: hidden;
 }
 .header_body {
-  background: url(images/bg-header.png) no-repeat center top;
+  background: url(images/landing7.jpg) no-repeat center top;
   background-size: cover;
   height: 120vh; /* Ensure this is enough to fit the viewport height */
   width: 100%;
@@ -180,13 +180,13 @@ nav label.cancel {
 
 /* ======service======= */
 .bg_row_service {
-  background: url(images/bg-whatwedo.png) no-repeat center bottom;
+  background: url(images/landing8.jpeg) no-repeat center bottom;
   background-size: cover;
   background-attachment: fixed;
   height: auto;
   width: 100%;
   padding: 50px 0; /* Add some padding for spacing */
-  filter: contrast(1) saturate(1) brightness(90%);
+  filter: contrast(1) saturate(1) brightness(80%);
 }
 
 .service_fst_row{

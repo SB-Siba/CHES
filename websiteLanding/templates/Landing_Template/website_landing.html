@@ -69,6 +69,13 @@
     
     </div>
 </div>
+<div class="carousel-item" id="carousel-item-4">
+    <div class="carousel-caption text-start">
+    <h1 class="service_hd_2">Sustainable Gardening</h1>
+    <p class="text-white">Adopt eco-friendly practices for a greener future.</p>
+    
+    </div>
+</div>
 </div>
 <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -112,37 +119,89 @@
 </div>
 </div>
 <!-- main Content  --> 
-<!-- service -->
-<div class="row mx-lg-5 mx-2 justify-content-center">
-<!-- Service 1 -->
-<div class="col-md-4 mb-4">
-    <div class="service-box">
-        <img src="{% static 'app_common/css/images/serv1.png' %}" alt="Care of Garden">
-        <h5 class="service-title">Flower Garden</h5>
-        <p class="service-description">Ut sit amet ipsum sit amet nibh rutrum faucibus gravida a eros orci varius.</p>
-        <a href="#" class="read-more">Read More</a>
+
+<!-- =========== About ========== -->
+<div class="row my-5 mx-lg-5 mx-1 about_row">
+    <div class="col-lg-6 column-left">
+        <div class="lading_body2">
+            <h3 class="mb-3">About CHES</h3>
+            <h1 class="mb-5">
+                Our Company and the Traditions <br> of Agricultural Farming
+            </h1>
+            <p>At CHES, we are dedicated to advancing the field of horticulture through innovative solutions and sustainable practices...</p>
+            <p>With a team of experienced professionals and a passion for plants, we offer a wide range of services...</p>
+            <p>We believe in the power of collaboration and strive to build strong partnerships with local and international organizations...</p>
+            <p>Join us at CHES to explore the future of horticulture and cultivate a greener, more vibrant world together.</p>
+        </div>
+    </div>
+    <div class="col-lg-6 mt-5  column-right">
+        <img class="about-img" src="{% static 'app_common/css/images/landing11.jpg'%}" alt="">
     </div>
 </div>
-<!-- Service 2 -->
-<div class="col-md-4 mb-4">
-    <div class="service-box">
-        <img src="{% static 'app_common/css/images/serv2.png' %}" alt="Flower Service">
-        <h5 class="service-title">Planting</h5>
-        <p class="service-description">Natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus nibh.</p>
-        <a href="#" class="read-more">Read More</a>
+
+
+<!-- =========== About ========== -->
+
+<!-- ==========service========= -->
+<div class="row mx-lg-5 mx-2 mb-5 justify-content-center">
+    <!-- Service 1 -->
+    <div class="col-md-4 mb-4 service-left">
+        <div class="service-box">
+            <img src="{% static 'app_common/css/images/serv1.png' %}" alt="Care of Garden">
+            <h5 class="service-title">Flower Garden</h5>
+            <p class="service-description">Ut sit amet ipsum sit amet nibh rutrum faucibus gravida a eros orci varius.</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+    </div>
+    <!-- Service 2 -->
+    <div class="col-md-4 mb-4 service-middle">
+        <div class="service-box">
+            <img src="{% static 'app_common/css/images/serv2.png' %}" alt="Flower Service">
+            <h5 class="service-title">Planting</h5>
+            <p class="service-description">Natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus nibh.</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
+    </div>
+    <!-- Service 3 -->
+    <div class="col-md-4 mb-4 service-right">
+        <div class="service-box">
+            <img src="{% static 'app_common/css/images/serv3.png' %}" alt="Spinach Service">
+            <h5 class="service-title">Care Of Garden</h5>
+            <p class="service-description">Velit nec sodales iaculis nisi arcu vehicula odio nec dictum augue elit ante.</p>
+            <a href="#" class="read-more">Read More</a>
+        </div>
     </div>
 </div>
-<!-- Service 3 -->
-<div class="col-md-4 mb-4">
-    <div class="service-box">
-        <img src="{% static 'app_common/css/images/serv3.png' %}" alt="Spinach Service">
-        <h5 class="service-title">Care Of Garden</h5>
-        <p class="service-description">Velit nec sodales iaculis nisi arcu vehicula odio nec dictum augue elit ante.</p>
-        <a href="#" class="read-more">Read More</a>
+
+<!-- ======== service ========== -->
+
+<!-- ======= Counter ========= -->
+<div class="row mx-lg-5 mx-2 counter-section">
+    <div class="row">
+        <div class="col-md-3 col-sm-6 counter-box">
+            <div class="icon">🍓</div>
+            <div class="number" data-target="4900">0 <span>+</span></div>
+            <p>Organic Food</p>
+        </div>
+        <div class="col-md-3 col-sm-6 counter-box">
+            <div class="icon">⭐</div>
+            <div class="number" data-target="6003">0</div>
+            <p>Happy Customers</p>
+        </div>
+        <div class="col-md-3 col-sm-6 counter-box">
+            <div class="icon">👨‍👩‍👧</div>
+            <div class="number" data-target="900">0</div>
+            <p>Experience Team</p>
+        </div>
+        <div class="col-md-3 col-sm-6 counter-box">
+            <div class="icon">🍽️</div>
+            <div class="number" data-target="1500">0</div>
+            <p>Monthly Food Order</p>
+        </div>
     </div>
 </div>
-</div>
-<!-- service -->
+
+<!--============= Counter========== -->
 
 <!-- faq -->
 <div class="row mx-lg-5 mx-2  mb-5">
@@ -367,6 +426,102 @@
             }
         });
     });
+
+
+    // service animation
+    document.addEventListener('DOMContentLoaded', function () {
+    const leftCard = document.querySelector('.service-left');
+    const middleCard = document.querySelector('.service-middle');
+    const rightCard = document.querySelector('.service-right');
+
+    const observerOptions = {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.5 // 50% of the element should be visible to trigger
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (entry.target === leftCard) {
+                    leftCard.classList.add('animate-left');
+                } else if (entry.target === rightCard) {
+                    rightCard.classList.add('animate-right');
+                } else if (entry.target === middleCard) {
+                    middleCard.classList.add('animate-middle');
+                }
+                // Once the animation is triggered, unobserve the element
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    observer.observe(leftCard);
+    observer.observe(middleCard);
+    observer.observe(rightCard);
+});
+
+    // service animation
+
+    //about animation
+    document.addEventListener('DOMContentLoaded', function() {
+    function onScroll() {
+        var aboutSection = document.querySelector('.about_row');
+        var leftColumn = document.querySelector('.column-left');
+        var rightColumn = document.querySelector('.column-right');
+        var sectionPosition = aboutSection.getBoundingClientRect().top;
+        var screenPosition = window.innerHeight / 1.2;
+
+        if (sectionPosition < screenPosition) {
+            leftColumn.classList.add('animated');
+            rightColumn.classList.add('animated');
+        }
+    }
+
+    window.addEventListener('scroll', onScroll);
+});
+
+    //about animation
+
+    // counter
+    document.addEventListener('DOMContentLoaded', function () {
+    const counters = document.querySelectorAll('.number');
+
+    const startCountUp = (counter) => {
+        const target = +counter.getAttribute('data-target');
+        let count = 500;
+
+        const updateCounter = () => {
+            const increment = target / 200;  // Adjust speed here
+            count += increment;
+            if (count < target) {
+                counter.innerText = Math.ceil(count) + "+";  // Add "+" during the counting
+                requestAnimationFrame(updateCounter);
+            } else {
+                counter.innerText = target + "+";  // Ensure "+" remains after finishing
+            }
+        };
+
+        updateCounter();
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counters = entry.target.querySelectorAll('.number');
+                counters.forEach(counter => startCountUp(counter));
+                observer.unobserve(entry.target);  // Stop observing once counting starts
+            }
+        });
+    }, { threshold: 0.5 });
+
+    const counterSection = document.querySelector('.counter-section');
+    observer.observe(counterSection);
+});
+
+
+
+    // counter
 </script>
 </body>
 </html>

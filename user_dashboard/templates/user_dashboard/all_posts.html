@@ -17,23 +17,15 @@
                             <ul class="timeline">
                                 {% for post,like,like_count,cmnt_count in post_and_like %}
                                 <li>
-                                    <!-- begin timeline-time -->
-                                    <div class="timeline-time">
-                                        <span class="time">{{post.date_time}}</span>
-                                    </div>
-                                    <!-- end timeline-time -->
-                                    <!-- begin timeline-icon -->
-                                    <div class="timeline-icon">
-                                        <a href="javascript:;">&nbsp;</a>
-                                    </div>
-                                    <!-- end timeline-icon -->
-                                    <!-- begin timeline-body -->
                                     <div class="timeline-body">
                                         <div class="timeline-header">
                                             {% if post.user.user_image %}
-                                                <span class="userimage"><img src="{{post.user.user_image.url}}" alt=""></span>
+                                            <span class="userimage"><img src="{{post.user.user_image.url}}"
+                                                    alt=""></span>
+                                            {% else %}
+                                            <span class="userimage"><img src="https://bootdey.com/img/Content/avatar/avatar3.png"></span>
                                             {% endif %}
-                                            <span class="username">{{post.user.full_name}} <small></small></span>
+                                            <span class="username">{{post.user.full_name}} <small class="mx-3">{{post.date_time}}</small></span>
                                         </div>
                                         <div class="timeline-content">
                                             <h5 class="text-black">{{post.activity_title}}</h5>
@@ -59,20 +51,59 @@
                                                 <span class="stats-total">{{like_count}}</span>
                                             </div>
                                         </div>
-                                        <div class="timeline-footer">
-                                            {% if like == 1 %}
-                                            <a aid='{{post.id}}' id="minus-like{{post.id}}"
-                                                class="m-r-15 text-inverse-lighter text-danger"
-                                                style="text-decoration: none;">
-                                                <i class="fa fa-heart fa-fw fa-lg m-r-3"></i>
-                                            </a>
-                                            {% else %}
-                                            <a aid='{{post.id}}' id="plus-like{{post.id}}"
-                                                class="m-r-15 text-inverse-lighter text-black"
-                                                style="text-decoration: none;">
-                                                <i class="fa fa-heart fa-fw fa-lg m-r-3"></i>
-                                            </a>
-                                            {% endif %}
+                                        <div class="timeline-footer d-flex justify-content-between">
+                                            <div class="">
+                                                {% if like == 1 %}
+                                                <a aid='{{post.id}}' id="minus-like{{post.id}}"
+                                                    class="m-r-15 text-inverse-lighter text-danger"
+                                                    style="text-decoration: none; text-align: center;">
+                                                    <i class="fa fa-heart fa-fw fa-lg m-r-3"></i>
+                                                </a>
+                                                {% else %}
+                                                <a aid='{{post.id}}' id="plus-like{{post.id}}"
+                                                    class="m-r-15 text-inverse-lighter text-black"
+                                                    style="text-decoration: none; text-align: center;">
+                                                    <i class="fa fa-heart fa-fw fa-lg m-r-3"></i>
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                            <div>
+                                                <!-- Share Button -->
+                                                <button class="btn btn-sm btn-secondary mt-3" data-bs-toggle="modal" data-bs-target="#shareModal{{ blog.id }}">
+                                                    <i class="fa-solid fa-share"></i> Share
+                                                </button>
+
+                                                <!-- Share Modal -->
+                                                <div class="modal fade" id="shareModal{{ blog.id }}" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="shareModalLabel">Share this Blog</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>Share this activity on:</p>
+                                                                <div class="share-buttons">
+                                                                    <!-- Facebook Share -->
+                                                                    <a href="https://www.facebook.com/dialog/share?app_id=YOUR_APP_ID&display=popup&href={{ request.build_absolute_uri|urlencode }}&quote={{ blog.title|urlencode }} - {{ blog.content|truncatechars:200|urlencode }}" 
+                                                                    target="_blank" class="btn btn-sm btn-primary">
+                                                                        <i class="fa-brands fa-facebook-f"></i> Share on Facebook
+                                                                    </a>
+
+                                                                    <!-- Twitter Share -->
+                                                                    <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri|urlencode }}&text={{ blog.title|urlencode }} - {{ blog.content|truncatechars:200|urlencode }}" 
+                                                                        target="_blank" class="btn btn-sm btn-info">
+                                                                            <i class="fa-brands fa-twitter"></i> Share on Twitter
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="timeline-comment-box">
                                             <div class="user">
@@ -104,19 +135,19 @@
                                         </div>
                                     </div>
                                     <!-- end timeline-body -->
-                                </div>
+                                </li>
                                 {% endfor %}
-                            </>
-                            <!-- end timeline -->
+                            </ul>
                         </div>
-                        <!-- end #profile-post tab -->
+                        <!-- end timeline -->
                     </div>
-                    <!-- end tab-content -->
+                    <!-- end #profile-post tab -->
                 </div>
                 <!-- end profile-content -->
         </div>
     </div>
     </div>
+</div>
 </div>
 {% endblock content %}
 

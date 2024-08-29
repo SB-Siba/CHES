@@ -59,6 +59,7 @@ urlpatterns = [
     path('reject_blog/<int:blog_id>',blogs.DeclineBlog.as_view(), name='blog_reject'),
     path('delete_blog/<int:blog_id>',blogs.DeleteBlog.as_view(), name='blog_delete'),
     path('blog_search/',blogs.BlogSearch.as_view(), name='blog_search'),
+    path('blog_update/<int:blog_id>',blogs.BlogUpdate.as_view(), name='blog_update'),
 ]
 
 #  admin_dashboard:users_list

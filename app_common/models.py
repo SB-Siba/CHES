@@ -250,30 +250,23 @@ class VendorDetails(models.Model):
     
 
 class ProductFromVendor(models.Model):
-    CATEGORY_CHOICES = [
-        ('seeds', 'Seeds'),
-        ('plants', 'Plants'),
-        ('tools', 'Gardening Tools'),
-        ('fertilizers', 'Fertilizers'),
-        ('pots_containers', 'Pots & Containers'),
-        ('pest_control', 'Pest Control'),
-        ('irrigation', 'Irrigation Systems'),
-        ('garden_decor', 'Garden Decor'),
-        # Add more gardening-specific categories as needed
-    ]
-    
     vendor = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField()
+    taxable_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     max_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     image = models.ImageField(upload_to='vendor_products/', null=True, blank=True)
     stock = models.IntegerField(default=0)
-    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
+    category = models.CharField(max_length=100)
     reason = models.TextField(null=True, blank=True)
     green_coins_required = models.PositiveIntegerField(default=0)
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=10.00)
     ratings = models.JSONField(default=list, null=True, blank=True)
+
+    gst_rate = models.DecimalField(max_digits=5, decimal_places=2,default=Decimal('0.00'))
+    sgst = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'), editable=False)
+    cgst = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'), editable=False)
 
     def calculate_discounted_price(self):
         """
@@ -310,6 +303,19 @@ class ProductFromVendor(models.Model):
             self.green_coins_required = int((self.discount_percentage / Decimal('100.00')) * self.discount_price)
         else:
             self.green_coins_required = 0
+
+        # Calculate taxable price as discounted price minus GST rate
+        if self.discount_price > 0 and self.gst_rate is not None:
+            self.taxable_price = self.discount_price - (self.discount_price * (self.gst_rate / Decimal('100.00')))
+        else:
+            self.taxable_price = self.discount_price
+
+        if self.gst_rate is not None:
+            # Calculate SGST and CGST by dividing the GST rate by 2
+            half_gst = self.gst_rate / 2
+            self.sgst = round(half_gst, 2)
+            self.cgst = round(half_gst, 2) 
+
         super(ProductFromVendor, self).save(*args, **kwargs)
     
     def __str__(self):
@@ -353,6 +359,8 @@ class Order(models.Model):
     transaction_id = models.TextField(null= True, blank=True)
     can_edit = models.BooleanField(default=True) # id a order is canceled or refunded, make it non editable
     rating_given = models.BooleanField(default=False,null=True,blank=True)
+    rating = models.FloatField(default=0.0,null=True,blank=True)
+
     def __str__(self):
         return self.uid
 
