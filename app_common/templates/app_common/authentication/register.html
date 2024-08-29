@@ -238,7 +238,8 @@
                             verifyOtpBtn.disabled = true;
                             document.getElementById("submit-btn").disabled = false;
                         } else {
-                            verifyOtpBtn.textContent = 'Not Verified';
+                            verifyOtpBtn.textContent = 'Verify Again';
+                            verifyOtpBtn.disabled = false;
                         }
                     });
                 } else {
