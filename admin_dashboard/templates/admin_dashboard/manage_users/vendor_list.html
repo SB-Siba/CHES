@@ -5,43 +5,33 @@
     <div class="page-wapper">
         {% include 'app_common/snippets/alert.html' %}
         <div class="search_sec">
-               
             <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
                 {% csrf_token %}
                 <div class="table_search_box">
-
                     <select class="form-control selects" name="search_by" aria-label="Default select example">
                         <option value="email">Email</option>
                         <option value="contact">Contact</option>
                     </select>
-    
                     <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query" required/>
-    
                     <button class="btn qry-sub" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
-
                 </div>
             </form>
-
         </div>
         
         <div class="table-responsive">
-            <!-- <div> 
-                <a href="{% url 'admin_dashboard:add_user'%}">
-                    <button class="btn new-user-btn">Create New User</button>
-                </a>
-            </div> -->
             <table class="table table-hover table-nowrap">
                 <thead class="table-light">
                     <tr>
                         <th scope="col">User-ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Wallet Balance</th>
                         <th scope="col">Vendor Details</th>
                         <th scope="col">Active Status</th>
                         <th scope="col">Last Login</th>
-                        <th>Action</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,58 +40,70 @@
                         <td>{{ user.id }}</td>
                         <td>{{ user.full_name }}</td>
                         <td>{{ user.email }}</td>
+                        <td>{{ user.wallet }}</td>
                         <td><a href="{% url 'admin_dashboard:vendor_details' user.id %}">Vendor Details</a></td>
                         <td>{{ user.is_active }}</td>
                         <td>{{ user.last_login }}</td>
                         <td>
-                            <!-- <a email="{{user.email}}" user_id="{{user.id}}" type="button" onclick="open_wallet_add_modal(this)">
-                                <i class="fa-regular fa-pen-to-square" style="color: #8400db;"></i>
-                            </a> -->
-                            <a href="{% url 'admin_dashboard:user_update' user.id %}">
-                                <i class="fa-regular fa-pen-to-square" style="color: #8400db;"></i>
-                            </a>
-                            <a href="{% url 'admin_dashboard:delete_user' user.id %}">
+                            <!-- Trigger Delete Vendor Modal -->
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#delete_vendor_modal_{{ user.id }}" class="mx-3">
                                 <i class="fa fa-trash text-danger" aria-hidden="true"></i>
                             </a>
+                            <!-- Trigger Wallet Balance Modal -->
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#wallet_balance_add_modal_{{ user.id }}">
+                                <i class="fa fa-wallet text-primary" aria-hidden="true"></i>
+                            </a>
                         </td>
-                       
                     </tr>
+
+                    <!-- Delete Vendor Modal -->
+                    <div class="modal fade" id="delete_vendor_modal_{{ user.id }}" tabindex="-1" aria-labelledby="deleteVendorModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteVendorModalLabel">Delete Vendor</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete the vendor <strong>{{ user.full_name }}</strong>?</p>
+                                    <form action="{% url 'admin_dashboard:delete_vendor' user.id %}" method="post">
+                                        {% csrf_token %}
+                                        <div style="text-align: center;">
+                                            <button class="btn btn-danger" type="submit">Delete Vendor</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wallet Balance Add Modal -->
+                    <div class="modal fade" id="wallet_balance_add_modal_{{ user.id }}" tabindex="-1" aria-labelledby="walletBalanceAddModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="walletBalanceAddModalLabel">Add Wallet Balance</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{% url 'admin_dashboard:vendor_add_wallet_balance' %}" method="post">
+                                        {% csrf_token %}
+                                        <input name="user_id" type="number" value="{{ user.id }}" hidden/>
+                                        <input name="email" type="email" value="{{ user.email }}" class="form-control" readonly/>
+                                        {{form.as_p}}
+                                        <div style="text-align: center;">
+                                            <button class="btn btn-outline-primary" type="submit">Add Balance</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {% endfor %}
                 </tbody>
             </table>
             {% include 'app_common/snippets/pagination.html' %}
         </div>
     </div>
-
-
-
-
-<!-- wallet balance add modal -->
-<div class="modal fade" id="wallet_balance_add_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Wallet Balance</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-         <form action="{% url 'admin_dashboard:add_wallet_balance' %}" method="post" id="wallet_balance_add_modal_form">
-            {% csrf_token %}
-            <input id="user_id" name="user_id" type="number" class="form-control" hidden/>
-            <input id="email" name="email" type="email" class="form-control" readonly/>
-            {{form.as_p}}
-            <div style="text-align: center;">
-                <button class="btn btn-outline-primary" type="submit">
-                    Add Balance
-                </button>
-            </div>
-         </form>
-        </div>
-       
-      </div>
-    </div>
-</div>
 {% endblock content %}
-{% block js %}
-<script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
-{% endblock js %}
