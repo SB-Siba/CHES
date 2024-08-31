@@ -141,8 +141,8 @@ nav label.cancel {
   position: relative;
   background: 
               url(images/about2.png) no-repeat bottom right;
-  background-size: 160px 150px; /* Adjust the size as needed */
-  padding: 0 0 100px; /* Adjust the padding to create space for the background images */
+  background-size: 190px 190px; /* Adjust the size as needed */
+  padding: 0 0 95px; /* Adjust the padding to create space for the background images */
 }
 
 .about-img {

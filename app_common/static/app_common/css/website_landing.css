@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Dancing+Script:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
 body {
     background-color: #f0f2f5;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -14,8 +14,9 @@ body {
     overflow-x: hidden;
   }
   ::selection {
-    background-color: #077701; /* Replace with your desired background color */
-    color: #403f3f; /* Optional: Change the text color */
+    background-color: #077701fb; /* Replace with your desired background color */
+    color: #ffffff; /* Optional: Change the text color */
+    
   }
   h3,h5,h1,h2,h4,p,h6{
     overflow-y: hidden;
@@ -174,116 +175,84 @@ body {
 }
 .main_content_img{
   width: 100%;
-  height: 400px;
+  height: 450px;
+  border-radius: 80px 1px 80px 1px;
+  
 }
 .display-5 {
   color: rgb(0, 0, 0);
-  font-size: 40px;
+  font-size: 30px;
+  font-family: "Oswald", sans-serif;
+  font-weight: 600;
+  overflow-y: hidden;
+}
+.display-5a{
+  font-size: 80px;
+  margin-left: 100px;
+  color: #007033;
+  font-family: "Oswald", sans-serif;
   font-weight: 600;
   overflow-y: hidden;
 }
 .lead1{
-  font-size: 14px;
-  line-height: 1.7rem;
+  font-size: 12px;
+  line-height: 1.5rem;
   text-align: justify;
   word-break:keep-all;
   color: rgb(96, 96, 96);
 }
+.bg_imG {
+  background-image: url(images/about1-removebg-preview.png); /* Replace with your image path */
+  background-repeat: no-repeat;
+  background-position: right top; /* Position the image in the right bottom corner */
+  background-size: 100px 100px; /* Adjust the size of the image */
+  position: relative; /* Ensure the background image stays within the column */
+}
+/* Initial state (hidden at the bottom) */
+.hidden-section {
+  opacity: 0;
+  transform: translateY(60px); /* Increased the translateY for more visible effect */
+  transition: opacity 1s cubic-bezier(0.25, 0.1, 0.25, 1), transform 1s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Final state (visible and in place) */
+.visible-section {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* From Uiverse.io by cssbuttons-io */ 
-button {
+.btn-succeSS {
   position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background-color: #007033; /* Initial background color */
+  padding: 6px 20px;
+  color: white;
+  border: none;
+}
+
+.btn-succeSS .bi-arrow-right {
   display: inline-block;
-  cursor: pointer;
-  outline: none;
-  border: 0;
-  vertical-align: middle;
-  text-decoration: none;
-  background: transparent;
-  padding: 0;
-  font-size: inherit;
-  font-family: inherit;
-  overflow-y: hidden !important;
- }
- 
- button.learn-more {
-  width: 12rem;
-  height: auto;
-  overflow-y: hidden !important;
- }
- 
- button.learn-more .circle {
-  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-  position: relative;
-  display: block;
-  margin: 0;
-  width: 3rem;
-  height: 3rem;
-  background: #01590e;
-  border-radius: 1.625rem;
-  overflow-y: hidden !important;
- }
- 
- button.learn-more .circle .icon {
-  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  background: #fff;
-  overflow-y: hidden !important;
- }
- 
- button.learn-more .circle .icon.arrow {
-  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-  left: 0.625rem;
-  width: 1.125rem;
-  height: 0.125rem;
-  background: none;
-  overflow-y: hidden !important;
- }
- 
- button.learn-more .circle .icon.arrow::before {
-  position: absolute;
-  content: "";
-  top: -0.29rem;
-  right: 0.0625rem;
-  width: 0.625rem;
-  height: 0.625rem;
-  border-top: 0.125rem solid #fff;
-  border-right: 0.125rem solid #fff;
-  transform: rotate(45deg);
-  overflow-y: hidden !important;
- }
- 
- button.learn-more .button-text {
-  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 0.75rem 0;
-  margin: 0 0 0 1.85rem;
-  color: #282936;
-  font-weight: 700;
-  line-height: 1.6;
-  text-align: center;
-  text-transform: uppercase;
-  overflow-y: hidden !important;
- }
- 
- button:hover .circle {
-  width: 100%;
- }
- 
- button:hover .circle .icon.arrow {
-  background: #fff;
-  transform: translate(1rem, 0);
- }
- 
- button:hover .button-text {
-  color: #fff;
- }
+  transition: transform 0.3s ease;
+}
+
+.btn-succeSS:hover {
+  background: rgb(5,131,47);
+background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(5,121,23,1) 52%, rgba(6,175,27,1) 100%);
+  color: white;
+}
+
+.btn-succeSS:hover .bi-arrow-right {
+  transform: translateX(5px); /* Move the icon 5px to the right on hover */
+}
+.btn-succeSS:active,
+.btn-succeSS:focus,
+.btn-succeSS:visited {
+
+    color: white;
+
+}
 /* Hero Section */
 #heroCarousel .carousel-item {
   height: 100vh; /* Fullscreen height */
@@ -295,7 +264,7 @@ button {
 
 @media (min-aspect-ratio: 16/9) {
   #heroCarousel .carousel-item {
-      background-size: 100% 100vh; /* Stretch to fit the height */
+      background-size: 100% 110vh; /* Stretch to fit the height */
   }
 }
 
@@ -356,31 +325,35 @@ button {
 /* Hero Section */
 /*========= About========= */
 
-
+.about_row{
+  background-color: #ffee9e;
+}
 /* Existing styles */
 .about-img {
   width: 100%;
-  height: auto;
-  border-radius: 100px 0 100px 0;
+  height: 500px;
+  
 }
 
 .lading_body2 h1 {
-  color: rgb(0, 0, 0);
+  color: rgb(5, 100, 1);
   font-size: 40px;
   font-weight: 600;
   overflow-y: hidden;
+  font-family: "Oswald", sans-serif;
 }
 
 .lading_body2 h3 {
-  font-size: 35px;
-  color: #FFCD1E;
-  font-family: "Dancing Script", cursive;
+  font-size: 80px;
+  color: #ffffff;
+  font-family: "Oswald", sans-serif;
 }
 
 .lading_body2 p {
   text-align: justify;
-  font-size: 14px !important;
-  color: gray;
+  font-size: 12px !important;
+  
+  color: rgb(64, 63, 63);
 }
 
 /* Keyframe animations */
@@ -549,8 +522,10 @@ button {
 }
 
 .gallery-heading {
-  font-size: 2rem; /* Adjust size as necessary */
+  font-size: 35px; /* Adjust size as necessary */
+  letter-spacing: 1px;
   margin-bottom: 30px; /* Spacing between heading and gallery */
+  font-family: "Oswald", sans-serif;
 }
 
 .gallery {
@@ -562,15 +537,22 @@ button {
 .gallery-item {
   position: relative;
   overflow: hidden;
-  border: 2px solid rgb(2, 119, 47);
+  border: 3px solid rgb(1, 159, 61);
   border-radius: 1px 50px 1px 50px;
 }
-
+.gallery-item:hover{
+  border: 3px solid rgb(255, 191, 0);
+}
 .gallery-item img {
   width: 100%;
   height: 230px;
   object-fit: cover; /* Ensures the image covers the entire container without distortion */
   display: block;
+  transition: transform 0.3s ease; /* Smooth transition for the zoom effect */
+}
+
+.gallery-item:hover img {
+  transform: scale(1.1); /* Zoom in the image */
 }
 
 /* ==========Gallery========== */
@@ -585,7 +567,10 @@ button {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slight shadow */
   transition: background-color 0.3s ease, color 0.3s ease;
 }
-
+.fq_head{
+  font-family: "Oswald", sans-serif;
+  font-size: 35px;
+}
 .accordion-button:not(.collapsed) {
   background-color: #234e25; /* Darker green when open */
   color: white;
@@ -695,13 +680,14 @@ button {
   
   }
   
-  
   /*========= footer end========= */
+
+
 @media (max-width: 1200px){
   .about-img {
     width: 100%;
-    height: 470px;
-    border-radius: 100px 0 100px 0;
+    height: 500px;
+    
   }
   .footer {
     background-color: #2A3D05;
