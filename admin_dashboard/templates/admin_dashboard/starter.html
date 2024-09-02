@@ -25,17 +25,193 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app_common/css/utilities.css'%}">
     <link rel="stylesheet" type="text/css" href="{% static 'app_common/css/style.css'%}">
     <link href="{% static 'admin_dashboard/css/image_hover.css'%}" rel="stylesheet">
-
-
+    <link href="{% static 'admin_dashboard/css/blog.css'%}" rel="stylesheet">
 </head>
 
 <body id="page-top">
-
     <!-- Page Wrapper -->
     <div id="wrapper">
 
         <!-- Sidebar -->
-        {% include 'admin_dashboard/menu.html' %}
+        <!-- Sidebar -->
+        <ul class="navbar-nav sidebar side-nav sidebar-dark accordion" id="accordionSidebar">
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'admin_dashboard:admin_dashboard' %}">
+                <div class="sidebar-brand-text mx-3"><img src="{% static 'admin_dashboard/images/green-logo.png' %}" class="mt-5"/></div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'admin_dashboard:admin_dashboard' %}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Admin Dashboard</span></a>
+            </li>
+
+            <!--Nav Item - Users -->
+            <li class="nav-item">
+            <a href="#" class="nav-link collapsed has-dropdown" data-bs-toggle="collapse"
+                data-bs-target="#Pending_Approvals" aria-expanded="false" aria-controls="Pending_Approvals">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Pending Approvals</span>
+                {% if not_approvedlist_count > 0 %}
+                <span class="badge badge-danger badge-counter">{{not_approvedlist_count}}</span>
+                {% endif %}
+            </a>
+            <ul id="Pending_Approvals" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                    <a href="{% url 'admin_dashboard:pending_rtg' %}" class="nav-link">
+                        <span>Pending Rtg</span>
+                        {% if not_approvedlist_rtg_count > 0 %}
+                        <span class="badge badge-danger badge-counter">{{not_approvedlist_rtg_count}}</span>
+                        {% endif %}
+                    </a>
+                    
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'admin_dashboard:pending_vendor' %}" class="nav-link">
+                        <span>Pending Vendor</span>
+                        {% if not_approvedlist_vendor_count > 0 %}
+                        <span class="badge badge-danger badge-counter">{{not_approvedlist_vendor_count}}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'admin_dashboard:pending_service_provider' %}" class="nav-link">
+                        <span>Pending Service Provider</span>
+                        {% if not_approvedlist_service_provider_count > 0 %}
+                        <span class="badge badge-danger badge-counter">{{not_approvedlist_service_provider_count}}</span>
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <!-- Add_user -->
+        <li class="nav-item">
+            <a href="#" class="nav-link collapsed has-dropdown" data-bs-toggle="collapse"
+                data-bs-target="#add_users" aria-expanded="false" aria-controls="add_users">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Add User</span>
+            </a>
+            <ul id="add_users" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                    <a href="{% url 'app_common:register' 'is_rtg' %}" class="nav-link">
+                        <span>Add Rtg</span>
+                    </a>
+                    
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'app_common:register' 'is_vendor' %}" class="nav-link">
+                        <span>Add Vendor</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'app_common:register' 'is_serviceprovider' %}" class="nav-link">
+                        <span>Add Service Provider</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_dashboard:serviceproviders_list' %}">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Service Providers</span>
+                </a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_dashboard:RTgardeners_list' %}">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Roof Top Gardeners</span>
+            </a>
+        </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_dashboard:vendors_list' %}">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Vendors</span>
+            </a>
+        </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_dashboard:gardeningprofileupdaterequest' %}">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Gardening Profile Update Request</span>
+                {% if gardening_profile_update_obj_request_count > 0 %}
+                <span class="badge badge-danger badge-counter">{{gardening_profile_update_obj_request_count}}</span>
+                {% endif %}
+            </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_dashboard:useractivityrequest' %}">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>User Activity Request</span>
+                    {% if activity_request_obj_count > 0 %}
+                    <span class="badge badge-danger badge-counter">{{activity_request_obj_count}}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_dashboard:sellrequest' %}">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Sell Request</span>
+                    {% if gardener_sell_request_obj_count > 0 %}
+                    <span class="badge badge-danger badge-counter">{{gardener_sell_request_obj_count}}</span>
+                    {% endif %}
+                </a>
+            </li>
+
+        <!-- Blogs -->
+        <li class="nav-item">
+            <a href="#" class="nav-link collapsed has-dropdown" data-bs-toggle="collapse"
+                data-bs-target="#blogs" aria-expanded="false" aria-controls="blogs">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Blogs</span>
+                {% if total_blogs_from_user_count > 0 %}
+                    <span class="badge badge-danger badge-counter">{{total_blogs_from_user_count}}</span>
+                {% endif %}
+            </a>
+            <ul id="blogs" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                    <a href="{% url 'blogs:admin_blog_list' %}" class="nav-link">
+                        <span>My Blogs</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'blogs:admin_all_blogs' %}" class="nav-link">
+                        <span>All Blogs</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="nav-link" href="{% url 'admin_dashboard:blogs_list' %}">
+                        <span>Blogs From Users</span>
+                        {% if total_blogs_from_user_count > 0 %}
+                            <span class="badge badge-danger badge-counter">{{total_blogs_from_user_count}}</span>
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
+        </li>
+            <!-- Nav Item - Charts -->
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'admin_dashboard:produce_order_list' %}">
+                <i class="fa-solid fa-coins"></i>
+                <span>Produce Orders</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'app_common:logout' %}">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span></a>
+            </li>
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+        </ul>
+        <!-- End of Sidebar -->
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
