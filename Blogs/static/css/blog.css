@@ -86,7 +86,7 @@ display: block;
 margin: 0;
 width: 3rem;
 height: 3rem;
-background: #282936;
+background: green;
 border-radius: 1.625rem;
 }
 
@@ -160,7 +160,7 @@ color: #fff;
     line-height: 23px;
 }
 .Main_Image{
-    height: 650px;
+   
     overflow: hidden;
     width: auto;
     object-fit: cover;

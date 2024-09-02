@@ -656,11 +656,10 @@ def reject_buy(request,ord_id):
     order_obj.buying_status="BuyRejected"
     order_obj.save()
     return redirect('vendor_dashboard:buybeginssellerview')
-
 class AllOrdersFromCommunity(View):
     template = app + "all_orders_from_community.html"
     model = common_models.ProduceBuy
-
+    
     def get(self, request):
         orders = self.model.objects.filter(buyer=request.user)
         return render(request , self.template , {'orders' : orders})

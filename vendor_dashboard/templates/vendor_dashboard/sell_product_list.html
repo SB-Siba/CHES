@@ -2,19 +2,19 @@
 {% load static %}
 
 {% block main_content %}
-<div class="mt-2">
+<div class="mt-2 m-4">
     {% include 'app_common/snippets/alert.html' %}
-    <div class="table-responsive">
+    <div class="">
         <table class="table table-hover table-nowrap">
             <thead class="table-light">
                 <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Stock</th> 
-                    <th scope="col">Disc. Price</th>
-                    <th scope="col">Max Price</th>
-                    <th scope="col">Image</th>
-                    <th scope="col">Action</th>
+                    <th id="t-Head" scope="col">ID</th>
+                    <th id="t-Head" scope="col">Name</th>
+                    <th id="t-Head" scope="col">Stock</th> 
+                    <th id="t-Head" scope="col">Disc. Price</th>
+                    <th id="t-Head" scope="col">Max Price</th>
+                    <th id="t-Head" scope="col">Image</th>
+                    <th id="t-Head" scope="col" class="text-center">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,12 +27,18 @@
                     <td>{{ product.max_price }}</td>
                     <td><img src="{{ product.image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class="zoom"></td>
                     <td>
-                        <a href="{% url 'vendor_dashboard:vendor_sell_product_update' product.id %}">
-                            <i class="fa-regular fa-pen-to-square" style="color: #8400db;"></i>
-                        </a>
-                        <a href="{% url 'vendor_dashboard:vendor_sell_product_delete' product.id %}">
-                            <i class="fa fa-trash text-danger" aria-hidden="true"></i>
-                        </a>
+                       <div class="d-flex justify-content-center gap-2">
+                        <div class="px-2 py-2 border bg-light">
+                            <a href="{% url 'vendor_dashboard:vendor_sell_product_update' product.id %}">
+                                <i class="fa-regular fa-pen-to-square fs-5" style="color: green;"></i>
+                            </a>
+                        </div>
+                        <div class="px-2 py-2 border bg-light">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteUrl({{ product.id }})">
+                                <i class="fa fa-trash text-danger fs-5" aria-hidden="true"></i>
+                              </a>
+                        </div>
+                       </div>
                     </td>
                 </tr>
                 {% endfor %}
@@ -41,4 +47,32 @@
         {% include 'app_common/snippets/pagination.html' %}
     </div>
 </div>
+
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this product?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <a href="#" id="confirmDeleteButton" class="btn btn-danger">Delete</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function setDeleteUrl(productId) {
+      const deleteUrl = "{% url 'vendor_dashboard:vendor_sell_product_delete' 0 %}".replace('0', productId);
+      document.getElementById('confirmDeleteButton').setAttribute('href', deleteUrl);
+    }
+  </script>
+      
 {% endblock main_content %}

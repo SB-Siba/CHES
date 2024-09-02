@@ -2,29 +2,28 @@
 {% load static %}
 
 {% block main_content %}
-<section class="py-6 bg-surface-secondary">
-   <div class="container">
-   <div class="text-center my-lg-4 text-secondary">
-    <h4>Add Your Blogs</h4>
-   </div>
-    <div class="card h-100">
-        <form action="" method="post" enctype="multipart/form-data" class="p-lg-4 lh-lg">
-                {% csrf_token %}
-                {{ form.media }}
-                <div class="row">
-                    {% for field in form %}
-                        <div class="col-12">
-                            <div class="form-group">
-                                {{ field.label_tag }}
-                                {{ field }}
+<section class="py-lg-2">
+    <div class="conatiner">
+        <h4 class="form-header headings_h4 text-center my-lg-4 p-lg-3">Add Your Blogs</h4>
+      
+        <div class="product-form-container w-50">
+            <form action="" method="post" enctype="multipart/form-data" class="lh-lg">
+             
+                    {% csrf_token %}
+                    {{ form.media }}
+                    <div class="row">
+                        {% for field in form %}
+                            <div class="col-12">
+                                <div class="form-group">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                </div>
-                <br>
-            <button type="submit" class="btn btn-success w-100">Add Your Blog</button>
-        </form>
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="btn w-100 mt-3" id="editb">Add Your Blog</button>
+            </form>
+        </div>
     </div>
-   </div>
 </section>
 {% endblock main_content %}

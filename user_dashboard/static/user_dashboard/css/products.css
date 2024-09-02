@@ -78,7 +78,8 @@
     height: 18rem;
 }
 .modal-header{
-    background-color: rgb(237, 237, 63);
+    background-color: #008000;
+    color: white;
 }
 .my_modal_btn{
     background-color: #1F782B;
