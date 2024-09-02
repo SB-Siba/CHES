@@ -8,19 +8,19 @@
   <div class="main-top">
     <h1 >My Wallet</h1>
   </div>
-  <div class="users d-flex justify-content-between">
-    <div class="card   " id="Wallet-card1">
-      <h4 class="mb-4" style="color: rgb(3, 63, 205);">Total Balance</h4>
+  <div class="users d-flex justify-content-between mb-4">
+    <div class="card  ps-4 pt-4 " id="Wallet-card1">
+      <h5 class="mb-4" style="color: rgb(3, 63, 205);">Total Balance</h5>
       <p><i class="fa-solid fa-coins fa-3x text-primary"></i> <span class="mx-2"
           style="font-weight: bold; color: rgb(3, 63, 205); font-size: 1.3em;">{{request.user.wallet}}</span></p>
     </div>
-    <div class="card  " id="Wallet-card2">
-      <h4 class="mb-4 " style="color: rgb(198, 172, 2);">Total Purchase</h4>
+    <div class="card  ps-4 pt-4" id="Wallet-card2">
+      <h5 class="mb-4 " style="color: rgb(198, 172, 2);">Total Purchase</h5>
       <p><i class="fa-solid fa-coins text-warning fa-3x"></i> <span class="mx-2"
           style="font-weight: bold; color: rgb(233, 156, 13); font-size: 1.3em;">{{request.user.total_invest}}</span></p>
     </div>
-    <div class="card" id="Wallet-card3">
-      <h4 class="text-danger  mb-4">Total Earnings</h4>
+    <div class="card ps-4 pt-4" id="Wallet-card3">
+      <h5 class="text-danger  mb-4">Total Earnings</h5>
       <p><i class="fa-solid fa-coins fa-3x text-danger"></i> <span class="mx-2"
           style="font-weight: bold; color: red; font-size: 1.3em;">{{request.user.total_income}}</span></p>
     </div>
@@ -32,28 +32,28 @@
     </div>
     <table class="table">
       <thead>
-        <tr style="color: black;">
-          <th>Product Name</th>
-          <th>Quantity</th>
-          <th>Amount</th>
-          <th>Date & Time</th>
-          <th>Details</th>
+        <tr >
+          <th id="t-Head">Product Name</th>
+          <th id="t-Head">Quantity</th>
+          <th id="t-Head">Amount</th>
+          <th id="t-Head">Date & Time</th>
+          <th id="t-Head">Details</th>
         </tr>
       </thead>
 
       <tbody>
         {% for i,j in main_obj %}
-        <tr style="color: black;">
-          <td style="font-size: small;">{{i.product_name}}</td>
-          <td style="font-size: small;">{{i.quantity_buyer_want}}&nbsp;{{i.SI_units}}</td>
+        <tr >
+          <td id="t_daTa">{{i.product_name}}</td>
+          <td id="t_daTa" >{{i.quantity_buyer_want}}&nbsp;{{i.SI_units}}</td>
           {% if j %}
-          <td style="font-size: small;" class="text-danger">- {{i.ammount_based_on_quantity_buyer_want}}</td>
+          <td id="t_daTa" class="text-danger">- {{i.ammount_based_on_quantity_buyer_want}}</td>
           {% else %}
-          <td style="font-size: small;" class="text-success">+ {{i.ammount_based_on_quantity_buyer_want}}</td>
+          <td id="t_daTa" class="text-success">+ {{i.ammount_based_on_quantity_buyer_want}}</td>
           {% endif %}
 
-          <td style="font-size: small;">{{i.date_time}}</td>
-          <td style="font-size: small;"><button type="button" class="btn btn-success text-black" data-toggle="modal"
+          <td id="t_daTa">{{i.date_time}}</td>
+          <td  id="t_daTa"><button type="button" class=" " data-toggle="modal"
               data-target="#transactionModal{{ forloop.counter }}">View</button></td>
         </tr>
         <!-- Modal -->
