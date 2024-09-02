@@ -167,17 +167,32 @@ class VendorList(View):
         }
         return render(request, self.template, context)
     
-def Delete_User(request, pk):
+def Delete_Rtg(request, pk):
     user = get_object_or_404(models.User, id=pk)
     # Checking if the logged in user can delete this user
     try:
         user.delete()
     except Exception as e:
         print(e)
-    messages.success(request,"Successfully Deleted!")
-    return redirect("admin_dashboard:users_list")
+    return redirect("admin_dashboard:RTgardeners_list")
 
+def Delete_Vendor(request, pk):
+    user = get_object_or_404(models.User, id=pk)
+    # Checking if the logged in user can delete this user
+    try:
+        user.delete()
+    except Exception as e:
+        print(e)
+    return redirect("admin_dashboard:vendors_list")
 
+def Delete_Serviceprovider(request, pk):
+    user = get_object_or_404(models.User, id=pk)
+    # Checking if the logged in user can delete this user
+    try:
+        user.delete()
+    except Exception as e:
+        print(e)
+    return redirect("admin_dashboard:serviceproviders_list")
 class UserGardeningDetails(View):
     template = app + "gardening_data.html"
     def get(self, request, pk):
@@ -221,49 +236,27 @@ class SearchUser(View):
         return render(request, self.template, context)
     
 
-class WalletBalanceAdd(View):
+class RtgWalletBalanceAdd(View):
     model = models.User
-    template = app + "wallet_balance_add.html"
     form_class = forms.WalletBalanceAdd
 
     def post(self, request):
         user_obj = self.model.objects.get(id = request.POST.get('user_id'))
         user_obj.wallet = user_obj.wallet + float(request.POST.get('wallet'))
         user_obj.save()
-        messages.success(request, 'Wallet balance is updated')
         
-        return redirect("admin_dashboard:users_list")
+        return redirect("admin_dashboard:RTgardeners_list")
     
-
-class UserUpdate(View):
+class VendorWalletBalanceAdd(View):
     model = models.User
-    template = app + "user_update.html"
-    form_class = forms.UserEdit
+    form_class = forms.WalletBalanceAdd
 
-    def get(self, request, user_id):
-        user_obj = self.model.objects.get(id = user_id)
-        context = {
-            "form": self.form_class(instance= user_obj),
-            "user_id" : user_id,
-        }
-        return render( request, self.template, context)
-    
-    def post(self, request, user_id):
-        user_obj = self.model.objects.get(id = user_id)
-        form = self.form_class(request.POST, instance= user_obj)
-
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'User is updated successfully....')
-            return redirect('admin_dashboard:users_list')
+    def post(self, request):
+        user_obj = self.model.objects.get(id = request.POST.get('user_id'))
+        user_obj.wallet = user_obj.wallet + float(request.POST.get('wallet'))
+        user_obj.save()
         
-        else:
-
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f'{field}: {error}')
-
-            return redirect('admin_dashboard:user_update', user_id = user_id)
+        return redirect("admin_dashboard:vendors_list")
         
 
 class AddUser(View):

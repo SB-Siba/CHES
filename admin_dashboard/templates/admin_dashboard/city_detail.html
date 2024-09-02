@@ -91,8 +91,8 @@
         <div class="col-lg-6 mb-4">
             <div class="card shadow h-100 py-2">
                 <div class="card-body">
-                    <h4 class="card-title">RTG Sales Chart</h4>
-                    <canvas id="rtgSalesChart"></canvas>
+                    <h4 class="card-title">RTG and Vendor Community Sales Chart</h4>
+                    <canvas id="rtgvendorSalesChart"></canvas>
                 </div>
             </div>
         </div>
@@ -146,14 +146,14 @@
     });
 
     // RTG Sales Chart
-    var ctxRtgSales = document.getElementById('rtgSalesChart').getContext('2d');
+    var ctxRtgSales = document.getElementById('rtgvendorSalesChart').getContext('2d');
     var rtgSalesChart = new Chart(ctxRtgSales, {
         type: 'bar',
         data: {
-            labels: graphData.rtg_sales_label, // Dynamic labels
+            labels: graphData.rtg_vendor_sales_label, // Dynamic labels
             datasets: [{
-                label: 'RTG Sales',
-                data: graphData.rtg_sales_data, // Dynamic data
+                label: 'RTG and Vendor Community Sales',
+                data: graphData.rtg_vendor_sales_data, // Dynamic data
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
@@ -163,7 +163,7 @@
             responsive: true,
             scales: {
                 x: {
-                    title: { display: true, text: 'RTG' },
+                    title: { display: true, text: 'RTG & VENDOR' },
                     beginAtZero: true
                 },
                 y: {

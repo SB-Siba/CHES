@@ -656,16 +656,15 @@ def reject_buy(request,ord_id):
     order_obj.buying_status="BuyRejected"
     order_obj.save()
     return redirect('vendor_dashboard:buybeginssellerview')
-
-class Mycommunityorders(View):
-    template = app + "all_community_orders.html"
+class AllOrdersFromCommunity(View):
+    template = app + "all_orders_from_community.html"
     model = common_models.ProduceBuy
-
+    
     def get(self, request):
         orders = self.model.objects.filter(buyer=request.user)
         return render(request , self.template , {'orders' : orders})
 
-class RateOrder(View):
+class RateOrderFromComunity(View):
     model = common_models.ProduceBuy
 
     def post(self,request):
@@ -689,8 +688,8 @@ class RateOrder(View):
         buy_obj.rating_given = True
         buy_obj.save()
         seller.save()
-        return redirect('vendor_dashboard:allorders')
-
+        return redirect('vendor_dashboard:allordersfromcommunity')
+    
 class AllOrders(View):
     template = app + "order_list.html"
     model = common_models.Order

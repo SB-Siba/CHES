@@ -1,9 +1,9 @@
-{% extends 'user_dashboard/starter.html' %}
+{% extends 'vendor_dashboard/base.html' %}
 {% load static %}
 
-{% block title %}All Orders{% endblock title %}
-{% block content %}
+{% block main_content %}
 <style>
+    /* Star Rating Styles */
     #starRating {
         direction: rtl;
         display: flex;
@@ -37,24 +37,24 @@
         color: #ffc107; /* Yellow color for stars on hover */
     }
 
-    #starRating input[type="radio"]:not(:checked) ~ label:hover,
-    #starRating input[type="radio"]:not(:checked) ~ label:hover ~ label {
+    #starRating input[type="radio"]:checked ~ label:hover,
+    #starRating input[type="radio"]:checked ~ label:hover ~ label {
         color: #ffc107; /* Yellow color for stars on hover */
     }
 </style>
-    <div class="page-wapper">
+    <div class="page-wapper m-4">
         {% include 'app_common/snippets/alert.html' %}
-        <div class="table-responsive">
+        <div class="">
             <table class="table table-hover table-nowrap">
                 <thead class="table-light">
                     <tr>
-                        <th scope="col">Request-ID</th>
-                        <th scope="col">P_Name</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Units</th>
-                        <th scope="col">Ammount</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Rating</th>
+                        <th id="t-Head" scope="col">Request-ID</th>
+                        <th id="t-Head" scope="col">P_Name</th>
+                        <th id="t-Head" scope="col">Quantity</th>
+                        <th id="t-Head" scope="col">Units</th>
+                        <th id="t-Head" scope="col">Ammount</th>
+                        <th id="t-Head" scope="col">Status</th>
+                        <th id="t-Head" scope="col">Rating</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,13 +77,13 @@
                         </td>
                         <td>
                             {% if not order.rating_given and order.buying_status == "BuyCompleted" %}
-                                <a type="button" class="btn btn-primary rate-order-btn" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">
+                                <a type="button" class="btn btn-primary rate-order-btn" data-bs-toggle="modal" data-bs-target="#rateOrderModal" data-order-id="{{ order.id }}">
                                     Rate This
                                 </a>
                             {% elif order.buying_status == "BuyInProgress" %}
-                                <a class="btn btn-secondary" disabled>Not Done Yet</a>
+                                <a class="btn btn-success" disabled>Not Done Yet</a>
                             {% else %}
-                                <a class="btn btn-secondary" disabled>Rated</a>
+                                <a class="btn btn-success" disabled>Rated</a>
                             {% endif %}   
                         </td>
                         <!-- <td>
@@ -112,7 +112,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="rateOrderForm" action="{% url 'user_dashboard:rate_order' %}" method="post">
+                <form id="rateOrderForm" action="{% url 'vendor_dashboard:rate_order_from_community' %}" method="post">
                     {% csrf_token %}
                     <div class="modal-body">
                         <input type="hidden" id="orderId" name="order_id">
@@ -129,14 +129,15 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit Rating</button>
+                        <button type="submit" class="btn btn-success">Submit Rating</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-{% endblock content %}
-{% block scripts %}
+
+{% endblock main_content %}
+{% block script %}
 <script>
     $(document).ready(function () {
         // Handle rate order button click
@@ -146,4 +147,4 @@
         });
     });
 </script>
-{% endblock scripts %}
+{% endblock script %}

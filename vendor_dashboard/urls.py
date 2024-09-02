@@ -22,8 +22,8 @@ urlpatterns = [
     path('delete_comment/<int:post_id>/<str:comment_id>/', views.delete_comment, name='delete_comment'),
     path('all-comment/',views.get_all_comments,name="get_all_comments"),
     path('walletpage', views.WalletView.as_view(), name = "walletpage"),
-    path('my-community-orders/', views.Mycommunityorders.as_view(), name = "allorderscommunity"),
-    path('rate-order/',views.RateOrder.as_view(),name="rate_order"),
+    path('all-orders-from-community/', views.AllOrdersFromCommunity.as_view(), name = "allordersfromcommunity"),
+    path('rate-order-from-comunity/',views.RateOrderFromComunity.as_view(),name="rate_order_from_community"),
 
     path('sellproduce', views.SellProduceView.as_view(), name = "sellproduce"),
     path('allsellrequests', views.AllSellRequests.as_view(), name = "allsellrequests"),
@@ -35,6 +35,8 @@ urlpatterns = [
     path('buybeginsbuyerview', views.BuyBeginsBuyerView.as_view(), name = "buybeginsbuyerview"),
     path('producebuy/<int:prod_id>', views.ProduceBuyView.as_view(), name = "producebuy"),
     path('buyreject/<int:ord_id>', views.reject_buy, name = "buyreject"),
+    path('all-orders-from-community/', views.AllOrdersFromCommunity.as_view(), name = "allordersfromcommunity"),
+    path('rate-order-from-comunity/',views.RateOrderFromComunity.as_view(),name="rate_order_from_community"),
     #Orders
     path('order/vendor_order_list', views.AllOrders.as_view(), name='vendor_order_list'),
     path('order/vendor_order_search', views.OrderSearch.as_view(), name='vendor_order_search'),

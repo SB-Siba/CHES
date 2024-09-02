@@ -60,6 +60,8 @@ class LoginAPIView(APIView):
         if serializer.is_valid():
             email = serializer.validated_data['email']
             password = serializer.validated_data['password']
+            user_obj = User.objects.filter(email = email)
+            print(user_obj)
             user = authenticate(email=email, password=password)
 
             if user is not None:
