@@ -2,14 +2,35 @@
 {% load static %}
 
 {% block main_content %}
-<div class="container mt-3">
+<style>
+
+.sell_wrapper form .form-control {
+  border: none;
+  border-bottom: 2px solid #ccc;
+  border-radius: 7px;
+  padding: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.sell_wrapper form .form-control:focus {
+  border-bottom-color: #37af2c;
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+label
+{
+    margin-bottom: 10px;    
+}
+</style>
+<div class="container my-5">
     <div class="row d-flex align-items-center justify-content-center">
-      <div class="col-lg-8 sell_wrapper">
-        <form method="post" action="" class="p-4 update-form" enctype="multipart/form-data">
+      <div class="col-lg-6 sell_wrapper">
+        <form method="post" action="" class="p-4 px-4 update-form" enctype="multipart/form-data">
           {% include 'app_common/snippets/alert.html' %}
           {% csrf_token %}
           {{form.as_p}}
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn py-2 w-100" id="editb">
               Update Profile
           </button>
       </form>

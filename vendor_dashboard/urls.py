@@ -22,6 +22,8 @@ urlpatterns = [
     path('delete_comment/<int:post_id>/<str:comment_id>/', views.delete_comment, name='delete_comment'),
     path('all-comment/',views.get_all_comments,name="get_all_comments"),
     path('walletpage', views.WalletView.as_view(), name = "walletpage"),
+    path('all-orders-from-community/', views.AllOrdersFromCommunity.as_view(), name = "allordersfromcommunity"),
+    path('rate-order-from-comunity/',views.RateOrderFromComunity.as_view(),name="rate_order_from_community"),
 
     path('sellproduce', views.SellProduceView.as_view(), name = "sellproduce"),
     path('allsellrequests', views.AllSellRequests.as_view(), name = "allsellrequests"),

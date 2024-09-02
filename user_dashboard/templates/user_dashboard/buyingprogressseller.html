@@ -5,22 +5,32 @@
 
 {% block content %}
 {% for i in bbeigins_obj %}
-<h4>Hey {{i.seller.full_name}},<br>{{i.buyer.full_name}} want to buy your product.</h4>
+
+<head>
+    <link rel="stylesheet" href="{% static '/user_dashboard/css/buysell_progress.css '%}">
+  </head>
+
+  <div class="row d-flex justify-content-center text-black">
+    <div class="col-lg-10 cl-12  mb-4 px-5 py-4" id="prog_div">
+        <h5>Hey <b>{{i.seller.full_name}}</b>, </h5>
+        <h5><b>{{i.buyer.full_name}}</b> want to buy your product.</h5>
 Product Details : <br>
 <small>Name : {{i.sell_produce.product_name}}</small><br>
 <small>Quantity : {{i.quantity_buyer_want}}</small><br>
 <small>Units : {{i.SI_units}}</small><br>
-<div>
+<div class="mt-3">
     {% if i.payment_link == "NotAvailable" %}
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#paymentModal{{ i.id }}">Send
+        <button type="button" class="payment_btn" data-bs-toggle="modal" data-bs-target="#paymentModal{{ i.id }}">Send
             Payment Link</button>
-        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal{{ i.id }}">Reject
+        <button type="button" class="payment_btn2" data-bs-toggle="modal" data-bs-target="#rejectModal{{ i.id }}">Reject
             this order</button>
     {% else %}
         <small class="text-success">Payment Link Send Succesfully.</small>
     {% endif %}
 </div>
 <hr>
+    </div>
+  </div>
 
 <!-- Payment Modal -->
 <div class="modal fade" id="paymentModal{{ i.id }}" tabindex="-1" aria-labelledby="paymentModalLabel{{ i.id }}"
@@ -38,7 +48,7 @@ Product Details : <br>
                     {{form.as_p}}
 
                     <div style="text-align: center;margin-top: 2rem;">
-                        <button class="btn btn-block btn-success" type="submit">Send</button>
+                        <button class="payment_btn w-100" type="submit">Send</button>
                     </div>
                 </form>
             </div>

@@ -58,19 +58,25 @@ class PendingServiceProviders(View):
     
     def get(self, request):
         not_approvedlist = self.model.objects.filter(is_approved=False,is_serviceprovider = True).order_by('-id')
+        print(not_approvedlist)
         service_provider_list = []
         service_provider_details_list = []
         try:
             for i in not_approvedlist:
                 service_provider_list.append(i)
-                s_provider_details = models.ServiceProviderDetails.objects.get(provider = i)
+                s_provider_details = models.ServiceProviderDetails.objects.filter(provider = i).first()
                 service_provider_details_list.append(s_provider_details)
             service_provider_data = zip(service_provider_list,service_provider_details_list)
-        except Exception:
+        except Exception as e:
+            print(e)
             service_provider_list = []
             service_provider_details_list = []
             service_provider_data = zip(service_provider_list,service_provider_details_list)
-        return render(request,self.template,locals())
+        print(service_provider_data)
+        print(service_provider_list,service_provider_details_list)
+        for i,j in service_provider_data:
+            print(i.full_name,"hjghgfg",j,"Hiii")
+        return render(request,self.template,{"service_provider_data":service_provider_data})
         
 def ApproveUser(request, pk):
     user = get_object_or_404(models.User, id=pk)

@@ -5,13 +5,17 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <style>
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f8f9fa;
+   body {
+        font-family: 'Arial', sans-serif !important;
+        background-color: #f8f9fa; /* Optional: light background */
+        height: 120vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
-    
     .container {
         margin-top: 50px;
     }
@@ -36,6 +40,7 @@
         border-bottom: 2px solid #ced4da;
         border-radius: 5px !important;
         transition: border-color 0.3s ease-in-out;
+        position: relative;
     }
     .form-container input {
         padding-left: 5px !important;
@@ -93,12 +98,27 @@
         margin-top: 10px;
         color: green;
     }
+    .password-wrapper {
+        position: relative;
+    }
+    .password-wrapper i {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        color: #5e5f60;
+        transform: translateY(-50%);
+        cursor: pointer;
+        z-index: 2;
+    }
+    .redg_btn{
+        font-size: 14px;
+    }
 </style>
 
 <body>
-    <div class="container mb-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-9 col-md-10 col-sm-12 form-container p-4">
+    <div class="container  my-5">
+        <div class="row pt-5 justify-content-center">
+            <div class="col-lg-9 col-md-10 col-sm-12 mb-5 form-container p-4">
                 <div class="row">
                     <!-- Left Column -->
                     <div class="col-lg-7 col-md-6 col-sm-12 py-4 px-5">
@@ -114,13 +134,13 @@
                             <div class="form-group mb-3">
                                 <div class="input-group">
                                     {{ form.email }}
-                                    <button type="button" id="send-otp-btn" class="btn btn-primary mx-1 rounded">Send OTP</button>
+                                    <button type="button" id="send-otp-btn" class="btn btn-primary ms-1 redg_btn rounded">Send OTP</button>
                                 </div>
                             </div>
 
                             <div class="form-group mb-3 otp-container" id="otp-container" style="display: none;">
                                 <input type="text" id="otp-input" class="form-control" placeholder="Enter OTP">
-                                <button type="button" id="verify-otp-btn" class="btn btn-success">Verify OTP</button>
+                                <button type="button" id="verify-otp-btn" class="btn btn-success redg_btn">Verify </button>
                             </div>
 
                             <div class="form-group mb-3">
@@ -136,11 +156,19 @@
                             </div>
 
                             <div class="form-group mb-3">
-                                {{ form.password }}
+                            
+                                <div class="password-wrapper">
+                                    {{ form.password }}
+                                    <i class="fas fa-eye" id="password-eye"></i>
+                                </div>
                             </div>
 
                             <div class="form-group mb-3">
-                                {{ form.confirm_password  }}
+      
+                                <div class="password-wrapper">
+                                    {{ form.confirm_password }}
+                                    <i class="fas fa-eye" id="confirm-password-eye"></i>
+                                </div>
                             </div>
 
                             <div class="text-center">
@@ -249,6 +277,32 @@
 
             // Trigger change event to handle page reloads
             cityField.dispatchEvent(new Event('change'));
+
+            // Toggle password visibility
+            const passwordInput = document.getElementById("id_password");
+            const confirmPasswordInput = document.getElementById("id_confirm_password");
+            const passwordEye = document.getElementById("password-eye");
+            const confirmPasswordEye = document.getElementById("confirm-password-eye");
+
+            function togglePasswordVisibility(input, icon) {
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                } else {
+                    input.type = "password";
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+            }
+
+            passwordEye.addEventListener("click", function () {
+                togglePasswordVisibility(passwordInput, passwordEye);
+            });
+
+            confirmPasswordEye.addEventListener("click", function () {
+                togglePasswordVisibility(confirmPasswordInput, confirmPasswordEye);
+            });
         });
     </script>
 </body>

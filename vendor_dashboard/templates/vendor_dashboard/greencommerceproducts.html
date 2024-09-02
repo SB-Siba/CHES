@@ -2,13 +2,13 @@
 {% load static %}
 
 {% block main_content %}
-<div class="row">
+<div class="row m-4">
     {% for prod,m_status,u_rating in zipped_value %}
-    <div class="col-md-3 col-sm-6">
+    <div class="col-md-3 col-sm-6 py-3">
         <div class="product-grid">
             <div class="product-image">
                 <a href="#" class="image">
-                    <img class="pic-1" src="{{prod.product_image.url}}">
+                    <img class="pic-1" src="{{prod.product_image.url}}" style="height: 200px; width: 100%;">
                     <img class="pic-2" src="{{prod.product_image.url}}">
                 </a>
                 {% if not m_status %}
@@ -19,7 +19,7 @@
             </div>
             <div class="product-content">
                 <div class="d-flex justify-content-between align-items-center">
-                    <small style="font-size: large; font-weight: bold;">{{prod.product_name}}</small>
+                    <small style="font-size: large; font-weight: bold;">{{prod.product_name|truncatechars:10 }}</small>
                     <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="cursor: pointer;" onclick="setProductId({{ prod.id }})">
                         <i class="fas fa-bolt" style="font-size: small;">&nbsp;<small>Buy Now</small></i>
                     </a>
@@ -61,12 +61,12 @@
                                                         <img src="{{prod.user.user_image.url}}"
                                                             alt="Generic placeholder image"
                                                             class="img-fluid rounded-circle border border-dark border-3"
-                                                            style="width: 70px;">
+                                                            style="width: 70px; height: 70px;">
                                                         {% else %}
                                                         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-2.webp"
                                                             alt="Generic placeholder image"
                                                             class="img-fluid rounded-circle border border-dark border-3"
-                                                            style="width: 70px;">
+                                                            style="width: 70px; height: 70px;">
                                                         {% endif %}
                                                     </div>
                                                     <div class="flex-grow-1">

@@ -9,8 +9,8 @@
 <div class="row">
 
     <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-4 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2 dash-card4">
+    <div class="col-xl-4 col-md-4 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2 dash-card1">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
@@ -28,7 +28,7 @@
     </div>
 
     <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-4 col-md-6 mb-4">
+    <div class="col-xl-4 col-md-4 mb-4">
         <div class="card border-left-success shadow h-100 py-2 dash-card2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -48,7 +48,7 @@
     </div>
 
     <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-4 col-md-6 mb-4">
+    <div class="col-xl-4 col-md-4 mb-4">
         <div class="card border-left-warning shadow h-100 py-2 dash-card3">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -68,7 +68,7 @@
     </div>
 
     <!-- Pending Requests Card Example -->
-    <div class="col-xl-4 col-md-6 mb-4">
+    <div class="col-xl-4 col-md-4 mb-4">
         <div class="card border-left-primary shadow h-100 py-2 dash-card4">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -88,7 +88,7 @@
     </div>
 
     <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-4 col-md-6 mb-4">
+    <div class="col-xl-4 col-md-4 mb-4">
         <div class="card border-left-primary shadow h-100 py-2 dash-card5">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -108,7 +108,7 @@
     </div>
 
     <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-4 col-md-6 mb-4">
+    <div class="col-xl-4 col-md-4 mb-4">
         <div class="card border-left-success shadow h-100 py-2 dash-card6">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -128,12 +128,14 @@
     </div>
 
     <!-- Earnings (Monthly) Card Example -->
-    <div class="col-xl-4 col-md-6 mb-4">
+    <div class="col-xl-4 col-md-4 mb-4">
         <div class="card border-left-info shadow h-100 py-2 dash-card7">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-
+                        <div class="h5 mb-0 font-weight-bold text-white">
+                            7
+                        </div>
                         <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
                             ALL
                         </div>
@@ -147,164 +149,168 @@
         </div>
     </div>
 
-    <!-- Pending Requests Card Example -->
-    <div class="col-xl-4 col-md-6 mb-4">
-        <a href="{% url 'admin_dashboard:city_detail_view' 'Bhubaneswar' %}" class="text-decoration-none">
-            <div class="card border-left-primary shadow h-100 py-2 dash-card8">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="mb-0 font-weight-bold text-white">
-                                <small>
-                                    <span>RTG : <b>{{bhubaneswar_rtg}}</b></span>
-                                    <span>VENDOR : <b>{{bhubaneswar_vendor}}</b></span>
-                                    <span>S.P. : <b>{{bhubaneswar_serviceprovider}}</b></span>
-                                </small>
+
+</div>
+<div class="row mb-4">
+        <!-- Pending Requests Card Example -->
+        <div class="col-xl-4 col-md-4 mb-4">
+            <a href="{% url 'admin_dashboard:city_detail_view' 'Bhubaneswar' %}" class="text-decoration-none">
+                <div class="card border-left-primary shadow h-100 py-2 dash-card8">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="mb-0 font-weight-bold text-white">
+                                    <small>
+                                        <span>RTG : <b>{{bhubaneswar_rtg}}</b></span>
+                                        <span>VENDOR : <b>{{bhubaneswar_vendor}}</b></span>
+                                        <span>S.P. : <b>{{bhubaneswar_serviceprovider}}</b></span>
+                                    </small>
+                                </div>
+                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                    Bhubaneswar</div>
+        
                             </div>
-                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
-                                Bhubaneswar</div>
-    
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa-solid fa-user fa-2x text-white"></i>
+                            <div class="col-auto">
+                                <!-- <i class="fa-solid fa-user fa-2x text-white"></i> -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-xl-4 col-md-6 mb-4">
-        <a href="{% url 'admin_dashboard:city_detail_view' 'Cuttack' %}" class="text-decoration-none">
-            <div class="card border-left-primary shadow h-100 py-2 dash-card8">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="mb-0 font-weight-bold text-white">
-                                <small>
-                                    <span>RTG : <b>{{cuttack_rtg}}</b></span>
-                                    <span>VENDOR : <b>{{cuttack_vendor}}</b></span>
-                                    <span>S.P. : <b>{{cuttack_serviceprovider}}</b></span>
-                                </small>
+            </a>
+        </div>
+        <div class="col-xl-4 col-md-4 mb-4">
+            <a href="{% url 'admin_dashboard:city_detail_view' 'Cuttack' %}" class="text-decoration-none">
+                <div class="card border-left-primary shadow h-100 py-2 dash-card9">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="mb-0 font-weight-bold text-white">
+                                    <small>
+                                        <span>RTG : <b>{{cuttack_rtg}}</b></span>
+                                        <span>VENDOR : <b>{{cuttack_vendor}}</b></span>
+                                        <span>S.P. : <b>{{cuttack_serviceprovider}}</b></span>
+                                    </small>
+                                </div>
+                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                    Cuttack</div>
+        
                             </div>
-                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
-                                Cuttack</div>
-    
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa-solid fa-user fa-2x text-white"></i>
+                            <div class="col-auto">
+                                <!-- <i class="fa-solid fa-user fa-2x text-white"></i> -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-xl-4 col-md-6 mb-4">
-        <a href="{% url 'admin_dashboard:city_detail_view' 'Jaipur' %}" class="text-decoration-none">
-            <div class="card border-left-primary shadow h-100 py-2 dash-card8">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="mb-0 font-weight-bold text-white">
-                                <small>
-                                    <span>RTG : <b>{{jaipur_rtg}}</b></span>
-                                    <span>VENDOR : <b>{{jaipur_vendor}}</b></span>
-                                    <span>S.P. : <b>{{jaipur_serviceprovider}}</b></span>
-                                </small>
+            </a>
+        </div>
+        <div class="col-xl-4 col-md-4 mb-4">
+            <a href="{% url 'admin_dashboard:city_detail_view' 'Jaipur' %}" class="text-decoration-none">
+                <div class="card border-left-primary shadow h-100 py-2 dash-card10">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="mb-0 font-weight-bold text-white">
+                                    <small>
+                                        <span>RTG : <b>{{jaipur_rtg}}</b></span>
+                                        <span>VENDOR : <b>{{jaipur_vendor}}</b></span>
+                                        <span>S.P. : <b>{{jaipur_serviceprovider}}</b></span>
+                                    </small>
+                                </div>
+                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                    Jajpur</div>
+        
                             </div>
-                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
-                                Jaipur</div>
-    
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa-solid fa-user fa-2x text-white"></i>
+                            <div class="col-auto">
+                                <!-- <i class="fa-solid fa-user fa-2x text-white"></i> -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-xl-4 col-md-6 mb-4">
-        <a href="{% url 'admin_dashboard:city_detail_view' 'Berahmpur' %}" class="text-decoration-none">
-            <div class="card border-left-primary shadow h-100 py-2 dash-card8">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="mb-0 font-weight-bold text-white">
-                                <small>
-                                    <span>RTG : <b>{{brahmapur_rtg}}</b></span>
-                                    <span>VENDOR : <b>{{brahmapur_vendor}}</b></span>
-                                    <span>S.P. : <b>{{brahmapur_serviceprovider}}</b></span>
-                                </small>
+            </a>
+        </div>
+        <div class="col-xl-4 col-md-4 mb-4">
+            <a href="{% url 'admin_dashboard:city_detail_view' 'Berahmpur' %}" class="text-decoration-none">
+                <div class="card border-left-primary shadow h-100 py-2 dash-card11">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="mb-0 font-weight-bold text-white">
+                                    <small>
+                                        <span>RTG : <b>{{brahmapur_rtg}}</b></span>
+                                        <span>VENDOR : <b>{{brahmapur_vendor}}</b></span>
+                                        <span>S.P. : <b>{{brahmapur_serviceprovider}}</b></span>
+                                    </small>
+                                </div>
+                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                    Berahmpur</div>
+        
                             </div>
-                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
-                                Berahmpur</div>
-    
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa-solid fa-user fa-2x text-white"></i>
+                            <div class="col-auto">
+                                <!-- <i class="fa-solid fa-user fa-2x text-white"></i> -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-xl-4 col-md-6 mb-4">
-        <a href="{% url 'admin_dashboard:city_detail_view' 'Sambalpur' %}" class="text-decoration-none">
-            <div class="card border-left-primary shadow h-100 py-2 dash-card8">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="mb-0 font-weight-bold text-white">
-                                <small>
-                                    <span>RTG : <b>{{sambalpur_rtg}}</b></span>
-                                    <span>VENDOR : <b>{{sambalpur_vendor}}</b></span>
-                                    <span>S.P. : <b>{{sambalpur_serviceprovider}}</b></span>
-                                </small>
+            </a>
+        </div>
+        <div class="col-xl-4 col-md-4 mb-4">
+            <a href="{% url 'admin_dashboard:city_detail_view' 'Sambalpur' %}" class="text-decoration-none">
+                <div class="card border-left-primary shadow h-100 py-2 dash-card12">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="mb-0 font-weight-bold text-white">
+                                    <small>
+                                        <span>RTG : <b>{{sambalpur_rtg}}</b></span>
+                                        <span>VENDOR : <b>{{sambalpur_vendor}}</b></span>
+                                        <span>S.P. : <b>{{sambalpur_serviceprovider}}</b></span>
+                                    </small>
+                                </div>
+                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                    Sambalpur</div>
+        
                             </div>
-                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
-                                Sambalpur</div>
-    
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa-solid fa-user fa-2x text-white"></i>
+                            <div class="col-auto">
+                                <!-- <i class="fa-solid fa-user fa-2x text-white"></i> -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
-    </div>
-    <div class="col-xl-4 col-md-6 mb-4">
-        <a href="{% url 'admin_dashboard:city_detail_view' 'Other' %}" class="text-decoration-none">
-            <div class="card border-left-primary shadow h-100 py-2 dash-card8">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="mb-0 font-weight-bold text-white">
-                                <small>
-                                    <span>RTG : <b>{{other_cities_rtg}}</b></span>
-                                    <span>VENDOR : <b>{{other_cities_vendor}}</b></span>
-                                    <span>S.P. : <b>{{other_cities_serviceprovider}}</b></span>
-                                </small>
+            </a>
+        </div>
+        <div class="col-xl-4 col-md-4 mb-4">
+            <a href="{% url 'admin_dashboard:city_detail_view' 'Other' %}" class="text-decoration-none">
+                <div class="card border-left-primary shadow h-100 py-2 dash-card13">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="mb-0 font-weight-bold text-white">
+                                    <small>
+                                        <span>RTG : <b>{{other_cities_rtg}}</b></span>
+                                        <span>VENDOR : <b>{{other_cities_vendor}}</b></span>
+                                        <span>S.P. : <b>{{other_cities_serviceprovider}}</b></span>
+                                    </small>
+                                </div>
+                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                    Other</div>
+        
                             </div>
-                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
-                                Other</div>
-    
-                        </div>
-                        <div class="col-auto">
-                            <i class="fa-solid fa-user fa-2x text-white"></i>
+                            <div class="col-auto">
+                                <!-- <i class="fa-solid fa-user fa-2x text-white"></i> -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </a>
-    </div>
+            </a>
+        </div>
+
 </div>
 
 <!-- Content Row -->
 
-<div class="row">
+<div class="row mb-4">
     <div class="col-xl-5 col-lg-5">
-        <div class="card shadow mb-4">
+        <div class="card Adm_das_card mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Area Distribution</h6>
@@ -354,7 +360,7 @@
     <!-- Area Chart -->
     <div class="col-xl-7 col-lg-7">
 
-        <div class="card shadow mb-4">
+        <div class="card Adm_das_card mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">Geographical Distribution</h6>
                 <div class="dropdown no-arrow">
@@ -374,7 +380,7 @@
             </div>
             <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3834529.3457607706!2d84.43725674999999!3d20.18997855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a226aece9af3bfd%3A0x133625caa9cea81f!2sOdisha!5e0!3m2!1sen!2sin!4v1711127459222!5m2!1sen!2sin"
-                width="800" height="400" style="border:0;" allowfullscreen="" loading="lazy"
+                width="" height="400" style="border:0;" allowfullscreen="" loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </div>
@@ -390,7 +396,7 @@
     <div class="col-lg-6 mb-4">
 
         <!-- Project Card Example -->
-        <div class="card shadow mb-4">
+        <div class="card Adm_das_card mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary"> Activity Overview</h6>
             </div>
@@ -399,7 +405,7 @@
             </div>
         </div>
 
-        <div class="card shadow mb-4">
+        <div class="card Adm_das_card mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary"> Green points Exchange</h6>
             </div>
@@ -415,7 +421,7 @@
             </div>
         </div>
 
-        <div class="card shadow mb-4">
+        <div class="card Adm_das_card mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary"> Green orders</h6>
             </div>
@@ -425,9 +431,9 @@
         </div>
     </div>
 
-    <div class="col-lg-6 mb-4">
-        <div class="card leaderbaord mb-4">
-            <img src="{% static 'admin_dashboard/images/board.png' %}">
+    <div class="col-lg-6 mb-4 ">
+        <div class="card leaderbaord  mb-4">
+            <img class="" src="{% static 'admin_dashboard/images/board.png' %}">
         </div>
     </div>
 </div>
