@@ -17,7 +17,7 @@ from .models import (
 )
 from chatapp.models import Message
 from django.db.models import Q
-
+from Blogs.models import Blogs
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -333,3 +333,10 @@ class OrderUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['order_status', 'payment_status', 'customer_details', 'more_info']
+
+# ================================== Blog ============================================
+
+class BlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blogs
+        fields = '__all__'

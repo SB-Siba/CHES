@@ -1,4 +1,5 @@
 import datetime
+import os
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
@@ -29,7 +30,8 @@ from .serializer import (
     UserProfileSerializer,
     GardeningProfileUpdateRequestSerializer,
     UserActivitySerializer,
-    AllActivitiesSerializer
+    AllActivitiesSerializer,
+    BlogSerializer,
 )
 from user_dashboard.serializers import DirectBuySerializer,OrderSerializer
 from django.contrib.auth import authenticate, login, logout
@@ -37,10 +39,12 @@ import json
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.utils import timezone
+from Blogs.models import Blogs
+
 
 class UserProfileAPIView(APIView):
     @swagger_auto_schema(
-        tags=["user_profile"],
+        tags=["Roof Top Gardeners"],
         operation_description="User Profile API",
         manual_parameters=swagger_doccumentation.user_profile_get,
         responses={200: UserProfileSerializer}
@@ -54,7 +58,7 @@ class UserProfileAPIView(APIView):
 class UpdateProfileViewAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
-        tags=["update_profile"],
+        tags=["Roof Top Gardeners"],
         operation_description="Update Profile API",
         manual_parameters=swagger_doccumentation.update_profile_post,
         responses={200: 'Profile updated successfully'}
@@ -74,7 +78,7 @@ class UpdateProfileViewAPIView(APIView):
 
 class GardeningProfileAPIView(APIView):
     @swagger_auto_schema(
-        tags=["gardening_profile"],
+        tags=["Roof Top Gardeners"],
         operation_description="Gardening Profile API",
         responses={200: GardeningProfileSerializer}
     )
@@ -90,7 +94,7 @@ class GardeningProfileAPIView(APIView):
 class UpdateGardeningProfileAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
-        tags=["update_gardening_profile"],
+        tags=["Roof Top Gardeners"],
         operation_description="Update Gardening Profile API",
         manual_parameters=swagger_doccumentation.update_gardening_profile_post,
         responses={201: 'Update request submitted successfully.'}
@@ -108,7 +112,7 @@ class UpdateGardeningProfileAPIView(APIView):
 class AddActivityRequestAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
-        tags=["add_activity"],
+        tags=["Roof Top Gardeners"],
         operation_description="Add Activity API",
         manual_parameters=swagger_doccumentation.add_activity_request_post,
         responses={201: 'Activity sent for approval successfully.'}
@@ -123,7 +127,7 @@ class AddActivityRequestAPIView(APIView):
 
 class ActivityListAPIView(APIView):
     @swagger_auto_schema(
-        tags=["activity_list"],
+        tags=["Roof Top Gardeners"],
         operation_description="Activity List API",
         manual_parameters=swagger_doccumentation.activity_list_get,
         responses={200: 'List of activities fetched successfully.'}
@@ -136,7 +140,7 @@ class ActivityListAPIView(APIView):
 class SellProduceAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
-        tags=["sell_produce"],
+        tags=["Roof Top Gardeners"],
         operation_description="Sell Produce API",
         manual_parameters=swagger_doccumentation.sell_produce_post,
         responses={200: 'Request for sell sent successfully.'}
@@ -151,7 +155,7 @@ class SellProduceAPIView(APIView):
         
 class SellProduceListAPIView(APIView):
     @swagger_auto_schema(
-        tags=["sell_produce_list"],
+        tags=["Roof Top Gardeners"],
         operation_description="Sell Produce List API",
         manual_parameters=swagger_doccumentation.sell_produces_list_get,
         responses={200: 'List of sell produces fetched successfully.'}
@@ -163,7 +167,7 @@ class SellProduceListAPIView(APIView):
     
 class GreenCommerceProductCommunityAPIView(APIView):
     @swagger_auto_schema(
-        tags=["green_commerce_community_products"],
+        tags=["Roof Top Gardeners"],
         operation_description="Community Products API",
         manual_parameters=swagger_doccumentation.green_commerce_product_community_get,
         responses={200: 'Approved sell produces fetched successfully.'}
@@ -176,7 +180,7 @@ class GreenCommerceProductCommunityAPIView(APIView):
 class BuyingBeginsAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
-        tags=["buy_begins"],
+        tags=["Roof Top Gardeners"],
         operation_description="Buy Begins API",
         manual_parameters=swagger_doccumentation.buying_begins_post,
         responses={201: 'Purchase initiated successfully.'}
@@ -214,7 +218,7 @@ class BuyingBeginsAPIView(APIView):
         
 class BuyBeginsSellerAPIView(APIView):
     @swagger_auto_schema(
-        tags=["buy_begins_seller_view"],
+        tags=["Roof Top Gardeners"],
         operation_description="Buy Begins Seller API",
         manual_parameters=swagger_doccumentation.buy_begins_seller_view_get,
         responses={200: ProduceBuySerializer(many=True)}
@@ -227,7 +231,7 @@ class BuyBeginsSellerAPIView(APIView):
 
 class BuyBeginsBuyerAPIView(APIView):
     @swagger_auto_schema(
-        tags=["buy_begins_buyer_view"],
+        tags=["Roof Top Gardeners"],
         operation_description="Buy Begins Buyer API",
         manual_parameters=swagger_doccumentation.buy_begins_buyer_view_get,
         responses={200: ProduceBuySerializer(many=True)}
@@ -242,7 +246,7 @@ class BuyBeginsBuyerAPIView(APIView):
 class SendPaymentLinkAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
-        tags=["send_payment_link"],
+        tags=["Roof Top Gardeners"],
         operation_description="Send Payment Link API",
         manual_parameters=swagger_doccumentation.send_payment_link_post,
         responses={200: "Payment link sent successfully."}
@@ -265,8 +269,8 @@ class SendPaymentLinkAPIView(APIView):
 
 class RejectBuyAPIView(APIView):
     @swagger_auto_schema(
-        tags=["reject_buy"],
-        operation_description="Reject Buy API",
+        tags=["Roof Top Gardeners"],
+        operation_description="Reject Buy Community",
         manual_parameters=swagger_doccumentation.reject_buy_post,
         responses={200: "Buy request rejected successfully."}
     )
@@ -283,8 +287,8 @@ class RejectBuyAPIView(APIView):
     
 class ProduceBuyAPIView(APIView):
     @swagger_auto_schema(
-        tags=["produce_buy"],
-        operation_description="Produce Buy API",
+        tags=["Roof Top Gardeners"],
+        operation_description="Community Produce Buy .",
         manual_parameters=swagger_doccumentation.produce_buy_get,
         responses={200: "Purchase completed successfully."}
     )
@@ -336,8 +340,8 @@ class ProduceBuyAPIView(APIView):
         
 class AllOrdersAPIView(APIView):
     @swagger_auto_schema(
-        tags=["all_orders"],
-        operation_description="All Orders API",
+        tags=["Roof Top Gardeners"],
+        operation_description="All Community Orders.",
         manual_parameters=swagger_doccumentation.all_orders_get,
         responses={200: ProduceBuySerializer(many=True)}
     )
@@ -349,7 +353,7 @@ class AllOrdersAPIView(APIView):
 
 class AllPostsAPIView(APIView):
     @swagger_auto_schema(
-        tags=["all_posts"],
+        tags=["Roof Top Gardeners"],
         operation_description="Retrieve all approved posts with like and comment counts",
         manual_parameters=swagger_doccumentation.all_posts_get,
         responses={200: AllActivitiesSerializer(many=True)}
@@ -361,7 +365,7 @@ class AllPostsAPIView(APIView):
 
 class PlusLikeAPIView(APIView):
     @swagger_auto_schema(
-        tags=["Like"],
+        tags=["Roof Top Gardeners"],
         operation_description="Add a like to a post",
         manual_parameters=swagger_doccumentation.plus_like_get,
         responses={200: 'Give like to a activity'}
@@ -382,7 +386,7 @@ class PlusLikeAPIView(APIView):
 
 class MinusLikeAPIView(APIView):
     @swagger_auto_schema(
-        tags=["Dislike"],
+        tags=["Roof Top Gardeners"],
         operation_description="Remove a like from a post",
         manual_parameters=swagger_doccumentation.minus_like_get,
         responses={200: 'Remove like from a activity'}
@@ -404,7 +408,7 @@ class MinusLikeAPIView(APIView):
 class GiveCommentAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
-        tags=["GiveComments"],
+        tags=["Roof Top Gardeners"],
         operation_description="Add a comment to a post",
         manual_parameters=swagger_doccumentation.add_comment_post,
         responses={302: 'Comment added successfully'}
@@ -428,7 +432,7 @@ class GiveCommentAPIView(APIView):
 
 class DeleteCommentAPIView(APIView):
     @swagger_auto_schema(
-        tags=["DeleteComments"],
+        tags=["Roof Top Gardeners"],
         operation_description="Delete a comment from a post",
         manual_parameters=swagger_doccumentation.delete_comment_delete,
         responses={
@@ -447,7 +451,7 @@ class DeleteCommentAPIView(APIView):
 
 class GetAllCommentsAPIView(APIView):
     @swagger_auto_schema(
-        tags=["Comments"],
+        tags=["Roof Top Gardeners"],
         operation_description="Get all comments for a post",
         manual_parameters=swagger_doccumentation.get_all_comments_get,
         responses={200: 'List of comments'}
@@ -463,7 +467,7 @@ class GetAllCommentsAPIView(APIView):
 class RateOrderAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
-        tags=["RateOrder"],
+        tags=["Roof Top Gardeners"],
         operation_description="Rate an order",
         manual_parameters=swagger_doccumentation.rate_order_post,
         request_body=RateOrderSerializer,
@@ -501,7 +505,7 @@ class RateOrderAPIView(APIView):
 
 class VendorsProductsAPI(APIView):
     @swagger_auto_schema(
-        tags=["Vendor Products"],
+        tags=["Roof Top Gardeners"],
         operation_description="Product from vendors",
         manual_parameters=swagger_doccumentation.vendor_products_get,
         responses={200: 'All Vendor Products', 400: 'Validation error', 404: 'Vendor Products not found'}
@@ -514,7 +518,7 @@ class VendorsProductsAPI(APIView):
     
 class FetchUserDetailsAPI(APIView):
     @swagger_auto_schema(
-        tags=["UserDetails"],
+        tags=["Roof Top Gardeners"],
         operation_description="Fetch user details",
         manual_parameters=swagger_doccumentation.fetch_user_details_get,
         responses={200: "Success"}
@@ -531,7 +535,7 @@ class FetchUserDetailsAPI(APIView):
 
 class ChatAPI(APIView):
     @swagger_auto_schema(
-        tags=["Chat"],
+        tags=["Roof Top Gardeners"],
         operation_description="Retrieve chat messages",
         responses={200: "Success"}
     )
@@ -573,7 +577,7 @@ class StartMessagesAPI(APIView):
     parser_classes = [FormParser, MultiPartParser]
 
     @swagger_auto_schema(
-        tags=["Messages"],
+        tags=["Roof Top Gardeners"],
         operation_description="Start a new message conversation",
         manual_parameters=swagger_doccumentation.start_message_post,
         request_body=StartMessagesSerializer,
@@ -614,7 +618,7 @@ class SendMessageApi(APIView):
     parser_classes = [FormParser, MultiPartParser]
 
     @swagger_auto_schema(
-        tags=["Messages"],
+        tags=["Roof Top Gardeners"],
         operation_description="Send a message",
         manual_parameters=swagger_doccumentation.send_message_post,
         request_body=SendMessageSerializer,
@@ -646,7 +650,7 @@ class SendMessageApi(APIView):
 
 class FetchMessageApi(APIView):
     @swagger_auto_schema(
-        tags=["Messages"],
+        tags=["Roof Top Gardeners"],
         operation_description="Fetch messages between users",
         manual_parameters=swagger_doccumentation.fetch_messages_get,
         responses={200: "Success"}
@@ -679,7 +683,7 @@ class FetchMessageApi(APIView):
     
 class ServiceProvidersListAPIView(APIView):
     @swagger_auto_schema(
-        tags=["Service Providers"],
+        tags=["Roof Top Gardeners"],
         manual_parameters=swagger_doccumentation.service_provider_list_get,
         operation_description="Get a list of approved service providers",
         responses={200: ServiceProviderSerializer(many=True)}
@@ -693,7 +697,7 @@ class CheckoutAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
 
     @swagger_auto_schema(
-        tags=["Checkout"],
+        tags=["Roof Top Gardeners"],
         operation_description="Fetch order details",
         manual_parameters=swagger_doccumentation.checkout_get,
         responses={200: 'Success', 404: 'Not Found'}
@@ -724,7 +728,7 @@ class CheckoutAPIView(APIView):
         return JsonResponse(data, safe=False)
 
     @swagger_auto_schema(
-        tags=["Checkout"],
+        tags=["Roof Top Gardeners"],
         operation_description="Place an order",
         request_body=CheckoutFormSerializer,
         manual_parameters=swagger_doccumentation.checkout_post,
@@ -774,7 +778,7 @@ class CheckoutAPIView(APIView):
     
 class AllOrdersFromVendorsApi(APIView):
     @swagger_auto_schema(
-        tags=["AllOrdersFromVendor"],
+        tags=["Roof Top Gardeners"],
         operation_description="See all orders",
         manual_parameters=swagger_doccumentation.orders_from_vendors_parameters,
         responses={200: OrderSerializer(many=True)}
@@ -789,7 +793,7 @@ class RateOrderFromVendorApi(APIView):
     parser_classes = [FormParser, MultiPartParser]
 
     @swagger_auto_schema(
-        tags=["RateOrderFromVendor"],
+        tags=["Roof Top Gardeners"],
         operation_description="Rate an order from a vendor",
         request_body=RateOrderSerializer,
         manual_parameters=swagger_doccumentation.rate_order_post,
@@ -838,3 +842,189 @@ class RateOrderFromVendorApi(APIView):
             return Response({"detail": "Rating submitted successfully"}, status=status.HTTP_200_OK)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# #################################### BLOGS
+
+class BlogListAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["RTGBlog"],
+        operation_description="Retrieve a list of blogs for the current user",
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Bearer <token>",
+                type=openapi.TYPE_STRING,
+                required=True
+            )
+        ],
+        responses={200: BlogSerializer(many=True)},
+    )
+    def get(self, request):
+        blogs = Blogs.objects.filter(user=request.user).order_by('-id')
+        serializer = BlogSerializer(blogs, many=True)
+        return Response(serializer.data)
+
+class BlogAddAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["RTGBlog"],
+        operation_description="Add a new blog",
+        request_body=BlogSerializer,
+        responses={201: BlogSerializer},
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Bearer <token>",
+                type=openapi.TYPE_STRING,
+                required=True
+            )
+        ]
+    )
+    def post(self, request):
+        serializer = BlogSerializer(data=request.data, files=request.FILES)
+        if serializer.is_valid():
+            blog = serializer.save(user=request.user)
+            return Response(BlogSerializer(blog).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class BlogUpdateAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["RTGBlog"],
+        operation_description="Update an existing blog",
+        request_body=BlogSerializer,
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Bearer <token>",
+                type=openapi.TYPE_STRING,
+                required=True
+            ),
+            openapi.Parameter(
+                'blog_id',
+                openapi.IN_PATH,
+                description="ID of the blog to update",
+                type=openapi.TYPE_INTEGER,
+                required=True
+            )
+        ],
+        responses={200: BlogSerializer},
+    )
+    def post(self, request, blog_id):
+        blog = get_object_or_404(Blogs, id=blog_id)
+        serializer = BlogSerializer(blog, data=request.data, files=request.FILES, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class BlogDeleteAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["RTGBlog"],
+        operation_description="Delete a blog",
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Bearer <token>",
+                type=openapi.TYPE_STRING,
+                required=True
+            ),
+            openapi.Parameter(
+                'blog_id',
+                openapi.IN_PATH,
+                description="ID of the blog to delete",
+                type=openapi.TYPE_INTEGER,
+                required=True
+            )
+        ],
+        responses={204: 'No Content'},
+    )
+    def get(self, request, blog_id):
+        blog = get_object_or_404(Blogs, id=blog_id)
+        if blog.image:
+            image_path = blog.image.path
+            os.remove(image_path)
+        blog.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class BlogViewAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["RTGBlog"],
+        operation_description="Retrieve a list of approved blogs",
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Bearer <token>",
+                type=openapi.TYPE_STRING,
+                required=True
+            )
+        ],
+        responses={200: BlogSerializer(many=True)},
+    )
+    def get(self, request):
+        blogs = Blogs.objects.filter(is_accepted="approved")
+        serializer = BlogSerializer(blogs, many=True)
+        return Response(serializer.data)
+
+class BlogDetailsAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["RTGBlog"],
+        operation_description="Retrieve details of a specific blog",
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Bearer <token>",
+                type=openapi.TYPE_STRING,
+                required=True
+            ),
+            openapi.Parameter(
+                'slug',
+                openapi.IN_PATH,
+                description="Slug of the blog",
+                type=openapi.TYPE_STRING,
+                required=True
+            )
+        ],
+        responses={200: BlogSerializer},
+    )
+    def get(self, request, slug):
+        blog = get_object_or_404(Blogs, slug=slug)
+        serializer = BlogSerializer(blog)
+        return Response(serializer.data)
+
+class BlogSearchAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["RTGBlog"],
+        operation_description="Search for blogs",
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Bearer <token>",
+                type=openapi.TYPE_STRING,
+                required=True
+            ),
+            openapi.Parameter('query', openapi.IN_QUERY, description="Search query", type=openapi.TYPE_STRING),
+            openapi.Parameter('filter_by', openapi.IN_QUERY, description="Filter by field", type=openapi.TYPE_STRING)
+        ],
+        responses={200: BlogSerializer(many=True)},
+    )
+    def post(self, request):
+        query = request.data.get('query', '')
+        filter_by = request.data.get('filter_by', 'all')
+
+        if filter_by == "id":
+            blogs = Blogs.objects.filter(id=query, user=request.user)
+        elif filter_by == "name":
+            blogs = Blogs.objects.filter(title__icontains=query, user=request.user)
+        elif filter_by == "all":
+            blogs = Blogs.objects.filter(
+                Q(id__icontains=query) | Q(title__icontains=query), user=request.user
+            )
+        serializer = BlogSerializer(blogs, many=True)
+        return Response(serializer.data)

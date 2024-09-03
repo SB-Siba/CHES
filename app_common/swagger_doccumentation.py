@@ -32,6 +32,14 @@ gardening_quiz_post = [
     openapi.Parameter("q5", openapi.IN_QUERY, description="5. What is the primary purpose of adding compost to soil?", required=True, type=openapi.TYPE_STRING),
 ]
 
+gardening_quiz_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
+
+logout_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
+
 vendor_details_post = [
     openapi.Parameter("business_name", openapi.IN_QUERY, description="Business Name", required=True, type=openapi.TYPE_STRING),
     openapi.Parameter("business_address", openapi.IN_QUERY, description="Business Address", required=True, type=openapi.TYPE_STRING),
