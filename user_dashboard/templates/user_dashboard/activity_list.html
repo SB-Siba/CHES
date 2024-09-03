@@ -4,6 +4,9 @@
 {% block title %}Activity List{% endblock title %}
 
 {% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/user_dashboard/css/tables.css '%}">
+</head>
 <div class="page-wapper">
     {% include 'app_common/snippets/alert.html' %}
     
@@ -11,10 +14,10 @@
         <table class="table table-hover table-nowrap">
             <thead class="table-light">
                 <tr>
-                    <th scope="col">Activity ID</th>
-                    <th scope="col">Activity Content</th>
-                    <th scope="col">Activity Image</th>
-                    <th scope="col">Date And Time</th>
+                    <th id="t-Head" scope="col">Activity ID</th>
+                    <th id="t-Head" scope="col">Activity Content</th>
+                    <th id="t-Head" scope="col">Activity Image</th>
+                    <th id="t-Head" scope="col">Date And Time</th>
                 </tr>
             </thead>
             <tbody>

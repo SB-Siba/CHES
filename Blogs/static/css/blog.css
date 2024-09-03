@@ -3,7 +3,7 @@
 /* -------------------------------User_blog List CSS  Page----------------------- */
 
 .BlogImage{
-    height: 400px;
+    height: 300px;
     overflow: hidden;
     width: auto;
     object-fit: cover;
@@ -183,4 +183,62 @@ color: #fff;
         height: 100%;
         width: 100%;
     }
+}
+#t-Head{
+    background-color: green;
+    color: white;
+}
+
+.table-responsive{
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+#input-group-text{
+    background-color: #1F782B !important;
+}
+.add_blog_btn{
+    background-color: #1F782B;
+    color: white;
+    padding: 5px 10px;   
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+ .add_blog_btn:hover{
+    background: rgb(5,131,47);
+    background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(4,99,19,1) 52%, rgba(6,175,27,1) 100%);
+    color: #fff !important;
+    transition: 0.5rem;
+    text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+}
+.add_blog_btn a{
+    color: white;
+    text-decoration: none;
+}
+.form-control {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 7px;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-control:focus {
+    border-bottom-color: #37af2c;
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px; /* Adjust as needed */
+}
+
+.button-group .learn-more {
+    margin-right: auto; /* Ensure it stays on the left */
+}
+
+.button-group .btn-secondary {
+    margin-left: auto; /* Ensure it stays on the right */
 }

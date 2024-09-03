@@ -26,8 +26,19 @@ h1, h2 , h3 ,h4 {
     color: #FFD600;
 }
 .sidebar-dark .nav-item .nav-link i{
-    color: #FFD600;
+    color: #fdfdfd;
     font-weight: 600;
+    margin-right: 10px;
+}
+.sidebar-dark .nav-item:hover{
+    color: yellow;
+}
+.sidebar .nav-item .collapse .collapse-inner .collapse-item{
+    color: white;
+    font-size: 14px !important;
+}
+.sidebar .nav-item .collapse .collapse-inner .collapse-item:hover{
+    background: none;
 }
 .index-card{
     height: 25vh;
@@ -274,10 +285,18 @@ background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%,
 }
 
 .contact form .form-control {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 7px;
     padding: 10px;
-    border-radius: 0px;
-    height: 53px;
-    border: 1px solid #4CAF50;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.contact form .form-control:focus {
+    border-bottom-color: #37af2c;
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .contact form p label{
 display: none;

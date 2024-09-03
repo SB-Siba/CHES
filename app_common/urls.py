@@ -35,6 +35,8 @@ urlpatterns = [
     path('api/vendor-details/<str:u_email>/', auth_api.VendorDetailsAPIView.as_view(), name='api_vendor_details'),
     path('api/service-provider-details/<str:u_email>/', auth_api.ServiceProviderDetailsAPIView.as_view(), name='api_service_provider_details'),
 
+    # ----------------------------- Roof Top Gardener ------------------------------------
+
     path('api/user/profile/', api_of_rtg.UserProfileAPIView.as_view(), name='user_profile_api'),
     path('api/user/profile/update/', api_of_rtg.UpdateProfileViewAPIView.as_view(), name='update_profile_api'),
     path('api/gardening-profile/', api_of_rtg.GardeningProfileAPIView.as_view(), name='gardening_profile_api'),
@@ -71,6 +73,14 @@ urlpatterns = [
     path('api/orders/from-vendors/', api_of_rtg.AllOrdersFromVendorsApi.as_view(), name='all_orders_from_vendors_api'),
     path('api/rate-order-from-vendor/', api_of_rtg.RateOrderFromVendorApi.as_view(), name='rate_order_from_vendor_api'),
 
+    path('api/rtg/blogs/', api_of_rtg.BlogListAPIView.as_view(), name='blog-list'),
+    path('api/rtg/blogs/add/', api_of_rtg.BlogAddAPIView.as_view(), name='blog-add'),
+    path('api/rtg/blogs/<int:blog_id>/update/', api_of_rtg.BlogUpdateAPIView.as_view(), name='blog-update'),
+    path('api/rtg/blogs/<int:blog_id>/delete/', api_of_rtg.BlogDeleteAPIView.as_view(), name='blog-delete'),
+    path('api/rtg/blogs/view/', api_of_rtg.BlogViewAPIView.as_view(), name='blog-view'),
+    path('api/rtg/blogs/<slug:slug>/', api_of_rtg.BlogDetailsAPIView.as_view(), name='blog-details'),
+    path('api/rtg/blogs/search/', api_of_rtg.BlogSearchAPIView.as_view(), name='blog-search'),
+
     # ----------------------------- Service Provider ------------------------------------
     path('api/service_provider/profile/', api_of_serviceprovider.ServiceProviderProfileAPI.as_view(), name='service_provider_profile_api'),
     path('api/service-provider-profile/update/', api_of_serviceprovider.ServiceProviderUpdateProfileAPI.as_view(), name='update-service-provider-profile'),
@@ -79,10 +89,44 @@ urlpatterns = [
     path('api/service/<int:service_id>/delete/', api_of_serviceprovider.ServiceDeleteAPIView.as_view(), name='service_delete_api'),
     path('api/my_service_bookings/', api_of_serviceprovider.MyServiceBookingsAPIView.as_view(), name='my_service_bookings_api'),
     path('api/booking/<int:booking_id>/<str:action>/', api_of_serviceprovider.BookingActionAPIView.as_view(), name='booking_action_api'),
-    # ----------------------------- Service Provider ------------------------------------
+    
+    path('api/sp/blogs/', api_of_serviceprovider.SpBlogListAPIView.as_view(), name='sp_blog_list_api'), 
+    path('api/sp/blogs/add/', api_of_serviceprovider.SpBlogAddAPIView.as_view(), name='sp_blog_add_api'), 
+    path('api/sp/blogs/<int:blog_id>/update/', api_of_serviceprovider.SpBlogUpdateAPIView.as_view(), name='sp_blog_update_api'), 
+    path('api/sp/blogs/<int:blog_id>/delete/', api_of_serviceprovider.SpBlogDeleteAPIView.as_view(), name='sp_blog_delete_api'),
+    path('api/sp/blogs/view/', api_of_serviceprovider.SpBlogViewAPIView.as_view(), name='sp_blog_view_api'),
+    path('api/sp/blogs/<slug:slug>/details/', api_of_serviceprovider.SpBlogDetailsAPIView.as_view(), name='sp_blog_details_api'),
+    path('api/sp/blogs/search/', api_of_serviceprovider.SpBlogSearchAPIView.as_view(), name='sp_blog_search_api'),
+    
+    # ----------------------------- Vendor ------------------------------------
 
     path('api/vendor/profile/', api_of_vendor.VendorProfileAPI.as_view(), name='vendor-profile-api'),
     path('api/vendor/update-profile/', api_of_vendor.VendorUpdateProfileAPIView.as_view(), name='vendor-update-profile-api'),
+    path('api/vendor/gardening-profile/', api_of_vendor.VendorGardeningProfileAPIView.as_view(), name='vendor_gardening_profile_api'),
+    path('api/vendor/update-gardening-profile/', api_of_vendor.VendorUpdateGardeningProfileAPIView.as_view(), name='vendor_update_gardening_profile_api'),
+    
+    path('api/vendor/sell-produce-list/', api_of_vendor.VendorSellProduceListAPIView.as_view(), name='vendor_sell_produce_list_api'),
+    path('api/vendor/green-commerce-product-community/', api_of_vendor.VendorGreenCommerceProductCommunityAPIView.as_view(), name='vendor_green_commerce_product_community_api'),
+    path('api/vendor/buying-begins/<int:prod_id>/', api_of_vendor.VendorBuyingBeginsAPIView.as_view(), name='vendor_buying_begins_api'),
+    path('api/vendor/buy-begins-seller/', api_of_vendor.VendorBuyBeginsSellerAPIView.as_view(), name='vendor_buy_begins_seller_api'),
+    path('api/vendor/buy-begins-buyer/', api_of_vendor.VendorBuyBeginsBuyerAPIView.as_view(), name='vendor_buy_begins_buyer_api'),
+    path('api/vendor/send-payment-link/<int:buy_id>/', api_of_vendor.VendorSendPaymentLinkAPIView.as_view(), name='vendor_send_payment_link_api'),
+    path('api/vendor/reject-buy/<int:ord_id>/', api_of_vendor.VendorRejectBuyAPIView.as_view(), name='vendor_reject_buy_api'),
+    path('api/vendor/produce-buy/<int:prod_id>/', api_of_vendor.VendorProduceBuyAPIView.as_view(), name='vendor_produce_buy_api'),
+    path('api/vendor/all-orders/', api_of_vendor.VendorAllOrdersAPIView.as_view(), name='vendor_all_order_api'),
+    path('api/vendor/all-posts/', api_of_vendor.VendorAllPostsAPIView.as_view(), name='vendor_all_posts_api'),
+    path('api/vendor/posts/plus-like/', api_of_vendor.VendorPlusLikeAPIView.as_view(), name='vendor_plus_like_api'),
+    path('api/vendor/posts/minus-like/', api_of_vendor.VendorMinusLikeAPIView.as_view(), name='vendor_minus_like_api'),
+    path('api/vendor/posts/give-comment/', api_of_vendor.VendorGiveCommentAPIView.as_view(), name='vendor_give_comment_api'),
+    path('api/vendor/delete/comments/<int:post_id>/<str:comment_id>/', api_of_vendor.VendorDeleteCommentAPIView.as_view(), name='vendor_delete_comment_api'),
+    path('api/vendor/posts/get-all-comments/', api_of_vendor.VendorGetAllCommentsAPIView.as_view(), name='vendor_get_all_comments_api'),
+    path('api/vendor/rate-order/', api_of_vendor.VendorRateCommunityOrderAPIView.as_view(), name='vendor_rate_community_order_api'),
+    path('api/vendor/fetch-user-details/', api_of_vendor.VendorFetchUserDetailsAPI.as_view(), name='vendor-fetch-user-details-api'),
+    path('api/vendor/chat/', api_of_vendor.VendorChatAPI.as_view(), name='vendor-chat-api'),
+    path('api/vendor/start-messages/<int:r_id>/', api_of_vendor.VendorStartMessagesAPI.as_view(), name='vendor-start-messages-api'),
+    path('api/vendor/send-message/', api_of_vendor.VendorSendMessageApi.as_view(), name='vendor-send-message-api'),
+    path('api/vendor/fetch-messages/', api_of_vendor.VendorFetchMessageApi.as_view(), name='vendor-fetch-messages-api'),
+    
     path('api/vendor/sell-product/', api_of_vendor.VendorSellProductAPIView.as_view(), name='vendor-sell-product-api'),
     path('api/vendor/sold-products/', api_of_vendor.VendorSoldProductsAPIView.as_view(), name='vendor-sold-products-api'),
     path('api/vendor/sell-products-list/', api_of_vendor.SellProductsListAPIView.as_view(), name='vendor-sell-products-list-api'),
@@ -91,6 +135,15 @@ urlpatterns = [
     path('api/vendor/add-activity/', api_of_vendor.AddActivityRequestVendorAPIView.as_view(), name='vendor-add_activity_request_api'),
     path('api/vendor/activity-list/', api_of_vendor.ActivityListVendorAPIView.as_view(), name='vendor_activity_list_api'),
     path('api/vendor/order/<str:order_uid>/', api_of_vendor.OrderDetailAPIView.as_view(), name='vendor_order_detail_api'),
+
+    path('vendor/blogs/', api_of_vendor.VendorBlogListAPIView.as_view(), name='vendor-blog-list'),
+    path('vendor/blogs/add/', api_of_vendor.VendorBlogAddAPIView.as_view(), name='vendor-blog-add'),
+    path('vendor/blogs/<int:blog_id>/update/', api_of_vendor.VendorBlogUpdateAPIView.as_view(), name='vendor-blog-update'),
+    path('vendor/blogs/<int:blog_id>/delete/', api_of_vendor.VendorBlogDeleteAPIView.as_view(), name='vendor-blog-delete'),
+    path('vendor/blogs/view/', api_of_vendor.VendorBlogViewAPIView.as_view(), name='vendor-blog-view'),
+    path('vendor/blogs/<slug:slug>/', api_of_vendor.VendorBlogDetailsAPIView.as_view(), name='vendor-blog-details'),
+    path('vendor/blogs/search/', api_of_vendor.VendorBlogSearchAPIView.as_view(), name='vendor-blog-search'),
+
 ]
 
 #   app_common:register
