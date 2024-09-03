@@ -70,7 +70,10 @@ class PendingServiceProviders(View):
             service_provider_list = []
             service_provider_details_list = []
             service_provider_data = zip(service_provider_list,service_provider_details_list)
-        return render(request,self.template,locals())
+        context = {
+            'service_provider_data':service_provider_data
+        }
+        return render(request,self.template,context)
         
 def ApproveUser(request, pk):
     user = get_object_or_404(models.User, id=pk)
