@@ -58,15 +58,17 @@ class PendingServiceProviders(View):
     
     def get(self, request):
         not_approvedlist = self.model.objects.filter(is_approved=False,is_serviceprovider = True).order_by('-id')
+        print(not_approvedlist)
         service_provider_list = []
         service_provider_details_list = []
         try:
             for i in not_approvedlist:
                 service_provider_list.append(i)
-                s_provider_details = models.ServiceProviderDetails.objects.get(provider = i)
+                s_provider_details = models.ServiceProviderDetails.objects.filter(provider = i).first()
                 service_provider_details_list.append(s_provider_details)
             service_provider_data = zip(service_provider_list,service_provider_details_list)
-        except Exception:
+        except Exception as e:
+            print(e)
             service_provider_list = []
             service_provider_details_list = []
             service_provider_data = zip(service_provider_list,service_provider_details_list)

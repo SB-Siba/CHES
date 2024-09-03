@@ -4,12 +4,12 @@
 
 <header>
   <div class="container-fluid">
-    <div class="border-bottom pt-6">
-      <div class="row align-items-center">
+    <div class="border-bottom pt-6 ">
+      <div class="row">
         <div class="col-sm col-6">
           <h1 class="h2 ls-tight">Order List</h1>
         </div>
-        <div class="col-sm col-6">
+        <div class="col-sm col-6 d-flex justify-content-end">
           <h1 class="h2 ls-tight">Total Income : <b class="text-success">{{income}} /-</b></h1>
         </div>
       </div>
@@ -42,11 +42,11 @@
           <table class="table table-hover table-nowrap">
             <thead class="table-light">
               <tr>
-                <th scope="col">Order ID</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Transaction Id</th>
-                <th scope="col">Status</th>
-                <th scope="col">Payment</th>
+                <th id="t-Head" scope="col">Order ID</th>
+                <th id="t-Head" scope="col">Amount</th>
+                <th id="t-Head" scope="col">Transaction Id</th>
+                <th id="t-Head" scope="col">Status</th>
+                <th id="t-Head" scope="col">Payment</th>
               </tr>
             </thead>
             <tbody id="test_table_tbody">

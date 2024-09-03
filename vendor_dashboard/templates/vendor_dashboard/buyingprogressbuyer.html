@@ -3,18 +3,33 @@
 
 {% block main_content %}
     {% for i in bbeigins_obj %}
-        <h4>Hey {{i.buyer.full_name}},<br>You want to buy from {{i.seller.full_name}}, Once he/she approve Payment option will be available.</h4>
-        Product Details : <br>
-        <small>Name : {{i.sell_produce.product_name}}</small><br>
-        <small>Quantity : {{i.quantity_buyer_want}}</small><br>
-        <small>Units : {{i.SI_units}}</small><br>
-        <div>
-            {% if i.payment_link == "Send" %}
-                <a href="{% url 'vendor_dashboard:producebuy' i.id %}" class="btn btn-primary">Pay <small><i class="fa-solid fa-indian-rupee-sign me-1 mx-2"></i></small>{{i.ammount_based_on_quantity_buyer_want}}</a>
-            {% else %}
-                <small class="text-danger">Order Not Approved By The Seller Yet.</small>
-            {% endif %}
+        <div class="row m-4">
+            <div class="col-md-6 mb-4">
+                <div class="col-md-12 p-4" style="background-color: #e9f7ef; border: 1px solid #28a745; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <div class="card-body">
+                        <h4 class="card-title">Hey {{i.buyer.full_name}},</h4>
+                        <p class="card-text">You want to buy from {{i.seller.full_name}},
+                            <br> once he/she approves, the payment option will be available.</p>
+                        
+                        <h5 class="card-subtitle mb-2 text-muted">Product Details</h5> 
+                        <p class="card-text">
+                            <small><strong>Name:</strong> {{i.sell_produce.product_name}}</small><br>
+                            <small><strong>Quantity:</strong> {{i.quantity_buyer_want}}</small><br>
+                            <small><strong>Units:</strong> {{i.SI_units}}</small>
+                        </p>
+                        
+                        <div>
+                            {% if i.payment_link == "Send" %}
+                                <a href="{% url 'vendor_dashboard:producebuy' i.id %}" class="btn btn-success">
+                                    Pay <small><i class="fa-solid fa-indian-rupee-sign me-1 mx-2"></i></small>{{i.ammount_based_on_quantity_buyer_want}}
+                                </a>
+                            {% else %}
+                                <small class="text-danger">Order Not Approved By The Seller Yet.</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <hr>
     {% endfor %}
 {% endblock main_content %}

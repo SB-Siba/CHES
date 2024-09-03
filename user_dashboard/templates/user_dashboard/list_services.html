@@ -5,33 +5,13 @@
 
 {% block content %}
 <!-- Custom CSS -->
+ <head>
+    <head>
+        <link rel="stylesheet" href="{% static '/user_dashboard/css/services.css '%}">
+      </head>
+ </head>
 <style>
-    .search-input {
-        border-radius: 25px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .search-btn {
-        border-radius: 25px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .service-card {
-        border: none;
-        border-radius: 15px;
-        overflow: hidden;
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .service-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .service-image {
-        height: 200px;
-        object-fit: cover;
-    }
+   
 </style>
 <div class="container my-4">
     <h2 class="mb-4">Available Services</h2>
@@ -40,7 +20,7 @@
     <div class="d-flex justify-content-end mb-4">
         <form method="get" action="{% url 'user_dashboard:service_search' %}" class="d-flex w-50">
             <input type="text" name="search_query" class="form-control me-2 search-input" placeholder="Search for services..." aria-label="Search">
-            <button class="btn btn-outline-primary search-btn" type="submit">
+            <button class=" search-btn" type="submit">
                 <i class="fa-solid fa-search"></i>
             </button>
         </form>
@@ -50,11 +30,11 @@
     <div class="row">
         {% for service in services %}
         <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm service-card">
+            <div class="card h-100  service-card">
                 <div class="card-body">
                     <h5 class="card-title">{{ service.name }}</h5>
                     <p class="card-text"><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
-                    <a href="{% url 'user_dashboard:service_details' service.id %}" class="btn btn-primary">View Details</a>
+                    <a href="{% url 'user_dashboard:service_details' service.id %}" class="details_btn">View Details</a>
                 </div>
             </div>
         </div>

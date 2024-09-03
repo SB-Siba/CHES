@@ -4,10 +4,13 @@
 {% block title %}Checkout Page{% endblock title %}
 
 {% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/user_dashboard/css/vendor_products.css '%}">
+</head>
 <div class="container mb-4">
     <div class="row">
-        <div class="col-md-4 order-md-2 mb-4">
-            <ul class="list-group mb-3 sticky-top">
+        <div class="col-md-4 order-md-2 mb-4" >
+            <ul class="list-group mb-3 sticky-top" id="my_col_1">
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
                         <h6 class="my-0">{{vendor_product.name}}</h6>
@@ -34,10 +37,16 @@
                     <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{discount_ammount}}({{discount_percentage}}%)</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between bg-light">
-                    <div class="text-success">
+                    <div class="">
+                        <h6 class="my-0">GST</h6>
+                    </div>
+                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{gst}}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between bg-light">
+                    <div class="">
                         <h6 class="my-0">Delivery Charge</h6>
                     </div>
-                    <span class="text-success"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{delivery_charge}}</span>
+                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{delivery_charge}}</span>
                 </li>
                 <!-- <li class="list-group-item d-flex justify-content-between bg-light">
                     <div class="text-success">
@@ -46,23 +55,23 @@
                     <span class="text-success">{{total}}</span>
                 </li> -->
                 <li class="list-group-item d-flex justify-content-between">
-                    <span>Total (INR)</span>
-                    <strong><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{total}}</strong>
+                    <span class="text-success">Total (INR)</span>
+                    <strong class="text-success"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{total}}</strong>
                 </li>
             </ul>
         </div>
-        <div class="col-md-8 order-md-1">
+        <div class="col-md-8 order-md-1 py-4 px-3 " id="my_col_1">
             <h4 class="mb-3">Billing address</h4>
             <form method="post" class="needs-validation" novalidate>
                 {% csrf_token %}
                 <input type="hidden" name="offer_discount" value="{{ offer_discount }}">
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-6 mb-2">
                         <label for="id_first_name">First name</label>
                         {{ form.first_name }}
                         <div class="invalid-feedback"> Valid first name is required. </div>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-6 mb-2">
                         <label for="id_last_name">Last name</label>
                         {{ form.last_name }}
                         <div class="invalid-feedback"> Valid last name is required. </div>
@@ -70,11 +79,12 @@
                 </div>
                 <div class="mb-3">
                     <label for="id_username">Username</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">@</span>
-                        </div>
-                        {{ form.username }}
+                    <div class="input-group ">
+                        
+                            {{ form.username }}
+                        
+                        
+
                         <div class="invalid-feedback" style="width: 100%;"> Your username is required. </div>
                     </div>
                 </div>
@@ -82,7 +92,7 @@
                     <label for="id_contact">Contact Number</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">+91 - </span>
+                            <span class="input-group-texT bg-white ">+91 - </span>
                         </div>
                         {{ form.contact_number }}
                         <div class="invalid-feedback" style="width: 100%;"> Your contact number is required. </div>
@@ -115,12 +125,12 @@
                     {{ form.same_address }}
                     <label class="custom-control-label" for="id_same_address">Shipping address is the same as my billing address</label>
                 </div>
-                <div class="custom-control custom-checkbox">
+                <div class="custom-control custom-checkbox ">
                     {{ form.save_info }}
                     <label class="custom-control-label" for="id_save_info">Save this information for next time</label>
                 </div>
                 <hr class="mb-4">
-                <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                <button class="btn btn-succesS btn-lg w-100" type="submit">Continue to checkout</button>
             </form>
         </div>
     </div>

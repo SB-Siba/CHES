@@ -1,6 +1,12 @@
 .auth {
-    background:#006633;
-    
+    background-image:url(images/logbg5.jpg) ;
+    background-size: cover;
+    height: 120vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-position: center center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent image repetition */
 }
 
 .login {

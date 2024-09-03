@@ -4,12 +4,17 @@
 
 {% block content %}
 <style>
-  body {
+   body {
         font-family: 'Arial', sans-serif !important;
-        
+        background-color: #f8f9fa; /* Optional: light background */
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
+
     .login-body{
-        background: #ffffffb3;
+        background: #dfeddfdb;
     }
     .form-group label {
         font-weight: 500;
@@ -21,7 +26,7 @@
     }
     .form-control {
       width: 100%;
-  padding: 5px;
+  padding: 4px;
   margin-bottom: 10px;
   border: none;
   border-bottom: 2px solid #ced4da;
@@ -35,11 +40,13 @@
   outline: none;
     }
     .form-control::placeholder{
-        font-size: 14px;
+        font-size: 13px;
         padding-left: 5px;
     }
-    .text-xs{
-        font-size: 14px;
+
+
+    .forget_para{
+        font-size: 12px;
     }
 </style>
 
@@ -47,8 +54,8 @@
 <body>
     
 
-<div class="container my_container mt-3">
-    <div class="row align-items-center justify-content-center mt-5">
+<div class="container my_container ">
+    <div class="row d-flex align-items-center justify-content-center  mb-3">
         <div class="col-lg-8 col-md-8  col-sm-12">
             <div class="row login-body rounded mt-3 p-2">
                 <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
@@ -56,17 +63,21 @@
                     <div id="lottie-animation" style="width: 100%; max-width: 300px; height: 300px;"></div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12 my-4">
-                    <h2 class="text-center mt-3 mb-5" id="h3">Login</h2>
+                    <h2 class="text-center mt-3 mb-3" id="h3">Login</h2>
                     <div class="login px-4 ">
                         
                         <form method="post" action="" class=" m-0 p-o form-group">
                             {% include 'app_common/snippets/alert.html' %}
                             {% csrf_token %}
                             {{ form.as_p }}
-                            <div class="text-center mt-3">
+                            <p class="forget_para  mb-0" >Forgot Password <a href="{% url 'app_common:password-reset' %}" style="text-decoration: none;"><b>Forgot ??</b></a></p>
+                            <div class="text-center mt-0 ">
                                 <button class="log_btn" type="submit">Login</button>
                             </div>
-                            <p class="pt-2 text-xs" >Forgot Password <a href="{% url 'app_common:password-reset' %}" style="text-decoration: none;"><b>Forgot ??</b></a></p>
+                            <div>
+                                <p class="text-center mt-3">Back to <a href="{% url 'app_common:index' %}" class="text-decoration-none "><b class="text-primary">Home</b></a></p>
+                            </div>
+                         
                         </form>
                     </div>
                 </div>
