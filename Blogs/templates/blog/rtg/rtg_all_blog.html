@@ -7,7 +7,7 @@
 <section>
     <div class="container my-lg-3 my-2">
         <h2 class="py-lg-3 py-2">All Blogs</h2>
-        <div class="row">
+        <div class="row g-3">
             {% for blog in blogs %}
             <div class="col col-12 col-lg-6 my-lg-3 my-2">
                 <div class="BlogImage">
@@ -16,26 +16,28 @@
                     </a>
                 </div>
                 <div class="blog_title">
-                    <h5 class="mt-lg-3 mt-3">
+                    <h5 class="mt-lg-3 mt-3 text-black">
                         <a href="{% url 'blogs:rtg_blog_details' slug=blog.slug %}">{{ blog.title }}</a>
                     </h5>
                     <p>{{ blog.date }}</p>
                     <p>
-                        {{ blog.content|truncatechars:200| safe }}
+                        {{ blog.content|truncatechars:60| safe }}
                     </p>
-                    <a href="{% url 'blogs:rtg_blog_details' slug=blog.slug %}">
-                        <button class="learn-more mt-3 mb-3 m-lg-0">
-                            <span class="circle" aria-hidden="true">
-                                <span class="icon arrow"></span>
-                            </span>
-                            <span class="button-text">Read More</span>
-                        </button>
-                    </a>
+                    <div class="button-group">
+                        <a href="{% url 'blogs:rtg_blog_details' slug=blog.slug %}">
+                            <button class="learn-more mt-3 mb-3 m-lg-0">
+                                <span class="circle" aria-hidden="true">
+                                    <span class="icon arrow"></span>
+                                </span>
+                                <span class="button-text">Read More</span>
+                            </button>
+                        </a>
                     
-                    <!-- Share Button -->
-                    <button class="btn btn-sm btn-secondary mt-3" data-bs-toggle="modal" data-bs-target="#shareModal{{ blog.id }}">
-                        <i class="fa-solid fa-share"></i> Share
-                    </button>
+                        <button class="btn btn-sm btn-secondary mt-3" data-bs-toggle="modal" data-bs-target="#shareModal{{ blog.id }}">
+                            <i class="fa-solid fa-share"></i> Share
+                        </button>
+                    </div>
+                    
 
                     <!-- Share Modal -->
                     <div class="modal fade" id="shareModal{{ blog.id }}" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">

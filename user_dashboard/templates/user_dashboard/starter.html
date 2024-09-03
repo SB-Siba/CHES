@@ -31,6 +31,7 @@
 <link href="{% static 'user_dashboard/css/invoice.css'%}" rel="stylesheet">
 <link href="{% static 'user_dashboard/css/posts.css'%}" rel="stylesheet">
 <link href="{% static 'css/blog.css'%}" rel="stylesheet">
+<link rel="icon" sizes="16x16" href="{% static 'app_common/css/images/icon.jpg'%}" type="image/jpeg">
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -44,7 +45,328 @@
 <div id="wrapper">
 
     <!-- Sidebar -->
-    {% include 'user_dashboard/menu.html' %}
+    <ul
+    class="navbar-nav sidebar side-nav sidebar-dark accordion"
+    id="accordionSidebar">
+                   <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'user_dashboard:user_dashboard' %}">
+                    <div class="sidebar-brand-text mx-3"><img src="{% static 'user_dashboard/images/green-logo.png' %}" class="mt-2" style="height: 60px; width: 100px;"/></div>
+                </a>
+    <!-- Sidebar - Brand -->
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0" />
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'user_dashboard:user_dashboard' %}">
+        <i class="fas fa-fw fa-home"></i>
+        <span>User Dashboard</span></a
+      >
+    </li>
+
+    <!-- Nav Item - Charts -->
+    <li class="nav-item">
+        <a
+        class="nav-link collapsed"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseThree"
+        aria-expanded="true"
+        aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-recycle "></i>
+        <span>Green Commerce</span>
+      </a>
+      
+      <div
+        id="collapseThree"
+        class="collapse "
+        aria-labelledby="headingTwo"
+        data-parent="#accordionSidebar">
+        <div class="  py-2 collapse-inner rounded">
+            <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:sellproduce' %}">
+            <i class="fas fa-fw fa-box "></i>
+            <span >Sell Produce</span>
+          </a>
+          <a
+          class="collapse-item"
+          href="{% url 'user_dashboard:greencommerceproducts' %}">
+          <i class="fas fa-fw fa-shopping-basket "></i>
+          <span>Buy From Community</span>
+        </a>
+        <a
+        class="collapse-item"
+        href="{% url 'user_dashboard:vendorproducts' %}">
+        <i class="fas fa-fw fa-store "></i>
+        <span>Buy From Vendors</span>
+      </a>
+      
+      <a class="collapse-item" href="{% url 'user_dashboard:allorders' %}">
+        <i class="fas fa-fw fa-clipboard-list "></i>
+        <span>My Community Orders</span>
+      </a>
+      
+      <a
+      class="collapse-item"
+      href="{% url 'user_dashboard:allordersfromvendor' %}">
+      <i class="fas fa-fw fa-shopping-cart "></i>
+      <span>My Orders From Vendor</span>
+    </a>
+    
+    <a
+    class="collapse-item"
+    href="{% url 'user_dashboard:allsellrequests' %}">
+    <i class="fas fa-fw fa-handshake "></i>
+    <span> Requests For Sell</span>
+  </a>
+  
+        </div>
+      </div>
+    </li>
+    <li class="nav-item">
+        <a
+        class="nav-link collapsed"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseFour"
+        aria-expanded="true"
+        aria-controls="collapseFour">
+        <i class="fas fa-fw fa-seedling "></i>
+        <span>Gardening Profile</span>
+      </a>
+      
+      <div
+        id="collapseFour"
+        class="collapse"
+        aria-labelledby="headingTwo"
+        data-parent="#accordionSidebar">
+        <div class=" py-2 collapse-inner rounded">
+            <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:gardeningprofile' %}">
+            <i class="fas fa-fw fa-user"></i>
+            <span>Profile</span>
+          </a>
+          
+          <a
+          class="collapse-item"
+          href="{% url 'user_dashboard:gardeningprofile' %}">
+          <i class="fas fa-fw fa-tree"></i>
+          <span>Plants in My Garden</span>
+        </a>
+        
+        </div>
+      </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'user_dashboard:list_services' %}">
+            <i class="fas fa-fw fa-concierge-bell"></i>
+            <span>List Of Services</span>
+          </a>
+          
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'user_dashboard:my_booked_services' %}">
+            <i class="fas fa-fw fa-calendar-alt"></i>
+            <span>My Booked Services</span>
+          </a>
+          
+    </li>
+    
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'user_dashboard:allposts' %}">
+            <i class="fas fa-fw fa-newspaper"></i>
+            <span>Posts</span>
+          </a>
+          
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'user_dashboard:walletpage' %}">
+            <i class="fa-solid fa-credit-card"></i>
+            <span>My Wallet</span>
+          </a>
+          
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'chat:all_messages' %}">
+            <i class="fa-solid fa-envelope"></i>
+            <span>Messages</span>
+          </a>
+          
+    </li>
+    <li class="nav-item">
+        <a
+        class="nav-link collapsed"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseFive"
+        aria-expanded="true"
+        aria-controls="collapseFive">
+        <i class="fa-solid fa-exchange-alt"></i>
+        <span>Buy/Sell Progress</span>
+      </a>
+      
+      <div
+        id="collapseFive"
+        class="collapse"
+        aria-labelledby="headingTwo"
+        data-parent="#accordionSidebar">
+        <div class=" py-2 collapse-inner rounded">
+            <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:buybeginsbuyerview' %}">
+            <i class="fa-solid fa-tachometer-alt"></i>
+            <span>Buying Progress</span>
+          </a>
+          
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:buybeginssellerview' %}">
+            <i class="fa-solid fa-dollar-sign"></i>
+            <span>Selling Progress</span>
+          </a>
+        </div>
+      </div>
+    </li>
+    <!-- Nav Item - Tables -->
+    <li class="nav-item">
+        <a
+        class="nav-link collapsed"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseTwo"
+        aria-expanded="true"
+        aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-chart-line"></i>
+        <span>Activity</span>
+      </a>
+      
+      <div
+        id="collapseTwo"
+        class="collapse"
+        aria-labelledby="headingTwo"
+        data-parent="#accordionSidebar">
+        <div class=" py-2 collapse-inner rounded">
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:addactivity' %}">
+            <i class="far fa-plus-square "></i>
+            <span> Add Activity</span>
+          </a>
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:activitylist' %}">
+            <i class="far fa-list-alt "></i>
+            <span>Activity List</span>
+          </a>
+        </div>
+      </div>
+    </li>
+
+    <!-- Blogs -->
+    <li class="nav-item">
+        <a
+        class="nav-link collapsed"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseManageBlogs"
+        aria-expanded="true"
+        aria-controls="collapseManageBlogs">
+        <i class="fas fa-fw fa-blog"></i>
+        <span>Manage Blogs</span>
+      </a>
+      
+      <div
+        id="collapseManageBlogs"
+        class="collapse"
+        aria-labelledby="headingTwo"
+        data-parent="#accordionSidebar">
+        <div class=" py-2 collapse-inner rounded">
+          <a
+            class="collapse-item"
+            href="{% url 'blogs:rtg_all_blogs' %}">
+            <i class="far fa-plus-square "></i>
+            <span> All Blogs</span>
+          </a>
+          <a
+            class="collapse-item"
+            href="{% url 'blogs:rtg_blog_list' %}">
+            <i class="far fa-list-alt "></i>
+            <span>My Blogs</span>
+          </a>
+        </div>
+      </div>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'user_dashboard:contactpage' %}">
+        <i class="fa-solid fa-headset"></i>
+        <span>Help & Support</span></a
+      >
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'user_dashboard:privacypolicy' %}">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Privacy Policy</span></a
+      >
+    </li>
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+      <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+    <li class="nav-item" >
+      <a
+        class="nav-link collapsed"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseUserProfile"
+        aria-expanded="true"
+        aria-controls="collapseUserProfile">
+        <img
+          class="img-profile rounded-circle"
+          src="{% static 'user_dashboard/img/undraw_profile.svg' %}" />
+        <span class="mr-2 d-none d-lg-inline text-gray-600 small"
+          >{{ user }}</span
+        >
+      </a>
+      <div
+        id="collapseUserProfile"
+        class="collapse"
+        aria-labelledby="headingUserProfile"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:userprofile' %}">
+            <i class="fas fa-user fa-sm fa-fw mr-2 text-success"></i>
+            Profile
+          </a>
+          <a class="collapse-item" href="#">
+            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-success"></i>
+            Settings
+          </a>
+          <a
+            class="collapse-item"
+            href="{% url 'user_dashboard:activitylist' %}">
+            <i class="fas fa-list fa-sm fa-fw mr-2 text-success"></i>
+            Activity Log
+          </a>
+          <div class="dropdown-divider"></div>
+          <a
+            class="collapse-item"
+            href=""
+            data-toggle="modal"
+            data-target="#logoutModal">
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-success"></i>
+            Logout
+          </a>
+        </div>
+      </div>
+    </li>
+  </ul>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
@@ -55,9 +377,9 @@
 
             <!-- Topbar -->
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'user_dashboard:user_dashboard' %}">
+                <!-- <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'user_dashboard:user_dashboard' %}">
                     <div class="sidebar-brand-text mx-3"><img src="{% static 'user_dashboard/images/green-logo.png' %}" class="mt-2" style="height: 60px; width: 100px;"/></div>
-                </a>
+                </a> -->
 
                 <!-- Sidebar Toggle (Topbar) -->
                 <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -256,5 +578,15 @@
         
         });
         
+
+    document.addEventListener("DOMContentLoaded", (event) => {
+      const sidebar = document.getElementById("accordionSidebar");
+      const toggleButton = document.getElementById("sidebarToggle");
+
+      toggleButton.addEventListener("click", () => {
+        sidebar.classList.toggle("collapsed");
+      });
+    });
+
 </script>
 </body>

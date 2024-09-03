@@ -26,42 +26,129 @@
           </ul>
           {% endif %}
         </div>
-        <div class="product-content">
-          <div class="d-flex mb-3 justify-content-between align-items-center">
-            <small style="font-size: large; font-weight: bold; color: gray"
-              >{{prod.product_name}}</small
-            >
-            <a
-              class="text-secondary"
-              data-bs-toggle="modal"
-              data-bs-target="#userprofile"
-              style="cursor: pointer; text-decoration: none">
-              <small>By : {{prod.user.full_name}}</small>
-            </a>
+    <div class="product-content">
+      <div class="d-flex justify-content-between align-items-center">
+          <small style="font-size: large; font-weight: bold;">{{prod.product_name|truncatechars:10 }}</small>
+          <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="cursor: pointer;" onclick="setProductId({{ prod.id }})">
+              <i class="fas fa-bolt" style="font-size: small;">&nbsp;<small>Buy Now</small></i>
+          </a>
+      </div>
+      <div class="d-flex justify-content-between">
+          <div class="text-secondary" style="font-weight: bold;">
+              {{prod.product_quantity}}&nbsp;<small>{{prod.SI_units}}</small></div>
+          <div class="price text-success"><i
+                  class="fa-solid fa-coins fa-1x text-success">&nbsp;&nbsp;</i>{{prod.ammount_in_green_points}}
           </div>
-          <div class="d-flex mb-3 justify-content-between">
-            <div class="text-secondary" style="font-weight: bold">
-              {{prod.product_quantity}}&nbsp;<small>{{prod.SI_units}}</small>
-            </div>
-            <div class="price text-success">
-              ₹ {{prod.ammount_in_green_points}}
-            </div>
-          </div>
+      </div>
 
-          <div class="d-flex mb-3 justify-content-between" id="buy_now">
-            <div>
-              <a
-                data-bs-toggle="modal"
-                data-bs-target="#staticBackdrop"
-                onclick="setProductId({{ prod.id }})">
-                &nbsp;<b>Buy Now</b>
+      <div class="d-flex justify-content-between">
+          <div class="text-info">
+              <a data-bs-toggle="modal" data-bs-target="#userprofile" style="cursor: pointer;">
+                  <small>By : {{prod.user.full_name}}</small>
               </a>
-            </div>
-            <div style="color: rgb(4, 138, 42)">
-              <small>Days Left: {{prod.days_left_to_expire}}</small>
-            </div>
+
           </div>
-        </div>
+          <div class="text-info"><small>Days Left: {{prod.days_left_to_expire}}</small></div>
+      </div>
+      <div class="modal fade" id="userprofile" data-bs-backdrop="static" data-bs-keyboard="false"
+          tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content" style="border-radius: 15px; background-color: green;">
+                  <div class="modal-header " id="modal-header">
+                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Seller Profile</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"
+                          aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <div class="container h-100 w-100">
+                          <div class="d-flex justify-content-center align-items-center">
+                              <div class="card w-100 h-100" style="background-color: green;border: none;">
+                                  <div class="card-body text-black mx-0 me-0 my-0 w-100 h-100">
+                                      <div class="d-flex align-items-center mb-4">
+                                          <div class="flex-shrink-0">
+                                              {% if prod.user.user_image %}
+                                              <img src="{{prod.user.user_image.url}}"
+                                                  alt="Generic placeholder image"
+                                                  class="img-fluid rounded-circle border border-dark border-3"
+                                                  style="width: 70px; height: 70px;">
+                                              {% else %}
+                                              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-2.webp"
+                                                  alt="Generic placeholder image"
+                                                  class="img-fluid rounded-circle border border-dark border-3"
+                                                  style="width: 70px; height: 70px;">
+                                              {% endif %}
+                                          </div>
+                                          <div class="flex-grow-1">
+                                              <div class="d-flex flex-column align-items-start mx-2">
+                                                  <p class="mb-0 me-2">Name : {{prod.user.full_name}}</p>
+                                                  <p class="mb-0 me-2">Email : {{prod.user.email}}</p>
+                                                  <p class="mb-0 me-2">City : {{prod.user.city}}</p>
+                                              </div>
+                                              <div class="d-flex flex-row align-items-start mx-2">
+                                                  <a href="{{prod.user.facebook_link}}">
+                                                    <button type="button" class="btn btn-outline-primary btn-floating mr-2">
+                                                      <i class="fab fa-facebook-f fa-lg"></i>
+                                                    </button>
+                                                  </a>
+                                                  <a href="{{prod.user.instagram_link}}">
+                                                    <button type="button" class="btn btn-outline-primary btn-floating mr-2">
+                                                      <i class="fab fa-instagram fa-lg"></i>
+                                                    </button>
+                                                  </a>
+                                                  <a href="{{prod.user.twitter_link}}">
+                                                    <button type="button" class="btn btn-outline-primary btn-floating mr-2">
+                                                      <i class="fab fa-twitter fa-lg"></i>
+                                                    </button>
+                                                  </a>
+                                                  <a href="{{prod.user.youtube_link}}">
+                                                    <button type="button" class="btn btn-outline-primary btn-floating">
+                                                      <i class="fab fa-youtube fa-lg"></i> <!-- YouTube -->
+                                                    </button>
+                                                  </a>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <hr>
+                                      <div class="mb-0 list-unstyled d-flex justify-content-evenly" style="color: yellow;">
+                                          <li>
+                                              <small>
+                                                  <p class="mb-2 h5">{{prod.user.coins}}</p>
+                                                  <p class="text-white mb-0">Coins</p>
+                                              </small>
+                                          </li>
+                                          <li class="px-3">
+                                              <small>
+                                                  <p class="mb-2 h5">{{prod.user.total_income}}</p>
+                                                  <p class="text-white mb-0">Income</p>
+                                              </small>
+                                          </li>
+                                          <li>
+                                              <small>
+                                                  <p class="mb-2 h5">{{prod.user.total_invest}}</p>
+                                                  <p class="text-white mb-0">Purchase</p>
+                                              </small>
+                                          </li>
+                                          <li>
+                                              <small>
+                                                  <div class="d-flex">
+                                                      <p class="mb-2 h5">{{u_rating}}</p>
+                                                      <i class="fas fa-star text-warning mt-1 mx-1"></i>
+                                                  </div>
+                                                  <p class="text-white mb-0">Ratings</p>
+                                              </small>
+                                          </li>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
         <div
           class="modal fade"
           id="userprofile"
