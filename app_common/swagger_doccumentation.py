@@ -101,7 +101,7 @@ service_provider_details_post = [
         type=openapi.TYPE_INTEGER,
         required=True
     )
-],
+] 
 
 user_profile_get = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
