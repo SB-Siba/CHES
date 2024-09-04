@@ -4,10 +4,13 @@ from drf_yasg import openapi
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from rest_framework.authtoken.models import Token 
+from rest_framework.authtoken.models import Token
+
+from EmailIntigration.views import send_template_email 
 from . import swagger_doccumentation
 from .models import User, GardeningProfile, GaredenQuizModel, VendorDetails, ServiceProviderDetails
 from .serializer import (
+    AuthServiceProviderDetailsSerializer,
     ForgotPasswordSerializer,
     RegisterSerializer,
     LoginSerializer,
@@ -17,7 +20,6 @@ from .serializer import (
     GardeningQuizQuestionSerializer,
     ResetPasswordSerializer,
     VendorDetailsSerializer,
-    ServiceProviderDetailsSerializer,
 )
 from rest_framework.parsers import FormParser, MultiPartParser
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -172,6 +174,7 @@ class GardeningQuizAPIView(APIView):
 
 
 class VendorDetailsAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
         tags=["Authentication API'S"],
         operation_description="Vendor Data API",
@@ -191,23 +194,20 @@ class VendorDetailsAPIView(APIView):
 
 
 class ServiceProviderDetailsAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
         tags=["Authentication API'S"],
-        operation_description="Service provider Data API",
+        operation_description="API to add service provider details",
         manual_parameters=swagger_doccumentation.service_provider_details_post,
-        responses={201: 'Details added successfully', 400: 'Validation error'}
+        responses={201: 'Details added successfully', 400: 'Validation error', 404: 'User not found'}
     )
     def post(self, request, u_email):
-        try:
-            user = User.objects.get(email=u_email)
-            serializer = ServiceProviderDetailsSerializer(data=request.data)
-            if serializer.is_valid():
-                service_provider_details = serializer.save(provider=user)
-                return Response({'message': 'Details added successfully'}, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-
+        user = User.objects.get(email=u_email)
+        serializer = AuthServiceProviderDetailsSerializer(data=request.data)
+        if serializer.is_valid():
+            service_provider_detail = serializer.save(provider=user)
+            return Response(AuthServiceProviderDetailsSerializer(service_provider_detail).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ForgotPasswordAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
