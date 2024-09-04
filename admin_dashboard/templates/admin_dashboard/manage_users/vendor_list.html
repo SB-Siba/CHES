@@ -12,7 +12,7 @@
                         <option value="email">Email</option>
                         <option value="contact">Contact</option>
                     </select>
-                    <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query" required/>
+                    <input type="text"  class="form-control" placeholder="Enter Query" name="query" required/>
                     <button class="btn qry-sub" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
@@ -27,7 +27,7 @@
                         <th scope="col">User-ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Wallet Balance</th>
+                        <!-- <th scope="col">Wallet Balance</th> -->
                         <th scope="col">Vendor Details</th>
                         <th scope="col">Active Status</th>
                         <th scope="col">Last Login</th>
@@ -37,20 +37,20 @@
                 <tbody>
                     {% for user in user_list %}
                     <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.full_name }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.wallet }}</td>
-                        <td><a href="{% url 'admin_dashboard:vendor_details' user.id %}">Vendor Details</a></td>
-                        <td>{{ user.is_active }}</td>
-                        <td>{{ user.last_login }}</td>
-                        <td>
+                        <td id="t_daTa">{{ user.id }}</td>
+                        <td id="t_daTa">{{ user.full_name }}</td>
+                        <td id="t_daTa">{{ user.email }}</td>
+                        <!-- <td id="t_daTa">fjedn</td> -->
+                        <td id="t_daTa"><a href="{% url 'admin_dashboard:vendor_details' user.id %}">Vendor Details</a></td>
+                        <td id="t_daTa">{{ user.is_active }}</td>
+                        <td id="t_daTa">{{ user.last_login }}</td>
+                        <td id="t_daTa">
                             <!-- Trigger Delete Vendor Modal -->
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#delete_vendor_modal_{{ user.id }}" class="mx-3">
+                            <a id="table_BTN2" href="#" data-bs-toggle="modal" data-bs-target="#delete_vendor_modal_{{ user.id }}" class="me-1">
                                 <i class="fa fa-trash text-danger" aria-hidden="true"></i>
                             </a>
                             <!-- Trigger Wallet Balance Modal -->
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#wallet_balance_add_modal_{{ user.id }}">
+                            <a id="table_BTN" href="#" data-bs-toggle="modal" data-bs-target="#wallet_balance_add_modal_{{ user.id }}">
                                 <i class="fa fa-wallet text-primary" aria-hidden="true"></i>
                             </a>
                         </td>
@@ -65,11 +65,11 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p>Are you sure you want to delete the vendor <strong>{{ user.full_name }}</strong>?</p>
+                                    <p class="mb-5">  Are you sure you want to delete the vendor <strong>{{ user.full_name }}</strong>?</p>
                                     <form action="{% url 'admin_dashboard:delete_vendor' user.id %}" method="post">
                                         {% csrf_token %}
                                         <div style="text-align: center;">
-                                            <button class="btn btn-danger" type="submit">Delete Vendor</button>
+                                            <button id="table_BTN2"  class="" type="submit">Delete Vendor</button>
                                         </div>
                                     </form>
                                 </div>
@@ -92,7 +92,7 @@
                                         <input name="email" type="email" value="{{ user.email }}" class="form-control" readonly/>
                                         {{form.as_p}}
                                         <div style="text-align: center;">
-                                            <button class="btn btn-outline-primary" type="submit">Add Balance</button>
+                                            <button id="table_BTN" class="" type="submit">Add Balance</button>
                                         </div>
                                     </form>
                                 </div>

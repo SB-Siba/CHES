@@ -72,10 +72,7 @@ class PendingServiceProviders(View):
             service_provider_list = []
             service_provider_details_list = []
             service_provider_data = zip(service_provider_list,service_provider_details_list)
-        print(service_provider_data)
-        print(service_provider_list,service_provider_details_list)
-        for i,j in service_provider_data:
-            print(i.full_name,"hjghgfg",j,"Hiii")
+        
         return render(request,self.template,{"service_provider_data":service_provider_data})
         
 def ApproveUser(request, pk):

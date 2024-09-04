@@ -12,7 +12,7 @@
                         <option value="email">Email</option>
                         <option value="contact">Contact</option>
                     </select>
-                    <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query" required/>
+                    <input type="text"  class="form-control" placeholder="Enter Query" name="query" required/>
                     <button class="btn qry-sub" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
@@ -24,33 +24,33 @@
             <table class="table table-hover table-nowrap">
                 <thead class="table-light">
                     <tr>
-                        <th scope="col">User-ID</th>
+                        <th  scope="col">User-ID</th>
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Wallet Balance</th>
                         <th scope="col">Gardening Details</th>
                         <th scope="col">Active Status</th>
                         <th scope="col">Last Login</th>
-                        <th>Action</th>
+                        <th>Action </th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in user_list %}
                     <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.full_name }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.wallet }}</td>
-                        <td><a href="{% url 'admin_dashboard:gardening_details' user.id %}">Gardening Details</a></td>
-                        <td>{{ user.is_active }}</td>
-                        <td>{{ user.last_login }}</td>
-                        <td>
+                        <td id="t_daTa">{{ user.id }}</td>
+                        <td id="t_daTa">{{ user.full_name }}</td>
+                        <td id="t_daTa">{{ user.email }}</td>
+                        <td id="t_daTa">{{ user.wallet }}</td>
+                        <td id="t_daTa"><a href="{% url 'admin_dashboard:gardening_details' user.id %}">Gardening Details</a></td>
+                        <td id="t_daTa">{{ user.is_active }}</td>
+                        <td id="t_daTa">{{ user.last_login }}</td>
+                        <td id="t_daTa " class="d-flex ">
                             <!-- Trigger Delete Modal -->
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#delete_user_modal_{{ user.id }}" class="mx-3">
-                                <i class="fa fa-trash text-danger" aria-hidden="true"></i>
+                            <a id="table_BTN2" class="me-1 " href="#" data-bs-toggle="modal" data-bs-target="#delete_user_modal_{{ user.id }}" >
+                                <i class="fa fa-trash " aria-hidden="true"></i>
                             </a>
                             <!-- Trigger Wallet Balance Modal -->
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#wallet_balance_add_modal_{{ user.id }}">
+                            <a id="table_BTN" href="#" data-bs-toggle="modal" data-bs-target="#wallet_balance_add_modal_{{ user.id }}">
                                 <i class="fa fa-wallet text-primary" aria-hidden="true"></i>
                             </a>
                         </td>
