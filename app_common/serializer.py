@@ -17,7 +17,7 @@ from .models import (
 )
 from chatapp.models import Message
 from django.db.models import Q
-
+from Blogs.models import Blogs
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -321,6 +321,37 @@ class BookingSerializer(serializers.ModelSerializer):
         model = Booking
         fields = '__all__'
 
+class AuthServiceProviderDetailsSerializer(serializers.ModelSerializer):
+    service_type = serializers.CharField()
+    add_service_type = serializers.CharField(required=False)
+    service_area = serializers.CharField()
+    add_service_area = serializers.CharField(required=False)
+    
+    class Meta:
+        model = ServiceProviderDetails
+        fields = ['service_type', 'add_service_type', 'service_area', 'add_service_area', 'average_cost_per_hour', 'years_experience']
+    
+    def to_internal_value(self, data):
+        # Convert comma-separated strings to lists
+        data = super().to_internal_value(data)
+        data['service_type'] = [item.strip() for item in data['service_type'].split(',')] if data.get('service_type') else []
+        data['add_service_type'] = [item.strip() for item in data['add_service_type'].split(',')] if data.get('add_service_type') else []
+        data['service_area'] = [item.strip() for item in data['service_area'].split(',')] if data.get('service_area') else []
+        data['add_service_area'] = [item.strip() for item in data['add_service_area'].split(',')] if data.get('add_service_area') else []
+        return data
+
+    def create(self, validated_data):
+        add_service_type = validated_data.pop('add_service_type', [])
+        add_service_area = validated_data.pop('add_service_area', [])
+        
+        # Merge additional service types and areas with the existing ones
+        service_type = validated_data['service_type'] + add_service_type
+        service_area = validated_data['service_area'] + add_service_area
+        
+        validated_data['service_type'] = service_type
+        validated_data['service_area'] = service_area
+        
+        return super().create(validated_data)
 # ================================== VENDOR ============================================
 
 class VendorSerializer(serializers.ModelSerializer):
@@ -333,3 +364,10 @@ class OrderUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['order_status', 'payment_status', 'customer_details', 'more_info']
+
+# ================================== Blog ============================================
+
+class BlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blogs
+        fields = '__all__'

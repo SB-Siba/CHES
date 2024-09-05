@@ -4,10 +4,13 @@ from drf_yasg import openapi
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from rest_framework.authtoken.models import Token 
+from rest_framework.authtoken.models import Token
+
+from EmailIntigration.views import send_template_email 
 from . import swagger_doccumentation
 from .models import User, GardeningProfile, GaredenQuizModel, VendorDetails, ServiceProviderDetails
 from .serializer import (
+    AuthServiceProviderDetailsSerializer,
     ForgotPasswordSerializer,
     RegisterSerializer,
     LoginSerializer,
@@ -17,7 +20,6 @@ from .serializer import (
     GardeningQuizQuestionSerializer,
     ResetPasswordSerializer,
     VendorDetailsSerializer,
-    ServiceProviderDetailsSerializer,
 )
 from rest_framework.parsers import FormParser, MultiPartParser
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -32,7 +34,7 @@ from django.urls import reverse_lazy
 # views_api.py
 class RegisterAPIView(APIView):
     @swagger_auto_schema(
-        tags=["registration"],
+        tags=["Authentication API'S"],
         operation_description="Registration API",
         manual_parameters=swagger_doccumentation.signup_post,
         responses={201: 'Registration successful', 400: 'Validation error'}
@@ -46,7 +48,7 @@ class RegisterAPIView(APIView):
 
 class LoginAPIView(APIView):
     @swagger_auto_schema(
-        tags=["log_in"],
+        tags=["Authentication API'S"],
         operation_description="Login API",
         manual_parameters=swagger_doccumentation.login_post,
         responses={
@@ -91,13 +93,19 @@ class LoginAPIView(APIView):
 
 
 class LogoutAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["Authentication API'S"],
+        operation_description="Logout API",
+        manual_parameters=swagger_doccumentation.logout_get,
+        responses={200: "log out successfull.", 404: 'Error while log out.'}
+    )
     def get(self, request):
         logout(request)
         return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
 
 class GardeningDetailsAPIView(APIView):
     @swagger_auto_schema(
-        tags=["gardening_detail_add"],
+        tags=["Authentication API'S"],
         operation_description="Gardening Detail API",
         manual_parameters=swagger_doccumentation.gardening_details_post,
         responses={201: 'Details added successfully', 400: 'Validation error'}
@@ -116,7 +124,7 @@ class GardeningDetailsAPIView(APIView):
 
 class GardeningQuizAPIView(APIView):
     @swagger_auto_schema(
-        tags=["gardening_quiz"],
+        tags=["Authentication API'S"],
         operation_description="Gardening Quiz API",
         manual_parameters=swagger_doccumentation.gardening_quiz_post,
         responses={201: 'Quiz submitted successfully', 400: 'Validation error'}
@@ -143,6 +151,9 @@ class GardeningQuizAPIView(APIView):
             return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
     @swagger_auto_schema(
+        tags=["Authentication API'S"],
+        operation_description="Gardening Quiz's API",
+        manual_parameters=swagger_doccumentation.gardening_quiz_get,
         responses={200: GardeningQuizQuestionSerializer, 404: 'User not found'}
     )
     def get(self, request, u_email):
@@ -163,8 +174,9 @@ class GardeningQuizAPIView(APIView):
 
 
 class VendorDetailsAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
-        tags=["vendor_detail"],
+        tags=["Authentication API'S"],
         operation_description="Vendor Data API",
         manual_parameters=swagger_doccumentation.vendor_details_post,
         responses={201: 'Details added successfully', 400: 'Validation error'}
@@ -182,28 +194,25 @@ class VendorDetailsAPIView(APIView):
 
 
 class ServiceProviderDetailsAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
-        tags=["service_provider_detail"],
-        operation_description="Service provider Data API",
+        tags=["Authentication API'S"],
+        operation_description="API to add service provider details",
         manual_parameters=swagger_doccumentation.service_provider_details_post,
-        responses={201: 'Details added successfully', 400: 'Validation error'}
+        responses={201: 'Details added successfully', 400: 'Validation error', 404: 'User not found'}
     )
     def post(self, request, u_email):
-        try:
-            user = User.objects.get(email=u_email)
-            serializer = ServiceProviderDetailsSerializer(data=request.data)
-            if serializer.is_valid():
-                service_provider_details = serializer.save(provider=user)
-                return Response({'message': 'Details added successfully'}, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-
+        user = User.objects.get(email=u_email)
+        serializer = AuthServiceProviderDetailsSerializer(data=request.data)
+        if serializer.is_valid():
+            service_provider_detail = serializer.save(provider=user)
+            return Response(AuthServiceProviderDetailsSerializer(service_provider_detail).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ForgotPasswordAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
     @swagger_auto_schema(
-        tags=["forgot_password"],
+        tags=["Authentication API'S"],
         operation_description="Forgot password link send to registered email.",
         manual_parameters=swagger_doccumentation.forgot_password,
         responses={201: 'forgot Password link send successfully', 400: 'Validation error'}
@@ -243,7 +252,7 @@ class ResetPasswordAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
 
     @swagger_auto_schema(
-        tags=["forgot_password"],
+        tags=["Authentication API'S"],
         operation_description="Password rest done",
         manual_parameters=swagger_doccumentation.reset_password,
         responses={201: 'Password Reset successfully', 400: 'Validation error'}

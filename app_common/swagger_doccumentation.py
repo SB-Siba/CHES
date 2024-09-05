@@ -32,6 +32,14 @@ gardening_quiz_post = [
     openapi.Parameter("q5", openapi.IN_QUERY, description="5. What is the primary purpose of adding compost to soil?", required=True, type=openapi.TYPE_STRING),
 ]
 
+gardening_quiz_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
+
+logout_get = [
+    openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+]
+
 vendor_details_post = [
     openapi.Parameter("business_name", openapi.IN_QUERY, description="Business Name", required=True, type=openapi.TYPE_STRING),
     openapi.Parameter("business_address", openapi.IN_QUERY, description="Business Address", required=True, type=openapi.TYPE_STRING),
@@ -44,11 +52,56 @@ vendor_details_post = [
 ]
 
 service_provider_details_post = [
-    openapi.Parameter("service_type", openapi.IN_QUERY, description="Service Type", required=True, type=openapi.TYPE_STRING),
-    openapi.Parameter("service_area", openapi.IN_QUERY, description="Service Area", required=True, type=openapi.TYPE_STRING),
-    openapi.Parameter("average_cost_per_hour", openapi.IN_QUERY, description="Average Cost Per Hour", required=True, type=openapi.TYPE_NUMBER),
-    openapi.Parameter("years_experience", openapi.IN_QUERY, description="Years of Experience", required=True, type=openapi.TYPE_INTEGER),
-]
+    openapi.Parameter(
+        'Authorization',
+        openapi.IN_HEADER,
+        description="Bearer token for authentication",
+        type=openapi.TYPE_STRING,
+        required=True
+    ),
+    openapi.Parameter(
+        'service_type',
+        openapi.IN_FORM,
+        description="Comma-separated list of service types. Example: Lawn Care, Garden Design",
+        type=openapi.TYPE_STRING,
+        required=True
+    ),
+    openapi.Parameter(
+        'add_service_type',
+        openapi.IN_FORM,
+        description="Comma-separated list of additional service types. Example: Pest Control, Landscaping",
+        type=openapi.TYPE_STRING,
+        required=False
+    ),
+    openapi.Parameter(
+        'service_area',
+        openapi.IN_FORM,
+        description="Comma-separated list of service areas. Example: Bhubaneswar, Cuttack",
+        type=openapi.TYPE_STRING,
+        required=True
+    ),
+    openapi.Parameter(
+        'add_service_area',
+        openapi.IN_FORM,
+        description="Comma-separated list of additional service areas. Example: Kolkata, Puri",
+        type=openapi.TYPE_STRING,
+        required=False
+    ),
+    openapi.Parameter(
+        'average_cost_per_hour',
+        openapi.IN_FORM,
+        description="Average cost per hour for the services. Example: 25.50",
+        type=openapi.TYPE_NUMBER,
+        required=True
+    ),
+    openapi.Parameter(
+        'years_experience',
+        openapi.IN_FORM,
+        description="Number of years of experience. Example: 5",
+        type=openapi.TYPE_INTEGER,
+        required=True
+    )
+] 
 
 user_profile_get = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),

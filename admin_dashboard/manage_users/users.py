@@ -30,7 +30,10 @@ class PendingRtgs(View):
             rtgardener_list = []
             rtgarden_details_list = []
             rtgardener_data = zip(rtgardener_list,rtgarden_details_list)
-        return render(request,self.template,locals())
+        context = {
+            'rtgardener_data':rtgardener_data
+        }
+        return render(request,self.template,context)
     
 class PendingVendors(View):
     model = models.User
@@ -50,7 +53,10 @@ class PendingVendors(View):
             vendor_list = []
             vendor_details_list = []
             vendor_data = zip(vendor_list,vendor_details_list)
-        return render(request,self.template,locals())
+        context = {
+            'vendor_data':vendor_data
+        }
+        return render(request,self.template,context)
     
 class PendingServiceProviders(View):
     model = models.User
