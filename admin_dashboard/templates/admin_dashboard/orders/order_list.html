@@ -2,12 +2,13 @@
 {% load static %}
 {% block content %}
 
+
 <header>
   <div class="container-fluid">
     <div class="border-bottom pt-6">
       <div class="row align-items-center">
         <div class="col-sm col-12">
-          <h1 class="h2 ls-tight">Order List</h1>
+          <h2 class=" ">Order List</h2>
         </div>
       </div>
     </div>
@@ -18,23 +19,26 @@
 
 
   <div class="container-fluid">
-    <div class="vstack gap-4">
-      <div class="utility_order">
-        <button class="btn btn-outline-primary my-1" data-bs-toggle="modal" data-bs-target="#order_filter">
-          <i class="fa-solid fa-filter" style="color: #005cfa;"></i>
+    <div class="vstack ">
+      <div class="d-flex justify-content-end mb-5">
+        <button id="table_BTN" class=" me-2 py-0" data-bs-toggle="modal" data-bs-target="#order_filter">
+          <i class="fa-solid fa-filter" ></i>
           filter
         </button>
 
-        <form method="get" action="{% url 'admin_dashboard:produce_order_search' %}">
+        <form class="d-flex align-items-center" method="get" action="{% url 'admin_dashboard:produce_order_search' %}">
           {% csrf_token %}
-          <input class="form-control" type="text" name="query" placeholder="SEARCH ID" required />
-          <button class="btn">
-            <i class="fa-solid fa-magnifying-glass fa-shake" style="color: #a805ff;"></i>
-          </button>
+          <div class="input-group">
+            <input class="form-control" type="text" name="query" placeholder="SEARCH ID" required />
+            <button id="table_BTN3" class="" type="submit">
+              <i class="fa-solid fa-magnifying-glass fa-shake"></i>
+            </button>
+          </div>
         </form>
+        
       </div>
 
-      <div class="card">
+      <div class="card mt-4">
         <div class="table-responsive">
           <table class="table table-hover table-nowrap">
             <thead class="table-light">
@@ -49,18 +53,18 @@
             <tbody id="test_table_tbody">
               {% for order in order_list %}
               <tr>
-                <td>
+                <td id="t_daTa">
                   <a target="_blank" href="{% url 'admin_dashboard:produce_order_detail' order.id %}">
                     {{order.id}}
                   </a>
                   
                 </td>
-                <td>
+                <td id="t_daTa">
                   {{order.ammount_based_on_quantity_buyer_want}}
                 </td>
-                <td>{{order.quantity_buyer_want}}</td>
-                <td>{{order.buying_status}}</td>
-                <td>{{order.date_time}}</td>
+                <td id="t_daTa">{{order.quantity_buyer_want}}</td>
+                <td id="t_daTa">{{order.buying_status}}</td>
+                <td id="t_daTa">{{order.date_time}}</td>
               </tr>
               {% endfor %}
 

@@ -3,28 +3,22 @@
 {% block title %}Activity Request List{% endblock title %}
 
 {% block content %}
-    <div class="page-wapper">
+    <div class="page-wrapper">
         {% include 'app_common/snippets/alert.html' %}
         <div class="search_sec">
-               
             <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
                 {% csrf_token %}
                 <div class="table_search_box">
-
                     <select class="form-control selects" name="search_by" aria-label="Default select example">
                         <option value="email">Email</option>
                         <option value="contact">Contact</option>
                     </select>
-    
-                    <input type="text"  class="form-control" placeholder="Enter Query" name="query" required/>
-    
+                    <input type="text" class="form-control" placeholder="Enter Query" name="query" required />
                     <button class="btn qry-sub" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
-
                 </div>
             </form>
-
         </div>
         <div class="table-responsive">
             <table class="table table-hover table-nowrap">
@@ -40,43 +34,46 @@
                 <tbody>
                     {% for a_request in activity_request_obj %}
                     <tr>
-                        <td>{{ a_request.id }}</td>
-                        <td>{{ a_request.user }}</td>
-                        <td>{{ a_request.activity_content }}</td>
-                        <td><img src="{{ a_request.activity_image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class="zoom"></td>
-                        <td>
-                            <div class="d-flex justify-content-arround">
-                                <a href="{% url 'admin_dashboard:approveactivity' a_request.id %}">
-                                    <span class="btn btn-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+                        <td id="t_daTa">{{ a_request.id }}</td>
+                        <td id="t_daTa">{{ a_request.user }}</td>
+                        <td id="t_daTa" style="max-width: 180px; overflow-x: scroll;" >{{ a_request.activity_content }}</td>
+                        <td id="t_daTa">
+                            <!-- Image with a click event to trigger modal -->
+                            <img src="{{ a_request.activity_image.url }}" alt="Garden Image"
+                                style="height: 50px; width: 50px; cursor: pointer;" class="img-thumbnail"
+                                data-toggle="modal" data-target="#imageModal"
+                                onclick="showImageModal('{{ a_request.activity_image.url }}')">
+                        </td>
+                        <td id="t_daTa">
+                            <div class="d-flex justify-content-around">
+                                <a id="table_BTN" href="{% url 'admin_dashboard:approveactivity' a_request.id %}">
+                                    <span class=" absolute--fill-m"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
                                 </a>
-                                <span class="btn btn-danger mx-1" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-ban" aria-hidden="true"></i></span>
+                                <span id="table_BTN2" class=" " data-toggle="modal" data-target="#exampleModal"><i class="fa fa-ban" aria-hidden="true"></i></span>
                             </div>
                         </td>
-                       
                     </tr>
+                    <!-- Modal for rejecting the activity -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Give Reason</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                             <form action="{% url 'admin_dashboard:rejectpactivity' %}" method="post">
-                                {% csrf_token %}
-                                <input name="user_id" value="{{a_request.id}}" type="number" class="form-control" hidden/>
-                                <input name="reason" type="text" class="form-control"/>
-                                <div style="text-align: center;">
-                                    <button class="btn btn-outline-success mt-2" type="submit">
-                                        Add Reason
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Give Reason</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                             </form>
+                                <div class="modal-body">
+                                    <form action="{% url 'admin_dashboard:rejectpactivity' %}" method="post">
+                                        {% csrf_token %}
+                                        <input name="user_id" value="{{ a_request.id }}" type="number" class="form-control" hidden />
+                                        <input name="reason" type="text" class="form-control" />
+                                        <div style="text-align: center;">
+                                            <button id="table_BTN" class="mt-5" type="submit">Add Reason</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                           
-                          </div>
                         </div>
                     </div>
                     {% endfor %}
@@ -84,8 +81,38 @@
             </table>
             {% include 'app_common/snippets/pagination.html' %}
         </div>
+
+        <!-- Modal for viewing the image with header -->
+        <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                <div class="modal-content">
+                    <!-- Modal Header with title and close button -->
+                    <div class="modal-header">
+                        <h5 class="modal-title">Activity Request</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <!-- Modal Body with the image -->
+                    <div class="modal-body">
+                        <img id="modalImage" src="" class="img-fluid" alt="Activity Image" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock content %}
+
 {% block js %}
-<script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
+<script src="{% static 'admin_dashboard/js/user_list.js' %}"></script>
+<script>
+    // JavaScript function to update the modal with the clicked image
+    function showImageModal(imageUrl) {
+        // Get the image element in the modal
+        var modalImage = document.getElementById('modalImage');
+        // Set the source of the image
+        modalImage.src = imageUrl;
+    }
+</script>
 {% endblock js %}
