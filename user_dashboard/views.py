@@ -34,7 +34,7 @@ class UserDashboard(View):
                     i.delete()
         except Exception:
             pass
-        users_orderby_coins = app_commonmodels.User.objects.filter(is_superuser=False,is_rtg = True).order_by('-coins')[:5]
+        users_orderby_coins = app_commonmodels.User.objects.filter(is_superuser=False,is_rtg = True,is_approved = True).order_by('-coins')[:5]
         users_name = [u.full_name for u in users_orderby_coins]
         user_coins = [u_coin.coins for u_coin in users_orderby_coins]
         garden_obj = app_commonmodels.GardeningProfile.objects.filter(user = user).first()

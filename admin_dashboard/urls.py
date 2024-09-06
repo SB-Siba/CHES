@@ -3,6 +3,8 @@ from . import views,api_views
 from .manage_users import users
 from admin_dashboard.orders import order
 from .manage_blogs import blogs
+from .registration import rtg_registration,vendor_registration,sp_registration
+
 
 app_name = 'admin_dashboard'
 
@@ -62,6 +64,13 @@ urlpatterns = [
     path('delete_blog/<int:blog_id>',blogs.DeleteBlog.as_view(), name='blog_delete'),
     path('blog_search/',blogs.BlogSearch.as_view(), name='blog_search'),
     path('blog_update/<int:blog_id>',blogs.BlogUpdate.as_view(), name='blog_update'),
+
+    # Registration
+
+    path('add_rtg/',rtg_registration.RtgRegistration.as_view(), name='add_rtg'),
+    path('add_vendor/',vendor_registration.VendorRegistration.as_view(), name='add_vendor'),
+    path('add_service_provider/',sp_registration.ServiceProviderRegistration.as_view(), name='add_service_provider'),
+
 ]
 
 #  admin_dashboard:users_list

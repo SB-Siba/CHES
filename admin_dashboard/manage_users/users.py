@@ -219,7 +219,6 @@ class ServiceProviderDetails(View):
     def get(self, request, pk):
         user = get_object_or_404(models.User, id=pk)
         serviceprovider_data = get_object_or_404(models.ServiceProviderDetails, provider=user)
-
         return render(request, self.template, locals())
     
 class SearchUser(View):
