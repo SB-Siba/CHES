@@ -57,6 +57,7 @@ class DirectBuySerializer(serializers.ModelSerializer):
                 x["gst"] = f"{product.gst_rate:.2f}"
                 x["cgst"] = f"{product.cgst:.2f}"
                 x["sgst"] = f"{product.sgst:.2f}"
+                x["product_id"] = f"{product.id}"
 
                 coin_exchange = True
             else:

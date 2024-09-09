@@ -500,7 +500,7 @@
                 <div class="coin">
                     <h3 class="h5 mb-0 font-weight-bold text-gray-800">Total Points</h3>
                     <p class="d-flex align-items-center font-weight-bold text-warning"><img
-                            src="{% static 'admin_dashboard/images/coin.png' %}" style="margin-top:11px;"> 50000</p>
+                            src="{% static 'admin_dashboard/images/coin.png' %}" style="margin-top:11px;"> {{ total_green_coins_turnover }}</p>
                 </div>
             </div>
         </div>
@@ -572,20 +572,6 @@
             <!-- 3rd and 4th -->
             <div class="leaderboard-row">
                 <div class="leaderboard-item">
-                    <div class="position-title">3rd</div>
-                    {% if leaderboard.third %}
-                        {% if leaderboard.third.user_image %}
-                            <img src="{{ leaderboard.third.user_image.url }}" alt="{{ leaderboard.third.full_name }}" class="user-image">
-                        {% else %}
-                            <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
-                        {% endif %}
-                        <div class="user-info">
-                            <p class="user-name">{{ leaderboard.third.full_name }}</p>
-                            <p class="user-coins">{{ leaderboard.third.coins }} coins</p>
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="leaderboard-item">
                     <div class="position-title">4th</div>
                     {% if leaderboard.fourth %}
                         {% if leaderboard.fourth.user_image %}
@@ -599,10 +585,6 @@
                         </div>
                     {% endif %}
                 </div>
-            </div>
-        
-            <!-- 5th and 6th -->
-            <div class="leaderboard-row">
                 <div class="leaderboard-item">
                     <div class="position-title">5th</div>
                     {% if leaderboard.fifth %}
@@ -617,6 +599,10 @@
                         </div>
                     {% endif %}
                 </div>
+            </div>
+        
+            <!-- 5th and 6th -->
+            <div class="leaderboard-row">
                 <div class="leaderboard-item">
                     <div class="position-title">6th</div>
                     {% if leaderboard.sixth %}
@@ -631,10 +617,6 @@
                         </div>
                     {% endif %}
                 </div>
-            </div>
-        
-            <!-- 7th and 8th -->
-            <div class="leaderboard-row">
                 <div class="leaderboard-item">
                     <div class="position-title">7th</div>
                     {% if leaderboard.seventh %}
@@ -649,6 +631,10 @@
                         </div>
                     {% endif %}
                 </div>
+            </div>
+        
+            <!-- 7th and 8th -->
+            <div class="leaderboard-row">
                 <div class="leaderboard-item">
                     <div class="position-title">8th</div>
                     {% if leaderboard.eighth %}
@@ -663,10 +649,6 @@
                         </div>
                     {% endif %}
                 </div>
-            </div>
-        
-            <!-- 9th -->
-            <div class="leaderboard-row">
                 <div class="leaderboard-item">
                     <div class="position-title">9th</div>
                     {% if leaderboard.ninth %}
@@ -678,6 +660,24 @@
                         <div class="user-info">
                             <p class="user-name">{{ leaderboard.ninth.full_name }}</p>
                             <p class="user-coins">{{ leaderboard.ninth.coins }} coins</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        
+            <!-- 9th -->
+            <div class="leaderboard-row">
+                <div class="leaderboard-item">
+                    <div class="position-title">10th</div>
+                    {% if leaderboard.tenth %}
+                        {% if leaderboard.tenth.user_image %}
+                            <img src="{{ leaderboard.tenth.user_image.url }}" alt="{{ leaderboard.tenth.full_name }}" class="user-image">
+                        {% else %}
+                            <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                        {% endif %}
+                        <div class="user-info">
+                            <p class="user-name">{{ leaderboard.tenth.full_name }}</p>
+                            <p class="user-coins">{{ leaderboard.tenth.coins }} coins</p>
                         </div>
                     {% endif %}
                 </div>
