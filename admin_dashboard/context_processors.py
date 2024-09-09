@@ -1,4 +1,3 @@
-
 from app_common import models as common_models
 from Blogs.models import Blogs
 def all_nessasery_data(request):
