@@ -15,7 +15,7 @@
                     <option value="contact">Contact</option>
                 </select>
 
-                <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query"
+                <input type="text"  class="form-control" placeholder="Enter Query" name="query"
                     required />
 
                 <button class="btn qry-sub" type="submit">
@@ -37,24 +37,24 @@
                     <th scope="col">Average Cost Per Hour</th>
                     <th scope="col">Years Experience</th>
                     <th scope="col">Action</th>
-                    <th></th>
+
                 </tr>
             </thead>
             <tbody>
                 {% for s_provider,s_provider_detail in service_provider_data %}
                 <tr>
-                    <td>{{ s_provider.email }}</td>
-                    <td>{{ s_provider_detail.service_type|join:", " }}</td>
-                    <td>{{ s_provider_detail.service_area|join:", " }}</td>
-                    <td>{{ s_provider_detail.average_cost_per_hour }}</td>
-                    <td>{{s_provider_detail.years_experience}}</td>
-                    <td>
-                        <div class="d-flex justify-content-arround">
+                    <td id="t_daTa">{{ s_provider.email }}</td>
+                    <td id="t_daTa">{{ s_provider_detail.service_type|slice:"1:-1" }}</td>
+                    <td id="t_daTa">{{ s_provider_detail.service_area|slice:"1:-1" }}</td>
+                    <td id="t_daTa">{{ s_provider_detail.average_cost_per_hour }}</td>
+                    <td id="t_daTa">{{s_provider_detail.years_experience}}</td>
+                    <td id="t_daTa">
+                        <div class="d-flex align-items-baseline">
                             <a href="{% url 'admin_dashboard:approve_user' s_provider.id %}">
-                                <span class="btn btn-success">Approve</span>
+                                <span class="mb-2" id="table_BTN">Approve</span>
                             </a>
                             <a href="{% url 'admin_dashboard:reject_user' s_provider.id %}">
-                                <span class="btn btn-danger mx-1">Reject</span>
+                                <span class=" mx-1" id="table_BTN2">Reject</span>
                             </a>
                         </div>
                     </td>

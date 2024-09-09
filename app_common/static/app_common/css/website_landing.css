@@ -28,7 +28,7 @@ body {
   nav {
     width: 100%;
     padding: 10px 0 0;
-    background: #1a4909;
+    background: #ffffff;
     box-shadow: none;
   }
   
@@ -36,14 +36,14 @@ body {
     max-width: 3000px;
     margin: auto;
     padding: 0 20px;
-    background-color: #1a4909;
+    background-color: #ffffff;
   }
   
   nav .menu {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #1a4909;
+    background-color: #ffffff;
   }
   
   
@@ -52,7 +52,7 @@ body {
     font-size: 25px;
     font-weight: 600;
     text-decoration: none;
-    color: #ffffff;
+    color: #000000;
   }
   
   .menu .logo a:hover {
@@ -68,17 +68,33 @@ body {
     margin: 0 8px;
     text-decoration: none;
     font-size: 14px;
-    color: #ffffff;
+    color: #020202;
     font-weight: 500;
     display: inline-flex;
-    padding: 10px 12px;
+    padding: 10px 12px 5px;
+    position: relative; /* Required for the pseudo-element */
     transition: all 0.3s ease;
-  }
-  
-  .menu ul a:hover {
-    color: #FFCD1E;
-  }
-  
+}
+
+.menu ul a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    background-color: #08721d;
+    left: 0;
+    bottom: 0;
+    transition: width 0.3s ease;
+}
+
+.menu ul a:hover {
+    color: #08721d; /* Change font color on hover */
+}
+
+.menu ul a:hover::after {
+    width: 100%;
+}
+
   .heder_para1 {
     color: white;
     font-size: 18px;
@@ -299,14 +315,16 @@ background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(5,121,23,1) 52%, 
   }
   
   #heroCarousel .carousel-caption h1 {
-    font-size: 3rem;
-    font-weight: bold;
+    font-size: 4rem;
+    color: white;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    font-family: "Oswald", sans-serif;
   }
   
   #heroCarousel .carousel-caption p {
     font-size: 1.25rem;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    color: yellowgreen;
   }
   
   #heroCarousel .btn {
@@ -314,13 +332,7 @@ background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(5,121,23,1) 52%, 
     font-size: 1rem;
     border-radius: 5px;
   }
-  .service_hd_2{
-    color: white;
-    font-size: 70px;
-  
-    letter-spacing:4px;
-    font-family: "Anton", sans-serif;
-  }
+ 
   
 /* Hero Section */
 /*========= About========= */
@@ -752,7 +764,7 @@ background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(5,121,23,1) 52%, 
       width: 100%;
       padding: 15px 20px 20px 15px ;
       margin: 0;
-      background-color: #1a4909;
+      background-color: #ffffff;
       align-items: center;
       box-sizing: border-box;
     }
@@ -765,7 +777,7 @@ background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(5,121,23,1) 52%, 
       padding: 15px 20px 20px 15px ;
       display: flex;
       align-items: center;
-      background-color: #1a4909;
+      background-color: #ffffff;
     }
     
   
@@ -779,7 +791,7 @@ background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(5,121,23,1) 52%, 
       padding-top: 45px;
       height: 100%;
       text-align: left; /* Keeps the text left-aligned */
-      background: #1a4909c9;
+      background: #ffffff;
       box-shadow: 0 5px 10px #b0b0b5;
       z-index: 12;
       transition: all 0.3s ease;
@@ -789,7 +801,7 @@ background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(5,121,23,1) 52%, 
       display: block;
       font-size: 16px;
       width: 100%;
-      color: rgb(255, 255, 255);
+      color: rgb(0, 0, 0);
       margin-top: 30px;
       text-align: left; /* Align the text to the left */
       padding-left: 10px; /* Add padding to keep some space from the left edge */

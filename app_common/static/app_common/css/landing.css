@@ -24,10 +24,11 @@ h3,h5,h1,h2,h4,p,h6{
   margin-top: 66px;
 }
 
+ 
 nav {
   width: 100%;
   padding: 10px 0 0;
-  background: #1a4909;
+  background: #ffffff;
   box-shadow: none;
 }
 
@@ -35,14 +36,14 @@ nav .menu-container {
   max-width: 3000px;
   margin: auto;
   padding: 0 20px;
-  background-color: #1a4909;
+  background-color: #ffffff;
 }
 
 nav .menu {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1a4909;
+  background-color: #ffffff;
 }
 
 
@@ -51,7 +52,7 @@ nav .menu {
   font-size: 25px;
   font-weight: 600;
   text-decoration: none;
-  color: #ffffff;
+  color: #000000;
 }
 
 .menu .logo a:hover {
@@ -66,16 +67,32 @@ nav .menu {
 .menu ul a {
   margin: 0 8px;
   text-decoration: none;
-  font-size: 18px;
-  color: #ffffff;
+  font-size: 14px;
+  color: #020202;
   font-weight: 500;
   display: inline-flex;
-  padding: 10px 12px;
+  padding: 10px 12px 5px;
+  position: relative; /* Required for the pseudo-element */
   transition: all 0.3s ease;
 }
 
+.menu ul a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  background-color: #08721d;
+  left: 0;
+  bottom: 0;
+  transition: width 0.3s ease;
+}
+
 .menu ul a:hover {
-  color: #FFCD1E;
+  color: #08721d; /* Change font color on hover */
+}
+
+.menu ul a:hover::after {
+  width: 100%;
 }
 
 .heder_para1 {
@@ -593,10 +610,11 @@ img {
   margin: 0 8px;
   text-decoration: none;
   font-size: 14px;
-  color: #ffffff;
+  color: #020202;
   font-weight: 500;
   display: inline-flex;
-  padding: 10px 12px;
+  padding: 10px 12px 5px;
+  position: relative; /* Required for the pseudo-element */
   transition: all 0.3s ease;
 }
 .heder_para1{

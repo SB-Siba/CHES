@@ -33,7 +33,7 @@
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   }
   .payment_btn2:hover{
-    background: rgb(5,131,47);
+    background: rgb(215, 6, 26);
     background: linear-gradient(344deg, rgb(215, 6, 26) 14%, rgb(166, 8, 6) 52%, rgb(224, 15, 8) 100%);
     color: #fff !important;
     transition: 0.5rem;

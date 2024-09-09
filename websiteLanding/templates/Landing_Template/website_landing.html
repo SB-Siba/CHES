@@ -25,14 +25,15 @@
             <a href="#">CHES</a>
             </div>
             <input type="checkbox" id="check">
-            <label class="btn bars text-white" for="check"><i class="fas fa-bars "></i></label>
-            <ul>
-            <label class="btn cancel" for="check"><i class="fas fa-times text-white"></i></label>
-            <li><a class="logo_an" href="">About Us</a></li>
-            <li><a class="logo_an" href="">Contact Us</a></li>
-            <li><a class="logo_an" href="">Privacy Policy</a></li>
-            <!-- <li><a class="logo_an" href="{% url 'app_common:login' %}">Login</a></li> -->
+            <label class="btn bars text-black" for="check"><i class="fas fa-bars "></i></label>
+            <ul class="menu">
+                <label class="btn cancel" for="check"><i class="fas fa-times text-black"></i></label>
+                <li><a class="logo_an" href="">About Us</a></li>
+                <li><a class="logo_an" href="">Contact Us</a></li>
+                <li><a class="logo_an" href="">Privacy Policy</a></li>
+                <!-- <li><a class="logo_an" href="{% url 'app_common:login' %}">Login</a></li> -->
             </ul>
+            
         </div>
         </div>
     </nav>
@@ -46,28 +47,28 @@
 <div class="carousel-item active" id="carousel-item-1">
     <div class="carousel-caption text-start">
     <h1 class="service_hd_2">Nurture Your Garden</h1>
-    <p class="text-white">Discover the best tips and tools for a flourishing garden.</p>  
+    <p class="">Discover the best tips and tools for a flourishing garden.</p>  
     
     </div>
 </div>
 <div class="carousel-item" id="carousel-item-2">
     <div class="carousel-caption text-start">
     <h1 class="service_hd_2">Explore Rare Plants</h1>
-    <p class="text-white">Add unique and exotic plants to your collection.</p>
+    <p class="">Add unique and exotic plants to your collection.</p>
     
     </div>
 </div>
 <div class="carousel-item" id="carousel-item-3">
     <div class="carousel-caption text-start">
     <h1 class="service_hd_2">Sustainable Gardening</h1>
-    <p class="text-white">Adopt eco-friendly practices for a greener future.</p>
+    <p class="">Adopt eco-friendly practices for a greener future.</p>
     
     </div>
 </div>
 <div class="carousel-item" id="carousel-item-4">
     <div class="carousel-caption text-start">
     <h1 class="service_hd_2">Sustainable Gardening</h1>
-    <p class="text-white">Adopt eco-friendly practices for a greener future.</p>
+    <p class="">Adopt eco-friendly practices for a greener future.</p>
     
     </div>
 </div>
@@ -511,23 +512,29 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const checkbox = document.getElementById('disclaimerCheckbox');
-        const proceedButton = document.getElementById('proceedButton');
-        const alertMessage = document.getElementById('alertMessage');
-        
-        checkbox.addEventListener('change', function() {
-            proceedButton.disabled = !checkbox.checked;
-            alertMessage.style.display = 'none'; // Hide alert when checkbox is checked
-        });
-        
-        document.getElementById('disclaimerForm').addEventListener('submit', function(event) {
-            if (!checkbox.checked) {
-                event.preventDefault(); // Prevent form submission
-                alertMessage.style.display = 'block'; // Show alert if checkbox is not checked
-            }
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    const checkbox = document.getElementById('disclaimerCheckbox');
+    const proceedButton = document.getElementById('proceedButton');
+    const alertMessage = document.getElementById('alertMessage');
+    
+    // Reset the checkbox and proceed button states on page load
+    checkbox.checked = false;
+    proceedButton.disabled = true;
+    alertMessage.style.display = 'none'; // Hide alert on page load
+
+    checkbox.addEventListener('change', function() {
+        proceedButton.disabled = !checkbox.checked;
+        alertMessage.style.display = 'none'; // Hide alert when checkbox is checked
     });
+    
+    document.getElementById('disclaimerForm').addEventListener('submit', function(event) {
+        if (!checkbox.checked) {
+            event.preventDefault(); // Prevent form submission
+            alertMessage.style.display = 'block'; // Show alert if checkbox is not checked
+        }
+    });
+});
+
 
 //main content
 document.addEventListener("DOMContentLoaded", function() {

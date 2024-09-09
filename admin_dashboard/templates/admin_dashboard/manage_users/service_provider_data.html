@@ -15,7 +15,7 @@
                         <option value="contact">Contact</option>
                     </select>
     
-                    <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query" required/>
+                    <input type="text"  class="form-control" placeholder="Enter Query" name="query" required/>
     
                     <button class="btn qry-sub" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -37,12 +37,12 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ serviceprovider_data.service_type }}</td>
-                        <td>{{ serviceprovider_data.service_area }}</td>
-                        <td>
+                        <td id="t_daTa">{{ serviceprovider_data.service_type }}</td>
+                        <td id="t_daTa">{{ serviceprovider_data.service_area }}</td>
+                        <td id="t_daTa">
                             {{ serviceprovider_data.average_cost_per_hour }}
                         </td>
-                        <td>
+                        <td id="t_daTa">
                             {{ serviceprovider_data.years_experience }}
                         </td>
                     </tr>

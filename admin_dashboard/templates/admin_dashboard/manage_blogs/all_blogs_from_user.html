@@ -13,7 +13,7 @@
 </style>
 <main class="py-6">
     <div class=container>
-    <h4>All Blogs</h4>
+    <h4 >All Blogs</h4>
         <div class="vstack gap-4">
             <div class="d-flex justify-content-between flex-column flex-sm-row gap-3">
                 <form class="my-3 mx-2" action="{% url 'admin_dashboard:blog_search' %}" method="post">
@@ -26,7 +26,7 @@
                         </select>
                         <span class="input-group">
                             <input type="text" name="query" placeholder="Search Here" class="form-control form-select1" required />
-                            <button type="submit" class="input-group-text form-select1"><i class='fa fa-search'></i></button>
+                            <button type="submit" class=" input-group-text form-select1" style="background-color: green; color: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"><i class='fa fa-search'></i></button>
                         </span>
                     </div>
                 </form>
@@ -49,54 +49,54 @@
                         <tbody id="test_table_tbody">
                             {% for blog in blog_list %}
                             <tr>
-                                <td class="tb-body">
+                                <td class="tb-body" id="t_daTa">
                                     
                                     <a class="text-heading text-primary-hover font-semibold"
                                             href="{% url 'admin_dashboard:blog_update' blog.id %}">
                                             {{ blog.id }}
                                         </a>
                                 </td>
-                                <td class="tb-body">{{ blog.title | truncatewords:8 }}</td>
-                                <td class="tb-body">{{ blog.author }}</td>
-                                <td class="tb-body">
-                                    <a href="{% url 'admin_dashboard:blog_delete' blog.id %}"
-                                        class="btn btn-sm btn-square btn-neutral text-danger">
+                                <td id="t_daTa" class="tb-body">{{ blog.title | truncatewords:8 }}</td>
+                                <td id="t_daTa" class="tb-body">{{ blog.author }}</td>
+                                <td id="t_daTa" class="tb-body">
+                                    <a id="table_BTN2" href="{% url 'admin_dashboard:blog_delete' blog.id %}"
+                                        class="me-1">
                                         <i class="fa-solid fa-trash"></i>                                           
                                     </a>
 
                                     {% if blog.is_accepted == "pending" %}
                                     <!-- Show Approve and Decline buttons when the blog is pending approval -->
-                                    <a href="{% url 'admin_dashboard:blogs_approve' blog.id %}"
-                                        class="btn btn-sm btn-square btn-success">
+                                    <a id="table_BTN" href="{% url 'admin_dashboard:blogs_approve' blog.id %}"
+                                        class="me-1">
                                         <i class="fa-solid fa-check"></i> Approve
                                     </a>
                                     <a href="{% url 'admin_dashboard:blog_reject' blog.id %}"
-                                        class="btn btn-sm btn-square btn-danger">
+                                        class="" id="table_BTN2">
                                         <i class="fa-solid fa-xmark"></i> Decline
                                     </a>
                                     {% elif blog.is_accepted == "approved" %}
                                     <!-- Disable buttons if the blog is already approved -->
                                     <a href="{% url 'admin_dashboard:blogs_approve' blog.id %}"
-                                        class="btn btn-sm btn-square btn-success {% if blog.is_accepted == 'approved' %}disabled-link{% endif %}">
+                                    id="table_BTN" class="me-1 {% if blog.is_accepted == 'approved' %}disabled-link{% endif %}">
                                         <i class="fa-solid fa-check"></i> Approve
                                     </a>
                                     <a href="{% url 'admin_dashboard:blog_reject' blog.id %}"
-                                        class="btn btn-sm btn-square btn-danger">
+                                        class="me-1" id="table_BTN2">
                                         <i class="fa-solid fa-xmark"></i> Decline
                                     </a>
                                     {% elif blog.is_accepted == "rejected" %}
                                     <!-- Disable buttons if the blog is already declined -->
                                     <a href="{% url 'admin_dashboard:blogs_approve' blog.id %}"
-                                        class="btn btn-sm btn-square btn-success">
+                                        class=" me-1" id="table_BTN">
                                         <i class="fa-solid fa-check"></i> Approve
                                     </a>
                                     <a href="{% url 'admin_dashboard:blog_reject' blog.id %}"
-                                        class="btn btn-sm btn-square btn-danger {% if blog.is_accepted == 'rejected' %}disabled-link{% endif %}">
+                                    id="table_BTN2" class="me-1 {% if blog.is_accepted == 'rejected' %}disabled-link{% endif %}">
                                         <i class="fa-solid fa-xmark"></i> Decline
                                     </a>
                                     {% endif %}
                                 </td>
-                                <td class="tb-body">
+                                <td id="t_daTa" class="tb-body">
                                     {% if blog.is_accepted == "approved" %}
                                         <span class="text-success">Approved</span>
                                     {% elif blog.is_accepted == "declined" %}

@@ -2,28 +2,22 @@
 {% load static %}
 {% block title %}User List{% endblock title %}
 {% block content %}
-    <div class="page-wapper">
+    <div class="page-wrapper">
         {% include 'app_common/snippets/alert.html' %}
         <div class="search_sec">
-               
             <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
                 {% csrf_token %}
                 <div class="table_search_box">
-
                     <select class="form-control selects" name="search_by" aria-label="Default select example">
                         <option value="email">Email</option>
                         <option value="contact">Contact</option>
                     </select>
-    
-                    <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query" required/>
-    
+                    <input type="text" class="form-control" placeholder="Enter Query" name="query" required />
                     <button class="btn qry-sub" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
-
                 </div>
             </form>
-
         </div>
         <div class="table-responsive">
             <table class="table table-hover table-nowrap">
@@ -39,107 +33,83 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for upd_profile,org_profile in data %}
+                    {% for upd_profile, org_profile in data %}
                     <tr>
-                        <td>{{ upd_profile.id }}</td>
-                        <td>{{ upd_profile.user.full_name }}</td>
-                        <td>
+                        <td id="t_daTa">{{ upd_profile.id }}</td>
+                        <td id="t_daTa">{{ upd_profile.user.full_name }}</td>
+                        <td id="t_daTa">
                             {{ upd_profile.garden_area }}
                             {% if 'garden_area' in upd_profile.changes %}
                                 <span class="text-danger"> (Changed)</span>
-                                <div>
-                                    {{org_profile.garden_area}}<span class="text-success"> (Original)</span>
-                                </div>
+                                <div>{{ org_profile.garden_area }}<span class="text-success"> (Original)</span></div>
                             {% endif %}
                         </td>
-                        <td>
+                        <td id="t_daTa">
                             {{ upd_profile.number_of_plants }}
                             {% if 'number_of_plants' in upd_profile.changes %}
                                 <span class="text-danger"> (Changed)</span>
-                                <div>
-                                    {{org_profile.number_of_plants}}<span class="text-success"> (Original)</span>
-                                </div>
+                                <div>{{ org_profile.number_of_plants }}<span class="text-success"> (Original)</span></div>
                             {% endif %}
                         </td>
-                        <td>
+                        <td id="t_daTa">
                             {{ upd_profile.number_of_unique_plants }}
                             {% if 'number_of_unique_plants' in upd_profile.changes %}
                                 <span class="text-danger mb-1"> (Changed)</span>
-                                <div>
-                                    {{org_profile.number_of_unique_plants}}<span class="text-success"> (Original)</span>
-                                </div>
+                                <div>{{ org_profile.number_of_unique_plants }}<span class="text-success"> (Original)</span></div>
                             {% endif %}
                         </td>
-                        <!-- <td>
-                            <div class="row">
-                                <div class="image-container col-md-12">
-                                    <div class="image-wrapper">
-                                        <img src="{{ upd_profile.garden_image.url }}" alt="Garden Image" class="thumbnail" style="height: 50px; width: 50px;">
-                                        <div class="hover-image">
-                                            <img src="{{ upd_profile.garden_image.url }}" alt="Garden Image" class="thumbnail">
-                                        </div>
-                                    </div>
-                                </div>
-                                {% if 'garden_image' in upd_profile.changes %}
-                                <div class="image-container col-md-12 mt-1">
-                                    <div class="image-wrapper">
-                                        <span class="text-danger"> (Changed)</span>
-                                        <div>
-                                            <img src="{{ org_profile.garden_image.url }}" alt="Garden Image" style="height: 50px; width: 50px;">
-                                        </div>
-                                        <h6 class="text-success"> (Original)</h6>
-                                        <div class="hover-image">
-                                            <img src="{{ org_profile.garden_image.url }}" alt="Garden Image" class="thumbnail">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %}
-                        </td> -->
-                        <td>
-                            <img src="{{ upd_profile.garden_image.url }}" alt="Garden Image" style="height: 50px; width: 50px; border-radius: 10%;" class="zoom">
+                        <td id="t_daTa">
+                            <!-- Updated Garden Images with Modal Trigger -->
+                            <img src="{{ upd_profile.garden_image.url }}" alt="Garden Image" 
+                                 style="height: 50px; width: 50px; border-radius: 10%;" 
+                                 class="" data-toggle="modal" 
+                                 data-target="#imageModal" 
+                                 data-img-url="{{ upd_profile.garden_image.url }}">
+
                             {% if 'garden_image' in upd_profile.changes %}
                                 <br><span class="text-danger"> (Changed)</span>
                                 <div class="mt-1">
-                                    <img src="{{ org_profile.garden_image.url }}" alt="Garden Image" style="height: 50px; width: 50px; border-radius: 10%;" class="zoom"><br><span class="text-success"> (Original)</span>
+                                    <img src="{{ org_profile.garden_image.url }}" alt="Garden Image" 
+                                         style="height: 50px; width: 50px; border-radius: 10%;" 
+                                         class="" 
+                                         data-toggle="modal" 
+                                         data-target="#imageModal" 
+                                         data-img-url="{{ org_profile.garden_image.url }}"><br>
+                                    <span class="text-success"> (Original)</span>
                                 </div>
                             {% endif %}
                         </td>
-                        <td>
+                        <td id="t_daTa">
                             <div class="d-flex justify-content-arround">
-                                <a href="{% url 'admin_dashboard:approveprofie' upd_profile.id %}">
-                                    <span class="btn btn-success"><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
+                                <a id="table_BTN" href="{% url 'admin_dashboard:approveprofie' upd_profile.id %}">
+                                    <span class=""><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
                                 </a>
-                                
-                                <span class="btn btn-danger mx-1" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-ban" aria-hidden="true"></i></span>
-                                
+                                <span id="table_BTN2" class="ms-1" data-toggle="modal" data-target="#exampleModal">
+                                    <i class="fa fa-ban" aria-hidden="true"></i>
+                                </span>
                             </div>
                         </td>
-                       
                     </tr>
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Give Reason</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                             <form action="{% url 'admin_dashboard:rejectprofile' %}" method="post">
-                                {% csrf_token %}
-                                <input name="user_id" value="{{upd_profile.id}}" type="number" class="form-control" hidden/>
-                                <input name="reason" type="text" class="form-control"/>
-                                <div style="text-align: center;">
-                                    <button class="btn btn-outline-success mt-2" type="submit">
-                                        Add Reason
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Give Reason</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                             </form>
+                                <div class="modal-body">
+                                    <form action="{% url 'admin_dashboard:rejectprofile' %}" method="post">
+                                        {% csrf_token %}
+                                        <input name="user_id" value="{{ upd_profile.id }}" type="number" class="form-control" hidden />
+                                        <input name="reason" type="text" class="form-control" />
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <button id="table_BTN" class="mt-2" type="submit">Add Reason</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                           
-                          </div>
                         </div>
                     </div>
                     {% endfor %}
@@ -149,13 +119,38 @@
         </div>
     </div>
 
-
-
-
-<!-- wallet balance add modal -->
-
+    <!-- Image Modal for Viewing Garden Image -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Garden Image</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Garden Image" class="img-fluid" style="width: 100%;">
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock content %}
+
 {% block js %}
 <script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var imageModal = document.getElementById('imageModal');
+        var modalImage = document.getElementById('modalImage');
+
+        // When the modal is triggered, set the image URL dynamically
+        $('#imageModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var imageUrl = button.data('img-url'); // Extract image URL from data-* attribute
+            modalImage.src = imageUrl; // Set the modal image src
+        });
+    });
+</script>
 {% endblock js %}

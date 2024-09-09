@@ -27,7 +27,7 @@ urlpatterns = [
     path("service_provider/", include("serviceprovider.urls")),
     path("email_otp/", include("EmailOTP.urls")),
     path("blog/", include("Blogs.urls")),
-    # ------------------------------------------------ swagger ---------------------------------
+    # ------------------------------------------------ swagger -----------------------------
     path(
         "swagger/download/",
         schema_view.without_ui(cache_timeout=0),
