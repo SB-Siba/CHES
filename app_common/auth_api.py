@@ -75,15 +75,15 @@ class LoginAPIView(APIView):
                     if user.is_rtg:
                         login(request, user)
                         token, _ = Token.objects.get_or_create(user=user)
-                        return Response({'message': 'Login successful, Hii Roof Top Gardener','token': token.key}, status=status.HTTP_200_OK)
+                        return Response({'message': 'Login successful, Hii Roof Top Gardener','token': token.key,"id":user.id}, status=status.HTTP_200_OK)
                     elif user.is_vendor:
                         login(request, user)
                         token, _ = Token.objects.get_or_create(user=user)
-                        return Response({'message': 'Login successful, Hii Vendor','token': token.key}, status=status.HTTP_200_OK)
+                        return Response({'message': 'Login successful, Hii Vendor','token': token.key,"id":user.id}, status=status.HTTP_200_OK)
                     elif user.is_serviceprovider:
                         login(request, user)
                         token, _ = Token.objects.get_or_create(user=user)
-                        return Response({'message': 'Login successful, Hii Service Provider','token': token.key}, status=status.HTTP_200_OK)
+                        return Response({'message': 'Login successful, Hii Service Provider','token': token.key,"id":user.id}, status=status.HTTP_200_OK)
                 else:
                     return Response({'message': "Your account hasn't been approved yet."}, status=status.HTTP_401_UNAUTHORIZED)
             else:

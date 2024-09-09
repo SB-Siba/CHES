@@ -98,6 +98,18 @@ class AdminDashboard(View):
             common_models.User.objects.get(id=entry['user']).full_name
             for entry in top_users
         ]
+
+        top_users_by_coins = common_models.User.objects.filter(coins__gt=0).order_by('-coins')[:10]
+        positions = [
+            'winner', 'first_runner_up', 'second_runner_up', 'third', 'fourth',
+            'fifth', 'sixth', 'seventh', 'eighth', 'ninth'
+        ]
+
+        leaderboard = {
+            position: top_users_by_coins[i] if i < len(top_users_by_coins) else None
+            for i, position in enumerate(positions)
+        }
+
         context = {
             'not_approvedlist': not_approvedlist,
             'not_approvedlist_rtg': not_approvedlist_rtg,
@@ -134,6 +146,7 @@ class AdminDashboard(View):
             'chart_data': chart_data,
             'activity_data':activity_data,
             'activity_label':activity_label,
+            'leaderboard':leaderboard,
         }
 
         return render(request, self.template, context)

@@ -214,7 +214,7 @@ class AllActivitiesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserActivity
-        fields = ['id', 'is_accepted', 'likes', 'comments', 'like_count', 'comment_count', 'user_liked']
+        fields = ['id', 'is_accepted', 'likes', 'comments', 'like_count', 'comment_count', 'user_liked','activity_image','activity_title','activity_content']
 
     def get_like_count(self, obj):
         return len(obj.likes)
