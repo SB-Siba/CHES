@@ -73,6 +73,15 @@ class VendorDashboard(View):
         earnings_month = calculate_earnings(user, start_of_month, today)
         earnings_year = calculate_earnings(user, start_of_year, today)
 
+        users_orderby_coins = common_models.User.objects.filter(
+            Q(is_rtg=True) | Q(is_vendor=True),
+            is_approved=True,
+            is_superuser=False
+        ).order_by('-coins')[:5]
+        users_name = [u.full_name for u in users_orderby_coins]
+        user_coins = [u_coin.coins for u_coin in users_orderby_coins]
+        print(users_name,user_coins)
+
         context = {
             'vendor_and_percentages_today': vendor_and_percentages_today,
             'vendor_and_percentages_month': vendor_and_percentages_month,
@@ -83,7 +92,11 @@ class VendorDashboard(View):
 
             'earnings_today': earnings_today,
             'earnings_month': earnings_month,
-            'earnings_year': earnings_year
+            'earnings_year': earnings_year,
+
+            'users_orderby_coins':users_orderby_coins,
+            'users_name':users_name,
+            'u_coins':user_coins,
         }
         return render(request, self.template,context)
 
