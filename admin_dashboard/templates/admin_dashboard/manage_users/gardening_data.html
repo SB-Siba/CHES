@@ -15,7 +15,7 @@
                         <option value="contact">Contact</option>
                     </select>
     
-                    <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query" required/>
+                    <input type="text"  class="form-control" placeholder="Enter Query" name="query" required/>
     
                     <button class="btn qry-sub" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -39,18 +39,18 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ gardening_data.user.id }}</td>
-                        <td>{{ gardening_data.user.full_name }}</td>
-                        <td>
+                        <td id="t_daTa">{{ gardening_data.user.id }}</td>
+                        <td id="t_daTa">{{ gardening_data.user.full_name }}</td>
+                        <td id="t_daTa">
                             {{ gardening_data.garden_area }}
                         </td>
-                        <td>
+                        <td id="t_daTa">
                             {{ gardening_data.number_of_plants }}
                         </td>
-                        <td>
+                        <td id="t_daTa">
                             {{ gardening_data.number_of_unique_plants }}
                         </td>
-                        <td>
+                        <td id="t_daTa">
                             <img src="{{ gardening_data.garden_image.url }}" alt="Garden Image" style="height: 50px; width: 50px; border-radius: 5%;" onclick="showImageModal(this.src)">
                         </td>
                     </tr>

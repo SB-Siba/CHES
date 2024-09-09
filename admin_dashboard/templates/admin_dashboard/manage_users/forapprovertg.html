@@ -2,29 +2,23 @@
 {% load static %}
 {% block title %}Pending RTG List{% endblock title %}
 {% block content %}
-<div class="page-wapper">
+
+<div class="page-wrapper">
     {% include 'app_common/snippets/alert.html' %}
     <div class="search_sec">
-
         <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
             {% csrf_token %}
             <div class="table_search_box">
-
                 <select class="form-control selects" name="search_by" aria-label="Default select example">
                     <option value="email">Email</option>
                     <option value="contact">Contact</option>
                 </select>
-
-                <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query"
-                    required />
-
+                <input type="text" class="form-control" placeholder="Enter Query" name="query" required />
                 <button class="btn qry-sub" type="submit">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
-
             </div>
         </form>
-
     </div>
 
     <div class="table-responsive">
@@ -32,7 +26,7 @@
             <thead class="table-light">
                 <tr>
                     <th scope="col">User-ID</th>
-                    <th scope="col">Ful Name</th>
+                    <th scope="col">Full Name</th>
                     <th scope="col">E-Mail</th>
                     <th scope="col">Area</th>
                     <th scope="col">Total Plants</th>
@@ -40,37 +34,60 @@
                     <th scope="col">Garden Image</th>
                     <th scope="col">Quiz Answers</th>
                     <th scope="col">Action</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                {% for rtg_user,rtgarden_user in rtgardener_data %}
+                {% for rtg_user, rtgarden_user in rtgardener_data %}
                 <tr>
-                    <td>{{ rtg_user.id }}</td>
-                    <td>{{ rtg_user.full_name }}</td>
-                    <td>{{ rtg_user.email }}</td>
-                    <td>{{ rtgarden_user.garden_area }}</td>
-                    <td>{{ rtgarden_user.number_of_plants }}</td>
-                    <td>{{ rtgarden_user.number_of_unique_plants }}</td>
-                    <td><img src="{{ rtgarden_user.garden_image.url }}" alt="Garden Image"
-                            style="height: 50px; width: 50px;"></td>
-                    <td><a href="{% url 'admin_dashboard:quizanswers' rtg_user.id %}">View</a></td>
-                    <td>
-                        <div class="d-flex justify-content-arround">
-                            <a href="{% url 'admin_dashboard:approve_user' rtg_user.id %}">
-                                <span class="btn btn-success">Approve</span>
+                    <td id="t_daTa">{{ rtg_user.id }}</td>
+                    <td id="t_daTa">{{ rtg_user.full_name }}</td>
+                    <td id="t_daTa">{{ rtg_user.email }}</td>
+                    <td id="t_daTa">{{ rtgarden_user.garden_area }}</td>
+                    <td id="t_daTa">{{ rtgarden_user.number_of_plants }}</td>
+                    <td id="t_daTa">{{ rtgarden_user.number_of_unique_plants }}</td>
+                    <td id="t_daTa">
+                        <img src="{{ rtgarden_user.garden_image.url }}" alt="Garden Image"
+                             style="height: 50px; width: 50px; cursor: pointer;"
+                             data-bs-toggle="modal" data-bs-target="#imageModal"
+                             onclick="setImageSrc('{{ rtgarden_user.garden_image.url }}')">
+                    </td>
+                    <td id="t_daTa"><a href="{% url 'admin_dashboard:quizanswers' rtg_user.id %}">View</a></td>
+                    <td id="t_daTa">
+                        <div class="d-flex justify-content-around">
+                            <a class="text-decoration-none" href="{% url 'admin_dashboard:approve_user' rtg_user.id %}">
+                                <span class="details_btn" id="table_BTN">Approve</span>
                             </a>
-                            <a href="{% url 'admin_dashboard:reject_user' rtg_user.id %}">
-                                <span class="btn btn-danger mx-1">Reject</span>
+                            <a class="text-decoration-none" href="{% url 'admin_dashboard:reject_user' rtg_user.id %}">
+                                <span class="payment_btn2 mx-1" id="table_BTN2">Reject</span>
                             </a>
                         </div>
                     </td>
-
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-
 </div>
+
+<!-- Modal Structure -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Garden Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img id="modalImage" src="" alt="Garden Image" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setImageSrc(src) {
+        document.getElementById('modalImage').src = src;
+    }
+</script>
+
 {% endblock content %}

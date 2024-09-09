@@ -86,60 +86,78 @@
     .winner .user-coins {
         color: #343a40;
     }
-
+    #city_cards{
+        height: 18rem;
+        overflow-y: auto;
+    }
+    #city_header{
+        color: black;
+    }
+    ol li{
+        
+        font-size: 12px;
+    }
 </style>
 <div class="container-fluid">
-    <h2 class="my-4">{{ city_name }} - Detailed Information</h2>
+    <h2 class="my-4" id="city_header" >{{ city_name }} - Detailed Information</h2>
     
     <!-- Card Section -->
-    <div class="row">
+    <div class="row mb-5">
         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <h4 class="card-title">RTG Users</h4>
-                    <ul class="list-group">
+            <div class="card  city_cards shadow " id="city_cards">
+                <div class="card-header ">
+                    <h5 class="">RTG Users</h5>
+                </div>
+                <div class="card-body ">
+                   
+                    <ol class="list-group">
                         {% for rtg in rtgs %}
-                        <li class="list-group-item">
-                            <strong>{{ rtg.username }}</strong> - {{ rtg.email }}
+                        <li class="">
+                            <strong>{{ rtg.username }}</strong>  {{ rtg.email }}
                         </li>
                         {% empty %}
-                        <li class="list-group-item">No RTG users found.</li>
+                        <li class="">No RTG users found.</li>
                         {% endfor %}
-                    </ul>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <h4 class="card-title">Vendors</h4>
-                    <ul class="list-group">
+            <div class="card  city_cards shadow " id="city_cards">
+                <div class="card-header ">
+                    <h5 class="">RTG Users</h5>
+                </div>
+                <div class="card-body ">
+                   
+                    <ol class="list-group">
                         {% for vendor in vendors %}
-                        <li class="list-group-item">
+                        <li class="">
                             <strong>{{ vendor.username }}</strong> - {{ vendor.email }}
                         </li>
                         {% empty %}
-                        <li class="list-group-item">No vendors found.</li>
+                        <li class="">No vendors found.</li>
                         {% endfor %}
-                    </ul>
+                    </ol>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                    <h4 class="card-title">Service Providers</h4>
-                    <ul class="list-group">
+            <div class="card  city_cards shadow " id="city_cards">
+                <div class="card-header ">
+                    <h5 class="">RTG Users</h5>
+                </div>
+                <div class="card-body ">
+                   
+                    <ol class="list-group">
                         {% for service_provider in service_providers %}
-                        <li class="list-group-item">
+                        <li class="">
                             <strong>{{ service_provider.username }}</strong> - {{ service_provider.email }}
                         </li>
                         {% empty %}
-                        <li class="list-group-item">No service providers found.</li>
+                        <li class="">No service providers found.</li>
                         {% endfor %}
-                    </ul>
+                    </ol>
                 </div>
             </div>
         </div>
@@ -155,7 +173,7 @@
                 </div>
             </div>
         </div> -->
-        <div class="col-lg-6 mb-4">
+        <div class="col-lg-6 mb-5">
             <div class="card shadow py-2">
                 <div class="card-body">
                     <canvas id="myUsersChart"></canvas>
@@ -163,28 +181,36 @@
             </div>
         </div>
 
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow h-100 py-2">
+        <div class="col-lg-6 mb-5">
+            <div class="card shadow h-100 ">
+                <div class="card-header">
+                    <h5 class="card-title">Activity Chart</h5>
+                </div>
                 <div class="card-body">
-                    <h4 class="card-title">Activity Chart</h4>
+                    
                     <canvas id="activityChart"></canvas>
                 </div>
             </div>
         </div>
         
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow h-100 py-2">
+        <div class="col-lg-6 mb-5">
+            <div class="card shadow h-100 ">
+                <div class="card-header">
+                    <h5 class="card-title">RTG & Vendor Community Sales Chart</h5>
+                </div>
                 <div class="card-body">
-                    <h4 class="card-title">RTG and Vendor Community Sales Chart</h4>
                     <canvas id="rtgvendorSalesChart"></canvas>
                 </div>
             </div>
         </div>
         
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow h-100 py-2">
+        <div class="col-lg-6 mb-5">
+            <div class="card shadow h-100 ">
+                <div class="card-header">
+                    <h5 class="card-title">Vendor Sales Chart</h5>
+                </div>
                 <div class="card-body">
-                    <h4 class="card-title">Vendor Sales Chart</h4>
+                    
                     <canvas id="vendorSalesChart"></canvas>
                 </div>
             </div>

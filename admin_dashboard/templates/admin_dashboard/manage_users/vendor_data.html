@@ -15,7 +15,7 @@
                         <option value="contact">Contact</option>
                     </select>
     
-                    <input type="text" style="height: 49px;" class="form-control" placeholder="Enter Query" name="query" required/>
+                    <input type="text"  class="form-control" placeholder="Enter Query" name="query" required/>
     
                     <button class="btn qry-sub" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
@@ -40,21 +40,21 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ vendor_data.business_name }}</td>
-                        <td>{{ vendor_data.business_address }}</td>
-                        <td>
+                        <td id="t_daTa">{{ vendor_data.business_name }}</td>
+                        <td id="t_daTa">{{ vendor_data.business_address }}</td>
+                        <td id="t_daTa">
                             {{ vendor_data.business_license_number }}
                         </td>
-                        <td>
+                        <td id="t_daTa">
                             {{ vendor_data.business_category }}
                         </td>
-                        <td>
+                        <td id="t_daTa">
                             {{ vendor_data.establishment_year }}
                         </td>
-                        <td>
+                        <td id="t_daTa">
                             <a href="{{vendor_data.website}}">{{vendor_data.website}}</a>
                         </td>
-                        <td>
+                        <td id="t_daTa" >
                             {{vendor_data.established_by}}
                         </td>
                     </tr>
