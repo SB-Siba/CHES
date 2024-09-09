@@ -11,6 +11,7 @@ from django.db.models import Sum
 from django.db.models.functions import TruncMonth
 from django.utils import timezone
 from Blogs.models import Blogs
+from django.db.models.functions import Coalesce
 
 app = "admin_dashboard/"
 
@@ -101,8 +102,8 @@ class AdminDashboard(View):
 
         top_users_by_coins = common_models.User.objects.filter(coins__gt=0).order_by('-coins')[:10]
         positions = [
-            'winner', 'first_runner_up', 'second_runner_up', 'third', 'fourth',
-            'fifth', 'sixth', 'seventh', 'eighth', 'ninth'
+            'winner', 'first_runner_up', 'second_runner_up','fourth',
+            'fifth', 'sixth', 'seventh', 'eighth', 'ninth','tenth'
         ]
 
         leaderboard = {
@@ -110,6 +111,34 @@ class AdminDashboard(View):
             for i, position in enumerate(positions)
         }
 
+         # Aggregate total green points used in purchases from ProduceBuy
+        total_green_points_buy = common_models.ProduceBuy.objects.aggregate(
+            total_green_points_buy=Coalesce(Sum('ammount_based_on_quantity_buyer_want'), 0)
+        )
+        # Multiply the aggregated value by 2 to get the desired turnover value
+        total_green_points_buy_value = total_green_points_buy['total_green_points_buy'] * 2
+
+        # Calculate total green coins from Orders
+        total_green_coins_orders = 0
+        orders = common_models.Order.objects.all()
+        
+        for order in orders:
+            order_meta_data = order.order_meta_data
+            if order_meta_data and 'products' in order_meta_data:
+                products = order_meta_data['products']
+                for product_id, product_data in products.items():
+                    if 'coinexchange' in product_data:
+                        if product_data['coinexchange'] != None:
+                            total_green_coins_orders += float(product_data['coinexchange'])
+                        else:
+                            total_green_coins_orders += 0
+        # Calculate the overall total green coins turnover
+        total_green_coins_turnover = (
+            total_green_points_buy_value +
+            (total_green_coins_orders*2)
+        )
+
+      
         context = {
             'not_approvedlist': not_approvedlist,
             'not_approvedlist_rtg': not_approvedlist_rtg,
@@ -147,6 +176,7 @@ class AdminDashboard(View):
             'activity_data':activity_data,
             'activity_label':activity_label,
             'leaderboard':leaderboard,
+            "total_green_coins_turnover":total_green_coins_turnover,
         }
 
         return render(request, self.template, context)
@@ -234,6 +264,17 @@ class CityDetailView(View):
             labels = ['RTGs', 'Vendors', 'Service Providers']
             chart_data = [rtgs.count(), vendors.count(), service_providers.count()]
 
+            top_rtgs_and_vendors_coins = common_models.User.objects.filter(Q(is_rtg=True) | Q(is_vendor=True)).exclude(city__in=default_cities).order_by('-coins')[:10]
+            positions = [
+                'winner', 'first_runner_up', 'second_runner_up','fourth',
+                'fifth', 'sixth', 'seventh', 'eighth', 'ninth','tenth'
+            ]
+
+            leaderboard = {
+                position: top_rtgs_and_vendors_coins[i] if i < len(top_rtgs_and_vendors_coins) else None
+                for i, position in enumerate(positions)
+            }
+
         else:
             # For specific cities, use the city_name
             rtgs = common_models.User.objects.filter(is_rtg=True, city=city_name)
@@ -309,6 +350,20 @@ class CityDetailView(View):
             print(graph_data)
             labels = ['RTGs', 'Vendors', 'Service Providers']
             chart_data = [rtgs.count(), vendors.count(), service_providers.count()]
+
+            top_rtgs_and_vendors_coins = common_models.User.objects.filter(
+                Q(is_rtg=True) | Q(is_vendor=True),
+                city=city_name
+            ).order_by('-coins')[:10]
+            positions = [
+                'winner', 'first_runner_up', 'second_runner_up','fourth',
+                'fifth', 'sixth', 'seventh', 'eighth', 'ninth','tenth'
+            ]
+
+            leaderboard = {
+                position: top_rtgs_and_vendors_coins[i] if i < len(top_rtgs_and_vendors_coins) else None
+                for i, position in enumerate(positions)
+            }
         # Pass data to template
         context = {
             'city_name': city_name,
@@ -318,6 +373,7 @@ class CityDetailView(View):
             'total_users': total_users,
             'graph_data': graph_data,
             'labels': labels,
-            'chart_data': chart_data
+            'chart_data': chart_data,
+            'leaderboard': leaderboard
         }
         return render(request, self.template_name, context)
