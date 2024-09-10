@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from app_common import models as common_models
+from app_common.error import render_error_page
 from . forms import ServiceProviderUpdateForm,ServiceAddForm
 from user_dashboard.serializers import OrderSerializer
 from user_dashboard.forms import ActivityAddForm, BuyAmmountForm,SellProduceForm,BuyQuantityForm
@@ -21,177 +22,226 @@ class ServiceProviderDashboard(View):
     template = app + "home.html"
 
     def get(self, request):
-        user = request.user 
-        return render(request, self.template)
-    
+        try:
+            user = request.user
+            return render(request, self.template)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
 class ServiceProviderProfile(View):
     template = app + "service_provider_profile.html"
 
     def get(self, request):
-        user = request.user 
-        service_provider_obj = get_object_or_404(common_models.ServiceProviderDetails,provider = user)
-        context = {
-            "service_provider_obj":service_provider_obj,
-        }
-        return render(request, self.template, context)
-    
+        try:
+            user = request.user
+            service_provider_obj = common_models.ServiceProviderDetails.objects.filter(provider=user).first()
+            context = {
+                "service_provider_obj": service_provider_obj,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
 class ServiceProviderUpdateProfileView(View):
     template_name = app + "service_provider_update_profile.html"
     form_class = ServiceProviderUpdateForm
     model = common_models.ServiceProviderDetails
 
     def get(self, request):
-        service_provider_details = get_object_or_404(self.model, provider=request.user)
+        try:
+            service_provider_details = self.model.objects.filter(provider=request.user).first()
 
-        # Convert string representation of lists to actual lists
-        existing_service_types = ast.literal_eval(service_provider_details.service_type)
-        existing_service_areas = ast.literal_eval(service_provider_details.service_area)
-        
-        initial_data = {
-            'service_type': existing_service_types,
-            'service_area': existing_service_areas,
-            'average_cost_per_hour': service_provider_details.average_cost_per_hour,
-            'years_experience': service_provider_details.years_experience,
-        }
-        form = self.form_class(initial=initial_data, 
-                               existing_service_types=existing_service_types, 
-                               existing_service_areas=existing_service_areas)
-        return render(request, self.template_name, {'form': form})
+            # Convert string representation of lists to actual lists
+            existing_service_types = ast.literal_eval(service_provider_details.service_type)
+            existing_service_areas = ast.literal_eval(service_provider_details.service_area)
+            
+            initial_data = {
+                'service_type': existing_service_types,
+                'service_area': existing_service_areas,
+                'average_cost_per_hour': service_provider_details.average_cost_per_hour,
+                'years_experience': service_provider_details.years_experience,
+            }
+            form = self.form_class(initial=initial_data, 
+                                   existing_service_types=existing_service_types, 
+                                   existing_service_areas=existing_service_areas)
+            return render(request, self.template_name, {'form': form})
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
 
     def post(self, request):
-        service_provider_details = get_object_or_404(self.model, provider=request.user)
-        form = self.form_class(request.POST, request.FILES,
-                               existing_service_types=ast.literal_eval(service_provider_details.service_type),
-                               existing_service_areas=ast.literal_eval(service_provider_details.service_area))
-        if form.is_valid():
-            service_type = form.cleaned_data['service_type']
-            service_area = form.cleaned_data['service_area']
+        try:
+            service_provider_details = get_object_or_404(self.model, provider=request.user)
+            form = self.form_class(request.POST, request.FILES,
+                                   existing_service_types=ast.literal_eval(service_provider_details.service_type),
+                                   existing_service_areas=ast.literal_eval(service_provider_details.service_area))
+            if form.is_valid():
+                service_type = form.cleaned_data['service_type']
+                service_area = form.cleaned_data['service_area']
 
-            # Handle additional service types
-            additional_service_type = form.cleaned_data['add_service_type']
-            if additional_service_type:
-                additional_service_types = [s.strip() for s in additional_service_type.split(',')]
-                service_type.extend(additional_service_types)
+                # Handle additional service types
+                additional_service_type = form.cleaned_data['add_service_type']
+                if additional_service_type:
+                    additional_service_types = [s.strip() for s in additional_service_type.split(',')]
+                    service_type.extend(additional_service_types)
 
-            # Handle additional service areas
-            additional_service_area = form.cleaned_data['add_service_area']
-            if additional_service_area:
-                additional_service_areas = [a.strip() for a in additional_service_area.split(',')]
-                service_area.extend(additional_service_areas)
+                # Handle additional service areas
+                additional_service_area = form.cleaned_data['add_service_area']
+                if additional_service_area:
+                    additional_service_areas = [a.strip() for a in additional_service_area.split(',')]
+                    service_area.extend(additional_service_areas)
 
-            average_cost_per_hour = form.cleaned_data['average_cost_per_hour']
-            years_experience = form.cleaned_data['years_experience']
-            
-            service_provider_details.service_type = service_type
-            service_provider_details.service_area = service_area
-            service_provider_details.average_cost_per_hour = average_cost_per_hour
-            service_provider_details.years_experience = years_experience
-            
-            # Update user object if needed
-            user_obj = get_object_or_404(common_models.User, id=service_provider_details.provider.id)
-            if 'image' in request.FILES:
-                user_obj.user_image = request.FILES['image']
-            user_obj.save()
-            service_provider_details.save()
-            messages.success(request, "Your profile has been updated successfully.")
-            return redirect('service_provider:service_provider_profile')
-        else:
-            messages.error(request, "Please correct the errors below.")
-        
+                average_cost_per_hour = form.cleaned_data['average_cost_per_hour']
+                years_experience = form.cleaned_data['years_experience']
+                
+                service_provider_details.service_type = service_type
+                service_provider_details.service_area = service_area
+                service_provider_details.average_cost_per_hour = average_cost_per_hour
+                service_provider_details.years_experience = years_experience
+                
+                # Update user object if needed
+                user_obj = get_object_or_404(common_models.User, id=service_provider_details.provider.id)
+                if 'image' in request.FILES:
+                    user_obj.user_image = request.FILES['image']
+                user_obj.save()
+                service_provider_details.save()
+                messages.success(request, "Your profile has been updated successfully.")
+                return redirect('service_provider:service_provider_profile')
+            else:
+                messages.error(request, "Please correct the errors below.")
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
         return render(request, self.template_name, {'form': form})
-
 
 class ServiceList(View):
     model = common_models.Service
     form_class = ServiceAddForm
     template = app + "service_list.html"
 
-    def get(self,request):
-        service_list = self.model.objects.filter(provider = request.user).order_by('-id')
-        form = self.form_class(initial={'provider': request.user})
-        context = {
-            "form": form,
-            "service_list":service_list,
-        }
-        return render(request, self.template, context)
-    
+    def get(self, request):
+        try:
+            service_list = self.model.objects.filter(provider=request.user).order_by('-id')
+            form = self.form_class(initial={'provider': request.user})
+            context = {
+                "form": form,
+                "service_list": service_list,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
     def post(self, request):
-        form = self.form_class(request.POST)
-        print("hii")
-        service_type = request.POST.get("service_type")
-        name = request.POST.get("name")
-        description = request.POST.get("description")
-        price_per_hour = request.POST.get("price_per_hour")
+        try:
+            form = self.form_class(request.POST)
+            service_type = request.POST.get("service_type")
+            name = request.POST.get("name")
+            description = request.POST.get("description")
+            price_per_hour = request.POST.get("price_per_hour")
 
-        print(name,description,price_per_hour,service_type)
-        service = self.model(provider=request.user, name=name, description=description, price_per_hour=price_per_hour,service_type = service_type)
-        service.save()
-        messages.success(request, f"{request.POST['name']} is added to service list.....")
-
-        return redirect("service_provider:service_list")
+            service = self.model(provider=request.user, name=name, description=description, price_per_hour=price_per_hour, service_type=service_type)
+            service.save()
+            messages.success(request, f"{request.POST['name']} is added to the service list.")
+            return redirect("service_provider:service_list")
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
 
 class ServiceUpdate(View):
     model = common_models.Service
     form_class = ServiceAddForm
     template = app + "service_update.html"
 
-    def get(self,request, service_id):
-        service = self.model.objects.get(id = service_id)
-        context = {
-            "form": self.form_class(instance=service),
-        }
-        return render(request, self.template, context)
-    
+    def get(self, request, service_id):
+        try:
+            service = self.model.objects.get(id=service_id)
+            context = {
+                "form": self.form_class(instance=service),
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
     def post(self, request, service_id):
-        service = self.model.objects.get(id= service_id)
-        form = self.form_class(request.POST, request.FILES ,instance= service)
-        if form.is_valid():
-            form.save()
-            messages.success(request, f"{request.POST['name']} is updated successfully.....")
-            return redirect("service_provider:service_list")
-        else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f'{field}: {error}')
+        try:
+            service = self.model.objects.get(id=service_id)
+            form = self.form_class(request.POST, request.FILES, instance=service)
+            if form.is_valid():
+                form.save()
+                messages.success(request, f"{request.POST['name']} is updated successfully.")
+                return redirect("service_provider:service_list")
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, f'{field}: {error}')
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
 
-        return redirect("service_provider:service_update", service_id = service_id)
-
+        return redirect("service_provider:service_update", service_id=service_id)
 
 class ServiceDelete(View):
     model = common_models.Service
 
-    def get(self,request, service_id):
-        service = self.model.objects.get(id= service_id).delete()
-        messages.info(request, "Service is deleted successfully....")
-        return redirect("service_provider:service_list")
-    
+    def get(self, request, service_id):
+        try:
+            service = self.model.objects.get(id=service_id)
+            service.delete()
+            messages.info(request, "Service is deleted successfully.")
+            return redirect("service_provider:service_list")
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
 class MyServiceBookings(View):
     model = common_models.Booking
     template = app + "my_service_bookings.html"
-    def get(self,request):
-        bookings = self.model.objects.filter(service__provider=request.user)
-        context = {
-            "bookings": bookings,
+
+    def get(self, request):
+        try:
+            bookings = self.model.objects.filter(service__provider=request.user)
+            context = {
+                "bookings": bookings,
             }
-        return render(request, self.template, context)
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
 
 def confirm_booking(request, booking_id):
-    booking = get_object_or_404(common_models.Booking, id=booking_id)
-    if request.user == booking.service.provider:
-        booking.status = 'confirmed'
-        booking.save()
+    try:
+        booking = get_object_or_404(common_models.Booking, id=booking_id)
+        if request.user == booking.service.provider:
+            booking.status = 'confirmed'
+            booking.save()
+    except Exception as e:
+        error_message = f"An unexpected error occurred: {str(e)}"
+        return render_error_page(request, error_message, status_code=400)
     return redirect('service_provider:my_all_bookings')
 
 def decline_booking(request, booking_id):
-    booking = get_object_or_404(common_models.Booking, id=booking_id)
-    if request.user == booking.service.provider:
-        booking.status = 'declined'
-        booking.save()
+    try:
+        booking = get_object_or_404(common_models.Booking, id=booking_id)
+        if request.user == booking.service.provider:
+            booking.status = 'declined'
+            booking.save()
+    except Exception as e:
+        error_message = f"An unexpected error occurred: {str(e)}"
+        return render_error_page(request, error_message, status_code=400)
     return redirect('service_provider:my_all_bookings')
 
 def mark_as_complete_booking(request, booking_id):
-    booking = get_object_or_404(common_models.Booking, id=booking_id)
-    if request.user == booking.service.provider:
-        booking.status = 'completed'
-        booking.save()
+    try:
+        booking = get_object_or_404(common_models.Booking, id=booking_id)
+        if request.user == booking.service.provider:
+            booking.status = 'completed'
+            booking.save()
+    except Exception as e:
+        error_message = f"An unexpected error occurred: {str(e)}"
+        return render_error_page(request, error_message, status_code=400)
     return redirect('service_provider:my_all_bookings')

@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.views import View
 
 from EmailIntigration.views import send_template_email
+from app_common.error import render_error_page
 from .forms import ServiceProviderRegistrationForm
 from app_common.models import User, ServiceProviderDetails
 
@@ -61,7 +62,8 @@ class ServiceProviderRegistration(View):
                 )
                 user.set_password(password)
                 user.save()
-                # Save sp data
+
+                # Save service provider details
                 service_provider_detail_obj = ServiceProviderDetails.objects.create(
                     provider=user,
                     service_type=service_type,
@@ -69,20 +71,24 @@ class ServiceProviderRegistration(View):
                     average_cost_per_hour=average_cost_per_hour,
                     years_experience=years_experience,
                 )
+
+                # Send registration email
                 send_template_email(
                     subject="Registration Successful",
                     template_name="mail_template/registration_mail.html",
                     context={'full_name': full_name, "email": email},
                     recipient_list=[email]
                 )
+
                 # Redirect to a success page
                 return redirect('admin_dashboard:serviceproviders_list')
+
             else:
                 print(form.errors)
+
         except Exception as e:
-            print(e)
-        
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
         # If form is not valid, render the template with the form (including errors)
         return render(request, self.template_name, {'form': form})
-            
-    
