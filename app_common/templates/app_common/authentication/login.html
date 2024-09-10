@@ -70,7 +70,7 @@
                             {% include 'app_common/snippets/alert.html' %}
                             {% csrf_token %}
                             {{ form.as_p }}
-                            <p class="forget_para  mb-0" >Forgot Password <a href="{% url 'app_common:password-reset' %}" style="text-decoration: none;"><b>Forgot ??</b></a></p>
+                            <p class="forget_para  mb-0" >Forgot Password <a href="{% url 'app_common:forgot_password' %}" style="text-decoration: none;"><b>Forgot ??</b></a></p>
                             <div class="text-center mt-0 ">
                                 <button class="log_btn" type="submit">Login</button>
                             </div>

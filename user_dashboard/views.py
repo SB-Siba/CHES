@@ -26,14 +26,6 @@ class UserDashboard(View):
 
     def get(self, request):
         user = request.user
-        # Deleting Expire Produce
-        try:
-            sell_produce_obj  = app_commonmodels.SellProduce.objects.all()
-            for i in sell_produce_obj:
-                if i.days_left_to_expire <= 0:
-                    i.delete()
-        except Exception:
-            pass
         users_orderby_coins = app_commonmodels.User.objects.filter(
             Q(is_rtg=True) | Q(is_vendor=True),
             is_approved=True,
@@ -377,6 +369,9 @@ class GreenCommerceProductCommunity(View):
     form = user_form.BuyQuantityForm
 
     def get(self,request):
+        # Deleting Expired Produce
+        self.model.objects.filter(days_left_to_expire__lte=0).delete()
+       
         produce_obj = self.model.objects.exclude(user=request.user).filter(is_approved="approved").order_by("-date_time")
         ratings_list = [i.user.calculate_avg_rating() for i in produce_obj]
         message_status = []

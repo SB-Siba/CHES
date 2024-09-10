@@ -143,6 +143,9 @@ STATIC_ROOT = os.path.join(str(BASE_DIR), 'staticfiles/')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+
+SITE_URL = 'http://127.0.0.1:8000/app_common'
+
 # more settings 
 GST_CHARGE = 0.015
 DELIVARY_CHARGE_PER_BAG = 30
