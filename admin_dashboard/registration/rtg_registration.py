@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.views import View
 
 from EmailIntigration.views import send_template_email
+from app_common.error import render_error_page
 from .forms import RtgRegistrationForm
 from app_common.models import User, GardeningProfile, GaredenQuizModel
 
@@ -51,6 +52,7 @@ class RtgRegistration(View):
                 )
                 user.set_password(password)
                 user.save()
+
                 # Save gardening data
                 gardening_data = GardeningProfile.objects.create(
                     user=user,
@@ -59,20 +61,24 @@ class RtgRegistration(View):
                     number_of_unique_plants=number_of_unique_plants,
                     garden_image=garden_image,
                 )
+
+                # Send registration email
                 send_template_email(
                     subject="Registration Successful",
                     template_name="mail_template/registration_mail.html",
                     context={'full_name': full_name, "email": email},
                     recipient_list=[email]
                 )
+
                 # Redirect to a success page
                 return redirect('admin_dashboard:RTgardeners_list')
+
             else:
                 print(form.errors)
+                
         except Exception as e:
-            print(e)
-        
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
         # If form is not valid, render the template with the form (including errors)
         return render(request, self.template_name, {'form': form})
-            
-    
