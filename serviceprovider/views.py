@@ -51,7 +51,7 @@ class ServiceProviderUpdateProfileView(View):
 
     def get(self, request):
         try:
-            service_provider_details = get_object_or_404(self.model, provider=request.user)
+            service_provider_details = self.model.objects.filter(provider=request.user).first()
 
             # Convert string representation of lists to actual lists
             existing_service_types = ast.literal_eval(service_provider_details.service_type)
