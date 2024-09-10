@@ -29,14 +29,6 @@ class VendorDashboard(View):
         user = request.user 
         vendors = common_models.User.objects.filter(is_vendor=True)[:5]
         valid_order_statuses = ["Placed", "Accepted", "On_Way", "Delivered"]
-        # Deleting Expire Produce
-        try:
-            sell_produce_obj  = common_models.SellProduce.objects.all()
-            for i in sell_produce_obj:
-                if i.days_left_to_expire <= 0:
-                    i.delete()
-        except Exception:
-            pass
 
         def calculate_earnings(vendor, start_date, end_date):
             orders = common_models.Order.objects.filter(
@@ -545,6 +537,9 @@ class GreenCommerceProductCommunity(View):
     form = BuyQuantityForm
 
     def get(self,request):
+        # Deleting Expired Produce
+        self.model.objects.filter(days_left_to_expire__lte=0).delete()
+
         produce_obj = self.model.objects.exclude(user=request.user).filter(is_approved="approved").order_by("-date_time")
         ratings_list = [i.user.calculate_avg_rating() for i in produce_obj]
         message_status = []

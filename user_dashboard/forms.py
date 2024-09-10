@@ -52,12 +52,6 @@ class UpdateProfileForm(forms.Form):
         ),
         required=False,
     )
-    youtube_link = forms.URLField(
-        widget=forms.URLInput(
-            attrs={"class": "form-control", "placeholder": "Youtube Link"}
-        ),
-        required=False,
-    )
 
     address = forms.CharField(
         widget=forms.Textarea(

@@ -40,26 +40,45 @@
             <p class="">{{user.city}}</p>
 
             <div class="mb-4 pb-2 d-flex justify-content-center">
-              <a href="{{user.facebook_link}} m-2">
-                <button type="button" class=" social_btn">
-                  <i class="fab fa-facebook-f "></i>
-                </button>
-              </a>
-              <a href="{{user.instagram_link}}">
-                <button type="button" class=" social_btn">
-                  <i class="fab fa-instagram "></i>
-                </button>
-              </a>
-              <a href="{{user.twitter_link}}">
-                <button type="button" class=" social_btn">
-                  <i class="fab fa-twitter "></i>
-                </button>
-              </a>
-              <a href="{{user.youtube_link}}">
-                <button type="button" class=" social_btn">
-                  <i class="fab fa-youtube fa-lg"></i> <!-- YouTube -->
-                </button>
-              </a>
+              {% if user.facebook_link %}
+                <a href="{{user.facebook_link}}">
+                  <button type="button" class=" social_btn">
+                    <i class="fab fa-facebook-f "></i>
+                  </button>
+                </a>
+              {% else %}
+                <a href="">
+                  <button type="button" class=" social_btn">
+                    <i class="fab fa-facebook-f "></i>
+                  </button>
+                </a>
+              {% endif %}
+              {% if user.instagram_link %}
+                <a href="{{user.instagram_link}}">
+                  <button type="button" class=" social_btn">
+                    <i class="fab fa-instagram "></i>
+                  </button>
+                </a>
+              {% else %}
+                <a href="">
+                  <button type="button" class=" social_btn">
+                    <i class="fab fa-instagram "></i>
+                  </button>
+                </a>
+              {% endif %}
+              {% if user.twitter_link %}
+                <a href="{{user.twitter_link}}">
+                  <button type="button" class=" social_btn">
+                    <i class="fab fa-twitter "></i>
+                  </button>
+                </a>
+              {% else %}
+                <a href="">
+                  <button type="button" class=" social_btn">
+                    <i class="fab fa-twitter "></i>
+                  </button>
+                </a>
+              {% endif %}
             </div>
 
 

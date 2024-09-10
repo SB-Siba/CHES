@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.hashers import make_password
@@ -40,6 +41,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     instagram_link = models.URLField(null=True,blank=True, max_length=2048)
     twitter_link = models.URLField(null=True,blank=True, max_length=2048)
     youtube_link = models.URLField(null=True,blank=True, max_length=2048)
+
+    token = models.CharField(max_length=100, null=True, blank=True)
 
     # we are storing some extra data in the meta data field
     meta_data = models.JSONField(default= dict, null=True, blank = True)
@@ -95,6 +98,20 @@ class User(AbstractBaseUser, PermissionsMixin):
 
         return avg_rating
 
+    def generate_reset_password_token(self):
+        token = str(uuid.uuid4())
+        self.token = token
+        self.save()
+        return token
+
+    def reset_password(self, token, new_password):
+        if self.token == token:
+            self.set_password(new_password)
+            self.token = None  # Clear the token after password reset
+            self.save()
+            return True
+        return False
+    
 class GaredenQuizModel(models.Model):
     user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)
     questionANDanswer = models.JSONField(null= False, blank= False) 
