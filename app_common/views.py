@@ -290,13 +290,21 @@ class VendorDetails(View):
         if form.is_valid():
             try:
                 user_obj = models.User.objects.get(email=u_email)
+                # Extract the category and check if it's 'Other'
+                business_category = form.cleaned_data['business_category']
+                custom_business_category = form.cleaned_data.get('custom_business_category', '')
+
+                # Use custom_business_category if 'Other' is selected
+                if business_category == 'other' and custom_business_category:
+                    business_category = custom_business_category
+
                 vendor_detail_obj = self.model(
                     vendor=user_obj,
                     business_name=form.cleaned_data['business_name'],
                     business_address=form.cleaned_data['business_address'],
                     business_description=form.cleaned_data['business_description'],
                     business_license_number=form.cleaned_data['business_license_number'],
-                    business_category=form.cleaned_data['business_category'],
+                    business_category=business_category,
                     establishment_year=form.cleaned_data['establishment_year'],
                     website=form.cleaned_data['website'],
                     established_by=form.cleaned_data['established_by']

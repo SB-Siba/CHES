@@ -239,18 +239,12 @@ class ProduceBuy(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
 
 class VendorDetails(models.Model):
-    BUSINESS_CATEGORIES = (
-        ('plants', 'Plants'),
-        ('tools', 'Tools'),
-        ('seeds', 'Seeds'),
-        ('other', 'Other'),
-    )
     vendor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='vendor_details')
     business_name = models.CharField(max_length=255)
     business_address = models.CharField(max_length=255)
     business_description = models.TextField()
     business_license_number = models.CharField(max_length=50)
-    business_category = models.CharField(max_length=20, choices=BUSINESS_CATEGORIES)
+    business_category = models.CharField(max_length=20, null=True,blank=True)
     establishment_year = models.PositiveIntegerField()
     website = models.URLField(blank=True)
     established_by = models.CharField(max_length=100, blank=True)

@@ -29,7 +29,18 @@ urlpatterns = [
     path('manage_users/users_gardening_data/<int:pk>',users.UserGardeningDetails.as_view(), name= 'gardening_details'),
     path('manage_users/vendor_data/<int:pk>',users.VendorDetails.as_view(), name= 'vendor_details'),
     path('manage_users/service_provider_data/<int:pk>',users.ServiceProviderDetails.as_view(), name= 'service_providor_details'),
-    path('manage_users/search_user',users.SearchUser.as_view(), name= 'search_user'),
+    path('manage_users/search_user/rtg',users.RtgSearchUser.as_view(), name= 'search_user_rtg'),
+    path('manage_users/search_user/vendor',users.VendorSearchUser.as_view(), name= 'search_user_vendor'),
+    path('manage_users/search_user/sp',users.SpSearchUser.as_view(), name= 'search_user_sp'),
+
+    path('manage_users/search_user/rtg/pending',users.PendingRtgSearch.as_view(), name= 'search_user_rtg_pending'),
+    path('manage_users/search_user/vendor/pending',users.PendingVendorSearch.as_view(), name= 'search_user_vendor_pending'),
+    path('manage_users/search_user/sp/pending',users.PendingSpSearch.as_view(), name= 'search_user_sp_pending'),
+
+    path('manage_users/search_g_p_update_request',users.SearchGardeningProfileUpdateRequest.as_view(), name= 'search_gardening_profile_update_request'),
+    path('manage_users/search_activity_request',users.SearchUsersActivityRequest.as_view(), name= 'search_activity_request'),
+    path('manage_users/search_sell_produce_request',users.SearchProduceSellRequest.as_view(), name= 'search_produce_sell_request'),
+
     path('manage_users/rtg/add_wallet_balance',users.RtgWalletBalanceAdd.as_view(), name= 'rtg_add_wallet_balance'),
     path('manage_users/vendor/add_wallet_balance',users.VendorWalletBalanceAdd.as_view(), name= 'vendor_add_wallet_balance'),
     path('gardeningprofileupdaterequest',users.UserGardeningProfileUpdateRequest.as_view(), name= 'gardeningprofileupdaterequest'),

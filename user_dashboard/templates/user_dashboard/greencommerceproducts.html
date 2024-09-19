@@ -100,11 +100,6 @@
                                                       <i class="fab fa-twitter fa-lg"></i>
                                                     </button>
                                                   </a>
-                                                  <a href="{{prod.user.youtube_link}}">
-                                                    <button type="button" class="btn btn-outline-primary btn-floating">
-                                                      <i class="fab fa-youtube fa-lg"></i> <!-- YouTube -->
-                                                    </button>
-                                                  </a>
                                               </div>
                                           </div>
                                       </div>
@@ -234,14 +229,6 @@
                                   <i class="fab fa-twitter fa-lg"></i>
                                 </button>
                               </a>
-                              <a href="{{prod.user.youtube_link}}">
-                                <button
-                                  type="button"
-                                  class="btn btn-outline-danger btn-floating">
-                                  <i class="fab fa-youtube fa-lg"></i>
-                                  <!-- YouTube -->
-                                </button>
-                              </a>
                             </div>
                           </div>
                         </div>
@@ -334,7 +321,8 @@
     </div>
   </div>
 </div>
-{% endblock content %} {% block scripts %}
+{% endblock content %} 
+{% block scripts %}
 <script>
   function setProductId(productId) {
     document.getElementById("modalForm").action =

@@ -46,7 +46,7 @@ display: flex;
             <div class="col-md-5   img_body" >
                 {% if garden_profile_obj.user.user_image %}
                 <div class="profile-img ">
-                    <img src="{{garden_profile_obj.user.user_image.url}}" alt="" />
+                    <img src="{{garden_profile_obj.garden_image.url}}" alt="" />
                 </div>
                 {% else %}
                 <div class="profile-img ">

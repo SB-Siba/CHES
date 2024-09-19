@@ -13,7 +13,7 @@
                 </a>
                 {% if not m_status %}
                     <ul class="product-links">
-                        <li><a href="{% url 'chat:startmessages' prod.user.id prod.id %}" data-tip="message"><i class="fas fa-sms"></i></a></li>
+                        <li><a href="{% url 'chat:startmessages' prod.user.id prod.product_name %}" data-tip="message"><i class="fas fa-sms"></i></a></li>
                     </ul>
                 {% endif %}
             </div>

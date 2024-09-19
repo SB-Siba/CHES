@@ -24,17 +24,78 @@ label
 }
 </style>
 <div class="container my-5">
-    <div class="row d-flex align-items-center justify-content-center">
-      <div class="col-lg-6 sell_wrapper">
+  <div class="row d-flex align-items-center justify-content-center">
+    <div class="col-lg-6 sell_wrapper">
+      <div class="login">
         <form method="post" action="" class="p-4 px-4 update-form" enctype="multipart/form-data">
           {% include 'app_common/snippets/alert.html' %}
           {% csrf_token %}
-          {{form.as_p}}
-          <button type="submit" class="btn py-2 w-100" id="editb">
-              Update Profile
-          </button>
-      </form>
+          <div class="form-group">
+              <label for="id_business_name">Business Name:</label>
+              {{ form.business_name }}
+          </div>
+          <div class="form-group">
+              <label for="id_business_address">Business Address:</label>
+              {{ form.business_address }}
+          </div>
+          <div class="form-group">
+              <label for="id_business_description">Business Description:</label>
+              {{ form.business_description }}
+          </div>
+          <div class="form-group">
+              <label for="id_business_license_number">Business License Number:</label>
+              {{ form.business_license_number }}
+          </div>
+          <div class="form-group">
+              <label for="id_business_category">Business Category:</label>
+              {{ form.business_category }}
+          </div>
+          <div class="form-group" id="additional-category" style="display: none;">
+              {{ form.custom_business_category.label_tag }}
+              {{ form.custom_business_category }}
+          </div>
+          <div class="form-group">
+              <label for="id_establishment_year">Establishment Year:</label>
+              {{ form.establishment_year }}
+          </div>
+          <div class="form-group">
+              <label for="id_website">Website:</label>
+              {{ form.website }}
+          </div>
+          <div class="form-group">
+              <label for="id_established_by">Established By:</label>
+              {{ form.established_by }}
+          </div>
+          <div class="form-group">
+            <label for="id_image">Profile Image:</label>
+            {{ form.image }}
+        </div>
+          <button type="submit" class="btn py-2 w-100" id="editb">Update Profile</button>
+        </form>
       </div>
     </div>
   </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const categoryField = document.getElementById('id_business_category');
+  const customCategoryField = document.getElementById('additional-category');
+  
+  categoryField.addEventListener('change', function() {
+    if (this.value === 'other') {
+      customCategoryField.style.display = 'block';
+    } else {
+      customCategoryField.style.display = 'none';
+    }
+  });
+
+  // Initialize visibility based on current value
+  if (categoryField.value === 'other') {
+    customCategoryField.style.display = 'block';
+  } else {
+    customCategoryField.style.display = 'none';
+  }
+});
+</script>
 {% endblock main_content %}

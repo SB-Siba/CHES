@@ -16,7 +16,6 @@ from .models import Order, ProduceBuy, ProductFromVendor, ServiceProviderDetails
 from .serializer import (
     CheckoutFormSerializer,
     CommentSerializer,
-    LikeSerializer,
     MessageSerializer,
     ProduceBuySerializer,
     GardeningProfileSerializer,
@@ -371,18 +370,16 @@ class PlusLikeAPIView(APIView):
         responses={200: 'Give like to a activity'}
     )
     def get(self, request):
-        serializer = LikeSerializer(data=request.data)
-        if serializer.is_valid():
-            user = request.user
-            activity_id = serializer.validated_data['activity_id']
-            activity_obj = UserActivity.objects.get(id=activity_id)
-            if user.full_name not in activity_obj.likes:
-                activity_obj.likes.append(user.full_name)
-                activity_obj.save()
-                return Response({'status': 'Like this activity'}, status=status.HTTP_200_OK)
-            else:
-                return Response({'error': 'Already liked'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user = request.user
+        activity_id = request.GET.get('activity_id')
+        print(activity_id,type(activity_id))
+        activity_obj = UserActivity.objects.get(id=activity_id)
+        if user.full_name not in activity_obj.likes:
+            activity_obj.likes.append(user.full_name)
+            activity_obj.save()
+            return Response({'status': 'Like this activity'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Already liked'}, status=status.HTTP_400_BAD_REQUEST)
 
 class MinusLikeAPIView(APIView):
     @swagger_auto_schema(
@@ -392,18 +389,16 @@ class MinusLikeAPIView(APIView):
         responses={200: 'Remove like from a activity'}
     )
     def get(self, request):
-        serializer = LikeSerializer(data=request.data)
-        if serializer.is_valid():
-            user = request.user
-            activity_id = serializer.validated_data['activity_id']
-            activity_obj = UserActivity.objects.get(id=activity_id)
-            if user.full_name in activity_obj.likes:
-                activity_obj.likes.remove(user.full_name)
-                activity_obj.save()
-                return Response({'status': 'Like removed from Activity'}, status=status.HTTP_200_OK)
-            else:
-                return Response({'error': 'First like then you have permissions dislike'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user = request.user
+        activity_id = request.GET.get('activity_id')
+        print(activity_id,type(activity_id))
+        activity_obj = UserActivity.objects.get(id=activity_id)
+        if user.full_name in activity_obj.likes:
+            activity_obj.likes.remove(user.full_name)
+            activity_obj.save()
+            return Response({'status': 'Like removed from Activity'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'First like then you have permissions dislike'}, status=status.HTTP_400_BAD_REQUEST)
 
 class GiveCommentAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
@@ -457,7 +452,7 @@ class GetAllCommentsAPIView(APIView):
         responses={200: 'List of comments'}
     )
     def get(self, request):
-        post_id = request.data.get('post_id')
+        post_id = request.GET.get('post_id')
         activity_obj = UserActivity.objects.filter(id=post_id).first()
         if activity_obj:
             comments_data = activity_obj.comments
@@ -867,54 +862,33 @@ class BlogListAPIView(APIView):
         return Response(serializer.data)
 
 class BlogAddAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
     @swagger_auto_schema(
         tags=["RTGBlog"],
         operation_description="Add a new blog",
-        request_body=BlogSerializer,
-        responses={201: BlogSerializer},
-        manual_parameters=[
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            )
-        ]
+        manual_parameters=swagger_doccumentation.blog_post_params,
+        responses={201: BlogSerializer}
     )
     def post(self, request):
-        serializer = BlogSerializer(data=request.data, files=request.FILES)
+        serializer = BlogSerializer(data=request.data)
         if serializer.is_valid():
             blog = serializer.save(user=request.user)
             return Response(BlogSerializer(blog).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class BlogUpdateAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
     @swagger_auto_schema(
         tags=["RTGBlog"],
-        operation_description="Update an existing blog",
-        request_body=BlogSerializer,
-        manual_parameters=[
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            ),
-            openapi.Parameter(
-                'blog_id',
-                openapi.IN_PATH,
-                description="ID of the blog to update",
-                type=openapi.TYPE_INTEGER,
-                required=True
-            )
-        ],
-        responses={200: BlogSerializer},
+        operation_description="update blog",
+        manual_parameters=swagger_doccumentation.blog_update_params,
+        responses={201: BlogSerializer}
     )
     def post(self, request, blog_id):
         blog = get_object_or_404(Blogs, id=blog_id)
-        serializer = BlogSerializer(blog, data=request.data, files=request.FILES, partial=True)
+        serializer = BlogSerializer(blog, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -995,36 +969,4 @@ class BlogDetailsAPIView(APIView):
     def get(self, request, slug):
         blog = get_object_or_404(Blogs, slug=slug)
         serializer = BlogSerializer(blog)
-        return Response(serializer.data)
-
-class BlogSearchAPIView(APIView):
-    @swagger_auto_schema(
-        tags=["RTGBlog"],
-        operation_description="Search for blogs",
-        manual_parameters=[
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            ),
-            openapi.Parameter('query', openapi.IN_QUERY, description="Search query", type=openapi.TYPE_STRING),
-            openapi.Parameter('filter_by', openapi.IN_QUERY, description="Filter by field", type=openapi.TYPE_STRING)
-        ],
-        responses={200: BlogSerializer(many=True)},
-    )
-    def post(self, request):
-        query = request.data.get('query', '')
-        filter_by = request.data.get('filter_by', 'all')
-
-        if filter_by == "id":
-            blogs = Blogs.objects.filter(id=query, user=request.user)
-        elif filter_by == "name":
-            blogs = Blogs.objects.filter(title__icontains=query, user=request.user)
-        elif filter_by == "all":
-            blogs = Blogs.objects.filter(
-                Q(id__icontains=query) | Q(title__icontains=query), user=request.user
-            )
-        serializer = BlogSerializer(blogs, many=True)
         return Response(serializer.data)

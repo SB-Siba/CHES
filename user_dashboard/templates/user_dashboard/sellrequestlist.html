@@ -33,45 +33,53 @@
                         <td>{{ sell_request.ammount_in_green_points }}</td>
                         
                         <td>
-                            {% if sell_request.is_approved == "approved" %}
-                                <abbr title="Click To See The Reason" style="font-size: 1.5rem;"><span class="text-success btn" data-toggle="modal" data-target="#exampleModal2">Approved</span></abbr>
-                            {% elif sell_request.is_approved == "rejected" %}
-                                <abbr title="Click To See The Reason" style="font-size: 1.5rem;"><span class="text-danger btn" data-toggle="modal" data-target="#exampleModal">Rejected</span></abbr>
-                            {% else %}
-                                <span class="text-warning btn">Pending</span>
-                            {% endif %}
-                        </td>
+                          {% if sell_request.is_approved == "approved" %}
+                              <abbr title="Click To See The Reason" style="font-size: 1.5rem;">
+                                  <span class="text-success btn" data-toggle="modal" data-target="#approvedModal{{ sell_request.id }}">Approved</span>
+                              </abbr>
+                          {% elif sell_request.is_approved == "rejected" %}
+                              <abbr title="Click To See The Reason" style="font-size: 1.5rem;">
+                                  <span class="text-danger btn" data-toggle="modal" data-target="#rejectedModal{{ sell_request.id }}">Rejected</span>
+                              </abbr>
+                          {% else %}
+                              <span class="text-warning btn">Pending</span>
+                          {% endif %}
+                      </td>
+                      
+                      <!-- Modal for rejected request -->
+                      <div class="modal fade" id="rejectedModal{{ sell_request.id }}" tabindex="-1" aria-labelledby="rejectedModalLabel{{ sell_request.id }}" aria-hidden="true">
+                          <div class="modal-dialog">
+                              <div class="modal-content">
+                                  <div class="modal-header" id="t-Head">
+                                      <h5 class="modal-title" id="rejectedModalLabel{{ sell_request.id }}">Reject Reason</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body text-center text-danger" style="font-size: larger;">
+                                      {{ sell_request.reason }}
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      <!-- Modal for approved request -->
+                      <div class="modal fade" id="approvedModal{{ sell_request.id }}" tabindex="-1" aria-labelledby="approvedModalLabel{{ sell_request.id }}" aria-hidden="true">
+                          <div class="modal-dialog">
+                              <div class="modal-content">
+                                  <div class="modal-header" id="t-Head">
+                                      <h5 class="modal-title" id="approvedModalLabel{{ sell_request.id }}">Approve Reason</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body text-center text-success" style="font-size: larger;">
+                                      {{ sell_request.reason }}
+                                  </div>
+                              </div>
+                          </div>
+                      </div>                      
                     </tr>
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header" id="t-Head">
-                              <h5 class="modal-title" id="exampleModalLabel">Reject Reason</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body text-center text-danger" style="font-size: larger;">
-                                {{sell_request.reason}}
-                            </div>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header" id="t-Head">
-                              <h5 class="modal-title" id="exampleModalLabel">Approve Reason</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body text-center text-success" style="font-size: larger;">
-                                {{sell_request.reason}}
-                            </div>
-                          </div>
-                        </div>
-                    </div>
                     {% endfor %}
                 </tbody>
             </table>

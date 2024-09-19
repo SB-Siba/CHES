@@ -77,7 +77,6 @@ urlpatterns = [
     path('api/rtg/blogs/<int:blog_id>/delete/', api_of_rtg.BlogDeleteAPIView.as_view(), name='blog-delete'),
     path('api/rtg/blogs/view/', api_of_rtg.BlogViewAPIView.as_view(), name='blog-view'),
     path('api/rtg/blogs/<slug:slug>/', api_of_rtg.BlogDetailsAPIView.as_view(), name='blog-details'),
-    path('api/rtg/blogs/search/', api_of_rtg.BlogSearchAPIView.as_view(), name='blog-search'),
 
     # ----------------------------- Service Provider ------------------------------------
     path('api/service_provider/profile/', api_of_serviceprovider.ServiceProviderProfileAPI.as_view(), name='service_provider_profile_api'),
@@ -94,7 +93,6 @@ urlpatterns = [
     path('api/sp/blogs/<int:blog_id>/delete/', api_of_serviceprovider.SpBlogDeleteAPIView.as_view(), name='sp_blog_delete_api'),
     path('api/sp/blogs/view/', api_of_serviceprovider.SpBlogViewAPIView.as_view(), name='sp_blog_view_api'),
     path('api/sp/blogs/<slug:slug>/details/', api_of_serviceprovider.SpBlogDetailsAPIView.as_view(), name='sp_blog_details_api'),
-    path('api/sp/blogs/search/', api_of_serviceprovider.SpBlogSearchAPIView.as_view(), name='sp_blog_search_api'),
     
     # ----------------------------- Vendor ------------------------------------
 
@@ -140,8 +138,4 @@ urlpatterns = [
     path('vendor/blogs/<int:blog_id>/delete/', api_of_vendor.VendorBlogDeleteAPIView.as_view(), name='vendor-blog-delete'),
     path('vendor/blogs/view/', api_of_vendor.VendorBlogViewAPIView.as_view(), name='vendor-blog-view'),
     path('vendor/blogs/<slug:slug>/', api_of_vendor.VendorBlogDetailsAPIView.as_view(), name='vendor-blog-details'),
-    path('vendor/blogs/search/', api_of_vendor.VendorBlogSearchAPIView.as_view(), name='vendor-blog-search'),
-
 ]
-
-#   app_common:register
