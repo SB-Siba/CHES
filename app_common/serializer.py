@@ -264,9 +264,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'full_name', 'email', 'user_image']
 
 class MessageSerializer(serializers.ModelSerializer):
+    sender = UserSerializer()
+    receiver = UserSerializer()
     class Meta:
         model = Message
-        fields = ['id', 'message_status', 'messages', 'is_read']
+        fields = ['id','sender', 'receiver','message_status', 'messages', 'is_read','last_message']
 
 class SendMessageSerializer(serializers.Serializer):
     receiver_id = serializers.IntegerField()
