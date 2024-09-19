@@ -425,10 +425,8 @@ class GreenCommerceProductCommunity(View):
             # Fetch all produce objects
             sell_produce_obj = self.model.objects.all()
             
-            # Check expiration for each object
             for produce in sell_produce_obj:
-                if produce.days_left_to_expire() <= 0:
-                    produce.delete()
+                produce.days_left_to_expire()
         
             produce_obj = self.model.objects.exclude(user=request.user).filter(is_approved="approved").order_by("-date_time")
             ratings_list = [i.user.calculate_avg_rating() for i in produce_obj]
@@ -993,30 +991,6 @@ class GardenerDownloadInvoice(View):
                 'exchange_percentage':exchange_percentage
             }
             
-            return render(request,self.template,context)
-        except Exception as e:
-            error_message = f"An unexpected error occurred: {str(e)}"
-            return render_error_page(request, error_message, status_code=400)
-        
-class ServiceProvidersList(View):
-    model = app_commonmodels.ServiceProviderDetails
-    template = app + "service_providers_list.html"
-
-    def get(self,request):
-        try:
-            service_providers = self.model.objects.filter(provider__is_approved = True)
-            providers = []
-            areas = []
-            types = []
-            for i in service_providers:
-                service_types = ast.literal_eval(i.service_type)
-                service_areas = ast.literal_eval(i.service_area)
-                providers.append(i)
-                types.append(service_types)
-                areas.append(service_areas)
-
-            providers_area_types = zip(providers,areas,types)
-            context = {'providers_area_types':providers_area_types}
             return render(request,self.template,context)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"

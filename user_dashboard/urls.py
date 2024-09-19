@@ -42,7 +42,6 @@ urlpatterns = [
     path('invoice/<int:order_uid>',views.GardenerDownloadInvoice.as_view(),name="invoice"),
     path('rate-order-from-vendor/',views.RateOrderFromVendor.as_view(),name="rate_order_from_vendor"),
 
-    path('service-providers-list/',views.ServiceProvidersList.as_view(),name="service_providers"),
     path('service/service_search', views.ServiceSearchView.as_view(), name='service_search'),
     path('services/', views.ListOfServicesByServiceProviders.as_view(), name='list_services'),
     path('service_details/<int:service_id>/', views.ServiceDetails.as_view(), name='service_details'),

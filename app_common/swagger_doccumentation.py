@@ -569,3 +569,60 @@ blog_update_params = [
             type=openapi.TYPE_FILE
         )
     ]
+
+
+list_services_params = [
+    openapi.Parameter(
+        'Authorization',
+        openapi.IN_HEADER,
+        description="Bearer <token>",
+        required=True,
+        type=openapi.TYPE_STRING
+    ),
+]
+
+service_search_params = [
+    openapi.Parameter(
+        'Authorization',
+        openapi.IN_HEADER,
+        description="Bearer <token>",
+        required=True,
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        'search_query',
+        openapi.IN_QUERY,
+        description="Search services by name or type",
+        required=False,
+        type=openapi.TYPE_STRING
+    ),
+]
+
+
+
+my_booked_services_params = [
+    openapi.Parameter(
+        'Authorization',
+        openapi.IN_HEADER,
+        description="Bearer <token>",
+        required=True,
+        type=openapi.TYPE_STRING
+    ),
+]
+
+decline_booking_params = [
+    openapi.Parameter(
+        'Authorization',
+        openapi.IN_HEADER,
+        description="Bearer <token>",
+        required=True,
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        'booking_id',
+        openapi.IN_PATH,
+        description="ID of the booking to decline",
+        required=True,
+        type=openapi.TYPE_INTEGER
+    ),
+]
