@@ -6,23 +6,33 @@
 <section class="py-6 bg-surface-secondary">
    <div class="container">
    <div class="text-center my-lg-4 text-secondary">
-    <h4>Add Your Blogs</h4>
+    <h4 class="form-header headings_h4 text-center my-lg-4 p-lg-3">Update Your Blogs</h4>
+
    </div>
     <div class="card h-100">
         <form action="" method="post" enctype="multipart/form-data" class="p-lg-4 lh-lg">
-                {% csrf_token %}
-                {{ form.media }}
-                <div class="row">
-                    {% for field in form %}
-                        <div class="col-12">
-                            <div class="form-group">
-                                {{ field.label_tag }}
-                                {{ field }}
-                            </div>
+            {% csrf_token %}
+            {{ form.media }}
+            <div class="row">
+                {% for field in form %}
+                    <div class="col-12">
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            
+                            {% if field.name == 'image' and blog.image %}
+                                <!-- Display the current image if it exists -->
+                                <div class="mb-3">
+                                    <img src="{{ blog.image.url }}" alt="Blog Image" class="img-thumbnail" style="max-height: 200px;">
+                                    <p>Current image: {{ blog.image.name }}</p>
+                                </div>
+                            {% endif %}
+                            
+                            {{ field }}
                         </div>
-                    {% endfor %}
-                </div>
-                <br>
+                    </div>
+                {% endfor %}
+            </div>
+            <br>
             <button type="submit" class="btn btn-success w-100">Update Blog</button>
         </form>
     </div>

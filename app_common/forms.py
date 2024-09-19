@@ -176,6 +176,12 @@ class GardeningQuizForm(forms.Form):
     
 
 class VendorDetailsForm(forms.ModelForm):
+    BUSINESS_CATEGORIES = (
+        ('plants', 'Plants'),
+        ('tools', 'Tools'),
+        ('seeds', 'Seeds'),
+        ('other', 'Other'),
+    )
     class Meta:
         model = models.VendorDetails
         fields = ['business_name', 'business_address', 'business_description', 'business_license_number',
@@ -185,10 +191,11 @@ class VendorDetailsForm(forms.ModelForm):
     business_address = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Address'}))
     business_description = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'class': 'form-control', 'placeholder': 'Business Description'}))
     business_license_number = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'GST Number'}))
-    business_category = forms.ChoiceField(choices=models.VendorDetails.BUSINESS_CATEGORIES, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Business Category'}))
+    business_category = forms.ChoiceField(choices=BUSINESS_CATEGORIES, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Business Category'}))
     establishment_year = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Establishment Year'}))
     website = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Website'}))
     established_by = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Owner Name'}))
+    custom_business_category = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Specify Custom Category'}))
 
 
 class ServiceProviderDetailsForm(forms.ModelForm):

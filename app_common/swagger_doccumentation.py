@@ -465,3 +465,107 @@ vendor_order_detail_post = [
     openapi.Parameter("customer_details", openapi.IN_FORM, description="Customer details in JSON format", required=False, type=openapi.TYPE_STRING),
     openapi.Parameter("more_info", openapi.IN_FORM, description="Additional information about the order", required=False, type=openapi.TYPE_STRING),
 ]
+
+
+
+# Blog
+
+blog_post_params = [
+        openapi.Parameter(
+            'Authorization',
+            openapi.IN_HEADER,
+            description="Bearer <token>",
+            required=True,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'title',
+            openapi.IN_FORM,
+            description="Title of the blog",
+            required=True,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'author',
+            openapi.IN_FORM,
+            description="Name of the author",
+            required=True,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'date',
+            openapi.IN_FORM,
+            description="Date in YYYY-MM-DD format",
+            required=True,
+            type=openapi.TYPE_STRING,
+            format='date'
+        ),
+        openapi.Parameter(
+            'content',
+            openapi.IN_FORM,
+            description="Content of the blog (Rich Text)",
+            required=True,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'image',
+            openapi.IN_FORM,
+            description="Image file for the blog",
+            required=False,
+            type=openapi.TYPE_FILE
+        ),
+    ]
+
+
+blog_update_params = [
+        openapi.Parameter(
+            'Authorization',
+            openapi.IN_HEADER,
+            description="Bearer <token>",
+            required=True,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'blog_id',
+            openapi.IN_PATH,
+            description="ID of the blog to update",
+            required=True,
+            type=openapi.TYPE_INTEGER
+        ),
+        openapi.Parameter(
+            'title',
+            openapi.IN_FORM,
+            description="Title of the blog",
+            required=False,  # It's an update, so not always required
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'author',
+            openapi.IN_FORM,
+            description="Name of the author",
+            required=False,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'date',
+            openapi.IN_FORM,
+            description="Date in YYYY-MM-DD format",
+            required=False,
+            type=openapi.TYPE_STRING,
+            format='date'
+        ),
+        openapi.Parameter(
+            'content',
+            openapi.IN_FORM,
+            description="Content of the blog (Rich Text)",
+            required=False,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'image',
+            openapi.IN_FORM,
+            description="Image file for the blog",
+            required=False,
+            type=openapi.TYPE_FILE
+        )
+    ]

@@ -227,9 +227,7 @@ class AllActivitiesSerializer(serializers.ModelSerializer):
         if request and hasattr(request, 'user'):
             return request.user.full_name in obj.likes
         return False
-    
-class LikeSerializer(serializers.Serializer):
-    activity_id = serializers.IntegerField()
+
 
 class CommentSerializer(serializers.Serializer):
     post_id = serializers.IntegerField()

@@ -118,16 +118,20 @@ class UpdateProfileView(View):
         try:
             vendor_details = get_object_or_404(self.model, vendor=request.user)
             initial_data = {
-            'business_name': vendor_details.business_name,
-            'business_address': vendor_details.business_address,
-            'business_description': vendor_details.business_description,
-            'business_license_number':vendor_details.business_license_number,
-            'business_category':vendor_details.business_category,
-            'establishment_year':vendor_details.establishment_year,
-            'website':vendor_details.website,
-            'established_by':vendor_details.established_by,
+                'business_name': vendor_details.business_name,
+                'business_address': vendor_details.business_address,
+                'business_description': vendor_details.business_description,
+                'business_license_number': vendor_details.business_license_number,
+                'establishment_year': vendor_details.establishment_year,
+                'website': vendor_details.website,
+                'established_by': vendor_details.established_by,
             }
 
+            # If the category is not in the predefined options, use it as a custom category
+            if vendor_details.business_category not in dict(self.form_class.BUSINESS_CATEGORIES):
+                initial_data['custom_business_category'] = vendor_details.business_category
+                initial_data['business_category'] = 'other'
+            # print(initial_data,"llll")
             form = self.form_class(initial=initial_data)
             return render(request, self.template_name, {'form': form})
         except Exception as e:
@@ -145,10 +149,18 @@ class UpdateProfileView(View):
                 business_address = form.cleaned_data['business_address']
                 business_description = form.cleaned_data['business_description']
                 business_license_number = form.cleaned_data['business_license_number']
-                business_category = form.cleaned_data['business_category']
                 establishment_year = form.cleaned_data['establishment_year']
                 website = form.cleaned_data['website']
                 established_by = form.cleaned_data['established_by']
+
+                # Extract the business category and check if 'Other' is selected
+                business_category = form.cleaned_data['business_category']
+                custom_business_category = form.cleaned_data.get('custom_business_category', '')
+
+                # If 'Other' is selected, use the custom business category
+                if business_category == 'other' and custom_business_category:
+                    business_category = custom_business_category
+
                 if 'image' in request.FILES:
                     image = request.FILES['image']
                 else:
@@ -172,7 +184,6 @@ class UpdateProfileView(View):
                 user_obj.save()
                 vendor_details.save()
 
-                messages.success(request, "Your profile has been updated successfully.")
                 return redirect('vendor_dashboard:vendor_profile')
             else:
                 error_message = f"Please correct your inputs"
@@ -257,6 +268,31 @@ class SellProductsList(View):
             user = request.user
             product_objs = self.model.objects.filter(vendor = user)
             return render(request,self.template,{'products':product_objs})
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+        
+class SearchSellProduct(View):
+    template = app + "sell_product_list.html"
+    model = common_models.ProductFromVendor
+
+    def get(self, request):
+        try:
+            search_by = request.GET.get("search_by")
+            query = request.GET.get("query")
+
+            user = request.user
+
+            if search_by and query:
+                if search_by == "id":
+                    product_objs = self.model.objects.filter(id = query,vendor = user)
+                elif search_by == "name":
+                    product_objs = self.model.objects.filter(name__icontains=query,vendor = user)
+
+            context = {
+                "products": product_objs,
+            }
+            return render(request, self.template, context)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
@@ -855,10 +891,15 @@ class OrderStatusSearch(View):
             order_list = self.model.objects.filter(vendor = request.user,order_status = filter_by)
             paginated_data = utils.paginate(request, order_list, 50)
             order_status_options = common_models.Order.ORDER_STATUS
+
+            all_order_list = self.model.objects.filter(vendor=request.user).order_by('-id')
+            income =  sum(order.order_value for order in all_order_list)
             
             context = {
+                "order":order_list,
                 "order_list":paginated_data,
                 "order_status_options":order_status_options,
+                "income":income
             }
             return render(request, self.template,context)
         except Exception as e:
@@ -873,8 +914,17 @@ class OrderSearch(View):
         try:
             query = request.GET.get('query')
             order_list = self.model.objects.filter(uid__icontains = query)
+        
+            order_status_options = common_models.Order.ORDER_STATUS
+
+            all_order_list = self.model.objects.filter(vendor=request.user).order_by('-id')
+            income =  sum(order.order_value for order in all_order_list)
+            
             context = {
+                "order":order_list,
                 "order_list":order_list,
+                "order_status_options":order_status_options,
+                "income":income
             }
             return render(request, self.template,context)
         except Exception as e:

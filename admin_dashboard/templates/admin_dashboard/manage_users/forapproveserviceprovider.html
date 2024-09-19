@@ -6,8 +6,7 @@
     {% include 'app_common/snippets/alert.html' %}
     <div class="search_sec">
 
-        <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
-            {% csrf_token %}
+        <form method="get" action="{% url 'admin_dashboard:search_user_sp_pending' %}">
             <div class="table_search_box">
 
                 <select class="form-control selects" name="search_by" aria-label="Default select example">
