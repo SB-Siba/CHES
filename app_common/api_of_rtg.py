@@ -554,23 +554,12 @@ class ChatAPI(APIView):
 
         sorted_messages = [msg for _, msg in sorted(sorted_messages, key=lambda x: x[0], reverse=True)]
 
-        user_last_message = []
-        for message in sorted_messages:
-            try:
-                message_data = json.loads(message.messages)  # Assuming `message.messages` contains JSON data
-                last_message = message_data[-1]
-                timestamp = timezone.localtime(timezone.datetime.strptime(last_message['timestamp'], "%Y-%m-%dT%H:%M:%S.%f%z"))
-                formatted_time = timestamp.strftime("%I:%M %p")
-                user_last_message.append((last_message['message'], formatted_time))
-            except (json.JSONDecodeError, IndexError, KeyError):
-                pass
-
         # zipped_messages = zip(sorted_messages, user_last_message)
 
         # Serialize the zipped messages using MessageSerializer
         serialized_messages = MessageSerializer(sorted_messages, many=True)
 
-        context = {'zipped_messages': serialized_messages.data,'last_message':user_last_message}
+        context = {'zipped_messages': serialized_messages.data}
         return Response(context)
 
 class StartMessagesAPI(APIView):
