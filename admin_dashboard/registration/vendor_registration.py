@@ -85,13 +85,10 @@ class VendorRegistration(View):
                 return redirect('admin_dashboard:vendors_list')
 
             else:
-                # Handle form errors
-                print(form.errors)
+                error_message = f"An unexpected error occurred: {str(form.errors)}"
+                return render_error_page(request, error_message, status_code=400)
 
         except Exception as e:
             # Exception handling with user-friendly error message
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-
-        # If form is not valid, render the template with the form (including errors)
-        return render(request, self.template_name, {'form': form})

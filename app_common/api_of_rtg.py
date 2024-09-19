@@ -11,9 +11,12 @@ from rest_framework.decorators import api_view,permission_classes
 from chatapp.models import Message
 from rest_framework.parsers import FormParser, MultiPartParser
 from . import swagger_doccumentation
+from django.db.models.functions import Lower
 from django.contrib.auth.hashers import make_password
-from .models import Order, ProduceBuy, ProductFromVendor, ServiceProviderDetails, User, GardeningProfile,UserActivity,SellProduce
+from .models import Booking, Order, ProduceBuy, ProductFromVendor, Service, ServiceProviderDetails, User, GardeningProfile,UserActivity,SellProduce
+from django.utils.dateparse import parse_datetime
 from .serializer import (
+    BookingSerializer,
     CheckoutFormSerializer,
     CommentSerializer,
     MessageSerializer,
@@ -24,6 +27,7 @@ from .serializer import (
     SellProduceSerializer,
     SendMessageSerializer,
     ServiceProviderSerializer,
+    ServiceSerializer,
     StartMessagesSerializer,
     UpdateProfileSerializer,
     UserProfileSerializer,
@@ -32,6 +36,7 @@ from .serializer import (
     AllActivitiesSerializer,
     BlogSerializer,
 )
+from django.utils.timezone import make_aware
 from user_dashboard.serializers import DirectBuySerializer,OrderSerializer
 from django.contrib.auth import authenticate, login, logout
 import json
@@ -422,7 +427,7 @@ class GiveCommentAPIView(APIView):
             }
             post_obj.comments.append(comment_data)
             post_obj.save()
-            return Response({'status': 'Comment added successfully'}, status=status.HTTP_302_FOUND)
+            return Response({'status': 'Comment added successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteCommentAPIView(APIView):
@@ -970,3 +975,187 @@ class BlogDetailsAPIView(APIView):
         blog = get_object_or_404(Blogs, slug=slug)
         serializer = BlogSerializer(blog)
         return Response(serializer.data)
+
+# Services
+
+class ListOfServicesByServiceProvidersAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["Roof Top Gardeners"],
+        operation_description="List Of Services By Service Provider",
+        manual_parameters=swagger_doccumentation.list_services_params,
+        responses={201: ServiceSerializer(many=True)}
+    )
+    def get(self, request):
+        try:
+            services = Service.objects.all()
+            serializer = ServiceSerializer(services, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ServiceSearchAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["Roof Top Gardeners"],
+        operation_description="Search Services",
+        manual_parameters=swagger_doccumentation.service_search_params,
+        responses={200: ServiceSerializer(many=True)}
+    )
+    def get(self, request):
+        try:
+            search_query = request.GET.get('search_query')
+            if search_query:
+                search_query_lower = search_query.lower()
+                services = Service.objects.annotate(
+                    name_lower=Lower('name'),
+                    service_type_lower=Lower('service_type')
+                ).filter(
+                    Q(name_lower__icontains=search_query_lower) |
+                    Q(service_type_lower__icontains=search_query_lower)
+                )
+            else:
+                services = Service.objects.all()
+
+            serializer = ServiceSerializer(services, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+class ServiceDetailsAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["Roof Top Gardeners"],
+        operation_description="Get details of a service",
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Bearer <token>",
+                required=True,
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                'service_id',
+                openapi.IN_PATH,
+                description="ID of the service",
+                required=True,
+                type=openapi.TYPE_INTEGER
+            ),
+        ],
+        responses={
+            200: ServiceSerializer,
+            404: openapi.Response('Service not found'),
+            400: openapi.Response('Error occurred')
+        }
+    )
+    def get(self, request, service_id):
+        try:
+            service = get_object_or_404(Service, id=service_id)
+            serializer = ServiceSerializer(service)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    @swagger_auto_schema(
+        tags=["Roof Top Gardeners"],
+        operation_description="Book a service",
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Bearer <token>",
+                required=True,
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                'service_id',
+                openapi.IN_PATH,
+                description="ID of the service",
+                required=True,
+                type=openapi.TYPE_INTEGER
+            ),
+        ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'booking_date': openapi.Schema(type=openapi.TYPE_STRING, format='date', description='Date of booking'),
+                'booking_time': openapi.Schema(type=openapi.TYPE_STRING, format='time', description='Time of booking'),
+            },
+            required=['booking_date', 'booking_time']
+        ),
+        responses={
+            201: openapi.Response('Booking created successfully'),
+            400: openapi.Response('Error occurred')
+        }
+    )
+    def post(self, request, service_id):
+        try:
+            service = get_object_or_404(Service, id=service_id)
+            
+            if Booking.objects.filter(service=service, gardener=request.user).exists():
+                return Response({'error': 'Booking already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Extract booking date and time from request data
+            booking_date_str = request.data.get('booking_date')
+            booking_time_str = request.data.get('booking_time')
+
+            # Combine date and time into a single datetime object
+            booking_datetime_str = f"{booking_date_str}T{booking_time_str}"
+            booking_date = parse_datetime(booking_datetime_str)
+
+            # Make the datetime timezone-aware if it's not already
+            if booking_date and not booking_date.tzinfo:
+                booking_date = make_aware(booking_date)
+
+            if not booking_date:
+                return Response({'error': 'Invalid date or time format'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Create and save the booking
+            booking = Booking(
+                service=service,
+                gardener=request.user,
+                booking_date=booking_date
+            )
+            booking.save()
+            return Response({'status': 'Booking created successfully'}, status=status.HTTP_201_CREATED)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MyBookedServicesAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["Roof Top Gardeners"],
+        operation_description="My Booked Services",
+        manual_parameters=swagger_doccumentation.my_booked_services_params,
+        responses={200: BookingSerializer(many=True)}
+    )
+    def get(self, request):
+        try:
+            booked_services = Booking.objects.filter(gardener=request.user).exclude(status="declined")
+            serializer = BookingSerializer(booked_services, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeclineBookingAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["Roof Top Gardeners"],
+        operation_description="Decline a Booking",
+        manual_parameters=swagger_doccumentation.decline_booking_params,
+        responses={
+            200: openapi.Response('Booking declined successfully'),
+            404: openapi.Response('Booking not found'),
+            400: openapi.Response('Error occurred')
+        }
+    )
+    def get(self, request, booking_id):
+        try:
+            booking = get_object_or_404(Booking, id=booking_id)
+            if request.user == booking.gardener:
+                booking.status = 'declined'
+                booking.save()
+                return Response({'status': 'Booking declined successfully'}, status=status.HTTP_200_OK)
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

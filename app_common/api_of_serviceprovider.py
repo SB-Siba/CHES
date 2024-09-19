@@ -1,4 +1,3 @@
-import datetime
 import os
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -6,13 +5,10 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
-from rest_framework.decorators import api_view,permission_classes
-from chatapp.models import Message
 from rest_framework.parsers import FormParser, MultiPartParser
 from . import swagger_doccumentation
 from django.contrib.auth.hashers import make_password
-from .models import Booking, Order, ProduceBuy, ProductFromVendor, Service, ServiceProviderDetails, User, GardeningProfile,UserActivity,SellProduce
+from .models import Booking,Service, ServiceProviderDetails
 from .serializer import (
     BlogSerializer,
     BookingSerializer,
@@ -21,12 +17,7 @@ from .serializer import (
     ServiceProviderProfileUpdateSerializer
 )
 from Blogs.models import Blogs
-from user_dashboard.serializers import DirectBuySerializer,OrderSerializer
-from django.contrib.auth import authenticate, login, logout
-import json
-from django.db.models import Q
-from django.http import Http404, JsonResponse, HttpResponseBadRequest
-from django.utils import timezone
+from django.http import Http404
 
 class ServiceProviderProfileAPI(APIView):
     @swagger_auto_schema(

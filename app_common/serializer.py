@@ -310,9 +310,10 @@ class ServiceProviderProfileUpdateSerializer(serializers.ModelSerializer):
         fields = ['service_type', 'service_area', 'average_cost_per_hour', 'years_experience']
 
 class ServiceSerializer(serializers.ModelSerializer):
+    provider = UserSerializer()
     class Meta:
         model = Service
-        fields = ['id', 'service_type', 'name', 'description', 'price_per_hour']
+        fields = ['id','provider', 'service_type', 'name', 'description', 'price_per_hour']
 
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -369,3 +370,6 @@ class BlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blogs
         fields = '__all__'
+
+
+# Service
