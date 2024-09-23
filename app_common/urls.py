@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views,auth_api,api_of_rtg,api_of_serviceprovider,api_of_vendor
+from . import top_users_api, views,auth_api,api_of_rtg,api_of_serviceprovider,api_of_vendor,email_otp_api
 from django.contrib.auth import views as auth_view
 from . forms import PasswordChangeForm
 app_name = 'app_common'
@@ -150,4 +150,11 @@ urlpatterns = [
     path('api/vendor/services/<int:service_id>/', api_of_vendor.ServiceDetailsAPIView.as_view(), name='vendor_service_details'),
     path('api/vendor/my-booked-services/', api_of_vendor.MyBookedServicesAPIView.as_view(), name='vendor_my_booked_services'),
     path('api/vendor/bookings/<int:booking_id>/decline/', api_of_vendor.DeclineBookingAPIView.as_view(), name='vendor_decline_booking'),
+
+    # OTP
+    path('api/email/send-otp/', email_otp_api.SendOTPAPIView.as_view(), name='send_otp_api'),
+    path('api/email/verify-otp/', email_otp_api.VerifyOTPAPIView.as_view(), name='verify_otp_api'), 
+
+    #top Users
+    path('api/top-users/', top_users_api.TopUsersAPIView.as_view(), name='top_users')
 ]

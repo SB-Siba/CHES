@@ -27,6 +27,7 @@
                         <th scope="col">Request-ID</th>
                         <th scope="col">User</th>
                         <th scope="col">P_Name</th>
+                        <th scope="col">P_Category</th>
                         <th scope="col">Quantity</th>
                         <th scope="col">Units</th>
                         <th scope="col">For Days</th>
@@ -38,9 +39,10 @@
                 <tbody>
                     {% for sell_request in produce_sell_request_obj %}
                     <tr>
-                        <td  id="t_daTa">{{ sell_request.id }}</td>
+                        <td id="t_daTa">{{ sell_request.id }}</td>
                         <td id="t_daTa">{{ sell_request.user }}</td>
                         <td id="t_daTa">{{ sell_request.product_name }}</td>
+                        <td id="t_daTa">{{ sell_request.produce_category.category_name }}</td>
                         <td id="t_daTa">{{ sell_request.product_quantity }}</td>
                         <td id="t_daTa">{{ sell_request.SI_units }}</td>
                         <td id="t_daTa">{{ sell_request.validity_duration_days }}</td>

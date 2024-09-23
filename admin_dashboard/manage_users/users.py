@@ -754,7 +754,6 @@ class UserProduceSellRequest(View):
     def get(self, request):
         try:
             produce_sell_request_obj = self.model.objects.filter(is_approved='pending').order_by('-date_time')
-            print(produce_sell_request_obj,"kkjhh")
             return render(request, self.template, {'produce_sell_request_obj': produce_sell_request_obj})
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"

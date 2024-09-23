@@ -1,18 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
 from django.views import View
-from django.contrib import messages
-from django.conf import settings
 from app_common import models as common_models
 from django.utils.decorators import method_decorator
 from django.db.models import Q
 from helpers import utils
 from django.db.models import Count
 from django.db.models import Sum
-from django.db.models.functions import TruncMonth
-from django.utils import timezone
-from Blogs.models import Blogs
 from django.db.models.functions import Coalesce
 
+from app_common.error import render_error_page
+from . import forms
 app = "admin_dashboard/"
 
 @method_decorator(utils.super_admin_only, name='dispatch')
@@ -377,3 +375,110 @@ class CityDetailView(View):
             'leaderboard': leaderboard
         }
         return render(request, self.template_name, context)
+    
+
+class ProducesCategory(View):
+    template = app + "produces_categories.html"
+    model = common_models.CategoryForProduces
+
+    def get(self, request, *args, **kwargs):
+        categories_of_produces = self.model.objects.all()
+        context = {
+            'categories_of_produces': categories_of_produces
+            }
+        return render(request,self.template,context)
+    
+class ProducesCategoryAdd(View):
+    template = app + "produces_category_add.html"
+    model = common_models.CategoryForProduces
+    form = forms.AddCategoryForProduces
+
+    def get(self, request, *args, **kwargs):
+        form = self.form()
+        context = {
+            'form': form
+            }
+        return render(request,self.template,context)
+    
+    def post(self,request):
+        try:
+            form = self.form(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect(reverse('admin_dashboard:produces_categories'))
+            else:
+                error_message = f"please correct these : {form.errors}"
+                return render_error_page(request, error_message)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)
+        
+class ProducescategoryUpdate(View):
+    template = app + "produces_category_update.html"
+    model = common_models.CategoryForProduces
+    form = forms.AddCategoryForProduces
+
+    def get(self, request, category_id):
+        try:
+            category_for_produces = get_object_or_404(self.model, id=category_id)
+            context = {
+                "category_for_produces": category_for_produces,
+                "form": self.form(instance=category_for_produces),
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)
+        
+    def post(self, request, category_id):
+        try:
+            category_for_produces = self.model.objects.get(id=category_id)
+            form = self.form(request.POST, request.FILES, instance=category_for_produces)
+
+            if form.is_valid():
+                form.save()
+                return redirect(reverse('admin_dashboard:produces_categories'))
+            else:
+                error_message = f"please correct these : {self.form.errors}"
+                return render_error_page(request, error_message)
+
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)
+
+class DeleteProducesCategory(View):
+    model = common_models.CategoryForProduces
+
+    def get(self, request, category_id):
+        try:
+            self.model.objects.get(id=category_id).delete()
+            return redirect(reverse('admin_dashboard:produces_categories'))
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)
+
+
+class ProducesCategorySearch(View):
+    model = common_models.CategoryForProduces
+    template = app + "produces_categories.html"
+
+    def post(self, request):
+        try:
+            query = request.POST.get('query', '')
+            filter_by = request.POST.get('filter_by', 'all')
+
+            if filter_by == "id":
+                categories_of_produces_list = self.model.objects.filter(id=query)
+            elif filter_by == "name":
+                categories_of_produces_list = self.model.objects.filter(category_name__icontains=query)
+            elif filter_by == "all":
+                categories_of_produces_list = self.model.objects.filter(
+                    Q(id__icontains=query) | Q(category_name__icontains=query)
+                )
+            context = {
+                "categories_of_produces": categories_of_produces_list,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)

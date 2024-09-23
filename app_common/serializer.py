@@ -374,4 +374,20 @@ class BlogSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# Service
+# Rank Serializer
+
+class UserRankSerializer(serializers.ModelSerializer):
+    rank = serializers.SerializerMethodField()
+    is_rtg = serializers.BooleanField()  # To show if the user is RTG
+    is_vendor = serializers.BooleanField()  # To show if the user is Vendor
+    user_image = serializers.ImageField()  # To show the user's profile image
+
+    class Meta:
+        model = User
+        fields = ['full_name', 'email', 'coins', 'rank', 'is_rtg', 'is_vendor', 'user_image']  # Add more fields if needed
+
+    def get_rank(self, obj):
+        # Calculate the rank based on the number of users with more coins
+        higher_scores_count = User.objects.filter(coins__gt=obj.coins).count()
+        return higher_scores_count + 1
+

@@ -82,6 +82,12 @@ urlpatterns = [
     path('add_vendor/',vendor_registration.VendorRegistration.as_view(), name='add_vendor'),
     path('add_service_provider/',sp_registration.ServiceProviderRegistration.as_view(), name='add_service_provider'),
 
+    # Categories produces
+    path('produces_categories/',views.ProducesCategory.as_view(), name='produces_categories'),
+    path('produces_category_add/',views.ProducesCategoryAdd.as_view(), name='produces_category_add'),
+    path('produces_category_update/<int:category_id>',views.ProducescategoryUpdate.as_view(), name='produces_category_update'),
+    path('produces_category_delete/<int:category_id>',views.DeleteProducesCategory.as_view(), name='produces_category_delete'),
+    path('produces_category/',views.ProducesCategorySearch.as_view(), name='produces_category_search'),
 ]
 
 #  admin_dashboard:users_list
