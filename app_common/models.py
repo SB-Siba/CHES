@@ -112,6 +112,11 @@ class User(AbstractBaseUser, PermissionsMixin):
             return True
         return False
     
+
+class CategoryForProduces(models.Model):
+    category_name = models.CharField(max_length = 250,null = True,blank = True)
+
+
 class GaredenQuizModel(models.Model):
     user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)
     questionANDanswer = models.JSONField(null= False, blank= False) 
@@ -178,6 +183,7 @@ class SellProduce(models.Model):
         ('Units', 'Units'),
     ]
     user = models.ForeignKey(User,on_delete=models.CASCADE,null= True, blank= True)
+    produce_category = models.ForeignKey(CategoryForProduces,on_delete=models.CASCADE,null= True, blank= True)
     product_name = models.CharField(max_length=250,blank=True,null=True,default="No Title")
     product_image = models.ImageField(upload_to='productforsell/',null=True, blank=True)
     product_quantity = models.FloatField(default=0.0,null=True,blank=True)

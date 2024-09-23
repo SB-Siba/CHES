@@ -146,6 +146,7 @@ activity_list_get = [
 
 sell_produce_post = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter('produce_category', openapi.IN_FORM, description="ID of the produce category", type=openapi.TYPE_INTEGER),  # New field
     openapi.Parameter('product_name', openapi.IN_FORM, description="Name of the product", type=openapi.TYPE_STRING),
     openapi.Parameter('product_image', openapi.IN_FORM, description="Image of the product", type=openapi.TYPE_FILE),
     openapi.Parameter('product_quantity', openapi.IN_FORM, description="Quantity of the product", type=openapi.TYPE_NUMBER),
@@ -624,5 +625,45 @@ decline_booking_params = [
         description="ID of the booking to decline",
         required=True,
         type=openapi.TYPE_INTEGER
+    ),
+]
+
+# OTP Varification
+
+send_otp_params = [
+    openapi.Parameter(
+        'email',
+            openapi.IN_FORM,
+        description="Email address to which the OTP will be sent",
+        required=True,
+        type=openapi.TYPE_STRING
+    )
+]
+
+verify_otp_params = [
+    openapi.Parameter(
+        'email',
+        openapi.IN_FORM,
+        description="Email address associated with the OTP",
+        required=True,
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        'otp',
+        openapi.IN_FORM,
+        description="OTP code received in the email",
+        required=True,
+        type=openapi.TYPE_STRING
+    )
+]
+
+# Top Users
+top_users_params = [
+    openapi.Parameter(
+        'Authorization',
+        openapi.IN_HEADER,
+        description="Bearer <token>",
+        required=True,
+        type=openapi.TYPE_STRING
     ),
 ]

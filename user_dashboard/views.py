@@ -355,36 +355,45 @@ class SellProduceView(View):
     form_class = user_form.SellProduceForm
     model = app_commonmodels.SellProduce
 
-    def get(self,request):
+    def get(self, request):
         try:
-            data = {
-                'form': self.form_class(),
-            }
-            return render(request,self.template,data)
+            form = self.form_class()  # Categories are populated in the form
+            data = {'form': form}
+            return render(request, self.template, data)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-    
-    def post(self,request):
+
+    def post(self, request):
         try:
             user = request.user
-            form = self.form_class(request.POST,request.FILES)
-            if form.is_valid(): 
-                product_name = form.cleaned_data['product_name'] 
-                product_image = form.cleaned_data['product_image']    
+            form = self.form_class(request.POST, request.FILES)
+            if form.is_valid():
+                # Extract form data
+                produce_category = form.cleaned_data['produce_category']
+                product_name = form.cleaned_data['product_name']
+                product_image = form.cleaned_data['product_image']
                 product_quantity = form.cleaned_data['product_quantity']
                 SI_units = form.cleaned_data['SI_units']
                 ammount_in_green_points = form.cleaned_data['ammount_in_green_points']
                 validity_duration_days = form.cleaned_data['validity_duration_days']
 
                 # Save SellProduce
-                
-                sellObj=self.model(user = user,product_name = product_name,product_image = product_image,product_quantity = product_quantity,SI_units = SI_units,ammount_in_green_points = ammount_in_green_points,validity_duration_days = validity_duration_days)
+                sellObj = self.model(
+                    user=user,
+                    produce_category=produce_category,  # Use the ID directly
+                    product_name=product_name,
+                    product_image=product_image,
+                    product_quantity=product_quantity,
+                    SI_units=SI_units,
+                    ammount_in_green_points=ammount_in_green_points,
+                    validity_duration_days=validity_duration_days
+                )
                 sellObj.save()
-                messages.success(request,'Request for sell Sent Successfully')
+                messages.success(request, 'Request for sell sent successfully.')
                 return redirect('user_dashboard:user_dashboard')
             else:
-                error_message = f"Error! Please check your inputs."
+                error_message = "Error! Please check your inputs."
                 return render_error_page(request, error_message, status_code=400)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
@@ -420,30 +429,67 @@ class GreenCommerceProductCommunity(View):
     model = app_commonmodels.SellProduce
     form = user_form.BuyQuantityForm
 
-    def get(self,request):
+    def get(self, request):
         try:
-            # Fetch all produce objects
-            sell_produce_obj = self.model.objects.all()
+            # Fetch all produce categories
+            produces_categories = app_commonmodels.CategoryForProduces.objects.all()
             
+            # Get selected category and search query from request
+            selected_category = request.GET.get('category')
+            search_query = request.GET.get('search_query', '')
+            selected_category_name = ""
+            
+            # Determine selected category name if applicable
+            if selected_category and selected_category != "all":
+                selected_category_name = app_commonmodels.CategoryForProduces.objects.get(id=selected_category).category_name
+            
+            # Update expiration status for all produce items
+            sell_produce_obj = self.model.objects.all()
             for produce in sell_produce_obj:
-                produce.days_left_to_expire()
-        
-            produce_obj = self.model.objects.exclude(user=request.user).filter(is_approved="approved").order_by("-date_time")
+                try:
+                    produce.days_left_to_expire()
+                except Exception as update_error:
+                    print(f"Error updating expiration for produce {produce.id}: {update_error}")
+
+            # Filter produce items that are approved and not posted by the current user
+            produce_query = self.model.objects.exclude(user=request.user).filter(is_approved="approved")
+            
+            # Apply filters based on category and search query
+            if selected_category and selected_category != "all":
+                produce_query = produce_query.filter(produce_category=selected_category)
+            if search_query:
+                produce_query = produce_query.filter(product_name__icontains=search_query)
+
+            # Order by latest date and fetch the list of produce objects
+            produce_obj = produce_query.order_by("-date_time")
+            
+            # Calculate ratings and check message status for each produce object
             ratings_list = [i.user.calculate_avg_rating() for i in produce_obj]
-            message_status = []
-            for i in produce_obj:
-                msg_obj = Message.objects.filter(Q(receiver=i.user,sender=request.user) | Q(receiver=request.user,sender=i.user))
-                if msg_obj:
-                    message_status.append(True)
-                else:
-                    message_status.append(False)
+            message_status = [
+                Message.objects.filter(
+                    Q(receiver=i.user, sender=request.user) | Q(receiver=request.user, sender=i.user)
+                ).exists() for i in produce_obj
+            ]
+
+            # Zip the values together for easy iteration in the template
+            zipped_value = zip(produce_obj, message_status, ratings_list)
+
+            # Context to be passed to the template
+            context = {
+                'zipped_value': zipped_value,
+                'form': self.form,
+                'produces_categories': produces_categories,
+                'selected_category_name': selected_category_name,
+                "searchquery": search_query
+            }
+            
+            # Render the template with the context
+            return render(request, self.template, context)
         
-            zipped_value = zip(produce_obj,message_status,ratings_list)
-            context={'zipped_value':zipped_value,'form':self.form}
-            return render(request,self.template,context)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
 
 class BuyingBegins(View):
     model = app_commonmodels.SellProduce

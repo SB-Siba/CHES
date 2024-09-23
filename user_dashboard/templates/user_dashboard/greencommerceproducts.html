@@ -4,6 +4,41 @@
  Available Products
  {% endblock title %}
   {% block content %}
+  <div class="row">
+    <form method="GET" action="{% url 'user_dashboard:greencommerceproducts' %}">
+      <div class="row">
+        <div class="col-md-6">
+          <label for="category-filter">Filter by Category:</label>
+          <select id="category-filter" name="category" onchange="this.form.submit()">
+            <option value="">
+              {% if selected_category_name %}
+                {{ selected_category_name }}
+              {% else %}
+                Select
+              {% endif %}
+            </option>
+            <option value="all">All Categories</option>
+            {% for category in produces_categories %}
+              <option value="{{ category.id }}">{{ category.category_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6">
+          {% if searchquery %}
+            <input type="text" name="search_query" class="form-control me-2 search-input" aria-label="Search" value="{{ searchquery }}">
+          {% else %}
+            <input type="text" name="search_query" class="form-control me-2 search-input" placeholder="Search for produces..." aria-label="Search">
+          {% endif %}
+          <span>
+            <button class="search-btn" type="submit">
+              <i class="fa-solid fa-search"></i>
+            </button>
+          </span>
+        </div>
+      </div>
+    </form>
+    
+  </div>
 <div class="row">
   {% for prod,m_status,u_rating in zipped_value %}
   <div class="col-md-3 col-sm-6 card-div">
