@@ -204,13 +204,12 @@
                 data: { 'post_id': postId },
                 success: function (response) {
                     console.log(response);
-                    var currentUser = response.current_user;
                     var commentsHtml = '';
                     if (response.comments.length > 0) {
                         for (var i = 0; i < response.comments.length; i++) {
                             commentsHtml += '<div class="d-flex justify-content-between align-items-center">';
                             commentsHtml += '<p><strong>' + response.comments[i].commenter + ':</strong> ' + response.comments[i].comment + '</p>';
-                            if (response.comments[i].commenter === currentUser) {
+                            if (response.comments[i].is_commenter) {
                                 commentsHtml += ' <a href="/user_dashboard/delete_comment/' + postId + '/' + response.comments[i].id + '/" class="delete-comment-btn" data-comment-id="' + response.comments[i].id + '" data-post-id="' + postId + '"><i class="fa fa-trash text-danger"></i></a>';
                             }
                             commentsHtml += '</div>';
