@@ -524,7 +524,8 @@ class VendorGiveCommentAPIView(APIView):
             comment_data = {
                 "id": str(datetime.datetime.now().timestamp()),  # unique ID for the comment
                 "commenter": commenter,
-                "comment": comment
+                "comment": comment,
+                'commenter_id':request.user.id
             }
             post_obj.comments.append(comment_data)
             post_obj.save()
@@ -562,7 +563,15 @@ class VendorGetAllCommentsAPIView(APIView):
         activity_obj = UserActivity.objects.filter(id=post_id).first()
         if activity_obj:
             comments_data = activity_obj.comments
+
+            # Assume comments_data is a list of dictionaries with a 'commenter_id' field
+            for comment in comments_data:
+                # Assuming the comment data contains 'commenter_id' field that holds the user ID of the commenter
+                is_commenter = comment.get('commenter_id') == request.user.id
+                comment['is_commenter'] = is_commenter  # Add this flag to the comment data
+
             return Response(comments_data, status=status.HTTP_200_OK)
+
         return Response([], status=status.HTTP_404_NOT_FOUND)
     
 class VendorRateCommunityOrderAPIView(APIView):

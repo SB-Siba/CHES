@@ -524,7 +524,8 @@ def give_comment(request):
             comment_data = {
                 "id": str(datetime.datetime.now().timestamp()),  # unique ID for the comment
                 "commenter": commenter,
-                "comment": comment
+                "comment": comment,
+                'commenter_id':request.user.id
             }
             post_obj.comments.append(comment_data)
             post_obj.save()
@@ -550,17 +551,24 @@ def get_all_comments(request):
     try:
         post_id = request.GET.get('post_id')
         activity_obj = common_models.UserActivity.objects.filter(id=int(post_id)).first()
-        current_user = request.user.full_name
         
-        if activity_obj:
-            comments_data = activity_obj.comments  # Assuming comments_data is a list of dictionaries
-            response_data = {
-                'current_user': current_user,
-                'comments': comments_data
-            }
-            return JsonResponse(response_data, safe=False)
-        else:
-            return JsonResponse({'current_user': current_user, 'comments': []}, safe=False)
+        comments_data = activity_obj.comments  # Assuming comments_data is a list of dictionaries
+        # Prepare the response data
+        response_data = {
+            'comments': []
+        }
+
+        for comment in comments_data:
+            # Check if the current user is the commenter
+            is_commenter = comment.get('commenter_id') == request.user.id
+            # Append the comment along with the is_commenter flag
+            response_data['comments'].append({
+                **comment,  # Unpack existing comment data
+                'is_commenter': is_commenter  # Add the is_commenter flag
+            })
+
+        return JsonResponse(response_data, safe=False)
+       
     except Exception as e:
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
