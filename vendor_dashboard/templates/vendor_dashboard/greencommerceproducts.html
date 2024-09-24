@@ -22,17 +22,19 @@
           </select>
         </div>
         <div class="col-md-6">
-          {% if searchquery %}
-            <input type="text" name="search_query" class="form-control me-2 search-input" aria-label="Search" value="{{ searchquery }}">
-          {% else %}
-            <input type="text" name="search_query" class="form-control me-2 search-input" placeholder="Search for produces..." aria-label="Search">
-          {% endif %}
-          <span>
-            <button class="search-btn" type="submit">
-              <i class="fa-solid fa-search"></i>
-            </button>
-          </span>
-        </div>
+            <div class="input-group mb-3">
+              {% if searchquery %}
+                <input type="text" name="search_query" class="form-control me-2 search-input" aria-label="Search" value="{{ searchquery }}">
+              {% else %}
+                <input type="text" name="search_query" class="form-control me-2 search-input" placeholder="Search for produces..." aria-label="Search">
+              {% endif %}          
+              <span class="input-group-text" id="basic-addon1">
+                <button type="submit">
+                  <i class="fa-solid fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </div>
       </div>
     </form>
     

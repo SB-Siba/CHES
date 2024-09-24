@@ -4,6 +4,7 @@ from .manage_users import users
 from admin_dashboard.orders import order
 from .manage_blogs import blogs
 from .registration import rtg_registration,vendor_registration,sp_registration
+from .user_query import Query
 
 
 app_name = 'admin_dashboard'
@@ -88,6 +89,11 @@ urlpatterns = [
     path('produces_category_update/<int:category_id>',views.ProducescategoryUpdate.as_view(), name='produces_category_update'),
     path('produces_category_delete/<int:category_id>',views.DeleteProducesCategory.as_view(), name='produces_category_delete'),
     path('produces_category/',views.ProducesCategorySearch.as_view(), name='produces_category_search'),
+    
+    # User Query
+    path('users_query/list/',Query.UsersQueryList.as_view(), name='users_query_list'),
+    path('users_query/reply/<int:id>/',Query.QueryReply.as_view(), name='query_reply'),
+
 ]
 
 #  admin_dashboard:users_list

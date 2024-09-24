@@ -161,7 +161,10 @@ sell_produces_list_get = [
 
 green_commerce_product_community_get = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("search_query", openapi.IN_QUERY, description="Search for products by name", required=False, type=openapi.TYPE_STRING),
+    openapi.Parameter("category", openapi.IN_QUERY, description="Filter products by category ID", required=False, type=openapi.TYPE_STRING),
 ]
+
 
 buying_begins_post = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
@@ -664,6 +667,46 @@ top_users_params = [
         openapi.IN_HEADER,
         description="Bearer <token>",
         required=True,
+        type=openapi.TYPE_STRING
+    ),
+]
+
+# User Query
+
+user_query_post = [
+    openapi.Parameter(
+        "Authorization", 
+        openapi.IN_HEADER, 
+        description="Bearer <token>", 
+        required=True, 
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        "full_name", 
+        openapi.IN_FORM, 
+        description="Full name of the user submitting the query", 
+        required=True, 
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        "email", 
+        openapi.IN_FORM, 
+        description="Email address of the user", 
+        required=True, 
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        "subject", 
+        openapi.IN_FORM, 
+        description="Subject of the query", 
+        required=True, 
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        "message", 
+        openapi.IN_FORM, 
+        description="Detailed message or query from the user", 
+        required=True, 
         type=openapi.TYPE_STRING
     ),
 ]
