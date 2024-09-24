@@ -1164,6 +1164,11 @@ class DeclineBookingAPIView(APIView):
 # all categpries
 
 class CategoryForProducesListView(APIView):
+    @swagger_auto_schema(
+        tags=["Produces Categories"],
+        operation_description="All Categories Of Produces.",
+        responses={200: CategoryForProducesSerializer(many=True)}
+    )
     def get(self, request, *args, **kwargs):
         categories = CategoryForProduces.objects.all()
         serializer = CategoryForProducesSerializer(categories, many=True)
