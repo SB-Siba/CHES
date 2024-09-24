@@ -13,10 +13,11 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from . import swagger_doccumentation
 from django.db.models.functions import Lower
 from django.contrib.auth.hashers import make_password
-from .models import Booking, Order, ProduceBuy, ProductFromVendor, Service, ServiceProviderDetails, User, GardeningProfile,UserActivity,SellProduce
+from .models import Booking, Order, ProduceBuy, ProductFromVendor, Service, ServiceProviderDetails, User, GardeningProfile,UserActivity,SellProduce,CategoryForProduces
 from django.utils.dateparse import parse_datetime
 from .serializer import (
     BookingSerializer,
+    CategoryForProducesSerializer,
     CheckoutFormSerializer,
     CommentSerializer,
     MessageSerializer,
@@ -1158,3 +1159,12 @@ class DeclineBookingAPIView(APIView):
             return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+# all categpries
+
+class CategoryForProducesListView(APIView):
+    def get(self, request, *args, **kwargs):
+        categories = CategoryForProduces.objects.all()
+        serializer = CategoryForProducesSerializer(categories, many=True)
+        return Response(serializer.data)
