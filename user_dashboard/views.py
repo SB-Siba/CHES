@@ -179,8 +179,16 @@ class ContactePage(View):
                 try:
                     contact_obj = app_commonmodels.User_Query(user = user,full_name = name,email = email,subject = subject,message = message)
                     contact_obj.save()
-                    # msg = EmailMessage("Contact from %s"%name,message,to=[settings.EMAIL_HOST_USER])
-                    # msg.send()
+                    send_template_email(
+                        subject="Your Query Is Recieved.",
+                        template_name="mail_template/query_submit.html",
+                        context={
+                            'full_name': contact_obj.full_name,
+                            "email": contact_obj.email,
+                            'message': contact_obj.message
+                        },
+                        recipient_list=[contact_obj.email]
+                    )
                     messages.success(request,'Query send Successfully. We will be in touch soon.')
                     
                 except Exception as e:

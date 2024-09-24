@@ -51,4 +51,7 @@ urlpatterns = [
     path('service_details/<int:service_id>/', views.ServiceDetails.as_view(), name='service_details'),
     path('my_booked_services/', views.MyBookedServices.as_view(), name='my_booked_services'),
     path('rtg/decline_booking/<int:booking_id>', views.vendor_decline_booking, name='vendor_decline_booking'),
+
+    path('vendor/contactpage', views.VendorContactePage.as_view(), name = "vendor_contact_page"),
+
 ]
