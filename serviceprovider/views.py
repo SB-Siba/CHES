@@ -6,6 +6,7 @@ from django.conf import settings
 from django.utils.decorators import method_decorator
 from app_common import models as common_models
 from app_common.error import render_error_page
+from EmailIntigration.views import send_template_email
 from . forms import ServiceProviderUpdateForm,ServiceAddForm
 from user_dashboard.serializers import OrderSerializer
 from user_dashboard.forms import ActivityAddForm, BuyAmmountForm,SellProduceForm,BuyQuantityForm
@@ -15,7 +16,8 @@ from django.utils import timezone
 from helpers import utils
 from chatapp.models import Message
 from admin_dashboard.orders.forms import OrderUpdateForm
-import ast
+from app_common.forms import contactForm
+
 app = "service_provider/"
 
 class ServiceProviderDashboard(View):
@@ -262,3 +264,54 @@ def mark_as_complete_booking(request, booking_id):
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
     return redirect('service_provider:my_all_bookings')
+
+
+class SpContactePage(View):
+    template = app + "contact.html"
+    form = contactForm
+
+    def get(self,request):
+        try:
+            data = {
+                'form': self.form(),
+            }
+            return render(request,self.template,data)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+        
+    def post(self, request):
+        try:
+            form = self.form(request.POST)
+            if form.is_valid():
+                user = request.user
+
+                name = form.cleaned_data['full_name']
+                email = form.cleaned_data['email']
+                subject = form.cleaned_data['subject']
+                message = form.cleaned_data['message']
+
+                try:
+                    contact_obj = common_models.User_Query(user = user,full_name = name,email = email,subject = subject,message = message)
+                    contact_obj.save()
+                    # Send email notification
+                    send_template_email(
+                        subject="Your Query Is Recieved.",
+                        template_name="mail_template/query_submit.html",
+                        context={
+                            'full_name': contact_obj.full_name,
+                            "email": contact_obj.email,
+                            'message': contact_obj.message
+                        },
+                        recipient_list=[contact_obj.email]
+                    )
+                    messages.success(request,'Query send Successfully. We will be in touch soon.')
+                    
+                except Exception as e:
+                    error_message = f"Something went wrong! {str(e)}"
+                    return render_error_page(request, error_message, status_code=400)
+            
+            return redirect('service_provider:sp_contact_page')
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)

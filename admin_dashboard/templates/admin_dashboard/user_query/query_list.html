@@ -15,6 +15,9 @@
                     <h5 class="card-title">{{ query.full_name }} - <span class="text-muted">{{ query.subject }}</span>
                     </h5>
                     <p class="card-text">{{ query.message|truncatewords:20 }}</p>
+                    {% if query.reply %}
+                    <p class="card-text"><strong>Reply :</strong> {{ query.reply }}</p>
+                    {% endif %}
                     <small class="text-muted">Status:
                         <span class="badge {{ query.is_solve|yesno:'badge-success,badge-danger' }}">
                             {{ query.is_solve|yesno:"Solved,Not Solved" }}
@@ -23,10 +26,17 @@
                     <br>
                     <small class="text-muted">Sent on: {{ query.date_sent|date:"M d, Y H:i" }}</small>
                 </div>
-                <button type="button" class="btn btn-primary" data-toggle="modal"
-                    data-target="#replyModal{{ query.id }}">
-                    <i class="fas fa-reply"></i> View & Reply
-                </button>
+                <div>
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#replyModal{{ query.id }}">
+                        <i class="fas fa-reply"></i> View & Reply
+                    </button>
+                    <!-- Delete Button -->
+                    <button type="button" class="btn btn-danger" data-toggle="modal"
+                        data-target="#deleteModal{{ query.id }}">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -59,6 +69,9 @@
                                     {{ query.is_solve|yesno:"Solved,Not Solved" }}
                                 </span>
                             </p>
+                            {% if query.reply %}
+                            <p><strong>Reply :</strong> {{ query.reply }}</p>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -77,6 +90,27 @@
                         <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i> Send
                             Reply</button>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal for deleting the query -->
+    <div class="modal fade" id="deleteModal{{ query.id }}" tabindex="-1" role="dialog"
+        aria-labelledby="deleteModalLabel{{ query.id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel{{ query.id }}">Delete Query</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the query from {{ query.full_name }}?</p>
+                    <p><strong>Subject:</strong> {{ query.subject }}</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="{% url 'admin_dashboard:query_delete' query.id %}" class="btn btn-danger">Delete</a>
                 </div>
             </div>
         </div>

@@ -248,3 +248,51 @@ class ForgotPasswordForm(forms.Form):
 class ResetPasswordForm(forms.Form):
     new_password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
+
+
+
+
+class contactForm(forms.Form):
+    class Meta:
+        model = models.User_Query
+        fields = ["full_name", "email", "subject", "message"]
+
+    full_name = forms.CharField(max_length=255, label="Enter Full Name")
+    full_name.widget.attrs.update(
+        {
+            "class": "form-control",
+            "type": "text",
+            "placeholder": "Full Name",
+            "required": "required",
+        }
+    )
+
+    email = forms.CharField(label="Email")
+    email.widget.attrs.update(
+        {
+            "class": "form-control",
+            "type": "email",
+            "placeholder": "user@gmail.com",
+            "required": "required",
+        }
+    )
+
+    subject = forms.CharField(label="Enter Subject")
+    subject.widget.attrs.update(
+        {
+            "class": "form-control",
+            "type": "text",
+            "placeholder": "Subject",
+            "required": "required",
+        }
+    )
+
+    message = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter message here",
+                "required": "required",
+            }
+        )
+    )

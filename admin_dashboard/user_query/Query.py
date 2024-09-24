@@ -73,4 +73,14 @@ class QueryReply(View):
             error_list = [f'{field}: {error}' for field, errors in form.errors.items() for error in errors]
             error_message =  f"Errors occurred: {', '.join(error_list)}"
             return render_error_page(request, error_message, status_code=400)
+        
+class DeleteQuery(View):
+    model = models.User_Query
+
+    def get(self,request,id):
+        message = get_object_or_404(self.model, id=id)
+        message.delete()
+        return redirect('admin_dashboard:users_query_list')
+
+
 

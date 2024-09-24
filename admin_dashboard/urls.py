@@ -93,6 +93,7 @@ urlpatterns = [
     # User Query
     path('users_query/list/',Query.UsersQueryList.as_view(), name='users_query_list'),
     path('users_query/reply/<int:id>/',Query.QueryReply.as_view(), name='query_reply'),
+    path('users_query/delete/<int:id>/',Query.DeleteQuery.as_view(), name='query_delete'),
 
 ]
 
