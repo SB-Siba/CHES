@@ -205,7 +205,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'admin_dashboard:users_query_list' %}">
                     <i class="fa-solid fa-coins"></i>
-                    <span>Users Query</span></a>
+                    <span>Users Query</span>
+                    {% if total_queries_from_user > 0 %}
+                        <span class="badge badge-danger badge-counter">{{total_queries_from_user}}</span>
+                    {% endif %}
+                </a>
             </li>
             <li class="nav-item">
             <a class="nav-link" href="{% url 'admin_dashboard:produce_order_list' %}">
