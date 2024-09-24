@@ -10,7 +10,8 @@ from .models import (
     Service,
     User, 
     GardeningProfile, 
-    GaredenQuizModel, 
+    GaredenQuizModel,
+    User_Query, 
     VendorDetails, 
     ServiceProviderDetails,
     GardeningProfileUpdateRequest,
@@ -212,10 +213,10 @@ class AllActivitiesSerializer(serializers.ModelSerializer):
     like_count = serializers.SerializerMethodField()
     comment_count = serializers.SerializerMethodField()
     user_liked = serializers.SerializerMethodField()
-
+    user_full_name = serializers.SerializerMethodField()
     class Meta:
         model = UserActivity
-        fields = ['id', 'is_accepted', 'likes', 'comments', 'like_count', 'comment_count', 'user_liked','activity_image','activity_title','activity_content']
+        fields = ['id','user_full_name', 'is_accepted', 'likes', 'comments', 'like_count', 'comment_count', 'user_liked','activity_image','activity_title','activity_content']
 
     def get_like_count(self, obj):
         return len(obj.likes)
@@ -228,6 +229,9 @@ class AllActivitiesSerializer(serializers.ModelSerializer):
         if request and hasattr(request, 'user'):
             return request.user.full_name in obj.likes
         return False
+    
+    def get_user_full_name(self,obj):
+        return obj.user.full_name
 
 
 class CommentSerializer(serializers.Serializer):
@@ -370,11 +374,17 @@ class OrderUpdateSerializer(serializers.ModelSerializer):
 # ================================== Blog ============================================
 
 class BlogSerializer(serializers.ModelSerializer):
+    blog_by = serializers.SerializerMethodField()
+
     class Meta:
         model = Blogs
-        fields = '__all__'
+        fields = ['title', 'author', 'date', 'content', 'image', 'blog_by']
 
-
+    def get_blog_by(self,obj):
+        if obj.user.full_name:
+            return obj.user.full_name
+        else:
+            return obj.user.email
 # Rank Serializer
 
 class UserRankSerializer(serializers.ModelSerializer):
@@ -397,3 +407,10 @@ class CategoryForProducesSerializer(serializers.ModelSerializer):
     class Meta:
         model = CategoryForProduces
         fields = ['id', 'category_name']
+
+
+class UserQuerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User_Query
+        fields = ['id', 'user', 'full_name', 'email', 'subject', 'message', 'date_sent', 'is_solve']
+        read_only_fields = ['id', 'date_sent']

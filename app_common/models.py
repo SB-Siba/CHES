@@ -166,6 +166,7 @@ class User_Query(models.Model):
     email = models.EmailField(null=False, blank=False)
     subject = models.CharField(max_length=250, null=False, blank=False)
     message = models.TextField(null=False, blank=False)
+    reply = models.TextField(null=True, blank= True)
     date_sent = models.DateTimeField(auto_now_add=True)
     is_solve = models.BooleanField(default = False)
 

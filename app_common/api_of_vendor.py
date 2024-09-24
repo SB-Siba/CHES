@@ -274,14 +274,36 @@ class VendorSellProduceListAPIView(APIView):
 class VendorGreenCommerceProductCommunityAPIView(APIView):
     @swagger_auto_schema(
         tags=["All API Vendors"],
-        operation_description="Community Products API",
+        operation_description="Fetch community products with optional filtering by category or search query.",
         manual_parameters=swagger_doccumentation.green_commerce_product_community_get,
         responses={200: 'Approved sell produces fetched successfully.'}
     )
     def get(self, request):
-        produce_obj = SellProduce.objects.exclude(user=request.user).filter(is_approved="approved").order_by("-id")
-        serializer = SellProduceSerializer(produce_obj, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            # Get search query and category from request parameters
+            search_query = request.GET.get('search_query', '')
+            selected_category = request.GET.get('category')
+            
+            # Fetch approved produce items excluding those from the current user
+            produce_query = SellProduce.objects.exclude(user=request.user).filter(is_approved="approved")
+            # Apply filtering based on category
+            if selected_category and selected_category != 'all':
+                produce_query = produce_query.filter(produce_category=selected_category)
+
+            # Apply filtering based on search query
+            if search_query:
+                produce_query = produce_query.filter(product_name__icontains=search_query)
+
+            # Order the results by latest date
+            produce_obj = produce_query.order_by("-date_time")
+            # Serialize the data
+            serializer = SellProduceSerializer(produce_obj, many=True)
+
+            # Return serialized data in the response
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class VendorBuyingBeginsAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
