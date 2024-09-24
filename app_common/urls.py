@@ -12,10 +12,8 @@ urlpatterns = [
     path('authentication/logout', views.Logout.as_view(), name = "logout"),
     path("passwordChange/",auth_view.PasswordChangeView.as_view(template_name = 'app_common/authentication/changepassword.html',form_class = PasswordChangeForm,success_url = '/passwordchangedone'),name='passwordchange'),
     path("passwordchangedone/",auth_view.PasswordChangeDoneView.as_view(template_name = 'app_common/authentication/changepassworddone.html'),name='passwordchangedone'),
-    path('password-reset/', views.CustomPasswordResetView.as_view(),name='password-reset'),
-    path('password-reset/done/', views.CustomPasswordResetDoneView.as_view(),name='password_reset_done'),
-    path('password-reset-confirm/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(),name='password_reset_confirm'),
-    path('password-reset-complete/',views.CustomPasswordResetCompleteView.as_view(),name='password_reset_complete'),
+    path('forgot_password/', views.ForgotPasswordView.as_view(), name = "forgot_password"),
+    path('reset-password/<uuid:token>/', views.ResetPasswordView.as_view(), name='reset_password'),
 
     path('add-gardening-details/<str:u_email>', views.GardeningDetails.as_view(), name='gardeningdetails'),
     path('gardening-quiz/<str:u_email>', views.gardening_quiz_view, name='gardeningquiz'),

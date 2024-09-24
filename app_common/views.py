@@ -1,35 +1,13 @@
+from django.forms import ValidationError
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
-
-from django.utils.decorators import method_decorator
 from django.contrib import auth
 from django.contrib.auth import logout
 from django.conf import settings
-from django.contrib.auth.hashers import check_password,make_password
 from EmailIntigration.views import send_template_email
-#import requests
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_str
-from django.http import JsonResponse
-
-from django.views.generic.edit import FormView
-from .forms import CustomPasswordResetForm,CustomSetPasswordForm
-from django.views.generic.base import TemplateView
-from django.contrib.auth import get_user_model
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_decode
-from django.views.generic.edit import FormView
-from django.core.exceptions import ValidationError
-from django.urls import reverse_lazy
-from django.core.mail import send_mail
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
-from django.template.loader import render_to_string
-from smtplib import SMTPException
 from . import forms
-from helpers import utils
 from . import models
 from django.utils.html import strip_tags
 from django.core.mail import EmailMultiAlternatives
@@ -452,95 +430,65 @@ class Home(View):
         return render(request,self.template)
     
 
-class CustomPasswordResetView(FormView):
-    template_name = app + "authentication/password_reset.html"
-    template_email = app + "authentication/password_reset_email.html"
+class ForgotPasswordView(View):
+    template_name = app + 'authentication/forgot_password.html'
 
-    form_class = CustomPasswordResetForm
-    success_url = reverse_lazy('app_common:password_reset_done')
-    token_generator = default_token_generator
+    def get(self, request):
+        form2 = forms.ForgotPasswordForm()
+        return render(request, self.template_name, {'form2': form2})
 
-    def form_valid(self, form):
-        email = form.cleaned_data['email']
-        users = models.User._default_manager.filter(email=email)
-        if users.exists():
-            for user in users:
-                current_site = get_current_site(self.request)
-                mail_subject = 'Password reset link'
-                uid = urlsafe_base64_encode(force_bytes(user.pk))
-                token = self.token_generator.make_token(user)
-                reset_link = reverse_lazy('app_common:password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
-                reset_url = f"{self.request.scheme}://{current_site.domain}{reset_link}"
-                message = render_to_string(self.template_email, {
-                    'user': user,
-                    'reset_url': reset_url,
-                })
-                text_message = strip_tags(message)
-                msg = EmailMultiAlternatives(mail_subject, text_message, 'admin@example.com', [email])
-                msg.attach_alternative(message, "text/html")
-                msg.send()
-        return super().form_valid(form)
-    
-class CustomPasswordResetDoneView(TemplateView):
-    template_name = app + "authentication/password_reset_done.html"
+    def post(self, request):
+        form2 = forms.ForgotPasswordForm(request.POST)
+        if form2.is_valid():
+            email = form2.cleaned_data['email']
+            try:
+                user = models.User.objects.get(email=email)
+                token = user.generate_reset_password_token()
+                reset_link = f"{settings.SITE_URL}/reset-password/{token}/"
+                context = {
+                    'full_name': user.full_name,
+                    'reset_link': reset_link,
+                }
+                send_template_email(
+                    subject='Reset Your Password',
+                    template_name='mail_template/reset_password_email.html',
+                    context=context,
+                    recipient_list=[email]
+                )
+                return render(request,"app_common/authentication/reset_mail_sent.html")
+            except models.User.DoesNotExist:
+                return HttpResponse("No user found with this email address.")
+            except Exception as e:
+                return HttpResponse(f"An error occurred: {e}")
+        return render(request, self.template_name, {'form2': form2})
 
-UserModel = get_user_model()
-
-class CustomPasswordResetConfirmView(FormView):
-    template_name = app + "authentication/password_reset_confirm.html"
-    form_class = CustomSetPasswordForm
-    token_generator = default_token_generator
-    success_url = reverse_lazy('app_common:password_reset_complete')
-
-    def dispatch(self, *args, **kwargs):
-        try:
-            self.user = self.get_user(kwargs['uidb64'])
-            if self.user is not None and self.token_generator.check_token(self.user, kwargs['token']):
-                return super().dispatch(*args, **kwargs)
-            return self.render_to_response(self.get_context_data(validlink=False))
-        except Exception as e:
-            error_message = f"An unexpected error occurred: {str(e)}"
-            return render_error_page(self.request, error_message, status_code=400)
+ 
 
 
-    def get_user(self, uidb64):
-        try:
-            uid = urlsafe_base64_decode(uidb64).decode()
-            return UserModel._default_manager.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist, ValidationError):
-            return None
-        except Exception as e:
-            raise e  # Raising exception to be caught by the dispatch method
+class ResetPasswordView(View):
+    template_name = app + 'authentication/reset_password.html'
 
-    def get_form_kwargs(self):
-        try:
-            kwargs = super().get_form_kwargs()
-            kwargs['user'] = self.user
-            return kwargs
-        except Exception as e:
-            error_message = f"An unexpected error occurred: {str(e)}"
-            messages.error(self.request, error_message)
-            return super().form_invalid(self.get_form())  # Handling form invalid case
+    def get(self, request, token):
+        form = forms.ResetPasswordForm()
+        return render(request, self.template_name, {'form': form})
 
-    def form_valid(self, form):
-        try:
-            form.save()
-            return super().form_valid(form)
-        except Exception as e:
-            error_message = f"An unexpected error occurred: {str(e)}"
-            messages.error(self.request, error_message)
-            return self.form_invalid(form)  # Handling form invalid case
-
-    def get_context_data(self, **kwargs):
-        try:
-            context = super().get_context_data(**kwargs)
-            context['validlink'] = True if self.user is not None else False
-            return context
-        except Exception as e:
-            error_message = f"An unexpected error occurred while loading the page: {str(e)}"
-            messages.error(self.request, error_message)
-            return context
-
-    
-class CustomPasswordResetCompleteView(TemplateView):
-    template_name = app + "authentication/password_reset_complete.html"
+    def post(self, request, token):
+        form = forms.ResetPasswordForm(request.POST)
+        if form.is_valid():
+            new_password = form.cleaned_data['new_password']
+            confirm_password = form.cleaned_data['confirm_password']
+            if new_password != confirm_password:
+                return HttpResponse("Passwords do not match.")
+            try:
+                user = models.User.objects.get(token=token)
+                if user:
+                    user.set_password(new_password)
+                    user.token = None  # Clear the token after password reset
+                    user.save()
+                    messages.success(request, "Password reset successfully.")
+                    return redirect('app_common:login')
+                else:
+                    return HttpResponse("Invalid token.")
+            except models.User.DoesNotExist:
+                return HttpResponse("Invalid token.")
+        return render(request, self.template_name, {'form': form})
