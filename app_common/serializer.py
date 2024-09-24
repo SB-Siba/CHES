@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import (
     Booking,
+    CategoryForProduces,
     Order,
     ProduceBuy,
     ProductFromVendor,
@@ -391,3 +392,8 @@ class UserRankSerializer(serializers.ModelSerializer):
         higher_scores_count = User.objects.filter(coins__gt=obj.coins).count()
         return higher_scores_count + 1
 
+
+class CategoryForProducesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryForProduces
+        fields = ['id', 'category_name']
