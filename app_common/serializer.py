@@ -378,7 +378,7 @@ class BlogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Blogs
-        fields = ['title', 'author', 'date', 'content', 'image', 'blog_by']
+        fields = ['id','slug','title', 'author', 'date', 'content', 'image', 'blog_by']
 
     def get_blog_by(self,obj):
         if obj.user.full_name:
