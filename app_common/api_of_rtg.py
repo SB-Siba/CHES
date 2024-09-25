@@ -27,6 +27,7 @@ from .serializer import (
     RateOrderSerializer,
     SellProduceSerializer,
     SendMessageSerializer,
+    ServiceDetailsSerializer,
     ServiceProviderSerializer,
     ServiceSerializer,
     StartMessagesSerializer,
@@ -1066,7 +1067,7 @@ class ServiceDetailsAPIView(APIView):
             ),
         ],
         responses={
-            200: ServiceSerializer,
+            200: ServiceDetailsSerializer,
             404: openapi.Response('Service not found'),
             400: openapi.Response('Error occurred')
         }
@@ -1074,7 +1075,7 @@ class ServiceDetailsAPIView(APIView):
     def get(self, request, service_id):
         try:
             service = get_object_or_404(Service, id=service_id)
-            serializer = ServiceSerializer(service)
+            serializer = ServiceDetailsSerializer(service)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
