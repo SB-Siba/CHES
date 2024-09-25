@@ -16,68 +16,120 @@
             justify-content: center;
             align-items: center;
             color: #333;
+            position: relative;
         }
 
         .error-container {
-            text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95); /* Almost opaque for readability */
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
             max-width: 600px;
             width: 100%;
             animation: fadeIn 1.2s ease-in-out;
+            text-align: center;
+            position: relative;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .error-container h1 {
-            font-size: 7rem;
-            font-weight: 800;
-            color: #388e3c; /* Deep green for gardening theme */
+        .error-icon {
+            font-size: 100px;
+            color: #4caf50; /* Nature-inspired green */
             margin-bottom: 20px;
         }
 
-        .error-container p.lead {
-            font-size: 1.5rem;
-            margin-top: 20px;
-            color: #555;
+        .error-container h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #388e3c; /* Dark green */
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .error-container p {
+            font-size: 1.25rem;
+            margin: 10px 0;
+            line-height: 1.6;
+            color: #555; /* Darker gray for readability */
         }
 
         .error-container p strong {
-            color: #d32f2f; /* Error message in red */
+            color: #d9534f; /* Error message in red */
         }
 
         .error-container .btn {
-            margin-top: 30px;
-            background-color: #388e3c; /* Green button */
+            margin-top: 40px; /* Increased margin to create a gap */
+            background-color: #66bb6a; /* Bright green button */
             border: none;
-            padding: 15px 40px;
+            padding: 15px 30px;
             font-size: 1.2rem;
             color: white;
-            border-radius: 50px;
+            border-radius: 30px;
             text-transform: uppercase;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .error-container .btn:hover {
-            background-color: #2e7d32;
+            background-color: #5cb85c;
+            transform: scale(1.05);
         }
 
+        /* Decorative Elements */
+        .leaf-decoration {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 60px;
+            opacity: 0.15;
+        }
+
+        .flower-decoration {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 80px;
+            opacity: 0.15;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: #333;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
 
     <div class="error-container">
+        <div class="error-icon">🌿</div>
         <h1>Oops!</h1>
-        <p class="lead">We encountered an error. We're tending to this issue like a delicate flower.</p>
+        <p>It seems we've hit a little bump in our garden.</p>
+        
+        <p>
+            <strong>Possible issues:</strong><br>
+            - If it's our fault, rest assured we're nurturing a fix!<br>
+            - If it’s due to your input, please double-check your data for any errors.
+        </p>
+
         <p>Error details: <strong>{{ error_message }}</strong></p>
         
-        <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn">Go Back</a>
+        <p style="margin-top: 20px;">
+            <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn">Go Back</a>
+        </p>
+
+        <!-- Decorative Elements -->
+        <img src="https://img.icons8.com/ios-filled/50/000000/leaf.png" alt="Leaf decoration" class="leaf-decoration">
+        <img src="https://img.icons8.com/ios-filled/50/000000/flower.png" alt="Flower decoration" class="flower-decoration">
     </div>
+
 
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
