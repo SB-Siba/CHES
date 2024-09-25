@@ -94,9 +94,30 @@ class GardeningQuizQuestionSerializer(serializers.Serializer):
 
 
 class VendorDetailsSerializer(serializers.ModelSerializer):
+    # Assuming custom_business_category will be an optional field
+    custom_business_category = serializers.CharField(required=False, allow_blank=True)
+
     class Meta:
         model = VendorDetails
-        fields = ['business_name', 'business_address', 'business_description', 'business_license_number', 'business_category', 'establishment_year', 'website', 'established_by']
+        fields = [
+            'business_name',
+            'business_address',
+            'business_description',
+            'business_license_number',
+            'business_category',
+            'custom_business_category',  # Add this field to handle custom category input
+            'establishment_year',
+            'website',
+            'established_by'
+        ]
+
+    def validate(self, data):
+        # Example validation to ensure custom business category is provided if 'other' is selected
+        if data.get('business_category') == 'other' and not data.get('custom_business_category'):
+            raise serializers.ValidationError({
+                'custom_business_category': 'This field is required if "business_category" is set to "other".'
+            })
+        return data
 
 class ServiceProviderDetailsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -345,19 +366,6 @@ class AuthServiceProviderDetailsSerializer(serializers.ModelSerializer):
         data['service_area'] = [item.strip() for item in data['service_area'].split(',')] if data.get('service_area') else []
         data['add_service_area'] = [item.strip() for item in data['add_service_area'].split(',')] if data.get('add_service_area') else []
         return data
-
-    def create(self, validated_data):
-        add_service_type = validated_data.pop('add_service_type', [])
-        add_service_area = validated_data.pop('add_service_area', [])
-        
-        # Merge additional service types and areas with the existing ones
-        service_type = validated_data['service_type'] + add_service_type
-        service_area = validated_data['service_area'] + add_service_area
-        
-        validated_data['service_type'] = service_type
-        validated_data['service_area'] = service_area
-        
-        return super().create(validated_data)
 # ================================== VENDOR ============================================
 
 class VendorSerializer(serializers.ModelSerializer):
