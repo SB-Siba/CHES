@@ -274,7 +274,11 @@ class VendorDetails(View):
     def get(self, request, u_email):
         try:
             user_obj = models.User.objects.get(email=u_email)
-            form = self.form_class(instance=user_obj)
+            try:
+                vendor_details = self.model.objects.get(vendor=user_obj)
+                form = self.form_class(instance=vendor_details)
+            except self.model.DoesNotExist:
+                form = self.form_class()
             context = {'form': form}
             return render(request, self.template, context)
         except models.User.DoesNotExist:
@@ -298,32 +302,34 @@ class VendorDetails(View):
                 if business_category == 'other' and custom_business_category:
                     business_category = custom_business_category
 
-                vendor_detail_obj = self.model(
+                # Check if VendorDetails for the user already exists
+                vendor_detail_obj, created = self.model.objects.update_or_create(
                     vendor=user_obj,
-                    business_name=form.cleaned_data['business_name'],
-                    business_address=form.cleaned_data['business_address'],
-                    business_description=form.cleaned_data['business_description'],
-                    business_license_number=form.cleaned_data['business_license_number'],
-                    business_category=business_category,
-                    establishment_year=form.cleaned_data['establishment_year'],
-                    website=form.cleaned_data['website'],
-                    established_by=form.cleaned_data['established_by']
+                    defaults={
+                        'business_name': form.cleaned_data['business_name'],
+                        'business_address': form.cleaned_data['business_address'],
+                        'business_description': form.cleaned_data['business_description'],
+                        'business_license_number': form.cleaned_data['business_license_number'],
+                        'business_category': business_category,
+                        'establishment_year': form.cleaned_data['establishment_year'],
+                        'website': form.cleaned_data['website'],
+                        'established_by': form.cleaned_data['established_by'],
+                    }
                 )
-                vendor_detail_obj.save()
 
-                try:
-                    send_template_email(
-                        subject="Registration Successful",
-                        template_name="mail_template/registration_mail.html",
-                        context={'full_name': user_obj.full_name, "email": user_obj.email},
-                        recipient_list=[user_obj.email]
-                    )
-                    request.session.pop('registration_step', None)
-                    request.session.pop('registration_email', None)
-                except Exception as e:
-                    error_message = f"Failed to send email: {str(e)}"
-                    return render_error_page(request, error_message, status_code=400)
-
+                if created:
+                    try:
+                        send_template_email(
+                            subject="Registration Successful",
+                            template_name="mail_template/registration_mail.html",
+                            context={'full_name': user_obj.full_name, "email": user_obj.email},
+                            recipient_list=[user_obj.email]
+                        )
+                        request.session.pop('registration_step', None)
+                        request.session.pop('registration_email', None)
+                    except Exception as e:
+                        error_message = f"Failed to send email: {str(e)}"
+                        return render_error_page(request, error_message, status_code=400)
 
                 if request.user.is_superuser:
                     return redirect('admin_dashboard:pending_vendor')
@@ -350,10 +356,14 @@ class ServiceProviderDetails(View):
     def get(self, request, u_email):
         try:
             user_obj = models.User.objects.get(email=u_email)
-            form = self.form_class()
+            try:
+                service_provider_details = self.model.objects.get(provider=user_obj)
+                form = self.form_class(instance=service_provider_details)
+            except self.model.DoesNotExist:
+                form = self.form_class()
             context = {'form': form}
         except models.User.DoesNotExist:
-            error_message = f"No Data Found."
+            error_message = f"No data found for the given email."
             return render_error_page(request, error_message, status_code=400)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
@@ -386,27 +396,31 @@ class ServiceProviderDetails(View):
                 average_cost_per_hour = form.cleaned_data['average_cost_per_hour']
                 years_experience = form.cleaned_data['years_experience']
 
-                service_provider_detail_obj = self.model(
+                # Update or create the service provider details for the user
+                service_provider_detail_obj, created = self.model.objects.update_or_create(
                     provider=user_obj,
-                    service_type=service_type,
-                    service_area=service_area,
-                    average_cost_per_hour=average_cost_per_hour,
-                    years_experience=years_experience,
+                    defaults={
+                        'service_type': service_type,
+                        'service_area': service_area,
+                        'average_cost_per_hour': average_cost_per_hour,
+                        'years_experience': years_experience,
+                    }
                 )
-                service_provider_detail_obj.save()
 
-                try:
-                    send_template_email(
-                        subject="Registration Successful",
-                        template_name="mail_template/registration_mail.html",
-                        context={'full_name': user_obj.full_name, "email": user_obj.email},
-                        recipient_list=[user_obj.email]
-                    )
-                    request.session.pop('registration_step', None)
-                    request.session.pop('registration_email', None)
-                except Exception as e:
-                    error_message = f"Failed to send email: {str(e)}"
-                    return render_error_page(request, error_message, status_code=400)
+                # Send email only if a new service provider detail is created
+                if created:
+                    try:
+                        send_template_email(
+                            subject="Registration Successful",
+                            template_name="mail_template/registration_mail.html",
+                            context={'full_name': user_obj.full_name, "email": user_obj.email},
+                            recipient_list=[user_obj.email]
+                        )
+                        request.session.pop('registration_step', None)
+                        request.session.pop('registration_email', None)
+                    except Exception as e:
+                        error_message = f"Failed to send email: {str(e)}"
+                        return render_error_page(request, error_message, status_code=400)
 
                 if request.user.is_superuser:
                     return redirect('admin_dashboard:pending_service_provider')

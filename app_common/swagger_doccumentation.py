@@ -46,6 +46,7 @@ vendor_details_post = [
     openapi.Parameter("business_description", openapi.IN_QUERY, description="Business Description", required=True, type=openapi.TYPE_STRING),
     openapi.Parameter("business_license_number", openapi.IN_QUERY, description="Business License Number", required=True, type=openapi.TYPE_STRING),
     openapi.Parameter("business_category", openapi.IN_QUERY, description="Business Category", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("custom_business_category", openapi.IN_QUERY, description="Add Your Bussiness Category", required=False, type=openapi.TYPE_STRING),
     openapi.Parameter("establishment_year", openapi.IN_QUERY, description="Establishment Year", required=True, type=openapi.TYPE_INTEGER),
     openapi.Parameter("website", openapi.IN_QUERY, description="Website", required=False, type=openapi.TYPE_STRING),
     openapi.Parameter("established_by", openapi.IN_QUERY, description="Established By", required=True, type=openapi.TYPE_STRING),
