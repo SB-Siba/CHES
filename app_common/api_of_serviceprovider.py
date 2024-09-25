@@ -50,10 +50,6 @@ class ServiceProviderUpdateProfileAPI(APIView):
             # Save the existing details first
             serializer.save()
 
-            # Extract existing service types and areas
-            existing_service_types = service_provider_details.service_type or []
-            existing_service_areas = service_provider_details.service_area or []
-
             # Split the incoming service types and areas
             new_service_types = request.data.get('service_type', '').split(',')
             add_service_types = request.data.get('add_service_type', '').split(',')
@@ -67,8 +63,8 @@ class ServiceProviderUpdateProfileAPI(APIView):
             add_service_areas = [item.strip() for item in add_service_areas if item.strip()]
 
             # Combine existing and new service types and areas
-            combined_service_types = list(set(existing_service_types + new_service_types + add_service_types))
-            combined_service_areas = list(set(existing_service_areas + new_service_areas + add_service_areas))
+            combined_service_types = list(set(new_service_types + add_service_types))
+            combined_service_areas = list(set(new_service_areas + add_service_areas))
 
             # Update the service_provider_details with combined lists
             service_provider_details.service_type = combined_service_types
