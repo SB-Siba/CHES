@@ -45,8 +45,35 @@ class ServiceProviderUpdateProfileAPI(APIView):
     def post(self, request):
         service_provider_details = get_object_or_404(ServiceProviderDetails, provider=request.user)
         serializer = ServiceProviderProfileUpdateSerializer(instance=service_provider_details, data=request.data)
+        
         if serializer.is_valid():
+            # Save the existing details first
             serializer.save()
+
+            # Extract existing service types and areas
+            existing_service_types = service_provider_details.service_type or []
+            existing_service_areas = service_provider_details.service_area or []
+
+            # Split the incoming service types and areas
+            new_service_types = request.data.get('service_type', '').split(',')
+            add_service_types = request.data.get('add_service_type', '').split(',')
+            new_service_areas = request.data.get('service_area', '').split(',')
+            add_service_areas = request.data.get('add_service_area', '').split(',')
+
+            # Clean up whitespace and remove empty entries
+            new_service_types = [item.strip() for item in new_service_types if item.strip()]
+            add_service_types = [item.strip() for item in add_service_types if item.strip()]
+            new_service_areas = [item.strip() for item in new_service_areas if item.strip()]
+            add_service_areas = [item.strip() for item in add_service_areas if item.strip()]
+
+            # Combine existing and new service types and areas
+            combined_service_types = list(set(existing_service_types + new_service_types + add_service_types))
+            combined_service_areas = list(set(existing_service_areas + new_service_areas + add_service_areas))
+
+            # Update the service_provider_details with combined lists
+            service_provider_details.service_type = combined_service_types
+            service_provider_details.service_area = combined_service_areas
+            service_provider_details.save()
 
             # Update user object if needed
             user_obj = request.user
@@ -55,6 +82,7 @@ class ServiceProviderUpdateProfileAPI(APIView):
             user_obj.save()
 
             return Response("Profile updated successfully", status=status.HTTP_200_OK)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ServiceListAPIView(APIView):

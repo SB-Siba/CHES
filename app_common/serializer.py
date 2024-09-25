@@ -335,7 +335,16 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
 class ServiceProviderProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceProviderDetails
-        fields = ['service_type', 'service_area', 'average_cost_per_hour', 'years_experience']
+        fields = ['average_cost_per_hour', 'years_experience']  # Exclude service_type and service_area
+
+    def update(self, instance, validated_data):
+        # Update average_cost_per_hour and years_experience
+        instance.average_cost_per_hour = validated_data.get('average_cost_per_hour', instance.average_cost_per_hour)
+        instance.years_experience = validated_data.get('years_experience', instance.years_experience)
+        
+        # Save the instance
+        instance.save()
+        return instance
 
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:

@@ -143,7 +143,7 @@ class Login(View):
                     return render_error_page(request, error_message, status_code=400)
 
             else:
-                error_message = f"Login failed or you are not approved yet!"
+                error_message = f"Account Doesn't Exists With this Email.. Please Double Check Your Inputs !!!"
                 return render_error_page(request, error_message, status_code=400)
 
         except Exception as e:
