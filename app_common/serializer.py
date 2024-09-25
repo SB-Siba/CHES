@@ -214,6 +214,7 @@ class ProduceBuySerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'buyer', 'seller', 'sell_produce', 'product_name', 'SI_units', 'buying_status', 'date_time']
 
 
+
 class SendPaymentLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProduceBuy
@@ -289,6 +290,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'full_name', 'email', 'user_image']
 
+
+class ServiceDetailsSerializer(serializers.ModelSerializer):
+    provider = UserSerializer()
+    class Meta:
+        model = Service
+        fields = ['id','provider','service_type', 'name', 'description', 'price_per_hour']
+        
 class MessageSerializer(serializers.ModelSerializer):
     sender = UserSerializer()
     receiver = UserSerializer()
