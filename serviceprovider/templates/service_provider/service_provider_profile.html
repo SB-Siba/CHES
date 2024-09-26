@@ -107,7 +107,11 @@
                             <label>Availability Area</label>
                         </div>
                         <div class="col-md-6">
-                            <p>{{ service_provider_obj.service_area|slice:"1:-1"  }}</p>
+                            {% for area in service_provider_obj.service_area %}
+                            <div class="d-flex justify-content-between">
+                                <p>{{ area  }}</p>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="row">
@@ -115,7 +119,9 @@
                             <label>Service Type</label>
                         </div>
                         <div class="col-md-6">
-                            <p>{{ service_provider_obj.service_type|slice:"1:-1"  }}</p>
+                            {% for type in service_provider_obj.service_type %}
+                                <p>{{ type  }}</p>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

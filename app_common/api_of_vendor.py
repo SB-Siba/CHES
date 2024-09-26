@@ -6,19 +6,18 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
-from rest_framework.decorators import api_view,permission_classes
 from chatapp.models import Message
 from rest_framework.parsers import FormParser, MultiPartParser
 from . import swagger_doccumentation
-from django.contrib.auth.hashers import make_password
 from .models import Booking, Order, ProduceBuy, ProductFromVendor, Service, ServiceProviderDetails, VendorDetails, User, GardeningProfile,UserActivity,SellProduce
+from django.utils.dateparse import parse_datetime
+from django.db.models.functions import Lower
+from django.utils.timezone import make_aware
 from .serializer import (
     BlogSerializer,
     BookingSerializer,
     CheckoutFormSerializer,
     CommentSerializer,
-    LikeSerializer,
     MessageSerializer,
     OrderUpdateSerializer,
     ProduceBuySerializer,
@@ -275,14 +274,36 @@ class VendorSellProduceListAPIView(APIView):
 class VendorGreenCommerceProductCommunityAPIView(APIView):
     @swagger_auto_schema(
         tags=["All API Vendors"],
-        operation_description="Community Products API",
+        operation_description="Fetch community products with optional filtering by category or search query.",
         manual_parameters=swagger_doccumentation.green_commerce_product_community_get,
         responses={200: 'Approved sell produces fetched successfully.'}
     )
     def get(self, request):
-        produce_obj = SellProduce.objects.exclude(user=request.user).filter(is_approved="approved").order_by("-id")
-        serializer = SellProduceSerializer(produce_obj, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            # Get search query and category from request parameters
+            search_query = request.GET.get('search_query', '')
+            selected_category = request.GET.get('category')
+            
+            # Fetch approved produce items excluding those from the current user
+            produce_query = SellProduce.objects.exclude(user=request.user).filter(is_approved="approved")
+            # Apply filtering based on category
+            if selected_category and selected_category != 'all':
+                produce_query = produce_query.filter(produce_category=selected_category)
+
+            # Apply filtering based on search query
+            if search_query:
+                produce_query = produce_query.filter(product_name__icontains=search_query)
+
+            # Order the results by latest date
+            produce_obj = produce_query.order_by("-date_time")
+            # Serialize the data
+            serializer = SellProduceSerializer(produce_obj, many=True)
+
+            # Return serialized data in the response
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class VendorBuyingBeginsAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
@@ -478,18 +499,15 @@ class VendorPlusLikeAPIView(APIView):
         responses={200: 'Give like to a activity'}
     )
     def get(self, request):
-        serializer = LikeSerializer(data=request.data)
-        if serializer.is_valid():
-            user = request.user
-            activity_id = serializer.validated_data['activity_id']
-            activity_obj = UserActivity.objects.get(id=activity_id)
-            if user.full_name not in activity_obj.likes:
-                activity_obj.likes.append(user.full_name)
-                activity_obj.save()
-                return Response({'status': 'Like this activity'}, status=status.HTTP_200_OK)
-            else:
-                return Response({'error': 'Already liked'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user = request.user
+        activity_id = request.GET.get('activity_id')
+        activity_obj = UserActivity.objects.get(id=activity_id)
+        if user.full_name not in activity_obj.likes:
+            activity_obj.likes.append(user.full_name)
+            activity_obj.save()
+            return Response({'status': 'Like this activity'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Already liked'}, status=status.HTTP_400_BAD_REQUEST)
 
 class VendorMinusLikeAPIView(APIView):
     @swagger_auto_schema(
@@ -499,18 +517,16 @@ class VendorMinusLikeAPIView(APIView):
         responses={200: 'Remove like from a activity'}
     )
     def get(self, request):
-        serializer = LikeSerializer(data=request.data)
-        if serializer.is_valid():
-            user = request.user
-            activity_id = serializer.validated_data['activity_id']
-            activity_obj = UserActivity.objects.get(id=activity_id)
-            if user.full_name in activity_obj.likes:
-                activity_obj.likes.remove(user.full_name)
-                activity_obj.save()
-                return Response({'status': 'Like removed from Activity'}, status=status.HTTP_200_OK)
-            else:
-                return Response({'error': 'First like then you have permissions dislike'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        user = request.user
+        activity_id = request.GET.get('activity_id')
+        activity_obj = UserActivity.objects.get(id=activity_id)
+        if user.full_name in activity_obj.likes:
+            activity_obj.likes.remove(user.full_name)
+            activity_obj.save()
+            return Response({'status': 'Like removed from Activity'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'First like then you have permissions dislike'}, status=status.HTTP_400_BAD_REQUEST)
 
 class VendorGiveCommentAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
@@ -530,11 +546,12 @@ class VendorGiveCommentAPIView(APIView):
             comment_data = {
                 "id": str(datetime.datetime.now().timestamp()),  # unique ID for the comment
                 "commenter": commenter,
-                "comment": comment
+                "comment": comment,
+                'commenter_id':request.user.id
             }
             post_obj.comments.append(comment_data)
             post_obj.save()
-            return Response({'status': 'Comment added successfully'}, status=status.HTTP_302_FOUND)
+            return Response({'status': 'Comment added successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class VendorDeleteCommentAPIView(APIView):
@@ -568,7 +585,15 @@ class VendorGetAllCommentsAPIView(APIView):
         activity_obj = UserActivity.objects.filter(id=post_id).first()
         if activity_obj:
             comments_data = activity_obj.comments
+
+            # Assume comments_data is a list of dictionaries with a 'commenter_id' field
+            for comment in comments_data:
+                # Assuming the comment data contains 'commenter_id' field that holds the user ID of the commenter
+                is_commenter = comment.get('commenter_id') == request.user.id
+                comment['is_commenter'] = is_commenter  # Add this flag to the comment data
+
             return Response(comments_data, status=status.HTTP_200_OK)
+
         return Response([], status=status.HTTP_404_NOT_FOUND)
     
 class VendorRateCommunityOrderAPIView(APIView):
@@ -861,54 +886,33 @@ class VendorBlogListAPIView(APIView):
         return Response(serializer.data)
 
 class VendorBlogAddAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
     @swagger_auto_schema(
         tags=["VendorBlog"],
         operation_description="Add a new blog",
-        request_body=BlogSerializer,
-        responses={201: BlogSerializer},
-        manual_parameters=[
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            )
-        ]
+        manual_parameters=swagger_doccumentation.blog_post_params,
+        responses={201: BlogSerializer}
     )
     def post(self, request):
-        serializer = BlogSerializer(data=request.data, files=request.FILES)
+        serializer = BlogSerializer(data=request.data)
         if serializer.is_valid():
             blog = serializer.save(user=request.user)
             return Response(BlogSerializer(blog).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class VendorBlogUpdateAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
     @swagger_auto_schema(
         tags=["VendorBlog"],
-        operation_description="Update an existing blog",
-        request_body=BlogSerializer,
-        manual_parameters=[
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            ),
-            openapi.Parameter(
-                'blog_id',
-                openapi.IN_PATH,
-                description="ID of the blog to update",
-                type=openapi.TYPE_INTEGER,
-                required=True
-            )
-        ],
-        responses={200: BlogSerializer},
+        operation_description="update blog",
+        manual_parameters=swagger_doccumentation.blog_update_params,
+        responses={201: BlogSerializer}
     )
     def post(self, request, blog_id):
         blog = get_object_or_404(Blogs, id=blog_id)
-        serializer = BlogSerializer(blog, data=request.data, files=request.FILES, partial=True)
+        serializer = BlogSerializer(blog, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -991,31 +995,186 @@ class VendorBlogDetailsAPIView(APIView):
         serializer = BlogSerializer(blog)
         return Response(serializer.data)
 
-class VendorBlogSearchAPIView(APIView):
+# Services
+
+class ListOfServicesByServiceProvidersAPIView(APIView):
     @swagger_auto_schema(
-        tags=["VendorBlog"],
-        operation_description="Search for blogs",
-        manual_parameters=[
-            openapi.Parameter('Authorization', openapi.IN_HEADER, description="Bearer <token>", type=openapi.TYPE_STRING, required=True),
-            openapi.Parameter('query', openapi.IN_QUERY, description="Search query", type=openapi.TYPE_STRING),
-            openapi.Parameter('filter_by', openapi.IN_QUERY, description="Filter by field", type=openapi.TYPE_STRING)
-        ],
-        responses={200: BlogSerializer(many=True)},
+        tags=["All API Vendors"],
+        operation_description="List Of Services By Service Provider",
+        manual_parameters=swagger_doccumentation.list_services_params,
+        responses={201: ServiceSerializer(many=True)}
     )
-    def post(self, request):
-        query = request.data.get('query', '')
-        filter_by = request.data.get('filter_by', 'all')
+    def get(self, request):
+        try:
+            services = Service.objects.all()
+            serializer = ServiceSerializer(services, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ServiceSearchAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["All API Vendors"],
+        operation_description="Search Services",
+        manual_parameters=swagger_doccumentation.service_search_params,
+        responses={200: ServiceSerializer(many=True)}
+    )
+    def get(self, request):
+        try:
+            search_query = request.GET.get('search_query')
+            if search_query:
+                search_query_lower = search_query.lower()
+                services = Service.objects.annotate(
+                    name_lower=Lower('name'),
+                    service_type_lower=Lower('service_type')
+                ).filter(
+                    Q(name_lower__icontains=search_query_lower) |
+                    Q(service_type_lower__icontains=search_query_lower)
+                )
+            else:
+                services = Service.objects.all()
+
+            serializer = ServiceSerializer(services, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         
-        if filter_by == "id":
-            blogs = Blogs.objects.filter(id=query, user=request.user)
-        elif filter_by == "name":
-            blogs = Blogs.objects.filter(title__icontains=query, user=request.user)
-        elif filter_by == "all":
-            blogs = Blogs.objects.filter(
-                Q(id__icontains=query) | Q(title__icontains=query), user=request.user
+class ServiceDetailsAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["All API Vendors"],
+        operation_description="Get details of a service",
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Bearer <token>",
+                required=True,
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                'service_id',
+                openapi.IN_PATH,
+                description="ID of the service",
+                required=True,
+                type=openapi.TYPE_INTEGER
+            ),
+        ],
+        responses={
+            200: ServiceSerializer,
+            404: openapi.Response('Service not found'),
+            400: openapi.Response('Error occurred')
+        }
+    )
+    def get(self, request, service_id):
+        try:
+            service = get_object_or_404(Service, id=service_id)
+            serializer = ServiceSerializer(service)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    @swagger_auto_schema(
+        tags=["All API Vendors"],
+        operation_description="Book a service",
+        manual_parameters=[
+            openapi.Parameter(
+                'Authorization',
+                openapi.IN_HEADER,
+                description="Bearer <token>",
+                required=True,
+                type=openapi.TYPE_STRING
+            ),
+            openapi.Parameter(
+                'service_id',
+                openapi.IN_PATH,
+                description="ID of the service",
+                required=True,
+                type=openapi.TYPE_INTEGER
+            ),
+        ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'booking_date': openapi.Schema(type=openapi.TYPE_STRING, format='date', description='Date of booking'),
+                'booking_time': openapi.Schema(type=openapi.TYPE_STRING, format='time', description='Time of booking'),
+            },
+            required=['booking_date', 'booking_time']
+        ),
+        responses={
+            201: openapi.Response('Booking created successfully'),
+            400: openapi.Response('Error occurred')
+        }
+    )
+    def post(self, request, service_id):
+        try:
+            service = get_object_or_404(Service, id=service_id)
+            
+            if Booking.objects.filter(service=service, gardener=request.user).exists():
+                return Response({'error': 'Booking already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Extract booking date and time from request data
+            booking_date_str = request.data.get('booking_date')
+            booking_time_str = request.data.get('booking_time')
+
+            # Combine date and time into a single datetime object
+            booking_datetime_str = f"{booking_date_str}T{booking_time_str}"
+            booking_date = parse_datetime(booking_datetime_str)
+
+            # Make the datetime timezone-aware if it's not already
+            if booking_date and not booking_date.tzinfo:
+                booking_date = make_aware(booking_date)
+
+            if not booking_date:
+                return Response({'error': 'Invalid date or time format'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Create and save the booking
+            booking = Booking(
+                service=service,
+                gardener=request.user,
+                booking_date=booking_date
             )
-        else:
-            blogs = Blogs.objects.none()  # Empty queryset if filter_by is invalid
+            booking.save()
+            return Response({'status': 'Booking created successfully'}, status=status.HTTP_201_CREATED)
         
-        serializer = BlogSerializer(blogs, many=True)
-        return Response(serializer.data)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MyBookedServicesAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["All API Vendors"],
+        operation_description="My Booked Services",
+        manual_parameters=swagger_doccumentation.my_booked_services_params,
+        responses={200: BookingSerializer(many=True)}
+    )
+    def get(self, request):
+        try:
+            booked_services = Booking.objects.filter(gardener=request.user).exclude(status="declined")
+            serializer = BookingSerializer(booked_services, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeclineBookingAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["All API Vendors"],
+        operation_description="Decline a Booking",
+        manual_parameters=swagger_doccumentation.decline_booking_params,
+        responses={
+            200: openapi.Response('Booking declined successfully'),
+            404: openapi.Response('Booking not found'),
+            400: openapi.Response('Error occurred')
+        }
+    )
+    def get(self, request, booking_id):
+        try:
+            booking = get_object_or_404(Booking, id=booking_id)
+            if request.user == booking.gardener:
+                booking.status = 'declined'
+                booking.save()
+                return Response({'status': 'Booking declined successfully'}, status=status.HTTP_200_OK)
+            return Response({'error': 'Unauthorized'}, status=status.HTTP_403_FORBIDDEN)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

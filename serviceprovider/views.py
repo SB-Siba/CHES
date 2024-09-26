@@ -6,6 +6,7 @@ from django.conf import settings
 from django.utils.decorators import method_decorator
 from app_common import models as common_models
 from app_common.error import render_error_page
+from EmailIntigration.views import send_template_email
 from . forms import ServiceProviderUpdateForm,ServiceAddForm
 from user_dashboard.serializers import OrderSerializer
 from user_dashboard.forms import ActivityAddForm, BuyAmmountForm,SellProduceForm,BuyQuantityForm
@@ -15,7 +16,8 @@ from django.utils import timezone
 from helpers import utils
 from chatapp.models import Message
 from admin_dashboard.orders.forms import OrderUpdateForm
-import ast
+from app_common.forms import contactForm
+
 app = "service_provider/"
 
 class ServiceProviderDashboard(View):
@@ -35,7 +37,8 @@ class ServiceProviderProfile(View):
     def get(self, request):
         try:
             user = request.user
-            service_provider_obj = get_object_or_404(common_models.ServiceProviderDetails, provider=user)
+            service_provider_obj = common_models.ServiceProviderDetails.objects.filter(provider=user).first()
+            # print(service_provider_obj.service_type,type(service_provider_obj.service_type),service_provider_obj.service_area,type(service_provider_obj.service_area))
             context = {
                 "service_provider_obj": service_provider_obj,
             }
@@ -51,12 +54,10 @@ class ServiceProviderUpdateProfileView(View):
 
     def get(self, request):
         try:
-            service_provider_details = get_object_or_404(self.model, provider=request.user)
-
+            service_provider_details = self.model.objects.filter(provider=request.user).first()
             # Convert string representation of lists to actual lists
-            existing_service_types = ast.literal_eval(service_provider_details.service_type)
-            existing_service_areas = ast.literal_eval(service_provider_details.service_area)
-            
+            existing_service_types = service_provider_details.service_type
+            existing_service_areas = service_provider_details.service_area
             initial_data = {
                 'service_type': existing_service_types,
                 'service_area': existing_service_areas,
@@ -75,8 +76,8 @@ class ServiceProviderUpdateProfileView(View):
         try:
             service_provider_details = get_object_or_404(self.model, provider=request.user)
             form = self.form_class(request.POST, request.FILES,
-                                   existing_service_types=ast.literal_eval(service_provider_details.service_type),
-                                   existing_service_areas=ast.literal_eval(service_provider_details.service_area))
+                                   existing_service_types=service_provider_details.service_type,
+                                   existing_service_areas=service_provider_details.service_area)
             if form.is_valid():
                 service_type = form.cleaned_data['service_type']
                 service_area = form.cleaned_data['service_area']
@@ -124,7 +125,25 @@ class ServiceList(View):
 
     def get(self, request):
         try:
-            service_list = self.model.objects.filter(provider=request.user).order_by('-id')
+            # Get the search query from the request
+            search_by = request.GET.get('search_by')
+            search_query = request.GET.get('search')
+
+            # Filter services based on the search query (by name, description, or service type)
+            if search_by and search_query:
+                if search_by == "name":
+                    service_list = self.model.objects.filter(
+                        provider=request.user,
+                        name__icontains=search_query
+                    ).order_by('-id')
+                elif search_by == "service_type":
+                    service_list = self.model.objects.filter(
+                        provider=request.user,
+                        service_type__icontains=search_query
+                    ).order_by('-id')
+            else:
+                # If no search query, return all services
+                service_list = self.model.objects.filter(provider=request.user).order_by('-id')
             form = self.form_class(initial={'provider': request.user})
             context = {
                 "form": form,
@@ -245,3 +264,54 @@ def mark_as_complete_booking(request, booking_id):
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
     return redirect('service_provider:my_all_bookings')
+
+
+class SpContactePage(View):
+    template = app + "contact.html"
+    form = contactForm
+
+    def get(self,request):
+        try:
+            data = {
+                'form': self.form(),
+            }
+            return render(request,self.template,data)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+        
+    def post(self, request):
+        try:
+            form = self.form(request.POST)
+            if form.is_valid():
+                user = request.user
+
+                name = form.cleaned_data['full_name']
+                email = form.cleaned_data['email']
+                subject = form.cleaned_data['subject']
+                message = form.cleaned_data['message']
+
+                try:
+                    contact_obj = common_models.User_Query(user = user,full_name = name,email = email,subject = subject,message = message)
+                    contact_obj.save()
+                    # Send email notification
+                    send_template_email(
+                        subject="Your Query Is Recieved.",
+                        template_name="mail_template/query_submit.html",
+                        context={
+                            'full_name': contact_obj.full_name,
+                            "email": contact_obj.email,
+                            'message': contact_obj.message
+                        },
+                        recipient_list=[contact_obj.email]
+                    )
+                    messages.success(request,'Query send Successfully. We will be in touch soon.')
+                    
+                except Exception as e:
+                    error_message = f"Something went wrong! {str(e)}"
+                    return render_error_page(request, error_message, status_code=400)
+            
+            return redirect('service_provider:sp_contact_page')
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)

@@ -1,42 +1,85 @@
-<!-- templates/error.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error</title>
+    <title>Error - Something Went Wrong</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .error-page {
+        body {
+            background: linear-gradient(135deg, #e0f7fa, #c8e6c9); /* Soft nature-inspired gradient */
+            font-family: 'Poppins', sans-serif;
             height: 100vh;
+            margin: 0;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+            color: #333;
+        }
+
+        .error-container {
             text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            animation: fadeIn 1.2s ease-in-out;
         }
-        .error-page h1 {
-            font-size: 6rem;
-            font-weight: 700;
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .error-page p {
-            font-size: 1.25rem;
-            margin-top: 1rem;
+
+        .error-container h1 {
+            font-size: 7rem;
+            font-weight: 800;
+            color: #388e3c; /* Deep green for gardening theme */
+            margin-bottom: 20px;
         }
-        .error-page .btn {
-            margin-top: 2rem;
+
+        .error-container p.lead {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            color: #555;
         }
+
+        .error-container p strong {
+            color: #d32f2f; /* Error message in red */
+        }
+
+        .error-container .btn {
+            margin-top: 30px;
+            background-color: #388e3c; /* Green button */
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            color: white;
+            border-radius: 50px;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+        }
+
+        .error-container .btn:hover {
+            background-color: #2e7d32;
+        }
+
     </style>
 </head>
 <body>
-    <div class="container error-page">
-        <h1 class="display-1">Oops!</h1>
-        <p class="lead">Something went wrong. We are working to fix this issue.</p>
+
+    <div class="error-container">
+        <h1>Oops!</h1>
+        <p class="lead">We encountered an error. We're tending to this issue like a delicate flower.</p>
         <p>Error details: <strong>{{ error_message }}</strong></p>
-        <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn btn-primary">Go Back</a>
+        
+        <a href="{{ request.META.HTTP_REFERER|default:'/' }}" class="btn">Go Back</a>
     </div>
-    <!-- Bootstrap JS (optional) -->
+
+    <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

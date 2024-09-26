@@ -9,6 +9,8 @@ urlpatterns = [
     path('vendor/update_profile/', views.UpdateProfileView.as_view(), name='update_vendor_profile'),
     path('vendor/sell-product/', views.VendorSellProduct.as_view(), name='vendor_sell_product'),
     path('vendor/sell-product-list/', views.SellProductsList.as_view(), name='vendor_sell_product_list'),
+    path('vendor/search/sell-products/', views.SearchSellProduct.as_view(), name='vendor_search_sell_products'),
+
     path('vendor/sell-product-update/<int:product_id>', views.UpdateProduct.as_view(), name='vendor_sell_product_update'),
     path('vendor/sell-product-delete/<int:product_id>', views.DeleteSellProduct.as_view(), name='vendor_sell_product_delete'),
     path('vendor/sold-products-list/', views.VendorSoldProducts.as_view(), name='vendor_sold_products'),
@@ -49,4 +51,7 @@ urlpatterns = [
     path('service_details/<int:service_id>/', views.ServiceDetails.as_view(), name='service_details'),
     path('my_booked_services/', views.MyBookedServices.as_view(), name='my_booked_services'),
     path('rtg/decline_booking/<int:booking_id>', views.vendor_decline_booking, name='vendor_decline_booking'),
+
+    path('vendor/contactpage', views.VendorContactePage.as_view(), name = "vendor_contact_page"),
+
 ]

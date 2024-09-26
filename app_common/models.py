@@ -112,6 +112,11 @@ class User(AbstractBaseUser, PermissionsMixin):
             return True
         return False
     
+
+class CategoryForProduces(models.Model):
+    category_name = models.CharField(max_length = 250,null = True,blank = True)
+
+
 class GaredenQuizModel(models.Model):
     user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)
     questionANDanswer = models.JSONField(null= False, blank= False) 
@@ -161,6 +166,7 @@ class User_Query(models.Model):
     email = models.EmailField(null=False, blank=False)
     subject = models.CharField(max_length=250, null=False, blank=False)
     message = models.TextField(null=False, blank=False)
+    reply = models.TextField(null=True, blank= True)
     date_sent = models.DateTimeField(auto_now_add=True)
     is_solve = models.BooleanField(default = False)
 
@@ -178,6 +184,7 @@ class SellProduce(models.Model):
         ('Units', 'Units'),
     ]
     user = models.ForeignKey(User,on_delete=models.CASCADE,null= True, blank= True)
+    produce_category = models.ForeignKey(CategoryForProduces,on_delete=models.CASCADE,null= True, blank= True)
     product_name = models.CharField(max_length=250,blank=True,null=True,default="No Title")
     product_image = models.ImageField(upload_to='productforsell/',null=True, blank=True)
     product_quantity = models.FloatField(default=0.0,null=True,blank=True)
@@ -239,18 +246,12 @@ class ProduceBuy(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
 
 class VendorDetails(models.Model):
-    BUSINESS_CATEGORIES = (
-        ('plants', 'Plants'),
-        ('tools', 'Tools'),
-        ('seeds', 'Seeds'),
-        ('other', 'Other'),
-    )
     vendor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='vendor_details')
     business_name = models.CharField(max_length=255)
     business_address = models.CharField(max_length=255)
     business_description = models.TextField()
     business_license_number = models.CharField(max_length=50)
-    business_category = models.CharField(max_length=20, choices=BUSINESS_CATEGORIES)
+    business_category = models.CharField(max_length=20, null=True,blank=True)
     establishment_year = models.PositiveIntegerField()
     website = models.URLField(blank=True)
     established_by = models.CharField(max_length=100, blank=True)

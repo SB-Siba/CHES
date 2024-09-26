@@ -4,6 +4,20 @@
 {% block main_content %}
 <div class="mt-2 m-4">
     {% include 'app_common/snippets/alert.html' %}
+    <div class="search_sec">
+      <form method="get" action="{% url 'vendor_dashboard:vendor_search_sell_products' %}">
+          <div class="table_search_box">
+              <select class="form-control selects" name="search_by" aria-label="Default select example">
+                  <option value="id">ID</option>
+                  <option value="name">Name</option>
+              </select>
+              <input type="text" class="form-control" placeholder="Enter Query" name="query" required />
+              <button class="btn qry-sub" type="submit">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+          </div>
+      </form>
+  </div>
     <div class="">
         <table class="table table-hover table-nowrap">
             <thead class="table-light">

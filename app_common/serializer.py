@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import (
     Booking,
+    CategoryForProduces,
     Order,
     ProduceBuy,
     ProductFromVendor,
@@ -9,7 +10,8 @@ from .models import (
     Service,
     User, 
     GardeningProfile, 
-    GaredenQuizModel, 
+    GaredenQuizModel,
+    User_Query, 
     VendorDetails, 
     ServiceProviderDetails,
     GardeningProfileUpdateRequest,
@@ -211,10 +213,10 @@ class AllActivitiesSerializer(serializers.ModelSerializer):
     like_count = serializers.SerializerMethodField()
     comment_count = serializers.SerializerMethodField()
     user_liked = serializers.SerializerMethodField()
-
+    user_full_name = serializers.SerializerMethodField()
     class Meta:
         model = UserActivity
-        fields = ['id', 'is_accepted', 'likes', 'comments', 'like_count', 'comment_count', 'user_liked','activity_image','activity_title','activity_content']
+        fields = ['id','user_full_name', 'is_accepted', 'likes', 'comments', 'like_count', 'comment_count', 'user_liked','activity_image','activity_title','activity_content']
 
     def get_like_count(self, obj):
         return len(obj.likes)
@@ -228,8 +230,9 @@ class AllActivitiesSerializer(serializers.ModelSerializer):
             return request.user.full_name in obj.likes
         return False
     
-class LikeSerializer(serializers.Serializer):
-    activity_id = serializers.IntegerField()
+    def get_user_full_name(self,obj):
+        return obj.user.full_name
+
 
 class CommentSerializer(serializers.Serializer):
     post_id = serializers.IntegerField()
@@ -266,9 +269,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'full_name', 'email', 'user_image']
 
 class MessageSerializer(serializers.ModelSerializer):
+    sender = UserSerializer()
+    receiver = UserSerializer()
     class Meta:
         model = Message
-        fields = ['id', 'message_status', 'messages', 'is_read']
+        fields = ['id','sender', 'receiver','message_status', 'messages', 'is_read','last_message']
 
 class SendMessageSerializer(serializers.Serializer):
     receiver_id = serializers.IntegerField()
@@ -312,9 +317,10 @@ class ServiceProviderProfileUpdateSerializer(serializers.ModelSerializer):
         fields = ['service_type', 'service_area', 'average_cost_per_hour', 'years_experience']
 
 class ServiceSerializer(serializers.ModelSerializer):
+    provider = UserSerializer()
     class Meta:
         model = Service
-        fields = ['id', 'service_type', 'name', 'description', 'price_per_hour']
+        fields = ['id','provider', 'service_type', 'name', 'description', 'price_per_hour']
 
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -368,6 +374,43 @@ class OrderUpdateSerializer(serializers.ModelSerializer):
 # ================================== Blog ============================================
 
 class BlogSerializer(serializers.ModelSerializer):
+    blog_by = serializers.SerializerMethodField()
+
     class Meta:
         model = Blogs
-        fields = '__all__'
+        fields = ['id','slug','title', 'author', 'date', 'content', 'image', 'blog_by']
+
+    def get_blog_by(self,obj):
+        if obj.user.full_name:
+            return obj.user.full_name
+        else:
+            return obj.user.email
+# Rank Serializer
+
+class UserRankSerializer(serializers.ModelSerializer):
+    rank = serializers.SerializerMethodField()
+    is_rtg = serializers.BooleanField()  # To show if the user is RTG
+    is_vendor = serializers.BooleanField()  # To show if the user is Vendor
+    user_image = serializers.ImageField()  # To show the user's profile image
+
+    class Meta:
+        model = User
+        fields = ['full_name', 'email', 'coins', 'rank', 'is_rtg', 'is_vendor', 'user_image']  # Add more fields if needed
+
+    def get_rank(self, obj):
+        # Calculate the rank based on the number of users with more coins
+        higher_scores_count = User.objects.filter(coins__gt=obj.coins).count()
+        return higher_scores_count + 1
+
+
+class CategoryForProducesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryForProduces
+        fields = ['id', 'category_name']
+
+
+class UserQuerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User_Query
+        fields = ['id', 'user', 'full_name', 'email', 'subject', 'message', 'date_sent', 'is_solve']
+        read_only_fields = ['id', 'date_sent']

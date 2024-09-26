@@ -84,6 +84,126 @@ class PendingServiceProviders(View):
         context = {'service_provider_data': service_provider_data}
         return render(request, self.template, context)
 
+
+# PENDING SEARCH
+class PendingRtgSearch(View):
+    template = app + "forapprovertg.html"
+    model = models.User
+    form_class = forms.WalletBalanceAdd
+
+    def get(self, request):
+        try:
+            search_by = request.GET.get("search_by")
+            query = request.GET.get("query")
+            print(search_by,query)
+            rtgardener_list = []  
+            rtgarden_details_list = []
+            if search_by and query:
+                if search_by == "email":
+                    users = self.model.objects.filter(email__icontains=query,is_rtg = True,is_approved = False)
+                    for i in users:
+                        rtgardener_list.append(i)
+                        garden_details = models.GardeningProfile.objects.get(user=i)
+                        rtgarden_details_list.append(garden_details)
+
+                    rtgardener_data = zip(rtgardener_list, rtgarden_details_list)
+                elif search_by == "contact":
+                    users = self.model.objects.filter(contact__icontains=query,is_rtg = True,is_approved = False)
+                    for i in users:
+                        rtgardener_list.append(i)
+                        garden_details = models.GardeningProfile.objects.get(user=i)
+                        rtgarden_details_list.append(garden_details)
+
+                    rtgardener_data = zip(rtgardener_list, rtgarden_details_list)
+            
+
+            context = {
+                "rtgardener_data": rtgardener_data,
+                'form': self.form_class,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+class PendingSpSearch(View):
+    template = app + "forapproveserviceprovider.html"
+    model = models.User
+    form_class = forms.WalletBalanceAdd
+
+    def get(self, request):
+        try:
+            search_by = request.GET.get("search_by")
+            query = request.GET.get("query")
+            service_provider_list = []
+            service_provider_details_list = []
+
+            if search_by and query:
+                if search_by == "email":
+                    users = self.model.objects.filter(email__icontains=query,is_approved=False, is_serviceprovider=True)
+                    for i in users:
+                        service_provider_list.append(i)
+                        s_provider_details = models.ServiceProviderDetails.objects.filter(provider=i).first()
+                        service_provider_details_list.append(s_provider_details)
+
+                    service_provider_data = zip(service_provider_list, service_provider_details_list)
+                elif search_by == "contact":
+                    users = self.model.objects.filter(contact__icontains=query,is_serviceprovider = True,is_approved = False)
+                    for i in users:
+                        service_provider_list.append(i)
+                        s_provider_details = models.ServiceProviderDetails.objects.filter(provider=i).first()
+                        service_provider_details_list.append(s_provider_details)
+
+                    service_provider_data = zip(service_provider_list, service_provider_details_list)
+            context = {
+                "service_provider_data": service_provider_data,
+                'form': self.form_class,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+    
+
+class PendingVendorSearch(View):
+    template = app + "forapprovevendor.html"
+    model = models.User
+    form_class = forms.WalletBalanceAdd
+
+    def get(self, request):
+        try:
+            search_by = request.GET.get("search_by")
+            query = request.GET.get("query")
+
+            vendor_list = []
+            vendor_details_list = []
+
+            if search_by and query:
+                if search_by == "email":
+                    users = self.model.objects.filter(email__icontains=query,is_vendor = True,is_approved = False)
+                    for i in users:
+                        vendor_list.append(i)
+                        vendor_details = models.VendorDetails.objects.get(vendor=i)
+                        vendor_details_list.append(vendor_details)
+
+                    vendor_data = zip(vendor_list, vendor_details_list)
+                elif search_by == "contact":
+                    users = self.model.objects.filter(contact__icontains=query,is_vendor = True,is_approved = False)
+                    for i in users:
+                        vendor_list.append(i)
+                        vendor_details = models.VendorDetails.objects.get(vendor=i)
+                        vendor_details_list.append(vendor_details)
+
+                    vendor_data = zip(vendor_list, vendor_details_list)
+
+            context = {
+                "vendor_data": vendor_data,
+                'form': self.form_class,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
         
 def ApproveUser(request, pk):
     try:
@@ -144,13 +264,10 @@ class ServiceProvidersList(View):
 
     def get(self, request):
         try:
-            page = request.GET.get('page', 1)
             user_list = self.model.objects.filter(is_approved=True, is_superuser=False, is_serviceprovider=True).order_by("-id")
-            paginated_data = utils.paginate(request, user_list, 25, page)
 
             context = {
-                "user_list": paginated_data,
-                'data_list': paginated_data,
+                "user_list": user_list,
                 'form': self.form_class,
             }
             return render(request, self.template, context)
@@ -166,13 +283,10 @@ class RTGList(View):
 
     def get(self, request):
         try:
-            page = request.GET.get('page', 1)
             user_list = self.model.objects.filter(is_approved=True, is_superuser=False, is_rtg=True).order_by("-id")
-            paginated_data = utils.paginate(request, user_list, 25, page)
 
             context = {
-                "user_list": paginated_data,
-                'data_list': paginated_data,
+                "user_list": user_list,
                 'form': self.form_class,
             }
             return render(request, self.template, context)
@@ -188,13 +302,10 @@ class VendorList(View):
 
     def get(self, request):
         try:
-            page = request.GET.get('page', 1)
             user_list = self.model.objects.filter(is_approved=True, is_superuser=False, is_vendor=True).order_by("-id")
-            paginated_data = utils.paginate(request, user_list, 25, page)
 
             context = {
-                "user_list": paginated_data,
-                'data_list': paginated_data,
+                "user_list": user_list,
                 'form': self.form_class,
             }
             return render(request, self.template, context)
@@ -269,28 +380,86 @@ class ServiceProviderDetails(View):
             return render_error_page(request, error_message, status_code=400)
 
     
-class SearchUser(View):
+class RtgSearchUser(View):
+    template = app + "rtg_list.html"
     model = models.User
-    template = app + "user_list.html"
+    form_class = forms.WalletBalanceAdd
 
     def get(self, request):
         try:
-            raw_query_dict = request.GET.dict()
-            query_dict = (lambda query_dict: {f'{query_dict["search_by"]}': f'{query_dict["query"]}'})(raw_query_dict)
+            search_by = request.GET.get("search_by")
+            query = request.GET.get("query")
+            print(search_by,query)
 
-            user_list = self.model.objects.filter(**query_dict)
-            paginated_data = utils.paginate(request, user_list, 25, 1)
+            if search_by and query:
+                if search_by == "email":
+                    users = self.model.objects.filter(email__icontains=query,is_rtg = True,is_approved = True)
+                elif search_by == "contact":
+                    users = self.model.objects.filter(contact__icontains=query,is_rtg = True,is_approved = True)
+            
 
             context = {
-                "user_list": paginated_data,
-                'data_list': paginated_data,
+                "user_list": users,
+                'form': self.form_class,
             }
             return render(request, self.template, context)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+class SpSearchUser(View):
+    template = app + "serviceprovider_list.html"
+    model = models.User
+    form_class = forms.WalletBalanceAdd
+
+    def get(self, request):
+        try:
+            search_by = request.GET.get("search_by")
+            query = request.GET.get("query")
+
+
+            if search_by and query:
+                if search_by == "email":
+                    users = self.model.objects.filter(email__icontains=query,is_serviceprovider = True,is_approved = True)
+                elif search_by == "contact":
+                    users = self.model.objects.filter(contact__icontains=query,is_serviceprovider = True,is_approved = True)
+
+            context = {
+                "user_list": users,
+                'form': self.form_class,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
     
+
+class VendorSearchUser(View):
+    template = app + "vendor_list.html"
+    model = models.User
+    form_class = forms.WalletBalanceAdd
+
+    def get(self, request):
+        try:
+            search_by = request.GET.get("search_by")
+            query = request.GET.get("query")
+
+
+            if search_by and query:
+                if search_by == "email":
+                    users = self.model.objects.filter(email__icontains=query,is_vendor = True,is_approved = True)
+                elif search_by == "contact":
+                    users = self.model.objects.filter(contact__icontains=query,is_vendor = True,is_approved = True)
+
+            context = {
+                "user_list": users,
+                'form': self.form_class,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+        
 class RtgWalletBalanceAdd(View):
     model = models.User
     form_class = forms.WalletBalanceAdd
@@ -402,6 +571,46 @@ class UserGardeningProfileUpdateRequest(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+class SearchGardeningProfileUpdateRequest(View):
+    template = app + "garden_profile_update_request.html"
+    model = models.GardeningProfileUpdateRequest
+
+    def get(self, request):
+        try:
+            search_by = request.GET.get("search_by")
+            query = request.GET.get("query")
+            print(search_by,query)
+
+            if search_by and query:
+                if search_by == "email":
+                    profile_update_obj = self.model.objects.filter(user__email__icontains = query)
+                    request_prof_objs = []
+                    original_prof_objs = []
+                    for i in profile_update_obj:
+                        request_prof_objs.append(i)
+                        user = i.user
+                        original_profile_data = get_object_or_404(models.GardeningProfile, user=user)
+                        original_prof_objs.append(original_profile_data)
+                    data = zip(request_prof_objs, original_prof_objs)
+                elif search_by == "contact":
+                    profile_update_obj = self.model.objects.filter(user__contact__icontains = query)
+                    request_prof_objs = []
+                    original_prof_objs = []
+                    for i in profile_update_obj:
+                        request_prof_objs.append(i)
+                        user = i.user
+                        original_profile_data = get_object_or_404(models.GardeningProfile, user=user)
+                        original_prof_objs.append(original_profile_data)
+                    data = zip(request_prof_objs, original_prof_objs)
+            
+
+            context = {
+                "data": data,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
     
 def ApproveProfile(request, pk):
     try:
@@ -470,6 +679,29 @@ class UserActivityRequest(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+class SearchUsersActivityRequest(View):
+    template = app + "activity_request.html"
+    model = models.UserActivity
+
+    def get(self, request):
+        try:
+            search_by = request.GET.get("search_by")
+            query = request.GET.get("query")
+
+
+            if search_by and query:
+                if search_by == "email":
+                    activity_request_obj = self.model.objects.filter(user__email__icontains = query,is_accepted='pending').order_by('-date_time')
+                elif search_by == "activity_title":
+                    users = self.model.objects.filter(activity_title__icontains=query,is_accepted='pending').order_by('-date_time')
+
+            context = {
+                "activity_request_obj": activity_request_obj,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
     
 def ApproveActivity(request, pk):
     try:
@@ -527,7 +759,30 @@ class UserProduceSellRequest(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-    
+class SearchProduceSellRequest(View):
+    template = app + "producesellrequest.html"
+    model = models.SellProduce
+
+    def get(self, request):
+        try:
+            search_by = request.GET.get("search_by")
+            query = request.GET.get("query")
+
+
+            if search_by and query:
+                if search_by == "email":
+                    produce_sell_request_obj = self.model.objects.filter(user__email__icontains = query,is_approved='pending').order_by('-date_time')
+                elif search_by == "product_name":
+                    produce_sell_request_obj = self.model.objects.filter(product_name__icontains=query,is_approved='pending').order_by('-date_time')
+
+            context = {
+                "produce_sell_request_obj": produce_sell_request_obj,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
 def ApproveSellRequest(request):
     if request.method == "POST":
         try:

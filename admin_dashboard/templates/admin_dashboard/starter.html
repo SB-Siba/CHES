@@ -163,7 +163,13 @@
                     {% endif %}
                 </a>
             </li>
-
+            <!-- Categories of Produces -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_dashboard:produces_categories' %}">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Produces Categories</span>
+                </a>
+            </li>
         <!-- Blogs -->
         <li class="nav-item">
             <a href="#" class="nav-link collapsed has-dropdown" data-bs-toggle="collapse"
@@ -196,6 +202,15 @@
             </ul>
         </li>
             <!-- Nav Item - Charts -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_dashboard:users_query_list' %}">
+                    <i class="fa-solid fa-coins"></i>
+                    <span>Users Query</span>
+                    {% if total_queries_from_user > 0 %}
+                        <span class="badge badge-danger badge-counter">{{total_queries_from_user}}</span>
+                    {% endif %}
+                </a>
+            </li>
             <li class="nav-item">
             <a class="nav-link" href="{% url 'admin_dashboard:produce_order_list' %}">
                 <i class="fa-solid fa-coins"></i>
@@ -234,15 +249,6 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                           
-                        </li>
 
                         <!-- Nav Item - Alerts -->
                         <!--li class="nav-item dropdown no-arrow mx-1">
@@ -308,19 +314,6 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout

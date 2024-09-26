@@ -1,4 +1,3 @@
-import datetime
 import os
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -6,13 +5,10 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
-from rest_framework.decorators import api_view,permission_classes
-from chatapp.models import Message
 from rest_framework.parsers import FormParser, MultiPartParser
 from . import swagger_doccumentation
 from django.contrib.auth.hashers import make_password
-from .models import Booking, Order, ProduceBuy, ProductFromVendor, Service, ServiceProviderDetails, User, GardeningProfile,UserActivity,SellProduce
+from .models import Booking,Service, ServiceProviderDetails
 from .serializer import (
     BlogSerializer,
     BookingSerializer,
@@ -21,12 +17,7 @@ from .serializer import (
     ServiceProviderProfileUpdateSerializer
 )
 from Blogs.models import Blogs
-from user_dashboard.serializers import DirectBuySerializer,OrderSerializer
-from django.contrib.auth import authenticate, login, logout
-import json
-from django.db.models import Q
-from django.http import Http404, JsonResponse, HttpResponseBadRequest
-from django.utils import timezone
+from django.http import Http404
 
 class ServiceProviderProfileAPI(APIView):
     @swagger_auto_schema(
@@ -208,54 +199,33 @@ class SpBlogListAPIView(APIView):
         return Response(serializer.data)
 
 class SpBlogAddAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
     @swagger_auto_schema(
         tags=["ServiceProviderBlog"],
         operation_description="Add a new blog",
-        request_body=BlogSerializer,
-        responses={201: BlogSerializer},
-        manual_parameters=[
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            )
-        ],
+        manual_parameters=swagger_doccumentation.blog_post_params,
+        responses={201: BlogSerializer}
     )
     def post(self, request):
-        serializer = BlogSerializer(data=request.data, files=request.FILES)
+        serializer = BlogSerializer(data=request.data)
         if serializer.is_valid():
             blog = serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SpBlogUpdateAPIView(APIView):
+    parser_classes = [FormParser, MultiPartParser]
+
     @swagger_auto_schema(
         tags=["ServiceProviderBlog"],
         operation_description="Update an existing blog",
-        request_body=BlogSerializer,
-        manual_parameters=[
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            ),
-            openapi.Parameter(
-                'blog_id',
-                openapi.IN_PATH,
-                description="ID of the blog to update",
-                type=openapi.TYPE_INTEGER,
-                required=True
-            )
-        ],
-        responses={200: BlogSerializer},
+        manual_parameters=swagger_doccumentation.blog_update_params,
+        responses={201: BlogSerializer}
     )
     def post(self, request, blog_id):
         blog = get_object_or_404(Blogs, id=blog_id)
-        serializer = BlogSerializer(blog, data=request.data, files=request.FILES, partial=True)
+        serializer = BlogSerializer(blog, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -335,40 +305,4 @@ class SpBlogDetailsAPIView(APIView):
     def get(self, request, slug):
         blog = get_object_or_404(Blogs, slug=slug)
         serializer = BlogSerializer(blog)
-        return Response(serializer.data)
-
-class SpBlogSearchAPIView(APIView):
-    @swagger_auto_schema(
-        tags=["ServiceProviderBlog"],
-        operation_description="Search for blogs",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'query': openapi.Schema(type=openapi.TYPE_STRING, description="Search query"),
-                'filter_by': openapi.Schema(type=openapi.TYPE_STRING, description="Filter by field")
-            }
-        ),
-        manual_parameters=[
-            openapi.Parameter(
-                'Authorization',
-                openapi.IN_HEADER,
-                description="Bearer <token>",
-                type=openapi.TYPE_STRING,
-                required=True
-            )
-        ],
-        responses={200: BlogSerializer(many=True)},
-    )
-    def post(self, request):
-        query = request.data.get('query', '')
-        filter_by = request.data.get('filter_by', 'all')
-        if filter_by == "id":
-            blogs = Blogs.objects.filter(id=query, user=request.user)
-        elif filter_by == "name":
-            blogs = Blogs.objects.filter(title__icontains=query, user=request.user)
-        elif filter_by == "all":
-            blogs = Blogs.objects.filter(
-                Q(id__icontains=query) | Q(title__icontains=query), user=request.user
-            )
-        serializer = BlogSerializer(blogs, many=True)
         return Response(serializer.data)

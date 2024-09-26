@@ -39,6 +39,17 @@ def admin_only(function):
       return redirect('app_common:login')
   return wrap
 
+def login_required(function):
+    @wraps(function)
+    def wrap(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return function(request, *args, **kwargs)
+        else:
+            # If the user is not authenticated, redirect to login with an error message
+            messages.error(request, "Login Required!")
+            return redirect('app_common:login')
+    return wrap
+
 def org_admin_only(function):
   @wraps(function)
   def wrap(request, *args, **kwargs):
