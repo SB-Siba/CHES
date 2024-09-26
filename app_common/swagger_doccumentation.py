@@ -46,6 +46,7 @@ vendor_details_post = [
     openapi.Parameter("business_description", openapi.IN_QUERY, description="Business Description", required=True, type=openapi.TYPE_STRING),
     openapi.Parameter("business_license_number", openapi.IN_QUERY, description="Business License Number", required=True, type=openapi.TYPE_STRING),
     openapi.Parameter("business_category", openapi.IN_QUERY, description="Business Category", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("custom_business_category", openapi.IN_QUERY, description="Add Your Bussiness Category", required=False, type=openapi.TYPE_STRING),
     openapi.Parameter("establishment_year", openapi.IN_QUERY, description="Establishment Year", required=True, type=openapi.TYPE_INTEGER),
     openapi.Parameter("website", openapi.IN_QUERY, description="Website", required=False, type=openapi.TYPE_STRING),
     openapi.Parameter("established_by", openapi.IN_QUERY, description="Established By", required=True, type=openapi.TYPE_STRING),
@@ -301,7 +302,9 @@ service_provider_profile_get = [
 service_provider_update_profile_post = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
     openapi.Parameter('service_type', openapi.IN_FORM, description="Service types provided by the service provider (comma-separated)", type=openapi.TYPE_STRING),
+    openapi.Parameter('add_service_type', openapi.IN_FORM, description="Additional service types (comma-separated)", type=openapi.TYPE_STRING),
     openapi.Parameter('service_area', openapi.IN_FORM, description="Service areas covered by the service provider (comma-separated)", type=openapi.TYPE_STRING),
+    openapi.Parameter('add_service_area', openapi.IN_FORM, description="Additional service areas (comma-separated)", type=openapi.TYPE_STRING),
     openapi.Parameter('average_cost_per_hour', openapi.IN_FORM, description="Average cost per hour charged by the service provider", type=openapi.TYPE_NUMBER),
     openapi.Parameter('years_experience', openapi.IN_FORM, description="Years of experience of the service provider", type=openapi.TYPE_INTEGER),
     openapi.Parameter('image', openapi.IN_FORM, description="Image file of the service provider", type=openapi.TYPE_FILE),

@@ -43,8 +43,16 @@
                 {% for s_provider,s_provider_detail in service_provider_data %}
                 <tr>
                     <td id="t_daTa">{{ s_provider.email }}</td>
-                    <td id="t_daTa">{{ s_provider_detail.service_type|slice:"1:-1" }}</td>
-                    <td id="t_daTa">{{ s_provider_detail.service_area|slice:"1:-1" }}</td>
+                    <td id="t_daTa">
+                        {% for type in s_provider_detail.service_type %}
+                            {{ type }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td id="t_daTa">
+                        {% for area in s_provider_detail.service_area %}
+                            {{ area }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
                     <td id="t_daTa">{{ s_provider_detail.average_cost_per_hour }}</td>
                     <td id="t_daTa">{{s_provider_detail.years_experience}}</td>
                     <td id="t_daTa">
@@ -63,6 +71,5 @@
             </tbody>
         </table>
     </div>
-
 </div>
 {% endblock content %}

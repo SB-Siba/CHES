@@ -87,7 +87,7 @@ class RegisterForm(forms.ModelForm):
 
     confirm_password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'form-control', 
+            'class': 'form-control',
             'placeholder': 'Confirm Password', 
             'required': 'required'
         })
@@ -97,6 +97,18 @@ class RegisterForm(forms.ModelForm):
         model = models.User
         fields = ["full_name", "email", "contact", "city", "password", "confirm_password"]
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+
+        if email:
+            email = email.lower()  # Normalize to lowercase
+
+            # Check if email already exists in the database
+            if models.User.objects.filter(email=email).exists():
+                raise ValidationError("Email is already in use.")
+
+        return email
+    
     def clean(self):
         cleaned_data = super().clean()
         city = cleaned_data.get("city")

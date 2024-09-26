@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from app_common import models
 
 class RtgRegistrationForm(forms.Form):
     # Fields from RegisterForm
@@ -127,6 +128,18 @@ class RtgRegistrationForm(forms.Form):
     )
 
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+
+        if email:
+            email = email.lower()  # Normalize to lowercase
+
+            # Check if email already exists in the database
+            if models.User.objects.filter(email=email).exists():
+                raise ValidationError("Email is already in use.")
+
+        return email
+    
     def clean(self):
         cleaned_data = super().clean()
 
@@ -264,7 +277,18 @@ class VendorRegistrationForm(forms.Form):
         })
     )
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
 
+        if email:
+            email = email.lower()  # Normalize to lowercase
+
+            # Check if email already exists in the database
+            if models.User.objects.filter(email=email).exists():
+                raise ValidationError("Email is already in use.")
+
+        return email
+    
     def clean(self):
         cleaned_data = super().clean()
 
@@ -404,6 +428,18 @@ class ServiceProviderRegistrationForm(forms.Form):
     )
 
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+
+        if email:
+            email = email.lower()  # Normalize to lowercase
+
+            # Check if email already exists in the database
+            if models.User.objects.filter(email=email).exists():
+                raise ValidationError("Email is already in use.")
+
+        return email
+    
     def clean(self):
         cleaned_data = super().clean()
 
