@@ -4,7 +4,9 @@ from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.views import View
 from django.shortcuts import get_object_or_404
-
+from django.utils.decorators import method_decorator
+from helpers import utils
+from helpers.decorators import login_required
 from app_common.error import render_error_page
 from ..models import Blogs
 from django.contrib import messages
@@ -13,6 +15,7 @@ from django.db.models import Q
 
 app = "blog/vendor/"
 
+@method_decorator(utils.login_required, name='dispatch')
 class VendorBlogList(View):
     model = Blogs
     template = app + "vendor_blog_list.html"
@@ -29,6 +32,7 @@ class VendorBlogList(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
     
+@method_decorator(utils.login_required, name='dispatch')
 class VendorBlogAdd(View):
     model = Blogs
     form_class = BlogForm
@@ -63,6 +67,7 @@ class VendorBlogAdd(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class VendorBlogUpdate(View):
     model = Blogs
     form_class = BlogForm
@@ -101,6 +106,7 @@ class VendorBlogUpdate(View):
             return render_error_page(request, error_message, status_code=400)
 
 
+@method_decorator(utils.login_required, name='dispatch')
 class VendorBlogDelete(View):
     model = Blogs
 
@@ -118,6 +124,7 @@ class VendorBlogDelete(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
     
+@method_decorator(utils.login_required, name='dispatch')
 class VendorBlogView(View):
     template_name = app + 'vendor_all_blog.html'
 
@@ -133,6 +140,7 @@ class VendorBlogView(View):
             return render_error_page(request, error_message, status_code=400)
     
 
+@method_decorator(utils.login_required, name='dispatch')
 class VendorBlogDetails(View):
     template_name = app + 'vendor_blog_single.html'
 
@@ -147,6 +155,7 @@ class VendorBlogDetails(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
     
+@method_decorator(utils.login_required, name='dispatch')
 class VENDORBlogSearch(View):
     model = Blogs
     template = app + "vendor_blog_list.html"

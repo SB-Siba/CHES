@@ -155,6 +155,7 @@ class PrivacyPolicyPage(View):
 
     def get(self,request):
         return render(request,self.template)
+    
 @method_decorator(utils.login_required, name='dispatch')   
 class ContactePage(View):
     template = app + "contact.html"
@@ -340,6 +341,7 @@ class ActivityList(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class WalletView(View):
     template = app + "wallet.html"
     model = app_commonmodels.ProduceBuy

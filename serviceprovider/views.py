@@ -17,9 +17,13 @@ from helpers import utils
 from chatapp.models import Message
 from admin_dashboard.orders.forms import OrderUpdateForm
 from app_common.forms import contactForm
+from django.utils.decorators import method_decorator
+from helpers import utils
+from helpers.decorators import login_required
 
 app = "service_provider/"
 
+@method_decorator(utils.login_required, name='dispatch')
 class ServiceProviderDashboard(View):
     template = app + "home.html"
 
@@ -31,6 +35,7 @@ class ServiceProviderDashboard(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class ServiceProviderProfile(View):
     template = app + "service_provider_profile.html"
 
@@ -47,6 +52,7 @@ class ServiceProviderProfile(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class ServiceProviderUpdateProfileView(View):
     template_name = app + "service_provider_update_profile.html"
     form_class = ServiceProviderUpdateForm
@@ -118,6 +124,7 @@ class ServiceProviderUpdateProfileView(View):
 
         return render(request, self.template_name, {'form': form})
 
+@method_decorator(utils.login_required, name='dispatch')
 class ServiceList(View):
     model = common_models.Service
     form_class = ServiceAddForm
@@ -170,6 +177,7 @@ class ServiceList(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class ServiceUpdate(View):
     model = common_models.Service
     form_class = ServiceAddForm
@@ -204,6 +212,7 @@ class ServiceUpdate(View):
 
         return redirect("service_provider:service_update", service_id=service_id)
 
+@method_decorator(utils.login_required, name='dispatch')
 class ServiceDelete(View):
     model = common_models.Service
 
@@ -217,6 +226,7 @@ class ServiceDelete(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class MyServiceBookings(View):
     model = common_models.Booking
     template = app + "my_service_bookings.html"
@@ -231,7 +241,7 @@ class MyServiceBookings(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-
+@login_required
 def confirm_booking(request, booking_id):
     try:
         booking = get_object_or_404(common_models.Booking, id=booking_id)
@@ -243,6 +253,7 @@ def confirm_booking(request, booking_id):
         return render_error_page(request, error_message, status_code=400)
     return redirect('service_provider:my_all_bookings')
 
+@login_required
 def decline_booking(request, booking_id):
     try:
         booking = get_object_or_404(common_models.Booking, id=booking_id)
@@ -254,6 +265,7 @@ def decline_booking(request, booking_id):
         return render_error_page(request, error_message, status_code=400)
     return redirect('service_provider:my_all_bookings')
 
+@login_required
 def mark_as_complete_booking(request, booking_id):
     try:
         booking = get_object_or_404(common_models.Booking, id=booking_id)
@@ -266,6 +278,7 @@ def mark_as_complete_booking(request, booking_id):
     return redirect('service_provider:my_all_bookings')
 
 
+@method_decorator(utils.login_required, name='dispatch')
 class SpContactePage(View):
     template = app + "contact.html"
     form = contactForm

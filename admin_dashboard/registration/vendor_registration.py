@@ -6,9 +6,12 @@ from EmailIntigration.views import send_template_email
 from app_common.error import render_error_page
 from .forms import VendorRegistrationForm
 from app_common.models import User, VendorDetails
+from django.utils.decorators import method_decorator
+from helpers import utils
 
 app = "admin_dashboard/registration/vendor/"
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class VendorRegistration(View):
     template_name = app + "vendor_registration.html"
 

@@ -4,7 +4,9 @@ from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.views import View
 from django.shortcuts import get_object_or_404
-
+from django.utils.decorators import method_decorator
+from helpers import utils
+from helpers.decorators import login_required
 from app_common.error import render_error_page
 from ..models import Blogs
 from django.contrib import messages
@@ -13,6 +15,7 @@ from django.db.models import Q
 
 app = "blog/serviceprovider/"
 
+@method_decorator(utils.login_required, name='dispatch')
 class SpBlogList(View):
     model = Blogs
     template = app + "sp_blog_list.html"
@@ -29,6 +32,7 @@ class SpBlogList(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
     
+@method_decorator(utils.login_required, name='dispatch')
 class SpBlogAdd(View):
     model = Blogs
     form_class = BlogForm
@@ -63,6 +67,7 @@ class SpBlogAdd(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class SpBlogUpdate(View):
     model = Blogs
     form_class = BlogForm
@@ -100,7 +105,7 @@ class SpBlogUpdate(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-
+@method_decorator(utils.login_required, name='dispatch')
 class SpBlogDelete(View):
     model = Blogs
 
@@ -119,6 +124,7 @@ class SpBlogDelete(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
     
+@method_decorator(utils.login_required, name='dispatch')
 class SpBlogView(View):
     template_name = app + 'sp_all_blog.html'
 
@@ -134,6 +140,7 @@ class SpBlogView(View):
             return render_error_page(request, error_message, status_code=400)
     
 
+@method_decorator(utils.login_required, name='dispatch')
 class SpBlogDetails(View):
     template_name = app + 'sp_blog_single.html'
 
@@ -149,6 +156,7 @@ class SpBlogDetails(View):
             return render_error_page(request, error_message, status_code=400)
     
 
+@method_decorator(utils.login_required, name='dispatch')
 class SPBlogSearch(View):
     model = Blogs
     template = app + "sp_blog_list.html"

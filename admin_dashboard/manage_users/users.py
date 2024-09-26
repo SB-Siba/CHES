@@ -9,10 +9,12 @@ from app_common.error import render_error_page
 from .import forms
 from app_common.forms import RegisterForm
 from django.shortcuts import get_object_or_404
-
+from django.utils.decorators import method_decorator
+from helpers import utils
+from helpers.utils import login_required
 app = "admin_dashboard/manage_users/"
 
-
+@method_decorator(utils.super_admin_only, name='dispatch')
 class PendingRtgs(View):
     model = models.User
     template = app + "forapprovertg.html"
@@ -36,7 +38,7 @@ class PendingRtgs(View):
         context = {'rtgardener_data': rtgardener_data}
         return render(request, self.template, context)
 
-    
+@method_decorator(utils.super_admin_only, name='dispatch')   
 class PendingVendors(View):
     model = models.User
     template = app + "forapprovevendor.html"
@@ -61,6 +63,7 @@ class PendingVendors(View):
         return render(request, self.template, context)
 
     
+@method_decorator(utils.super_admin_only, name='dispatch')
 class PendingServiceProviders(View):
     model = models.User
     template = app + "forapproveserviceprovider.html"
@@ -84,8 +87,7 @@ class PendingServiceProviders(View):
         context = {'service_provider_data': service_provider_data}
         return render(request, self.template, context)
 
-
-# PENDING SEARCH
+@method_decorator(utils.super_admin_only, name='dispatch')
 class PendingRtgSearch(View):
     template = app + "forapprovertg.html"
     model = models.User
@@ -126,6 +128,7 @@ class PendingRtgSearch(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class PendingSpSearch(View):
     template = app + "forapproveserviceprovider.html"
     model = models.User
@@ -165,6 +168,7 @@ class PendingSpSearch(View):
             return render_error_page(request, error_message, status_code=400)
     
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class PendingVendorSearch(View):
     template = app + "forapprovevendor.html"
     model = models.User
@@ -204,7 +208,8 @@ class PendingVendorSearch(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-        
+
+@login_required       
 def ApproveUser(request, pk):
     try:
         user = get_object_or_404(models.User, id=pk)
@@ -234,7 +239,7 @@ def ApproveUser(request, pk):
 
     return redirect("admin_dashboard:admin_dashboard")
 
-
+@login_required
 def RejectUser(request, pk):
     try:
         user = get_object_or_404(models.User, id=pk)
@@ -257,6 +262,7 @@ def RejectUser(request, pk):
     return redirect("admin_dashboard:admin_dashboard")
 
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class ServiceProvidersList(View):
     template = app + "serviceprovider_list.html"
     model = models.User
@@ -276,6 +282,7 @@ class ServiceProvidersList(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
     
+@method_decorator(utils.super_admin_only, name='dispatch')
 class RTGList(View):
     template = app + "rtg_list.html"
     model = models.User
@@ -295,6 +302,7 @@ class RTGList(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class VendorList(View):
     template = app + "vendor_list.html"
     model = models.User
@@ -314,7 +322,7 @@ class VendorList(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-    
+@login_required   
 def Delete_Rtg(request, pk):
     user = get_object_or_404(models.User, id=pk)
     try:
@@ -324,6 +332,7 @@ def Delete_Rtg(request, pk):
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
 
+@login_required
 def Delete_Vendor(request, pk):
     user = get_object_or_404(models.User, id=pk)
     try:
@@ -333,6 +342,7 @@ def Delete_Vendor(request, pk):
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
 
+@login_required
 def Delete_Serviceprovider(request, pk):
     user = get_object_or_404(models.User, id=pk)
     try:
@@ -342,6 +352,7 @@ def Delete_Serviceprovider(request, pk):
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class UserGardeningDetails(View):
     template = app + "gardening_data.html"
 
@@ -354,6 +365,7 @@ class UserGardeningDetails(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class VendorDetails(View):
     template = app + "vendor_data.html"
 
@@ -367,6 +379,7 @@ class VendorDetails(View):
             return render_error_page(request, error_message, status_code=400)
 
     
+@method_decorator(utils.super_admin_only, name='dispatch')
 class ServiceProviderDetails(View):
     template = app + "service_provider_data.html"
 
@@ -379,7 +392,7 @@ class ServiceProviderDetails(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-    
+@method_decorator(utils.super_admin_only, name='dispatch')    
 class RtgSearchUser(View):
     template = app + "rtg_list.html"
     model = models.User
@@ -407,6 +420,7 @@ class RtgSearchUser(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class SpSearchUser(View):
     template = app + "serviceprovider_list.html"
     model = models.User
@@ -434,6 +448,7 @@ class SpSearchUser(View):
             return render_error_page(request, error_message, status_code=400)
     
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class VendorSearchUser(View):
     template = app + "vendor_list.html"
     model = models.User
@@ -460,6 +475,7 @@ class VendorSearchUser(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
         
+@method_decorator(utils.super_admin_only, name='dispatch')
 class RtgWalletBalanceAdd(View):
     model = models.User
     form_class = forms.WalletBalanceAdd
@@ -475,7 +491,7 @@ class RtgWalletBalanceAdd(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-    
+@method_decorator(utils.super_admin_only, name='dispatch')    
 class VendorWalletBalanceAdd(View):
     model = models.User
     form_class = forms.WalletBalanceAdd
@@ -491,7 +507,7 @@ class VendorWalletBalanceAdd(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-        
+@method_decorator(utils.super_admin_only, name='dispatch')        
 class AddUser(View):
     model = models.User
     template = app + "add_user.html"
@@ -523,7 +539,7 @@ class AddUser(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-        
+@method_decorator(utils.super_admin_only, name='dispatch')        
 class QuizAnswers(View):
     model = models.GaredenQuizModel
     template = app + "quiz_view.html"
@@ -550,7 +566,7 @@ class QuizAnswers(View):
             return redirect("admin_dashboard:quizanswers", user_id=user_id)
 
 
-
+@method_decorator(utils.super_admin_only, name='dispatch')
 class UserGardeningProfileUpdateRequest(View):
     template = app + "garden_profile_update_request.html"
     model = models.GardeningProfileUpdateRequest
@@ -571,6 +587,7 @@ class UserGardeningProfileUpdateRequest(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class SearchGardeningProfileUpdateRequest(View):
     template = app + "garden_profile_update_request.html"
     model = models.GardeningProfileUpdateRequest
@@ -611,7 +628,8 @@ class SearchGardeningProfileUpdateRequest(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-    
+
+@login_required    
 def ApproveProfile(request, pk):
     try:
         prof_obj = get_object_or_404(models.GardeningProfileUpdateRequest, id=pk)
@@ -643,6 +661,7 @@ def ApproveProfile(request, pk):
         return render_error_page(request, error_message, status_code=400)
 
 
+@login_required
 def RejectProfile(request):
     if request.method == "POST":
         try:
@@ -666,7 +685,7 @@ def RejectProfile(request):
             return render_error_page(request, error_message, status_code=400)
 
 
-
+@method_decorator(utils.super_admin_only, name='dispatch')
 class UserActivityRequest(View):
     template = app + "activity_request.html"
     model = models.UserActivity
@@ -679,6 +698,7 @@ class UserActivityRequest(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class SearchUsersActivityRequest(View):
     template = app + "activity_request.html"
     model = models.UserActivity
@@ -702,7 +722,8 @@ class SearchUsersActivityRequest(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-    
+
+@login_required    
 def ApproveActivity(request, pk):
     try:
         req_obj = get_object_or_404(models.UserActivity, id=pk)
@@ -723,7 +744,7 @@ def ApproveActivity(request, pk):
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
 
-
+@login_required
 def RejectActivity(request):
     if request.method == "POST":
         try:
@@ -746,7 +767,7 @@ def RejectActivity(request):
             return render_error_page(request, error_message, status_code=400)
 
 
-
+@method_decorator(utils.super_admin_only, name='dispatch')
 class UserProduceSellRequest(View):
     template = app + "producesellrequest.html"
     model = models.SellProduce
@@ -759,6 +780,7 @@ class UserProduceSellRequest(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class SearchProduceSellRequest(View):
     template = app + "producesellrequest.html"
     model = models.SellProduce
@@ -783,6 +805,7 @@ class SearchProduceSellRequest(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@login_required
 def ApproveSellRequest(request):
     if request.method == "POST":
         try:
@@ -814,6 +837,7 @@ def ApproveSellRequest(request):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@login_required
 def RejectSellRequest(request):
     if request.method == "POST":
         try:

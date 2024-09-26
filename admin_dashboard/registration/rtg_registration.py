@@ -6,9 +6,13 @@ from EmailIntigration.views import send_template_email
 from app_common.error import render_error_page
 from .forms import RtgRegistrationForm
 from app_common.models import User, GardeningProfile, GaredenQuizModel
+from django.utils.decorators import method_decorator
+from helpers import utils
+from helpers.utils import login_required
 
 app = "admin_dashboard/registration/rtg/"
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class RtgRegistration(View):
     template_name = app + "rtg_registration.html"
 
