@@ -11,8 +11,11 @@ from django.db.models.functions import Coalesce
 from itertools import zip_longest
 from operator import itemgetter
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from helpers import utils
+from helpers.decorators import login_required
 
-
+@login_required
 def fetch_user_details(request):
     if request.method == 'GET':
         user_id = request.GET.get('user_id')
@@ -93,7 +96,7 @@ def chat(request):
     except Exception as e:
             return render_error_page(request, f"An unexpected error occurred : {str(e)}", status_code=500)
 
-
+@login_required
 def start_messages(request, r_id,product_name=None):
     try:
         receiver = get_object_or_404(User, pk=r_id)
@@ -180,7 +183,7 @@ def send_message(request):
         # Handle if it's not a POST request
         return render_error_page(request, "Invalid request method", status_code=400)
 
-
+@login_required
 def fetch_messages(request):
     if request.method == 'GET':
         try:

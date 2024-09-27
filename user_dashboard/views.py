@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.utils.decorators import method_decorator
 from app_common import models as app_commonmodels
+from helpers.decorators import login_required
 from . import forms as user_form
 from app_common import forms as common_forms
 from django.shortcuts import get_object_or_404
@@ -22,6 +23,7 @@ from app_common.error import render_error_page
 
 app = "user_dashboard/"
 
+@method_decorator(utils.login_required, name='dispatch')
 class UserDashboard(View):
     template = app + "index.html"
 
@@ -51,6 +53,7 @@ class UserDashboard(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
         
+@method_decorator(utils.login_required, name='dispatch')   
 class UserProfile(View):
     template = app + "user_profile.html"
 
@@ -63,6 +66,7 @@ class UserProfile(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class UpdateProfileView(View):
     template = app + "update_profile.html"
     form = user_form.UpdateProfileForm
@@ -139,6 +143,7 @@ class UpdateProfileView(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+@method_decorator(utils.login_required, name='dispatch')        
 class ServicePage(View):
     template = app + "service.html"
 
@@ -151,6 +156,7 @@ class PrivacyPolicyPage(View):
     def get(self,request):
         return render(request,self.template)
     
+@method_decorator(utils.login_required, name='dispatch')   
 class ContactePage(View):
     template = app + "contact.html"
     form = user_form.contactForm
@@ -199,6 +205,7 @@ class ContactePage(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+@method_decorator(utils.login_required, name='dispatch')
 class GardeningProfile(View):
     template = app + "gardening_profile.html"
     model = app_commonmodels.GardeningProfile
@@ -219,7 +226,7 @@ class GardeningProfile(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
         
-import json
+@method_decorator(utils.login_required, name='dispatch')
 class UpdateGardeningProfileView(View):
     template = app + "edit_gardening_profile.html"
     form_class = common_forms.GardeningForm
@@ -281,6 +288,7 @@ class UpdateGardeningProfileView(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class AddActivityRequest(View):
     template = app + "activity_add.html"
     form_class = user_form.ActivityAddForm
@@ -316,6 +324,7 @@ class AddActivityRequest(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class ActivityList(View):
     template = app + "activity_list.html"
     model = app_commonmodels.UserActivity
@@ -332,6 +341,7 @@ class ActivityList(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class WalletView(View):
     template = app + "wallet.html"
     model = app_commonmodels.ProduceBuy
@@ -357,7 +367,7 @@ class WalletView(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-
+@method_decorator(utils.login_required, name='dispatch')
 class SellProduceView(View):
     template = app + "sell_produce.html"
     form_class = user_form.SellProduceForm
@@ -416,10 +426,7 @@ def delete_expired_sell_produce(request):
     current_date = timezone.now()
     app_commonmodels.SellProduce.objects.filter(validity__lte=current_date).delete()
    
-
-
-
-
+@method_decorator(utils.login_required, name='dispatch')
 class AllSellRequests(View):
     template = app + "sellrequestlist.html"
     model = app_commonmodels.SellProduce
@@ -431,7 +438,8 @@ class AllSellRequests(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-    
+
+@method_decorator(utils.login_required, name='dispatch')   
 class GreenCommerceProductCommunity(View):
     template = app + "greencommerceproducts.html"
     model = app_commonmodels.SellProduce
@@ -499,6 +507,7 @@ class GreenCommerceProductCommunity(View):
             return render_error_page(request, error_message, status_code=400)
 
 
+@method_decorator(utils.login_required, name='dispatch')
 class BuyingBegins(View):
     model = app_commonmodels.SellProduce
     
@@ -536,7 +545,7 @@ class BuyingBegins(View):
             return render_error_page(request, error_message, status_code=400)
 
 
-
+@method_decorator(utils.login_required, name='dispatch')
 class BuyBeginsSellerView(View):
     template = app + "buyingprogressseller.html"
     model = app_commonmodels.ProduceBuy
@@ -550,6 +559,8 @@ class BuyBeginsSellerView(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
+@method_decorator(utils.login_required, name='dispatch')
 class BuyBeginsBuyerView(View):
     template = app + "buyingprogressbuyer.html"
     model = app_commonmodels.ProduceBuy
@@ -578,6 +589,7 @@ def send_payment_link(request,buy_id):
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class ProduceBuyView(View):
     model = app_commonmodels.ProduceBuy
     def get(self,request,ord_id):
@@ -624,7 +636,7 @@ def reject_buy(request,ord_id):
         return render_error_page(request, error_message, status_code=400)
 
     
-
+@method_decorator(utils.login_required, name='dispatch')
 class AllOrders(View):
     template = app + "all_orders.html"
     model = app_commonmodels.ProduceBuy
@@ -636,6 +648,8 @@ class AllOrders(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
+@method_decorator(utils.login_required, name='dispatch')
 class AllPosts(View):
     template = app + "all_posts.html"
     model = app_commonmodels.UserActivity
@@ -665,7 +679,8 @@ class AllPosts(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-
+        
+@login_required   
 def plus_like(request):
     try:
         if request.method == 'GET':
@@ -681,6 +696,7 @@ def plus_like(request):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
     
+@login_required
 def minus_like(request):
     try:
         if request.method == 'GET':
@@ -696,6 +712,7 @@ def minus_like(request):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
     
+@login_required
 def give_comment(request):
     try:
         if request.method == "POST":
@@ -717,6 +734,7 @@ def give_comment(request):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
     
+@login_required
 def delete_comment(request, post_id, comment_id):
     try:
         post_obj = app_commonmodels.UserActivity.objects.get(id=post_id)
@@ -730,6 +748,7 @@ def delete_comment(request, post_id, comment_id):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
     
+@login_required   
 def get_all_comments(request):
     try:
         post_id = request.GET.get('post_id')
@@ -759,6 +778,7 @@ def get_all_comments(request):
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
     
+@method_decorator(utils.login_required, name='dispatch')
 class RateOrder(View):
     model = app_commonmodels.ProduceBuy
 
@@ -789,6 +809,7 @@ class RateOrder(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
         
+@method_decorator(utils.login_required, name='dispatch')
 class VendorsProduct(View):
     template = app + "vendor_products.html"
     model = app_commonmodels.ProductFromVendor
@@ -811,7 +832,8 @@ class VendorsProduct(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-        
+
+@method_decorator(utils.login_required, name='dispatch')        
 class CheckoutView(View):
     template = app + "checkout_page.html"
     form = user_form.CheckoutForm
@@ -974,6 +996,7 @@ class CheckoutView(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
         
+@method_decorator(utils.login_required, name='dispatch')
 class AllOrdersFromVendors(View):
     model = app_commonmodels.Order
     template = app + "all_orders_from_vendor.html"
@@ -1001,6 +1024,7 @@ class AllOrdersFromVendors(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
         
+@method_decorator(utils.login_required, name='dispatch')
 class GardenerDownloadInvoice(View):
     model = app_commonmodels.Order
     template = app + "invoice.html"
@@ -1061,7 +1085,7 @@ class GardenerDownloadInvoice(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
         
-
+@method_decorator(utils.login_required, name='dispatch')
 class ListOfServicesByServiceProviders(View):
     template = app + "list_services.html"
     model = app_commonmodels.Service
@@ -1074,6 +1098,7 @@ class ListOfServicesByServiceProviders(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
         
+@method_decorator(utils.login_required, name='dispatch')
 class ServiceSearchView(View):
     model = app_commonmodels.Service
     template = app + "list_services.html"
@@ -1104,6 +1129,8 @@ class ServiceSearchView(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
+@method_decorator(utils.login_required, name='dispatch')
 class ServiceDetails(View):
     template = app + "service_details.html"
     model = app_commonmodels.Service
@@ -1134,6 +1161,8 @@ class ServiceDetails(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
         
+
+@method_decorator(utils.login_required, name='dispatch')
 class MyBookedServices(View):
     template = app + "my_booked_services.html"
     model = app_commonmodels.Booking
@@ -1157,6 +1186,7 @@ def rtg_decline_booking(request, booking_id):
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
     
+@method_decorator(utils.login_required, name='dispatch')
 class RateOrderFromVendor(View):
     model = app_commonmodels.Order
 

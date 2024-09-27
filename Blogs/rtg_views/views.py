@@ -4,7 +4,9 @@ from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.views import View
 from django.shortcuts import get_object_or_404
-
+from django.utils.decorators import method_decorator
+from helpers import utils
+from helpers.decorators import login_required
 from app_common.error import render_error_page
 from ..models import Blogs
 from django.contrib import messages
@@ -13,6 +15,7 @@ from django.db.models import Q
 
 app = "blog/rtg/"
 
+@method_decorator(utils.login_required, name='dispatch')
 class BlogList(View):
     model = Blogs
     template = app + "rtg_blog_list.html"
@@ -29,6 +32,7 @@ class BlogList(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
     
+@method_decorator(utils.login_required, name='dispatch')
 class BlogAdd(View):
     model = Blogs
     form_class = BlogForm
@@ -66,6 +70,7 @@ class BlogAdd(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class BlogUpdate(View):
     model = Blogs
     form_class = BlogForm
@@ -103,7 +108,7 @@ class BlogUpdate(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
         
-
+@method_decorator(utils.login_required, name='dispatch')
 class BlogDelete(View):
     model = Blogs
 
@@ -121,6 +126,7 @@ class BlogDelete(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
     
+@method_decorator(utils.login_required, name='dispatch')
 class BlogView(View):
     template_name = app + 'rtg_all_blog.html'
 
@@ -135,6 +141,7 @@ class BlogView(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+@method_decorator(utils.login_required, name='dispatch')
 class BlogDetails(View):
     template_name = app + 'rtg_blog_single.html'
 
@@ -149,6 +156,7 @@ class BlogDetails(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
     
+@method_decorator(utils.login_required, name='dispatch')
 class RTGBlogSearch(View):
     model = Blogs
     template = app + "rtg_blog_list.html"

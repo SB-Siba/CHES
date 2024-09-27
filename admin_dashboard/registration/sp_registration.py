@@ -6,9 +6,11 @@ from EmailIntigration.views import send_template_email
 from app_common.error import render_error_page
 from .forms import ServiceProviderRegistrationForm
 from app_common.models import User, ServiceProviderDetails
-
+from django.utils.decorators import method_decorator
+from helpers import utils
 app = "admin_dashboard/registration/serviceprovider/"
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class ServiceProviderRegistration(View):
     template_name = app + "sp_registration.html"
 

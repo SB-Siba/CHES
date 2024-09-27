@@ -8,12 +8,13 @@ from Blogs.models import Blogs
 from django.contrib import messages
 from Blogs.forms import BlogForm
 from django.db.models import Q
-
+from django.utils.decorators import method_decorator
 from app_common.error import render_error_page
+from helpers import utils
 
 app = "admin_dashboard/manage_blogs/"
 
-
+@method_decorator(utils.super_admin_only, name='dispatch')
 class AllBlogsFromUsers(View):
     model = Blogs
     template = app + "all_blogs_from_user.html"
@@ -30,6 +31,7 @@ class AllBlogsFromUsers(View):
             return render_error_page(request, error_message)
 
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class ApproveBlog(View):
     model = Blogs
 
@@ -44,6 +46,7 @@ class ApproveBlog(View):
             return render_error_page(request, error_message)
 
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class DeclineBlog(View):
     model = Blogs
 
@@ -58,6 +61,7 @@ class DeclineBlog(View):
             return render_error_page(request, error_message)
 
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class DeleteBlog(View):
     model = Blogs
 
@@ -69,7 +73,7 @@ class DeleteBlog(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message)
 
-
+@method_decorator(utils.super_admin_only, name='dispatch')
 class BlogSearch(View):
     model = Blogs
     template = app + "all_blogs_from_user.html"
@@ -96,6 +100,7 @@ class BlogSearch(View):
             return render_error_page(request, error_message)
 
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class BlogUpdate(View):
     model = Blogs
     form_class = BlogForm
