@@ -9,6 +9,7 @@ from app_common import models as common_models
 from EmailIntigration.views import send_template_email
 from user_dashboard.serializers import OrderSerializer
 from user_dashboard.forms import ActivityAddForm, BuyAmmountForm,SellProduceForm,BuyQuantityForm
+from app_common.forms import GardeningForm
 from . import forms as common_forms
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
@@ -25,6 +26,7 @@ from app_common.forms import contactForm
 from django.utils.decorators import method_decorator
 from helpers import utils
 from helpers.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 
 app = "vendor_dashboard/"
 
@@ -412,7 +414,111 @@ class VendorDownloadInvoice(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-        
+
+
+@method_decorator(utils.login_required, name='dispatch')
+class VendorGardeningProfile(View):
+    template = app + "gardening_profile.html"
+    model = common_models.GardeningProfile
+
+    def get(self, request):
+        try:
+            user = request.user
+            garden_profile_obj = self.model.objects.filter(user=user).first()
+            if garden_profile_obj:
+                garden_area = garden_profile_obj.garden_area
+                # Assume each tree needs 4 square ft and each pot needs 1 square ft
+                trees = garden_area // 4
+                pots = garden_area // 1
+            return render(request, self.template, locals())
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+
+@method_decorator(utils.login_required, name='dispatch')
+class VendorUpdateGardeningProfileView(View):
+    template = app + "edit_gardening_profile.html"
+    form_class = GardeningForm
+    model = common_models.GardeningProfile
+
+    def get(self, request):
+        try:
+            user = request.user
+            garden_profile_obj = self.model.objects.filter(user=user).first()
+            form = self.form_class(instance=garden_profile_obj) if garden_profile_obj else self.form_class()
+            context = {'form': form}
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+    def post(self, request):
+        try:
+            form = self.form_class(request.POST, request.FILES)
+            user = request.user
+
+            if form.is_valid():
+                garden_area = form.cleaned_data['garden_area']
+                number_of_plants = form.cleaned_data['number_of_plants']
+                number_of_unique_plants = form.cleaned_data['number_of_unique_plants']
+                garden_image = form.cleaned_data['garden_image']
+
+                gardening_obj = self.model.objects.filter(user=user).first()
+                changes = []
+
+                if gardening_obj:
+                    # Compare fields to see if there are any changes
+                    for field_name, value in form.cleaned_data.items():
+                        if getattr(gardening_obj, field_name) != value:
+                            changes.append(field_name)
+
+                # Handle update request logic
+                req_obj = common_models.GardeningProfileUpdateRequest.objects.filter(user=user)
+                if req_obj.exists():
+                    # If there is already a pending update request, remove it
+                    req_obj.delete()
+
+                # Create new update request
+                update_request = common_models.GardeningProfileUpdateRequest(
+                    user=user,
+                    garden_area=garden_area,
+                    number_of_plants=number_of_plants,
+                    number_of_unique_plants=number_of_unique_plants,
+                    garden_image=garden_image,
+                    changes=changes
+                )
+                update_request.save()
+
+                garden_image_url = request.build_absolute_uri(update_request.garden_image.url)
+
+                # Send email notification
+                send_template_email(
+                    subject='Gardening Profile Update Request Received',
+                    template_name='mail_template/gardening_profile_update_request_sent.html',
+                    context={
+                        'full_name': update_request.user.full_name,
+                        'area_for_update': garden_area,
+                        'number_of_plants_for_update': number_of_plants,
+                        'number_of_unique_plants_for_update': number_of_unique_plants,
+                        'garden_image_for_update': garden_image_url,
+                        'is_rtg': False
+                    },
+                    recipient_list=[update_request.user.email]
+                )
+                return redirect('vendor_dashboard:vendor_gardeningprofile')
+            else:
+                # If form is invalid, show error message
+                return render_error_page(request, 'Invalid form data', status_code=400)
+
+        except ObjectDoesNotExist:
+            return render_error_page(request, 'No gardening profile found', status_code=404)
+
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+
 @method_decorator(utils.login_required, name='dispatch')
 class AddActivityVendor(View):
     template = app + "add_activity.html"
@@ -440,7 +546,18 @@ class AddActivityVendor(View):
                 # Save Activity 
                 actvtyreqobj=self.model(user = user,activity_title = activity_title,activity_content = activity_content,activity_image = activity_image)
                 actvtyreqobj.save()
-                messages.success(request,'Request Sent Successfully')
+                activity_image_url = request.build_absolute_uri(actvtyreqobj.activity_image.url)
+                send_template_email(
+                    subject='Activity Request Recived Successfully.',
+                    template_name='mail_template/activity_request_sent.html',
+                    context={
+                        'full_name':actvtyreqobj.user.full_name,
+                        'activity_title':activity_title,
+                        'activity_content':activity_content,
+                        'activity_image':activity_image_url,
+                        },
+                    recipient_list=[actvtyreqobj.user.email]
+                )
                 return redirect('vendor_dashboard:vendor_dashboard')
         except Exception as e:
             error_message = f"Error! Please check your inputs. {str(e)}"
@@ -653,7 +770,22 @@ class SellProduceView(View):
                 
                 sellObj=self.model(user = user,product_name = product_name,product_image = product_image,product_quantity = product_quantity,SI_units = SI_units,ammount_in_green_points = ammount_in_green_points,validity_duration_days = validity_duration_days)
                 sellObj.save()
-                messages.success(request,'Request for sell Sent Successfully')
+                produce_image_url = request.build_absolute_uri(sellObj.product_image.url)
+
+                send_template_email(
+                    subject='Sell Produce Request Recived Successfully.',
+                    template_name='mail_template/sell_produce_request_sent.html',
+                    context={
+                        'full_name':sellObj.user.full_name,
+                        'product_name':sellObj.product_name,
+                        'product_quantity':sellObj.product_quantity,
+                        'SI_units':sellObj.SI_units,
+                        'ammount_in_green_points':sellObj.ammount_in_green_points,
+                        'validity_duration_days':sellObj.validity_duration_days,
+                        'product_image':produce_image_url,
+                        },
+                    recipient_list=[sellObj.user.email]
+                )
                 return redirect('vendor_dashboard:vendor_dashboard')
         except Exception as e:
             error_message = f"Error! Please check your inputs. {str(e)}"
@@ -773,10 +905,36 @@ class BuyingBegins(View):
                     if buyer.wallet >= ammount_in_green_points:
                         buying_obj = common_models.ProduceBuy(buyer = buyer,seller = seller,sell_produce = sell_prod_obj,product_name = sell_prod_obj.product_name,SI_units = SI_units,buying_status = 'BuyInProgress',quantity_buyer_want = quantity)
                         buying_obj.save()
+                        # Send email to the buyer
+                        send_template_email(
+                            subject='Purchase Request Submitted Successfully',
+                            template_name='mail_template/purchase_request_buyer.html',
+                            context={
+                                'full_name': buyer.full_name,
+                                'product_name': sell_prod_obj.product_name,
+                                'quantity': quantity,
+                                'SI_units': SI_units,
+                            },
+                            recipient_list=[buyer.email]
+                        )
+
+                        # Send email to the seller
+                        send_template_email(
+                            subject='New Purchase Request Received',
+                            template_name='mail_template/purchase_request_seller.html',
+                            context={
+                                'full_name': seller.full_name,
+                                'product_name': sell_prod_obj.product_name,
+                                'buyer_name': buyer.full_name,
+                                'quantity': quantity,
+                                'SI_units': SI_units,
+                            },
+                            recipient_list=[seller.email]
+                        )
                         return redirect('vendor_dashboard:vendor_dashboard')
                     else:
-                        messages.error(request,"You don't have enough green points in your wallet!")
-                        return redirect('vendor_dashboard:greencommerceproducts')
+                        error_message = "You don't have enough green points in your wallet!"
+                        return render_error_page(request, error_message, status_code=400)
                 except Exception as e:
                     error_message = f"An unexpected error occurred: {str(e)}"
                     return render_error_page(request, error_message, status_code=400)
@@ -822,62 +980,143 @@ class BuyBeginsBuyerView(View):
             return render_error_page(request, error_message, status_code=400)
         
 @login_required
-def send_payment_link(request,buy_id):
+def send_payment_link(request, buy_id):
     try:
         if request.method == "POST":
             buy_obj = common_models.ProduceBuy.objects.get(id=buy_id)
             form_data = request.POST
-            ammount_based_on_buyer_quantity = int(form_data['ammount_based_on_buyer_quantity'])
+            amount_based_on_buyer_quantity = int(form_data['ammount_based_on_buyer_quantity'])
             buy_obj.payment_link = "Send"
-            buy_obj.ammount_based_on_quantity_buyer_want = ammount_based_on_buyer_quantity
+            buy_obj.ammount_based_on_quantity_buyer_want = amount_based_on_buyer_quantity
             buy_obj.save()
+
+            # Send email notification to both buyer and seller using templates
+            send_template_email(
+                subject='New Payment Link Sent',
+                template_name='mail_template/payment_link.html',
+                context={
+                    'full_name': buy_obj.buyer.full_name,
+                    'product_name': buy_obj.sell_produce.product_name,
+                    'amount': buy_obj.ammount_based_on_quantity_buyer_want,
+                },
+                recipient_list=[buy_obj.buyer.email]
+            )
+
+            send_template_email(
+                subject='New Payment Link Sent',
+                template_name='mail_template/payment_link_seller.html',
+                context={
+                    'full_name': buy_obj.seller.full_name,
+                    'product_name': buy_obj.sell_produce.product_name,
+                    'buyer_name': buy_obj.buyer.full_name,
+                    'amount': buy_obj.ammount_based_on_quantity_buyer_want,
+                },
+                recipient_list=[buy_obj.seller.email]
+            )
 
             return redirect('vendor_dashboard:buybeginssellerview')
     except Exception as e:
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
 
-
-@method_decorator(utils.login_required, name='dispatch')
+@method_decorator(login_required, name='dispatch')
 class ProduceBuyView(View):
     model = common_models.ProduceBuy
-    def get(self,request,prod_id):
+
+    def get(self, request, prod_id):
         try:
             user = request.user
             buy_prod_obj = self.model.objects.get(id=prod_id)
             seller = buy_prod_obj.seller
             buyer = buy_prod_obj.buyer
-            ammount_for_quantity_want = buy_prod_obj.ammount_based_on_quantity_buyer_want
+            amount_for_quantity_want = buy_prod_obj.ammount_based_on_quantity_buyer_want
             sell_prod = buy_prod_obj.sell_produce
 
-            buyer.wallet -= ammount_for_quantity_want
-            buyer.total_invest += ammount_for_quantity_want
+            # Update buyer's wallet and total investments
+            buyer.wallet -= amount_for_quantity_want
+            buyer.total_invest += amount_for_quantity_want
             buyer.coins += 50
-                
-            seller.wallet += ammount_for_quantity_want
-            seller.total_income += ammount_for_quantity_want
+
+            # Update seller's wallet and total income
+            seller.wallet += amount_for_quantity_want
+            seller.total_income += amount_for_quantity_want
             seller.coins += 50
 
-            sell_prod_obj = common_models.SellProduce.objects.get(id = sell_prod.id)
-            sell_prod_obj.product_quantity = sell_prod_obj.product_quantity-buy_prod_obj.quantity_buyer_want
-            sell_prod_obj.ammount_in_green_points = sell_prod_obj.ammount_in_green_points - ammount_for_quantity_want
+            # Update product quantity and amount in green points
+            sell_prod_obj = common_models.SellProduce.objects.get(id=sell_prod.id)
+            sell_prod_obj.product_quantity -= buy_prod_obj.quantity_buyer_want
+            sell_prod_obj.ammount_in_green_points -= amount_for_quantity_want
+
+            # Update the buying status
             buy_prod_obj.buying_status = "BuyCompleted"
             buy_prod_obj.save()
             sell_prod_obj.save()
             buyer.save()
             seller.save()
-            return redirect('vendor_dashboard:greencommerceproducts')  
+
+            # Send email notification for purchase completion using templates
+            send_template_email(
+                subject='Purchase Completed Successfully',
+                template_name='mail_template/purchase_completion_buyer.html',
+                context={
+                    'full_name': buyer.full_name,
+                    'product_name': sell_prod_obj.product_name,
+                    'quantity': buy_prod_obj.quantity_buyer_want,
+                    'amount': buy_prod_obj.ammount_based_on_quantity_buyer_want,
+                    'SI_units': sell_prod_obj.SI_units,
+                },
+                recipient_list=[buyer.email]
+            )
+
+            send_template_email(
+                subject='Purchase Completed Successfully',
+                template_name='mail_template/purchase_completion_seller.html',
+                context={
+                    'full_name': seller.full_name,
+                    'product_name': sell_prod_obj.product_name,
+                    'buyer_name': buyer.full_name,
+                    'quantity': buy_prod_obj.quantity_buyer_want,
+                    'amount': buy_prod_obj.ammount_based_on_quantity_buyer_want,
+                    'SI_units': sell_prod_obj.SI_units,
+                },
+                recipient_list=[seller.email]
+            )
+
+            return redirect('vendor_dashboard:greencommerceproducts')
 
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
 @login_required
-def reject_buy(request,ord_id):
+def reject_buy(request, ord_id):
     try:
         order_obj = common_models.ProduceBuy.objects.get(id=ord_id)
-        order_obj.buying_status="BuyRejected"
+        order_obj.buying_status = "BuyRejected"
         order_obj.save()
+
+        # Send email notification for the rejection using templates
+        send_template_email(
+            subject='Purchase Request Rejected',
+            template_name='mail_template/rejection_notification_buyer.html',
+            context={
+                'full_name': order_obj.buyer.full_name,
+                'product_name': order_obj.sell_produce.product_name,
+            },
+            recipient_list=[order_obj.buyer.email]
+        )
+
+        send_template_email(
+            subject='Purchase Request Rejected',
+            template_name='mail_template/rejection_notification_seller.html',
+            context={
+                'full_name': order_obj.seller.full_name,
+                'product_name': order_obj.sell_produce.product_name,
+                'buyer_name': order_obj.buyer.full_name,
+            },
+            recipient_list=[order_obj.seller.email]
+        )
+
         return redirect('vendor_dashboard:buybeginssellerview')
     except Exception as e:
         error_message = f"An unexpected error occurred: {str(e)}"

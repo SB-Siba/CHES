@@ -579,13 +579,18 @@ class UserGardeningProfileUpdateRequest(View):
             for i in profile_update_obj:
                 request_prof_objs.append(i)
                 user = i.user
-                original_profile_data = get_object_or_404(models.GardeningProfile, user=user)
+                # Check if the user has an original gardening profile
+                try:
+                    original_profile_data = models.GardeningProfile.objects.get(user=user)
+                except models.GardeningProfile.DoesNotExist:
+                    original_profile_data = None  # Handle case where profile doesn't exist
                 original_prof_objs.append(original_profile_data)
             data = zip(request_prof_objs, original_prof_objs)
             return render(request, self.template, {'data': data})
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
 
 @method_decorator(utils.super_admin_only, name='dispatch')
 class SearchGardeningProfileUpdateRequest(View):
@@ -596,30 +601,30 @@ class SearchGardeningProfileUpdateRequest(View):
         try:
             search_by = request.GET.get("search_by")
             query = request.GET.get("query")
-            print(search_by,query)
+            data = None
 
             if search_by and query:
                 if search_by == "email":
-                    profile_update_obj = self.model.objects.filter(user__email__icontains = query)
-                    request_prof_objs = []
-                    original_prof_objs = []
-                    for i in profile_update_obj:
-                        request_prof_objs.append(i)
-                        user = i.user
-                        original_profile_data = get_object_or_404(models.GardeningProfile, user=user)
-                        original_prof_objs.append(original_profile_data)
-                    data = zip(request_prof_objs, original_prof_objs)
+                    profile_update_obj = self.model.objects.filter(user__email__icontains=query)
                 elif search_by == "contact":
-                    profile_update_obj = self.model.objects.filter(user__contact__icontains = query)
-                    request_prof_objs = []
-                    original_prof_objs = []
-                    for i in profile_update_obj:
-                        request_prof_objs.append(i)
-                        user = i.user
-                        original_profile_data = get_object_or_404(models.GardeningProfile, user=user)
-                        original_prof_objs.append(original_profile_data)
-                    data = zip(request_prof_objs, original_prof_objs)
-            
+                    profile_update_obj = self.model.objects.filter(user__contact__icontains=query)
+                else:
+                    profile_update_obj = []
+
+                request_prof_objs = []
+                original_prof_objs = []
+
+                for i in profile_update_obj:
+                    request_prof_objs.append(i)
+                    user = i.user
+                    # Check if the user has an original gardening profile
+                    try:
+                        original_profile_data = models.GardeningProfile.objects.get(user=user)
+                    except models.GardeningProfile.DoesNotExist:
+                        original_profile_data = None  # Handle case where profile doesn't exist
+                    original_prof_objs.append(original_profile_data)
+
+                data = zip(request_prof_objs, original_prof_objs)
 
             context = {
                 "data": data,
@@ -629,23 +634,33 @@ class SearchGardeningProfileUpdateRequest(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+
 @login_required    
 def ApproveProfile(request, pk):
     try:
         prof_obj = get_object_or_404(models.GardeningProfileUpdateRequest, id=pk)
         user = prof_obj.user
-        garden_area = prof_obj.garden_area
-        number_of_plants = prof_obj.number_of_plants
-        number_of_unique_plants = prof_obj.number_of_unique_plants
-        garden_image = prof_obj.garden_image
 
-        p_obj_for_update = get_object_or_404(models.GardeningProfile, user=user)
+        # Check if the original profile exists, if not, create a new one
+        p_obj_for_update, created = models.GardeningProfile.objects.get_or_create(
+            user=user,
+            defaults={
+                'garden_area': prof_obj.garden_area,
+                'number_of_plants': prof_obj.number_of_plants,
+                'number_of_unique_plants': prof_obj.number_of_unique_plants,
+                'garden_image': prof_obj.garden_image
+            }
+        )
 
-        p_obj_for_update.garden_area = garden_area
-        p_obj_for_update.number_of_plants = number_of_plants
-        p_obj_for_update.number_of_unique_plants = number_of_unique_plants
-        p_obj_for_update.garden_image = garden_image
+        if not created:  # If the profile already exists, update the fields
+            p_obj_for_update.garden_area = prof_obj.garden_area
+            p_obj_for_update.number_of_plants = prof_obj.number_of_plants
+            p_obj_for_update.number_of_unique_plants = prof_obj.number_of_unique_plants
+            p_obj_for_update.garden_image = prof_obj.garden_image
 
+        p_obj_for_update.save()
+
+        # Send approval email
         send_template_email(
             subject="Gardening Profile Updated",
             template_name="mail_template/gardening_profile_approve_mail.html",
@@ -653,8 +668,9 @@ def ApproveProfile(request, pk):
             recipient_list=[user.email]
         )
 
-        p_obj_for_update.save()
+        # Delete the request after the profile is updated or created
         prof_obj.delete()
+
         return redirect("admin_dashboard:gardeningprofileupdaterequest")
     except Exception as e:
         error_message = f"An unexpected error occurred: {str(e)}"
@@ -670,13 +686,20 @@ def RejectProfile(request):
             
             prof_obj = get_object_or_404(models.GardeningProfileUpdateRequest, id=int(req_id))
             user = prof_obj.user
-            reject_object = models.GardeningProfileUpdateReject(user=user, gardening_profile_update_id=prof_obj.id, reason=reason)
+
+            reject_object = models.GardeningProfileUpdateReject(
+                user=user,
+                gardening_profile_update_id=prof_obj.id,
+                reason=reason
+            )
+
             send_template_email(
                 subject="Gardening Profile Rejected",
                 template_name="mail_template/gardening_profile_rejected_mail.html",
-                context={'full_name': user.full_name, "email": user.email},
+                context={'full_name': user.full_name, "email": user.email, 'reason': reason},
                 recipient_list=[user.email]
             )
+            
             reject_object.save()
             prof_obj.delete()
             return redirect("admin_dashboard:gardeningprofileupdaterequest")
