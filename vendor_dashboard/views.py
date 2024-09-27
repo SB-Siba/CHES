@@ -1403,6 +1403,15 @@ class ServiceDetails(View):
                 booking.service = service
                 booking.gardener = request.user
                 booking.save()
+                send_template_email(
+                    subject="Booking Confirmation",
+                    template_name="mail_template/booking_confirmation.html",
+                    context = {
+                    'gardener_name': request.user.full_name,
+                    'service_name': service.name,  # Assuming the service has a name attribute
+                    },                 
+                    recipient_list=[request.user.email]
+                )
                 return redirect("vendor_dashboard:list_services")
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
@@ -1428,6 +1437,16 @@ def vendor_decline_booking(request, booking_id):
         if request.user == booking.gardener:
             booking.status = 'declined'
             booking.save()
+
+            send_template_email(
+                subject="Booking Declined",
+                template_name="mail_template/booking_decline.html",
+                context = {
+                'gardener_name': request.user.full_name,
+                'service_name': booking.service.name,  # Assuming the service has a name attribute
+                },                 
+                recipient_list=[request.user.email]
+            )
         return redirect('vendor_dashboard:my_booked_services')
     except Exception as e:
         error_message = f"An unexpected error occurred: {str(e)}"
