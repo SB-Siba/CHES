@@ -1311,6 +1311,15 @@ class ServiceDetails(View):
                 booking.service = service
                 booking.gardener = request.user
                 booking.save()
+                send_template_email(
+                    subject="Booking Confirmation",
+                    template_name="mail_template/booking_confirmation.html",
+                    context = {
+                    'gardener_name': request.user.full_name,
+                    'service_name': service.name,  # Assuming the service has a name attribute
+                    },                 
+                    recipient_list=[request.user.email]
+                )
                 return redirect("user_dashboard:list_services")
             return render(request, self.template, {'service': service,"form":form,"service_booked_obj":service_booked_obj})
         except Exception as e:
@@ -1330,13 +1339,23 @@ class MyBookedServices(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-        
+
+@login_required    
 def rtg_decline_booking(request, booking_id):
     try:
         booking = get_object_or_404(app_commonmodels.Booking, id=booking_id)
         if request.user == booking.gardener:
             booking.status = 'declined'
             booking.save()
+            send_template_email(
+                subject="Booking Declined",
+                template_name="mail_template/booking_decline.html",
+                context = {
+                'gardener_name': request.user.full_name,
+                'service_name': booking.service.name,  # Assuming the service has a name attribute
+                },                 
+                recipient_list=[request.user.email]
+            )
         return redirect('user_dashboard:my_booked_services')
     except Exception as e:
         error_message = f"An unexpected error occurred: {str(e)}"
