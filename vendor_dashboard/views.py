@@ -1443,7 +1443,7 @@ def vendor_decline_booking(request, booking_id):
                 template_name="mail_template/booking_decline.html",
                 context = {
                 'gardener_name': request.user.full_name,
-                'service_name': booking.service.name,  # Assuming the service has a name attribute
+                'service_name': booking.service.name,
                 },                 
                 recipient_list=[request.user.email]
             )
