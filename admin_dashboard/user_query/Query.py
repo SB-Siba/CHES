@@ -74,6 +74,7 @@ class QueryReply(View):
             error_message =  f"Errors occurred: {', '.join(error_list)}"
             return render_error_page(request, error_message, status_code=400)
         
+@method_decorator(utils.super_admin_only, name='dispatch')
 class DeleteQuery(View):
     model = models.User_Query
 

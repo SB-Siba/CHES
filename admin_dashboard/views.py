@@ -60,7 +60,7 @@ class AdminDashboard(View):
         default_cities = ["Bhubaneswar", "Cuttack", "Jaipur", "Brahmapur", "Sambalpur"]
 
         # Query the database for city-wise data
-        city_data = common_models.User.objects.values('city').annotate(total=Count('city'))
+        city_data = common_models.User.objects.filter(is_approved=True).values('city').annotate(total=Count('city'))
 
         # Initialize the data structure
         city_counts = {city: 0 for city in default_cities}
@@ -98,7 +98,7 @@ class AdminDashboard(View):
             for entry in top_users
         ]
 
-        top_users_by_coins = common_models.User.objects.filter(coins__gt=0).order_by('-coins')[:10]
+        top_users_by_coins = common_models.User.objects.filter(coins__gt=0,is_approved = True).order_by('-coins')[:10]
         positions = [
             'winner', 'first_runner_up', 'second_runner_up','fourth',
             'fifth', 'sixth', 'seventh', 'eighth', 'ninth','tenth'
@@ -179,6 +179,7 @@ class AdminDashboard(View):
 
         return render(request, self.template, context)
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class CityDetailView(View):
     template_name = app + "city_detail.html"
 
@@ -190,14 +191,14 @@ class CityDetailView(View):
 
         if city_name == "Other":
             # Filter users from cities not in the default list
-            rtgs = common_models.User.objects.filter(is_rtg=True).exclude(city__in=default_cities)
-            vendors = common_models.User.objects.filter(is_vendor=True).exclude(city__in=default_cities)
-            service_providers = common_models.User.objects.filter(is_serviceprovider=True).exclude(city__in=default_cities)
+            rtgs = common_models.User.objects.filter(is_rtg=True,is_approved = True).exclude(city__in=default_cities)
+            vendors = common_models.User.objects.filter(is_vendor=True,is_approved = True).exclude(city__in=default_cities)
+            service_providers = common_models.User.objects.filter(is_serviceprovider=True,is_approved = True).exclude(city__in=default_cities)
             
             # Aggregate data for all non-default cities
-            total_users = common_models.User.objects.filter(city__in=default_cities).count()
+            total_users = common_models.User.objects.filter(city__in=default_cities,is_approved = True).count()
 
-            rtgs_and_vendors = common_models.User.objects.filter(Q(is_rtg=True) | Q(is_vendor=True)).exclude(city__in=default_cities)
+            rtgs_and_vendors = common_models.User.objects.filter(Q(is_rtg=True) | Q(is_vendor=True),is_approved = True).exclude(city__in=default_cities)
 
             activity_label = []
             activity_data = []
@@ -262,7 +263,7 @@ class CityDetailView(View):
             labels = ['RTGs', 'Vendors', 'Service Providers']
             chart_data = [rtgs.count(), vendors.count(), service_providers.count()]
 
-            top_rtgs_and_vendors_coins = common_models.User.objects.filter(Q(is_rtg=True) | Q(is_vendor=True)).exclude(city__in=default_cities).order_by('-coins')[:10]
+            top_rtgs_and_vendors_coins = common_models.User.objects.filter(Q(is_rtg=True) | Q(is_vendor=True),is_approved = True).exclude(city__in=default_cities).order_by('-coins')[:10]
             positions = [
                 'winner', 'first_runner_up', 'second_runner_up','fourth',
                 'fifth', 'sixth', 'seventh', 'eighth', 'ninth','tenth'
@@ -275,15 +276,15 @@ class CityDetailView(View):
 
         else:
             # For specific cities, use the city_name
-            rtgs = common_models.User.objects.filter(is_rtg=True, city=city_name)
-            vendors = common_models.User.objects.filter(is_vendor=True, city=city_name)
-            service_providers = common_models.User.objects.filter(is_serviceprovider=True, city=city_name)
+            rtgs = common_models.User.objects.filter(is_rtg=True, city=city_name,is_approved = True)
+            vendors = common_models.User.objects.filter(is_vendor=True, city=city_name,is_approved = True)
+            service_providers = common_models.User.objects.filter(is_serviceprovider=True, city=city_name,is_approved = True)
             
-            total_users = common_models.User.objects.filter(city=city_name).count()
+            total_users = common_models.User.objects.filter(city=city_name,is_approved = True).count()
 
             rtgs_and_vendors = common_models.User.objects.filter(
                 Q(is_rtg=True) | Q(is_vendor=True),
-                city=city_name
+                city=city_name,is_approved = True
             )
 
             activity_label = []
@@ -351,7 +352,7 @@ class CityDetailView(View):
 
             top_rtgs_and_vendors_coins = common_models.User.objects.filter(
                 Q(is_rtg=True) | Q(is_vendor=True),
-                city=city_name
+                city=city_name,is_approved = True
             ).order_by('-coins')[:10]
             positions = [
                 'winner', 'first_runner_up', 'second_runner_up','fourth',
@@ -376,7 +377,7 @@ class CityDetailView(View):
         }
         return render(request, self.template_name, context)
     
-
+@method_decorator(utils.super_admin_only, name='dispatch')
 class ProducesCategory(View):
     template = app + "produces_categories.html"
     model = common_models.CategoryForProduces
@@ -413,6 +414,7 @@ class ProducesCategoryAdd(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message)
         
+@method_decorator(utils.super_admin_only, name='dispatch')
 class ProducescategoryUpdate(View):
     template = app + "produces_category_update.html"
     model = common_models.CategoryForProduces
@@ -446,6 +448,7 @@ class ProducescategoryUpdate(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message)
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class DeleteProducesCategory(View):
     model = common_models.CategoryForProduces
 
@@ -458,6 +461,7 @@ class DeleteProducesCategory(View):
             return render_error_page(request, error_message)
 
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class ProducesCategorySearch(View):
     model = common_models.CategoryForProduces
     template = app + "produces_categories.html"
