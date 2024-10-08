@@ -162,4 +162,8 @@ urlpatterns = [
     #  User Query
     path('api/user/query/', api_of_rtg.UserQueryCreateView.as_view(), name='user-query-api'),
 
+    path('api/privacy-policy/', auth_api.PrivacyPolicyAPIView.as_view(), name='privacy-policy-api'),
+    path('api/about-us/', auth_api.AboutUsAPIView.as_view(), name='about-us-api'),
+    path('api/terms-and-conditions/', auth_api.TermsAndConditionsAPIView.as_view(), name='terms-and-conditions-api'),
+
 ]

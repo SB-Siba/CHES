@@ -193,9 +193,17 @@ class UserActivitySerializer(serializers.ModelSerializer):
         fields = ['activity_title', 'activity_content', 'activity_image']
 
 class SellProduceSerializer(serializers.ModelSerializer):
+    user_full_name = serializers.SerializerMethodField()
+
     class Meta:
         model = SellProduce
-        fields = '__all__'
+        fields = '__all__'  # All fields including the new field
+
+    def get_user_full_name(self, obj):
+        # Ensure that the user exists and return the full name
+        if obj.user:
+            return obj.user.get_full_name() if hasattr(obj.user, 'get_full_name') else f"{obj.user.full_name}"
+        return None
 
 class ProduceBuySerializer(serializers.ModelSerializer):
     class Meta:
@@ -264,11 +272,20 @@ class RateOrderSerializer(serializers.Serializer):
     order_id = serializers.IntegerField(required=True)
     rating = serializers.FloatField(required=True, min_value=0, max_value=5)
 
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'full_name', 'email', 'user_image']
+
+
 class ProductFromVendorSerializer(serializers.ModelSerializer):
     average_rating = serializers.FloatField(source='calculate_avg_rating', read_only=True)
     discounted_price = serializers.DecimalField(source='calculate_discounted_price', max_digits=10, decimal_places=2, read_only=True)
     has_message = serializers.SerializerMethodField()
-
+    vendor = serializers.SerializerMethodField()  # Use method field for vendor
+    
     class Meta:
         model = ProductFromVendor
         fields = [
@@ -276,6 +293,10 @@ class ProductFromVendorSerializer(serializers.ModelSerializer):
             'image', 'stock', 'category', 'reason', 'green_coins_required',
             'discount_percentage', 'ratings', 'average_rating', 'discounted_price', 'has_message'
         ]
+
+    def get_vendor(self, obj):
+        # Manually serialize the vendor object using the UserSerializer
+        return UserSerializer(obj.vendor, context=self.context).data
 
     def get_has_message(self, obj):
         request = self.context.get('request')
@@ -285,10 +306,6 @@ class ProductFromVendorSerializer(serializers.ModelSerializer):
             return msg_obj.exists()
         return False
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'full_name', 'email', 'user_image']
 
 
 class ServiceDetailsSerializer(serializers.ModelSerializer):
@@ -360,9 +377,18 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = ['id','service_type', 'name', 'description', 'price_per_hour']
 
 class BookingSerializer(serializers.ModelSerializer):
+    gardener_full_name = serializers.SerializerMethodField()
+
     class Meta:
         model = Booking
-        fields = '__all__'
+        fields = '__all__'  # Include all model fields
+        extra_fields = ['gardener_full_name']  # Add the custom field to the response
+
+    def get_gardener_full_name(self, obj):
+        # Ensure that the gardener exists and return the full name
+        if obj.gardener:
+            return obj.gardener.get_full_name() if hasattr(obj.gardener, 'get_full_name') else f"{obj.gardener.full_name}"
+        return None
 
 class AuthServiceProviderDetailsSerializer(serializers.ModelSerializer):
     service_type = serializers.CharField()

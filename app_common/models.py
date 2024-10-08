@@ -286,25 +286,27 @@ class ProductFromVendor(models.Model):
     sgst = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'), editable=False)
     cgst = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'), editable=False)
 
-    def calculate_discounted_price(self):
-        """
-        Calculate the discounted price based on the discount percentage.
-        """
-        if self.discount_percentage > 0:
-            discount_amount = (self.discount_percentage / 100) * self.discount_price
-            discounted_price = self.discount_price - discount_amount
-            return discounted_price
-        else:
-            return self.discount_price
-    
     def calculate_avg_rating(self):
+        """
+        Calculate the average rating from the JSONField 'ratings'.
+        Ratings is expected to be a list of dictionaries with a 'rating' key.
+        """
+        if not isinstance(self.ratings, list) or len(self.ratings) == 0:
+            # If ratings is not a list or is an empty list, return 0 as the average rating
+            return 0
+
         total_rating = 0
         num_ratings = len(self.ratings)
 
-        # Calculate total rating
+        # Iterate over the ratings list and calculate total rating
         for rating_data in self.ratings:
-            rating = float(rating_data['rating'])  # Convert rating to float
-            total_rating += rating
+            try:
+                # Attempt to get the 'rating' key from each rating dictionary and convert it to a float
+                rating = float(rating_data.get('rating', 0))
+                total_rating += rating
+            except (TypeError, ValueError):
+                # In case of any invalid data, continue with the next rating
+                continue
 
         # Calculate average rating
         if num_ratings > 0:
@@ -314,6 +316,7 @@ class ProductFromVendor(models.Model):
             avg_rating = 0
 
         return avg_rating
+
 
     def save(self, *args, **kwargs):
         # Calculate green_coins_required as a percentage of the discount_price

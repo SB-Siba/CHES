@@ -543,10 +543,15 @@ class VendorsProductsAPI(APIView):
     @swagger_auto_schema(
         tags=["Roof Top Gardeners"],
         operation_description="Product from vendors",
-        manual_parameters=swagger_doccumentation.vendor_products_get,
-        responses={200: 'All Vendor Products', 400: 'Validation error', 404: 'Vendor Products not found'}
+        responses={
+            200: openapi.Response(
+                description="All Vendor Products",
+                schema=ProductFromVendorSerializer(many=True)  # Explicitly define the response schema
+            ),
+            400: 'Validation error',
+            404: 'Vendor Products not found'
+        }
     )
-
     def get(self, request):
         products = ProductFromVendor.objects.all().order_by("-id")
         serializer = ProductFromVendorSerializer(products, many=True, context={'request': request})
