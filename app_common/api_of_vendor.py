@@ -132,9 +132,10 @@ class VendorSellProductAPIView(APIView):
     def post(self, request):
         serializer = ProductFromVendorSerializer(data=request.data)
         if serializer.is_valid():
-            product = serializer.save(commit=False)
-            product.vendor = request.user
-            product.save()
+            # product = serializer.save(commit=False)
+            # product.vendor = request.user
+            # product.save()
+            product = serializer.save(vendor=request.user)
 
             return Response("Product sell request sent successfully", status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

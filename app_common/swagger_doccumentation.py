@@ -18,10 +18,10 @@ login_post = [
 ]
 
 gardening_details_post = [
-    openapi.Parameter("garden_area", openapi.IN_QUERY, description="Garden Area", required=True, type=openapi.TYPE_STRING),
-    openapi.Parameter("number_of_plants", openapi.IN_QUERY, description="Number of Plants", required=True, type=openapi.TYPE_STRING),
-    openapi.Parameter("number_of_unique_plants", openapi.IN_QUERY, description="Number of Unique Plants", required=True, type=openapi.TYPE_STRING),
-    openapi.Parameter("garden_image", openapi.IN_QUERY, description="Garden Image", required=True, type=openapi.TYPE_FILE),
+    openapi.Parameter("garden_area", openapi.IN_FORM, description="Garden Area", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("number_of_plants", openapi.IN_FORM, description="Number of Plants", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("number_of_unique_plants", openapi.IN_FORM, description="Number of Unique Plants", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("garden_image", openapi.IN_FORM, description="Garden Image", required=True, type=openapi.TYPE_FILE),
 ]
 
 gardening_quiz_post = [

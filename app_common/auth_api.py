@@ -104,6 +104,7 @@ class LogoutAPIView(APIView):
         return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
 
 class GardeningDetailsAPIView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
     @swagger_auto_schema(
         tags=["Authentication API'S"],
         operation_description="Gardening Detail API",
@@ -327,3 +328,53 @@ class ResetPasswordAPIView(APIView):
                 else:
                     return Response({"error": "Passwords doesn't match."}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class PrivacyPolicyAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["Authentication API'S"],
+        operation_description="Privacy policy",
+        responses={201: 'Privacy policy content', 400: 'Validation error'}
+    )
+
+    def get(self, request, *args, **kwargs):
+        # Replace this string with your actual privacy policy content
+        privacy_policy_content = """
+        Your privacy is important to us, and maintaining your trust and confidence is one of our highest priorities. We respect your right to keep your personal information confidential and understand your desire to avoid unwanted solicitations. We use the information we collect about you to process orders and to provide a more personalized shopping experience. Please read on for more detail about our privacy policy.
+        ...
+        """
+        data = {
+            'privacy_policy': privacy_policy_content
+        }
+        return Response(data, status=status.HTTP_200_OK)
+    
+class AboutUsAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["Authentication API'S"],
+        operation_description="About Us",
+        responses={201: 'About Us content', 400: 'Validation error'}
+    )
+    def get(self, request, *args, **kwargs):
+        # Replace this string with your actual "About Us" content
+        about_us_content = """
+        Welcome to our company. We are committed to providing the best services...
+        """
+        data = {
+            'about_us': about_us_content
+        }
+        return Response(data, status=status.HTTP_200_OK)
+    
+class TermsAndConditionsAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["Authentication API'S"],
+        operation_description="Terms and Conditions",
+        responses={201: 'Terms and Conditions', 400: 'Validation error'}
+    )
+    def get(self, request, *args, **kwargs):
+        # Replace this string with your actual "Terms and Conditions" content
+        terms_and_conditions_content = """
+        By using our services, you agree to the following terms and conditions...
+        """
+        data = {
+            'terms_and_conditions': terms_and_conditions_content
+        }
+        return Response(data, status=status.HTTP_200_OK)
