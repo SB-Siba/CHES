@@ -145,7 +145,7 @@ class SellProduceForm(forms.ModelForm):
     SI_UNIT_CHOICES = [
         ("Kilogram", "Kilogram"),
         ("Gram", "Gram"),
-        ("Liter", "Liter"),
+        ("Litre", "Litre"),
         ("Units", "Units"),
     ]
 
@@ -207,11 +207,11 @@ class BuyQuantityForm(forms.Form):
 
 class BuyAmmountForm(forms.Form):
     ammount_based_on_buyer_quantity = forms.IntegerField(
-        label="Ammount Based On Quantity",
+        label="Amount Based On Quantity",
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
-                "placeholder": "Enter Ammount",
+                "placeholder": "Enter Amount",
                 "required": "required",
             }
         ),

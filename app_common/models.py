@@ -180,7 +180,7 @@ class SellProduce(models.Model):
     SI_UNIT_CHOICES = [
         ('Kilogram', 'Kilogram'),
         ('Gram', 'Gram'),
-        ('Liter', 'Liter'),
+        ('Litre', 'Litre'),
         ('Units', 'Units'),
     ]
     user = models.ForeignKey(User,on_delete=models.CASCADE,null= True, blank= True)
