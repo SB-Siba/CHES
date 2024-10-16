@@ -372,25 +372,36 @@ class ServiceProviderProfileUpdateSerializer(serializers.ModelSerializer):
         return instance
 
 class ServiceSerializer(serializers.ModelSerializer):
+    provider_name = serializers.CharField(source='provider.full_name', read_only=True)
+    provider_id = serializers.IntegerField(source='provider.id', read_only=True)
+
     class Meta:
         model = Service
-        fields = ['id','service_type', 'name', 'description', 'price_per_hour']
+        fields = ['id', 'service_type', 'name', 'description', 'price_per_hour', 'provider_id', 'provider_name']
 
 class BookingSerializer(serializers.ModelSerializer):
     gardener_full_name = serializers.SerializerMethodField()
+    provider_full_name = serializers.SerializerMethodField()  
     created_at = serializers.DateTimeField(format='%Y-%m-%d at %H:%M')
-    booking_date = serializers.DateTimeField(format='%Y-%m-%d  at %H:%M')
+    booking_date = serializers.DateTimeField(format='%Y-%m-%d at %H:%M')
 
     class Meta:
         model = Booking
-        fields = '__all__'  # Include all model fields
-        extra_fields = ['gardener_full_name']  # Add the custom field to the response
+        fields = '__all__'  
+        extra_fields = ['gardener_full_name', 'provider_full_name'] 
 
     def get_gardener_full_name(self, obj):
-        # Ensure that the gardener exists and return the full name
+        # Return the full name of the gardener
         if obj.gardener:
-            return obj.gardener.get_full_name() if hasattr(obj.gardener, 'get_full_name') else f"{obj.gardener.full_name}"
+            return obj.gardener.full_name if obj.gardener.full_name else None
         return None
+
+    def get_provider_full_name(self, obj):
+        # Return the full name of the provider related to the service
+        if obj.service and obj.service.provider:
+            return obj.service.provider.full_name if obj.service.provider.full_name else None
+        return None
+
 
 class AuthServiceProviderDetailsSerializer(serializers.ModelSerializer):
     service_type = serializers.CharField()
