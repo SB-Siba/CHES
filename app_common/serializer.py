@@ -378,6 +378,8 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 class BookingSerializer(serializers.ModelSerializer):
     gardener_full_name = serializers.SerializerMethodField()
+    created_at = serializers.DateTimeField(format='%Y-%m-%d at %H:%M')
+    booking_date = serializers.DateTimeField(format='%Y-%m-%d  at %H:%M')
 
     class Meta:
         model = Booking

@@ -152,7 +152,7 @@ class SellProduceForm(forms.ModelForm):
     class Meta:
         model = common_models.SellProduce
         fields = [
-            "produce_category",  # Include produce_category
+            "produce_category", 
             "product_name",
             "product_image",
             "product_quantity",
@@ -161,7 +161,7 @@ class SellProduceForm(forms.ModelForm):
             "validity_duration_days",
         ]
         widgets = {
-            "produce_category": forms.Select(attrs={"class": "form-control"}),  # Widget for category selection
+            "produce_category": forms.Select(attrs={"class": "form-control"}), 
             "product_name": forms.TextInput(
                 attrs={"class": "form-control", "placeholder": "Enter Produce Name"}
             ),
