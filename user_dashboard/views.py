@@ -510,8 +510,9 @@ class GreenCommerceProductCommunity(View):
             produce_query = self.model.objects.exclude(user=request.user).filter(is_approved="approved")
             
             # Apply filters based on category and search query
+            # Determine selected category name if applicable
             if selected_category and selected_category != "all":
-                produce_query = produce_query.filter(produce_category=selected_category)
+                selected_category_name = app_commonmodels.CategoryForProduces.objects.get(id=selected_category).category_name
             if search_query:
                 produce_query = produce_query.filter(product_name__icontains=search_query)
 
