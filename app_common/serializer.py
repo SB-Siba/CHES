@@ -378,17 +378,17 @@ class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = ['id', 'service_type', 'name', 'description', 'price_per_hour', 'provider_id', 'provider_name']
-
 class BookingSerializer(serializers.ModelSerializer):
     gardener_full_name = serializers.SerializerMethodField()
-    provider_full_name = serializers.SerializerMethodField()  
+    provider_full_name = serializers.SerializerMethodField()  # Add provider full name field
+    provider_id = serializers.SerializerMethodField()  # Add provider ID field
     created_at = serializers.DateTimeField(format='%Y-%m-%d at %H:%M')
     booking_date = serializers.DateTimeField(format='%Y-%m-%d at %H:%M')
 
     class Meta:
         model = Booking
-        fields = '__all__'  
-        extra_fields = ['gardener_full_name', 'provider_full_name'] 
+        fields = '__all__'  # Include all model fields
+        extra_fields = ['gardener_full_name', 'provider_full_name', 'provider_id']  # Add custom fields
 
     def get_gardener_full_name(self, obj):
         # Return the full name of the gardener
@@ -401,6 +401,13 @@ class BookingSerializer(serializers.ModelSerializer):
         if obj.service and obj.service.provider:
             return obj.service.provider.full_name if obj.service.provider.full_name else None
         return None
+
+    def get_provider_id(self, obj):
+        # Return the ID of the provider related to the service
+        if obj.service and obj.service.provider:
+            return obj.service.provider.id
+        return None
+
 
 
 class AuthServiceProviderDetailsSerializer(serializers.ModelSerializer):
