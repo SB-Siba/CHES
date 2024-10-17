@@ -275,14 +275,14 @@ class SpBlogDeleteAPIView(APIView):
                 required=True
             )
         ],
-        responses={204: 'No Content'},
+        responses={200: 'Delete Successfully'},
     )
     def get(self, request, blog_id):
         blog = get_object_or_404(Blogs, id=blog_id)
         if blog.image:
             os.remove(blog.image.path)
         blog.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)
 
 class SpBlogViewAPIView(APIView):
     @swagger_auto_schema(

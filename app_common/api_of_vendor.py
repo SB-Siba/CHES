@@ -939,15 +939,22 @@ class VendorBlogDeleteAPIView(APIView):
                 required=True
             )
         ],
-        responses={204: 'No Content'},
+        responses={200: 'Blog is deleted successfully'},
     )
     def get(self, request, blog_id):
         blog = get_object_or_404(Blogs, id=blog_id)
+        
+        # If the blog has an image, delete the image file from the filesystem
         if blog.image:
             image_path = blog.image.path
             os.remove(image_path)
+        
+        # Delete the blog
         blog.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+
+        # Return a JSON response with a success message
+        return Response({"message": "Blog is deleted successfully"}, status=status.HTTP_200_OK)
+
 
 class VendorBlogViewAPIView(APIView):
     @swagger_auto_schema(

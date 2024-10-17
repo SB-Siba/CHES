@@ -463,7 +463,7 @@ class DeleteCommentAPIView(APIView):
         operation_description="Delete a comment from a post",
         manual_parameters=swagger_doccumentation.delete_comment_delete,
         responses={
-            204: 'Comment deleted successfully',
+            200: 'Comment deleted successfully',
             404: 'Comment or post not found'
         }
     )
@@ -474,7 +474,7 @@ class DeleteCommentAPIView(APIView):
         post_obj.comments = [comment for comment in post_obj.comments if comment["id"] != comment_id]
 
         post_obj.save()
-        return Response({"message": "Comment deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "Comment deleted successfully"}, status=status.HTTP_200_OK)
 
 class GetAllCommentsAPIView(APIView):
     @swagger_auto_schema(
