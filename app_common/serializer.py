@@ -378,34 +378,47 @@ class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
         fields = ['id', 'service_type', 'name', 'description', 'price_per_hour', 'provider_id', 'provider_name']
+
 class BookingSerializer(serializers.ModelSerializer):
     gardener_full_name = serializers.SerializerMethodField()
-    provider_full_name = serializers.SerializerMethodField()  # Add provider full name field
-    provider_id = serializers.SerializerMethodField()  # Add provider ID field
+    provider_full_name = serializers.SerializerMethodField()
+    provider_id = serializers.SerializerMethodField()
+    service_name = serializers.SerializerMethodField()  # Add service name field
+    service_price_per_hour = serializers.SerializerMethodField()  # Add service price per hour field
     created_at = serializers.DateTimeField(format='%Y-%m-%d at %H:%M')
     booking_date = serializers.DateTimeField(format='%Y-%m-%d at %H:%M')
 
     class Meta:
         model = Booking
-        fields = '__all__'  # Include all model fields
-        extra_fields = ['gardener_full_name', 'provider_full_name', 'provider_id']  # Add custom fields
+        fields = '__all__'
+        extra_fields = [
+            'gardener_full_name', 'provider_full_name', 'provider_id',
+            'service_name', 'service_price_per_hour'
+        ]
 
     def get_gardener_full_name(self, obj):
-        # Return the full name of the gardener
         if obj.gardener:
             return obj.gardener.full_name if obj.gardener.full_name else None
         return None
 
     def get_provider_full_name(self, obj):
-        # Return the full name of the provider related to the service
         if obj.service and obj.service.provider:
             return obj.service.provider.full_name if obj.service.provider.full_name else None
         return None
 
     def get_provider_id(self, obj):
-        # Return the ID of the provider related to the service
         if obj.service and obj.service.provider:
             return obj.service.provider.id
+        return None
+
+    def get_service_name(self, obj):
+        if obj.service:
+            return obj.service.name
+        return None
+
+    def get_service_price_per_hour(self, obj):
+        if obj.service:
+            return obj.service.price_per_hour
         return None
 
 
