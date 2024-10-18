@@ -204,14 +204,19 @@ class SellProduceSerializer(serializers.ModelSerializer):
         if obj.user:
             return obj.user.get_full_name() if hasattr(obj.user, 'get_full_name') else f"{obj.user.full_name}"
         return None
-
+    
 class ProduceBuySerializer(serializers.ModelSerializer):
+    seller_name = serializers.CharField(source='seller.full_name', read_only=True) 
+    buyer_name = serializers.CharField(source='buyer.full_name', read_only=True)
+
     class Meta:
         model = ProduceBuy
         fields = [
             'id',
             'buyer',
             'seller',
+            'buyer_name',      
+            'seller_name',     
             'sell_produce',
             'product_name',
             'SI_units',
@@ -219,7 +224,7 @@ class ProduceBuySerializer(serializers.ModelSerializer):
             'quantity_buyer_want',
             'date_time'
         ]
-        read_only_fields = ['id', 'buyer', 'seller', 'sell_produce', 'product_name', 'SI_units', 'buying_status', 'date_time']
+        read_only_fields = ['id', 'buyer', 'seller', 'buyer_name', 'seller_name', 'sell_produce', 'product_name', 'SI_units', 'buying_status', 'date_time']
 
 
 
@@ -360,7 +365,7 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
 class ServiceProviderProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceProviderDetails
-        fields = ['average_cost_per_hour', 'years_experience']  # Exclude service_type and service_area
+        fields = ['average_cost_per_hour', 'years_experience'] 
 
     def update(self, instance, validated_data):
         # Update average_cost_per_hour and years_experience
