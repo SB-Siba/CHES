@@ -204,6 +204,7 @@ class ContactePage(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+        
 @method_decorator(utils.login_required, name='dispatch')
 class GardeningProfile(View):
     template = app + "gardening_profile.html"
@@ -247,58 +248,72 @@ class UpdateGardeningProfileView(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-    def post(self,request):
+    def post(self, request):
         try:
-            form = self.form_class(request.POST,request.FILES)
             user = request.user
+            gardening_obj = self.model.objects.get(user=user)
+            
+            form = self.form_class(request.POST, request.FILES, instance=gardening_obj)
+
             if form.is_valid():
+                garden_image = form.cleaned_data.get('garden_image')
+                
+                if not garden_image:
+                    garden_image = gardening_obj.garden_image
 
                 garden_area = form.cleaned_data['garden_area']
                 number_of_plants = form.cleaned_data['number_of_plants']
                 number_of_unique_plants = form.cleaned_data['number_of_unique_plants']
-                garden_image = form.cleaned_data['garden_image']
-
-                gardening_obj = self.model.objects.get(user=user)
 
                 changes = []
-
                 form_data = form.cleaned_data
+
                 for field_name, value in form_data.items():
                     if getattr(gardening_obj, field_name) != value:
                         changes.append(field_name)
 
                 try:
                     req_obj = app_commonmodels.GardeningProfileUpdateRequest.objects.filter(user=user)
-                    if len(req_obj)>0 :
-                        #if there is already a pending update request then remove it  
+                    if req_obj.exists():
+                        # If there is already a pending update request, remove it
                         req_obj[0].delete()
-                    gardening_obj = app_commonmodels.GardeningProfileUpdateRequest(user=user,garden_area = garden_area,number_of_plants = number_of_plants,number_of_unique_plants = number_of_unique_plants,garden_image = garden_image,changes = changes)              
+                    
+                    gardening_obj = app_commonmodels.GardeningProfileUpdateRequest(
+                        user=user,
+                        garden_area=garden_area,
+                        number_of_plants=number_of_plants,
+                        number_of_unique_plants=number_of_unique_plants,
+                        garden_image=garden_image,
+                        changes=changes
+                    )
                     gardening_obj.save()
+
                     garden_image_url = request.build_absolute_uri(gardening_obj.garden_image.url)
                     send_template_email(
-                        subject='Gardening Profile Update Request Recived',
+                        subject='Gardening Profile Update Request Received',
                         template_name='mail_template/gardening_profile_update_request_sent.html',
                         context={
-                            'full_name':gardening_obj.user.full_name,
-                            'area_for_update':garden_area,
-                            'number_of_plants_for_update':number_of_plants,
-                            'number_of_unique_plants_for_update':number_of_unique_plants,
-                            'garden_image_for_update':garden_image_url,
-                            'is_rtg':True
-                            },
+                            'full_name': gardening_obj.user.full_name,
+                            'area_for_update': garden_area,
+                            'number_of_plants_for_update': number_of_plants,
+                            'number_of_unique_plants_for_update': number_of_unique_plants,
+                            'garden_image_for_update': garden_image_url,
+                            'is_rtg': True
+                        },
                         recipient_list=[gardening_obj.user.email]
                     )
                     return redirect('user_dashboard:gardeningprofile')
-                except:
-                    error_message = f"Failed to Request data"
+                except Exception as e:
+                    error_message = f"Failed to request data: {str(e)}"
                     return render_error_page(request, error_message, status_code=400)
             else:
-                error_message = f"Failed to Request data"
+                error_message = "Form validation failed. Please check your inputs."
                 return render_error_page(request, error_message, status_code=400)
 
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
 
 @method_decorator(utils.login_required, name='dispatch')
 class AddActivityRequest(View):
