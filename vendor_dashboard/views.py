@@ -763,12 +763,12 @@ class SellProduceView(View):
                 product_image = form.cleaned_data['product_image']    
                 product_quantity = form.cleaned_data['product_quantity']
                 SI_units = form.cleaned_data['SI_units']
-                ammount_in_green_points = form.cleaned_data['ammount_in_green_points']
+                amount_in_green_points = form.cleaned_data['amount_in_green_points']
                 validity_duration_days = form.cleaned_data['validity_duration_days']
 
                 # Save SellProduce
                 
-                sellObj=self.model(user = user,product_name = product_name,product_image = product_image,product_quantity = product_quantity,SI_units = SI_units,ammount_in_green_points = ammount_in_green_points,validity_duration_days = validity_duration_days)
+                sellObj=self.model(user = user,product_name = product_name,product_image = product_image,product_quantity = product_quantity,SI_units = SI_units,amount_in_green_points = amount_in_green_points,validity_duration_days = validity_duration_days)
                 sellObj.save()
                 produce_image_url = request.build_absolute_uri(sellObj.product_image.url)
 
@@ -780,7 +780,7 @@ class SellProduceView(View):
                         'product_name':sellObj.product_name,
                         'product_quantity':sellObj.product_quantity,
                         'SI_units':sellObj.SI_units,
-                        'ammount_in_green_points':sellObj.ammount_in_green_points,
+                        'amount_in_green_points':sellObj.amount_in_green_points,
                         'validity_duration_days':sellObj.validity_duration_days,
                         'product_image':produce_image_url,
                         },
@@ -845,7 +845,8 @@ class GreenCommerceProductCommunity(View):
 
             # Filter produce items that are approved and not posted by the current user
             produce_query = self.model.objects.exclude(user=request.user).filter(is_approved="approved")
-            
+            print(produce_query)
+
             # Apply filters based on category and search query
             if selected_category and selected_category != "all":
                 produce_query = produce_query.filter(produce_category=selected_category)
@@ -854,7 +855,6 @@ class GreenCommerceProductCommunity(View):
 
             # Order by latest date and fetch the list of produce objects
             produce_obj = produce_query.order_by("-date_time")
-            
             # Calculate ratings and check message status for each produce object
             ratings_list = [i.user.calculate_avg_rating() for i in produce_obj]
             message_status = [
@@ -894,7 +894,7 @@ class BuyingBegins(View):
             seller = sell_prod_obj.user
             product_quantity = sell_prod_obj.product_quantity
             SI_units = sell_prod_obj.SI_units
-            ammount_in_green_points = sell_prod_obj.ammount_in_green_points
+            amount_in_green_points = sell_prod_obj.amount_in_green_points
 
             form_data = request.POST
             quantity = int(form_data['quantity'])
@@ -902,7 +902,7 @@ class BuyingBegins(View):
             # print(type(prod_id),type(quantity))
             if product_quantity >= quantity:
                 try:
-                    if buyer.wallet >= ammount_in_green_points:
+                    if buyer.wallet >= amount_in_green_points:
                         buying_obj = common_models.ProduceBuy(buyer = buyer,seller = seller,sell_produce = sell_prod_obj,product_name = sell_prod_obj.product_name,SI_units = SI_units,buying_status = 'BuyInProgress',quantity_buyer_want = quantity)
                         buying_obj.save()
                         # Send email to the buyer
