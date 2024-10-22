@@ -37,7 +37,7 @@ class VendorDashboard(View):
     def get(self, request):
         try:
             user = request.user 
-            vendors = common_models.User.objects.filter(is_vendor=True)[:5]
+            vendors = common_models.User.objects.filter(is_vendor=True)[:10]
             valid_order_statuses = ["Placed", "Accepted", "On_Way", "Delivered"]
 
             def calculate_earnings(vendor, start_date, end_date):
@@ -76,10 +76,10 @@ class VendorDashboard(View):
             earnings_year = calculate_earnings(user, start_of_year, today)
 
             users_orderby_coins = common_models.User.objects.filter(
-                Q(is_rtg=True) | Q(is_vendor=True),
+                Q(is_vendor=True),
                 is_approved=True,
                 is_superuser=False
-            ).order_by('-coins')[:5]
+            ).order_by('-coins')[:10]
             users_name = [u.full_name for u in users_orderby_coins]
             user_coins = [u_coin.coins for u_coin in users_orderby_coins]
             print(users_name,user_coins)

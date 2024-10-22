@@ -33,10 +33,10 @@ class UserDashboard(View):
         try:
             user = request.user
             users_orderby_coins = app_commonmodels.User.objects.filter(
-                Q(is_rtg=True) | Q(is_vendor=True),
+                Q(is_rtg=True),
                 is_approved=True,
                 is_superuser=False
-            ).order_by('-coins')[:5]
+            ).order_by('-coins')[:10]
             users_name = [u.full_name for u in users_orderby_coins]
             user_coins = [u_coin.coins for u_coin in users_orderby_coins]
             garden_obj = app_commonmodels.GardeningProfile.objects.filter(user = user).first()
