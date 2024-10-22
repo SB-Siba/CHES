@@ -132,11 +132,9 @@ class ServiceList(View):
 
     def get(self, request):
         try:
-            # Get the search query from the request
             search_by = request.GET.get('search_by')
             search_query = request.GET.get('search')
 
-            # Filter services based on the search query (by name, description, or service type)
             if search_by and search_query:
                 if search_by == "name":
                     service_list = self.model.objects.filter(
@@ -149,8 +147,8 @@ class ServiceList(View):
                         service_type__icontains=search_query
                     ).order_by('-id')
             else:
-                # If no search query, return all services
                 service_list = self.model.objects.filter(provider=request.user).order_by('-id')
+            
             form = self.form_class(initial={'provider': request.user})
             context = {
                 "form": form,
@@ -163,19 +161,20 @@ class ServiceList(View):
 
     def post(self, request):
         try:
-            form = self.form_class(request.POST)
-            service_type = request.POST.get("service_type")
-            name = request.POST.get("name")
-            description = request.POST.get("description")
-            price_per_hour = request.POST.get("price_per_hour")
-
-            service = self.model(provider=request.user, name=name, description=description, price_per_hour=price_per_hour, service_type=service_type)
-            service.save()
-            messages.success(request, f"{request.POST['name']} is added to the service list.")
-            return redirect("service_provider:service_list")
+            form = self.form_class(request.POST, request.FILES)  # Include request.FILES here
+            if form.is_valid():
+                service = form.save(commit=False)  # Create the instance but don't save it yet
+                service.provider = request.user  # Set the provider
+                service.save()  # Save the instance
+                messages.success(request, f"{service.name} is added to the service list.")
+                return redirect("service_provider:service_list")
+            else:
+                # Handle form errors
+                return render(request, self.template, {'form': form})
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
 
 @method_decorator(utils.login_required, name='dispatch')
 class ServiceUpdate(View):

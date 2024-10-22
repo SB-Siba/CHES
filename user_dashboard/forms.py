@@ -157,7 +157,7 @@ class SellProduceForm(forms.ModelForm):
             "product_image",
             "product_quantity",
             "SI_units",
-            "ammount_in_green_points",
+            "amount_in_green_points",
             "validity_duration_days",
         ]
         widgets = {
@@ -169,7 +169,7 @@ class SellProduceForm(forms.ModelForm):
                 attrs={"class": "form-control", "placeholder": "Enter Quantity"}
             ),
             "SI_units": forms.Select(attrs={"class": "form-control"}),
-            "ammount_in_green_points": forms.NumberInput(
+            "amount_in_green_points": forms.NumberInput(
                 attrs={"class": "form-control"}
             ),
             "validity_duration_days": forms.NumberInput(

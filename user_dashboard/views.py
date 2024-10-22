@@ -33,10 +33,10 @@ class UserDashboard(View):
         try:
             user = request.user
             users_orderby_coins = app_commonmodels.User.objects.filter(
-                Q(is_rtg=True) | Q(is_vendor=True),
+                Q(is_rtg=True),
                 is_approved=True,
                 is_superuser=False
-            ).order_by('-coins')[:5]
+            ).order_by('-coins')[:10]
             users_name = [u.full_name for u in users_orderby_coins]
             user_coins = [u_coin.coins for u_coin in users_orderby_coins]
             garden_obj = app_commonmodels.GardeningProfile.objects.filter(user = user).first()
@@ -432,7 +432,7 @@ class SellProduceView(View):
                 product_image = form.cleaned_data['product_image']
                 product_quantity = form.cleaned_data['product_quantity']
                 SI_units = form.cleaned_data['SI_units']
-                ammount_in_green_points = form.cleaned_data['ammount_in_green_points']
+                amount_in_green_points = form.cleaned_data['amount_in_green_points']
                 validity_duration_days = form.cleaned_data['validity_duration_days']
 
                 # Save SellProduce
@@ -443,7 +443,7 @@ class SellProduceView(View):
                     product_image=product_image,
                     product_quantity=product_quantity,
                     SI_units=SI_units,
-                    ammount_in_green_points=ammount_in_green_points,
+                    amount_in_green_points=amount_in_green_points,
                     validity_duration_days=validity_duration_days
                 )
                 sellObj.save()
@@ -457,7 +457,7 @@ class SellProduceView(View):
                         'product_name':sellObj.product_name,
                         'product_quantity':sellObj.product_quantity,
                         'SI_units':sellObj.SI_units,
-                        'ammount_in_green_points':sellObj.ammount_in_green_points,
+                        'amount_in_green_points':sellObj.amount_in_green_points,
                         'validity_duration_days':sellObj.validity_duration_days,
                         'product_image':produce_image_url,
                         },
@@ -497,7 +497,7 @@ class AllSellRequests(View):
 class GreenCommerceProductCommunity(View):
     template = app + "greencommerceproducts.html"
     model = app_commonmodels.SellProduce
-    form = user_form.BuyQuantityForm
+    form = user_form.BuyQuantityForm    
 
     def get(self, request):
         try:
@@ -525,9 +525,8 @@ class GreenCommerceProductCommunity(View):
             produce_query = self.model.objects.exclude(user=request.user).filter(is_approved="approved")
             
             # Apply filters based on category and search query
-            # Determine selected category name if applicable
             if selected_category and selected_category != "all":
-                selected_category_name = app_commonmodels.CategoryForProduces.objects.get(id=selected_category).category_name
+                produce_query = produce_query.filter(produce_category=selected_category)
             if search_query:
                 produce_query = produce_query.filter(product_name__icontains=search_query)
 
@@ -562,6 +561,7 @@ class GreenCommerceProductCommunity(View):
             return render_error_page(request, error_message, status_code=400)
 
 
+
 @method_decorator(utils.login_required, name='dispatch')
 class BuyingBegins(View):
     model = app_commonmodels.SellProduce
@@ -572,66 +572,83 @@ class BuyingBegins(View):
             buyer = app_commonmodels.User.objects.get(id=user.id)
             sell_prod_obj = self.model.objects.get(id=prod_id)
             seller = sell_prod_obj.user
+            
             product_quantity = sell_prod_obj.product_quantity
             SI_units = sell_prod_obj.SI_units
-            ammount_in_green_points = sell_prod_obj.ammount_in_green_points
+            amount_in_green_points = sell_prod_obj.amount_in_green_points
+
+            # Validate product_quantity
+            if product_quantity is None:
+                return render_error_page(request, "Product quantity is not available.", status_code=400)
 
             form_data = request.POST
-            quantity = int(form_data['quantity'])
+            
+            # Handle potential ValueError from int conversion
+            try:
+                quantity = int(form_data['quantity'])
+            except (ValueError, KeyError):
+                return render_error_page(request, "Invalid quantity input.", status_code=400)
 
+            # Check if the requested quantity is available
             if product_quantity >= quantity:
-                try:
-                    if buyer.wallet >= ammount_in_green_points:
-                        buying_obj = app_commonmodels.ProduceBuy(
-                            buyer=buyer,
-                            seller=seller,
-                            sell_produce=sell_prod_obj,
-                            product_name=sell_prod_obj.product_name,
-                            SI_units=SI_units,
-                            buying_status='BuyInProgress',
-                            quantity_buyer_want=quantity
-                        )
-                        buying_obj.save()
+                # Check for buyer wallet and handle None value
+                buyer_wallet = buyer.wallet if buyer.wallet is not None else 0.0  # Default to 0.0 if None
 
-                        # Send email to the buyer
-                        send_template_email(
-                            subject='Purchase Request Submitted Successfully',
-                            template_name='mail_template/purchase_request_buyer.html',
-                            context={
-                                'full_name': buyer.full_name,
-                                'product_name': sell_prod_obj.product_name,
-                                'quantity': quantity,
-                                'SI_units': SI_units,
-                            },
-                            recipient_list=[buyer.email]
-                        )
+                # Check if buyer has enough green points
+                if buyer_wallet >= amount_in_green_points:
+                    buying_obj = app_commonmodels.ProduceBuy(
+                        buyer=buyer,
+                        seller=seller,
+                        sell_produce=sell_prod_obj,
+                        product_name=sell_prod_obj.product_name,
+                        SI_units=SI_units,
+                        buying_status='BuyInProgress',
+                        quantity_buyer_want=quantity
+                    )
+                    buying_obj.save()
 
-                        # Send email to the seller
-                        send_template_email(
-                            subject='New Purchase Request Received',
-                            template_name='mail_template/purchase_request_seller.html',
-                            context={
-                                'full_name': seller.full_name,
-                                'product_name': sell_prod_obj.product_name,
-                                'buyer_name': buyer.full_name,
-                                'quantity': quantity,
-                                'SI_units': SI_units,
-                            },
-                            recipient_list=[seller.email]
-                        )
+                    # Send email to the buyer
+                    send_template_email(
+                        subject='Purchase Request Submitted Successfully',
+                        template_name='mail_template/purchase_request_buyer.html',
+                        context={
+                            'full_name': buyer.full_name,
+                            'product_name': sell_prod_obj.product_name,
+                            'quantity': quantity,
+                            'SI_units': SI_units,
+                        },
+                        recipient_list=[buyer.email]
+                    )
 
-                        return redirect('user_dashboard:user_dashboard')
-                    else:
-                        error_message = "You don't have enough green points in your wallet!"
-                        return render_error_page(request, error_message, status_code=400)
-                except Exception as e:
-                    error_message = f"An unexpected error occurred: {str(e)}"
+                    # Send email to the seller
+                    send_template_email(
+                        subject='New Purchase Request Received',
+                        template_name='mail_template/purchase_request_seller.html',
+                        context={
+                            'full_name': seller.full_name,
+                            'product_name': sell_prod_obj.product_name,
+                            'buyer_name': buyer.full_name,
+                            'quantity': quantity,
+                            'SI_units': SI_units,
+                        },
+                        recipient_list=[seller.email]
+                    )
+
+                    return redirect('user_dashboard:user_dashboard')
+                else:
+                    error_message = "You don't have enough green points in your wallet!"
                     return render_error_page(request, error_message, status_code=400)
             else:
                 error_message = "The requested amount is not available."
                 return render_error_page(request, error_message, status_code=400)
         except self.model.DoesNotExist:
             error_message = "The product is not available."
+            return render_error_page(request, error_message, status_code=400)
+        except app_commonmodels.User.DoesNotExist:
+            error_message = "User does not exist."
+            return render_error_page(request, error_message, status_code=400)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
 
@@ -730,7 +747,7 @@ class ProduceBuyView(View):
             # Update product quantity and amount in green points
             sell_prod_obj = app_commonmodels.SellProduce.objects.get(id=sell_prod.id)
             sell_prod_obj.product_quantity -= buy_prod_obj.quantity_buyer_want
-            sell_prod_obj.ammount_in_green_points -= amount_for_quantity_want
+            sell_prod_obj.amount_in_green_points -= amount_for_quantity_want
 
             # Update the buying status
             buy_prod_obj.buying_status = "BuyCompleted"
