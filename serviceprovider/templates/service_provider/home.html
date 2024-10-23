@@ -5,16 +5,16 @@
 <div class="main-panel">
     <div class="row mx-3 mt-3">
         <div class="col-12 col-md-4 ">
-            <div class="card border-left-primary shadow h-100 py-2 dash-card1">
+            <div class=" dash-card1 h-100 py-2 ">
                 <div class="card-body py-4">
-                    <h5 class="mb-2 fw-bold text-primary">
+                    <h5 class="mb-2 ">
                         My Progress
                     </h5>
                     <p class="mb-2 fw-bold">
                         $72,540
                     </p>
                     <div class="mb-0">
-                        <span class="badge text-success me-2">
+                        <span class="fw-bold  me-2">
                             +9.0%
                         </span>
                         <span class=" fw-bold">
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="col-12 col-md-4 ">
-            <div class="card border-left-success shadow h-100 py-2 dash-card2">
+            <div class="dash-card2 h-100 py-2 dash-card2">
                 <div class="card-body py-4">
                     <h5 class="mb-2 fw-bold">
                         My Progress
@@ -34,7 +34,7 @@
                         $72,540
                     </p>
                     <div class="mb-0">
-                        <span class="badge text-success me-2">
+                        <span class=" fw-bold me-2">
                             +9.0%
                         </span>
                         <span class="fw-bold">
@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="col-12 col-md-4 ">
-            <div class="card border-left-success shadow h-100 py-2 dash-card3">
+            <div class="dash-card1 h-100 py-2 dash-card3">
                 <div class="card-body py-4">
                     <h5 class="mb-2 fw-bold">
                         My Progress
@@ -54,7 +54,7 @@
                         $72,540
                     </p>
                     <div class="mb-0">
-                        <span class="badge text-success me-2">
+                        <span class=" fw-bold  me-2">
                             +9.0%
                         </span>
                         <span class="fw-bold">
@@ -67,14 +67,16 @@
     </div>
     <div class="row mt-3 mx-3">
         <div class="col-md-7 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Project Status</h4>
-                    <div class="table-responsive">
-                        <table class="table">
+            <div class="service_home_card  ">
+                <div class=" ">
+                    <div class="service_home_card_head  p-3">
+                        <h4 class="text-white">Project Status</h4>
+                    </div>
+                    <div class="px-3 pb-3">
+                        <table class="table ">
                             <thead>
                                 <tr>
-                                    <th> # </th>
+                                    <th> Sl </th>
                                     <th> Name </th>
                                     <th> Due Date </th>
                                     <th> Progress </th>
@@ -160,50 +162,61 @@
             </div>
         </div>
         <div class="col-md-5 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title text-dark">Todo List</h4>
-                    <div class="add-items d-flex">
-                        <input type="text" class="form-control todo-list-input"
+            <div class="service_home_card">
+                <div class="">
+                    <div class="service_home_card_head  p-3 mb-3">
+                        <h4 class="text-white">Todo List</h4>
+                    </div>
+                    <div class="add-items d-flex  justify-content-center align-items-center mx-3">
+                        <input type="text" class="form-control todo-list-input me-3"
                             placeholder="What do you need to do today?">
-                        <button class="add btn btn-gradient-primary font-weight-bold todo-list-add-btn"
+                        <button class=" table_btn mb-3"
                             id="add-task">Add</button>
                     </div>
-                    <div class="list-wrapper">
+                    <div class="list-wrapper pb-2">
                         <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
                             <li>
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input class="checkbox" type="checkbox"> Meeting with Alisa </label>
+                                        <input class="checkbox" type="checkbox"> Meeting with Alisa
+                                        <span class="custom-checkmark"></span>
+                                    </label>
                                 </div>
                                 <i class="remove mdi mdi-close-circle-outline"></i>
                             </li>
                             <li class="completed">
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input class="checkbox" type="checkbox" checked> Call John </label>
+                                        <input class="checkbox" type="checkbox" checked> Call John
+                                        <span class="custom-checkmark"></span>
+                                    </label>
                                 </div>
                                 <i class="remove mdi mdi-close-circle-outline"></i>
                             </li>
                             <li>
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input class="checkbox" type="checkbox"> Create invoice </label>
+                                        <input class="checkbox" type="checkbox"> Create invoice
+                                        <span class="custom-checkmark"></span>
+                                    </label>
                                 </div>
                                 <i class="remove mdi mdi-close-circle-outline"></i>
                             </li>
                             <li>
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input class="checkbox" type="checkbox"> Print Statements </label>
+                                        <input class="checkbox" type="checkbox"> Print Statements
+                                        <span class="custom-checkmark"></span>
+                                    </label>
                                 </div>
                                 <i class="remove mdi mdi-close-circle-outline"></i>
                             </li>
                             <li class="completed">
                                 <div class="form-check">
                                     <label class="form-check-label">
-                                        <input class="checkbox" type="checkbox" checked> Prepare for
-                                        presentation </label>
+                                        <input class="checkbox" type="checkbox" checked> Prepare for presentation
+                                        <span class="custom-checkmark"></span>
+                                    </label>
                                 </div>
                                 <i class="remove mdi mdi-close-circle-outline"></i>
                             </li>
@@ -211,14 +224,22 @@
                                 <div class="form-check">
                                     <label class="form-check-label">
                                         <input class="checkbox" type="checkbox"> Pick up kids from school
+                                        <span class="custom-checkmark"></span>
                                     </label>
                                 </div>
                                 <i class="remove mdi mdi-close-circle-outline"></i>
                             </li>
                         </ul>
+                        
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-center service_anime_row mx-3 my-4">
+        <div class="service_anime_div">
+            <img  src="{% static 'app_common/css/images/anime.gif'%}" alt="">
+
         </div>
     </div>
 </div>

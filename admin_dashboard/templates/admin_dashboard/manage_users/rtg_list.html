@@ -1,19 +1,18 @@
 {% extends 'admin_dashboard/starter.html' %}
 {% load static %}
-{% block title %}User List{% endblock title %}
+{% block title %}Roof Top Gardeners List{% endblock title %}
 {% block content %}
     <div class="page-wapper">
         {% include 'app_common/snippets/alert.html' %}
         <div class="search_sec">
-            <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
-                {% csrf_token %}
+            <form method="get" action="{% url 'admin_dashboard:search_user_rtg' %}">
                 <div class="table_search_box">
                     <select class="form-control selects" name="search_by" aria-label="Default select example">
                         <option value="email">Email</option>
                         <option value="contact">Contact</option>
                     </select>
                     <input type="text"  class="form-control" placeholder="Enter Query" name="query" required/>
-                    <button class="btn qry-sub" type="submit">
+                    <button class="btn qry-sub " type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>

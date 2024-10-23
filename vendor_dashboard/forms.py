@@ -18,6 +18,8 @@ class VendorDetailsForm(forms.Form):
     website = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control'}))
     established_by = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     image = forms.ImageField(required=False, widget=forms.FileInput(attrs={'class': 'form-control'}))
+    custom_business_category = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Specify Custom Category'}))
+
 
 class ProductFromVendorForm(forms.ModelForm):
     CATEGORY_CHOICES = [

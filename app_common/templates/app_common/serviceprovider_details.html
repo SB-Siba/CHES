@@ -74,72 +74,74 @@
     
 </style>
 
-
-<div class="container">
-    <div class="row d-flex align-items-center justify-content-center my-5 ">
-        <div class="col-lg-6 d-flex justify-content-center gardning-body">
-            <div class="login">
-                <div class="d-flex justify-space-between py-3 mt-4"
-                    style="align-items: center;justify-content: center;">
-                    <div class="auth_reg_logo mx-3">
-                        <img src="{% static 'user_dashboard/images/green-logo.png' %}" />
+<body style="height: 120vh !important; display: flex ; align-items: center;">
+    <div class="container">
+        <div class="row d-flex align-items-center justify-content-center my-5 ">
+            <div class="col-lg-6 d-flex justify-content-center gardning-body">
+                <div class="login">
+                    <div class="d-flex justify-space-between py-3 mt-4"
+                        style="align-items: center;justify-content: center;">
+                        <div class="auth_reg_logo mx-3">
+                            <img src="{% static 'user_dashboard/images/green-logo.png' %}" />
+                        </div>
+                        <div>
+                            <h2>Service Provider Details</h2>
+                        </div>
                     </div>
                     <div>
-                        <h2>Service Provider Details</h2>
+                        <hr>
+                        </hr>
                     </div>
-                </div>
-                <div>
-                    <hr>
-                    </hr>
-                </div>
-
-                <form method="post" action="" class="px-4" enctype="multipart/form-data">
-                    {% include 'app_common/snippets/alert.html' %}
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label>Service Type:</label><br>
-                        {% for service in form.service_type %}
-                        <div class="form-check  form-check-inline">
-                            {{ service }}
+    
+                    <form method="post" action="" class="px-4" enctype="multipart/form-data">
+                        {% include 'app_common/snippets/alert.html' %}
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Service Type:</label><br>
+                            {% for service in form.service_type %}
+                            <div class="form-check  form-check-inline">
+                                {{ service }}
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
-                    </div>
-                    <button type="button" class="btn btn-add-more btn-secondary" id="add-more-service-type">Add More</button>
-                    <div id="additional-service-type" class="form-group" style="display: none;">
-                        {{ form.add_service_type.label_tag }}
-                        {{ form.add_service_type }}
-                    </div>
-                    <div class="form-group">
-                        <label>Service Area:</label><br>
-                        {% for city in form.service_area %}
-                        <div class="form-check form-check-inline">
-                            {{ city }}
+                        <button type="button" class="btn btn-add-more btn-secondary" id="add-more-service-type">Add More</button>
+                        <div id="additional-service-type" class="form-group" style="display: none;">
+                            {{ form.add_service_type.label_tag }}
+                            {{ form.add_service_type }}
                         </div>
-                        {% endfor %}
-                    </div>
-                    <button type="button" class="btn btn-add-more btn-secondary" id="add-more-service-area">Add More</button>
-                    <div id="additional-service-area" class="form-group" style="display: none;">
-                        {{ form.add_service_area.label_tag }}
-                        {{ form.add_service_area }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_average_cost_per_hour">Average Cost per Hour:</label>
-                        {{ form.average_cost_per_hour }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_years_experience">Years of Experience:</label>
-                        {{ form.years_experience }}
-                    </div>
-                    <div style="text-align:center;">
-                        <button class="log_btn" type="submit">
-                            Add data
-                        </button>
-                    </div>
-                </form>
+                        <div class="form-group">
+                            <label>Service Area:</label><br>
+                            {% for city in form.service_area %}
+                            <div class="form-check form-check-inline">
+                                {{ city }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="btn btn-add-more btn-secondary" id="add-more-service-area">Add More</button>
+                        <div id="additional-service-area" class="form-group" style="display: none;">
+                            {{ form.add_service_area.label_tag }}
+                            {{ form.add_service_area }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_average_cost_per_hour">Average Cost per Hour:</label>
+                            {{ form.average_cost_per_hour }}
+                        </div>
+                        <div class="form-group">
+                            <label for="id_years_experience">Years of Experience:</label>
+                            {{ form.years_experience }}
+                        </div>
+                        <div style="text-align:center;">
+                            <button class="log_btn" type="submit">
+                                Add data
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</body>
+
 <script>
     document.getElementById('add-more-service-type').addEventListener('click', function() {
         document.getElementById('additional-service-type').style.display = 'block';

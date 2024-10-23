@@ -15,7 +15,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgb(89, 199, 124);
+    background-color:#1F782B;
     padding: 1rem 2rem;
   }
 
@@ -33,7 +33,7 @@ main {
     position: relative;
   }
   .card-header{
-    background-color: rgb(89, 199, 124);
+    background-color: #1F782B;
   }
   table {
       width: 100%;

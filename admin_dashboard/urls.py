@@ -3,6 +3,9 @@ from . import views,api_views
 from .manage_users import users
 from admin_dashboard.orders import order
 from .manage_blogs import blogs
+from .registration import rtg_registration,vendor_registration,sp_registration
+from .user_query import Query
+
 
 app_name = 'admin_dashboard'
 
@@ -27,7 +30,18 @@ urlpatterns = [
     path('manage_users/users_gardening_data/<int:pk>',users.UserGardeningDetails.as_view(), name= 'gardening_details'),
     path('manage_users/vendor_data/<int:pk>',users.VendorDetails.as_view(), name= 'vendor_details'),
     path('manage_users/service_provider_data/<int:pk>',users.ServiceProviderDetails.as_view(), name= 'service_providor_details'),
-    path('manage_users/search_user',users.SearchUser.as_view(), name= 'search_user'),
+    path('manage_users/search_user/rtg',users.RtgSearchUser.as_view(), name= 'search_user_rtg'),
+    path('manage_users/search_user/vendor',users.VendorSearchUser.as_view(), name= 'search_user_vendor'),
+    path('manage_users/search_user/sp',users.SpSearchUser.as_view(), name= 'search_user_sp'),
+
+    path('manage_users/search_user/rtg/pending',users.PendingRtgSearch.as_view(), name= 'search_user_rtg_pending'),
+    path('manage_users/search_user/vendor/pending',users.PendingVendorSearch.as_view(), name= 'search_user_vendor_pending'),
+    path('manage_users/search_user/sp/pending',users.PendingSpSearch.as_view(), name= 'search_user_sp_pending'),
+
+    path('manage_users/search_g_p_update_request',users.SearchGardeningProfileUpdateRequest.as_view(), name= 'search_gardening_profile_update_request'),
+    path('manage_users/search_activity_request',users.SearchUsersActivityRequest.as_view(), name= 'search_activity_request'),
+    path('manage_users/search_sell_produce_request',users.SearchProduceSellRequest.as_view(), name= 'search_produce_sell_request'),
+
     path('manage_users/rtg/add_wallet_balance',users.RtgWalletBalanceAdd.as_view(), name= 'rtg_add_wallet_balance'),
     path('manage_users/vendor/add_wallet_balance',users.VendorWalletBalanceAdd.as_view(), name= 'vendor_add_wallet_balance'),
     path('gardeningprofileupdaterequest',users.UserGardeningProfileUpdateRequest.as_view(), name= 'gardeningprofileupdaterequest'),
@@ -62,6 +76,25 @@ urlpatterns = [
     path('delete_blog/<int:blog_id>',blogs.DeleteBlog.as_view(), name='blog_delete'),
     path('blog_search/',blogs.BlogSearch.as_view(), name='blog_search'),
     path('blog_update/<int:blog_id>',blogs.BlogUpdate.as_view(), name='blog_update'),
+
+    # Registration
+
+    path('add_rtg/',rtg_registration.RtgRegistration.as_view(), name='add_rtg'),
+    path('add_vendor/',vendor_registration.VendorRegistration.as_view(), name='add_vendor'),
+    path('add_service_provider/',sp_registration.ServiceProviderRegistration.as_view(), name='add_service_provider'),
+
+    # Categories produces
+    path('produces_categories/',views.ProducesCategory.as_view(), name='produces_categories'),
+    path('produces_category_add/',views.ProducesCategoryAdd.as_view(), name='produces_category_add'),
+    path('produces_category_update/<int:category_id>',views.ProducescategoryUpdate.as_view(), name='produces_category_update'),
+    path('produces_category_delete/<int:category_id>',views.DeleteProducesCategory.as_view(), name='produces_category_delete'),
+    path('produces_category/',views.ProducesCategorySearch.as_view(), name='produces_category_search'),
+    
+    # User Query
+    path('users_query/list/',Query.UsersQueryList.as_view(), name='users_query_list'),
+    path('users_query/reply/<int:id>/',Query.QueryReply.as_view(), name='query_reply'),
+    path('users_query/delete/<int:id>/',Query.DeleteQuery.as_view(), name='query_delete'),
+
 ]
 
 #  admin_dashboard:users_list

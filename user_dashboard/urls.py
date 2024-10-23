@@ -25,7 +25,7 @@ urlpatterns = [
     path('buybeginssellerview', views.BuyBeginsSellerView.as_view(), name = "buybeginssellerview"),
     path('sendpaymentlink/<int:buy_id>', views.send_payment_link, name = "sendpaymentlink"),
     path('buybeginsbuyerview', views.BuyBeginsBuyerView.as_view(), name = "buybeginsbuyerview"),
-    path('producebuy/<int:ord_id>', views.ProduceBuyView.as_view(), name = "producebuy"),
+    path('producebuy/<int:prod_id>', views.ProduceBuyView.as_view(), name = "producebuy"),
     path('buyreject/<int:ord_id>', views.reject_buy, name = "buyreject"),
     path('orders/', views.AllOrders.as_view(), name = "allorders"),
     path('all-posts/', views.AllPosts.as_view(), name = "allposts"),
@@ -42,7 +42,6 @@ urlpatterns = [
     path('invoice/<int:order_uid>',views.GardenerDownloadInvoice.as_view(),name="invoice"),
     path('rate-order-from-vendor/',views.RateOrderFromVendor.as_view(),name="rate_order_from_vendor"),
 
-    path('service-providers-list/',views.ServiceProvidersList.as_view(),name="service_providers"),
     path('service/service_search', views.ServiceSearchView.as_view(), name='service_search'),
     path('services/', views.ListOfServicesByServiceProviders.as_view(), name='list_services'),
     path('service_details/<int:service_id>/', views.ServiceDetails.as_view(), name='service_details'),

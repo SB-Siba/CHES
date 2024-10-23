@@ -18,10 +18,10 @@ login_post = [
 ]
 
 gardening_details_post = [
-    openapi.Parameter("garden_area", openapi.IN_QUERY, description="Garden Area", required=True, type=openapi.TYPE_STRING),
-    openapi.Parameter("number_of_plants", openapi.IN_QUERY, description="Number of Plants", required=True, type=openapi.TYPE_STRING),
-    openapi.Parameter("number_of_unique_plants", openapi.IN_QUERY, description="Number of Unique Plants", required=True, type=openapi.TYPE_STRING),
-    openapi.Parameter("garden_image", openapi.IN_QUERY, description="Garden Image", required=True, type=openapi.TYPE_FILE),
+    openapi.Parameter("garden_area", openapi.IN_FORM, description="Garden Area", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("number_of_plants", openapi.IN_FORM, description="Number of Plants", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("number_of_unique_plants", openapi.IN_FORM, description="Number of Unique Plants", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("garden_image", openapi.IN_FORM, description="Garden Image", required=True, type=openapi.TYPE_FILE),
 ]
 
 gardening_quiz_post = [
@@ -46,6 +46,7 @@ vendor_details_post = [
     openapi.Parameter("business_description", openapi.IN_QUERY, description="Business Description", required=True, type=openapi.TYPE_STRING),
     openapi.Parameter("business_license_number", openapi.IN_QUERY, description="Business License Number", required=True, type=openapi.TYPE_STRING),
     openapi.Parameter("business_category", openapi.IN_QUERY, description="Business Category", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("custom_business_category", openapi.IN_QUERY, description="Add Your Bussiness Category", required=False, type=openapi.TYPE_STRING),
     openapi.Parameter("establishment_year", openapi.IN_QUERY, description="Establishment Year", required=True, type=openapi.TYPE_INTEGER),
     openapi.Parameter("website", openapi.IN_QUERY, description="Website", required=False, type=openapi.TYPE_STRING),
     openapi.Parameter("established_by", openapi.IN_QUERY, description="Established By", required=True, type=openapi.TYPE_STRING),
@@ -146,6 +147,7 @@ activity_list_get = [
 
 sell_produce_post = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter('produce_category', openapi.IN_FORM, description="ID of the produce category", type=openapi.TYPE_INTEGER),  # New field
     openapi.Parameter('product_name', openapi.IN_FORM, description="Name of the product", type=openapi.TYPE_STRING),
     openapi.Parameter('product_image', openapi.IN_FORM, description="Image of the product", type=openapi.TYPE_FILE),
     openapi.Parameter('product_quantity', openapi.IN_FORM, description="Quantity of the product", type=openapi.TYPE_NUMBER),
@@ -160,7 +162,10 @@ sell_produces_list_get = [
 
 green_commerce_product_community_get = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
+    openapi.Parameter("search_query", openapi.IN_QUERY, description="Search for products by name", required=False, type=openapi.TYPE_STRING),
+    openapi.Parameter("category", openapi.IN_QUERY, description="Filter products by category ID", required=False, type=openapi.TYPE_STRING),
 ]
+
 
 buying_begins_post = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
@@ -297,7 +302,9 @@ service_provider_profile_get = [
 service_provider_update_profile_post = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
     openapi.Parameter('service_type', openapi.IN_FORM, description="Service types provided by the service provider (comma-separated)", type=openapi.TYPE_STRING),
+    openapi.Parameter('add_service_type', openapi.IN_FORM, description="Additional service types (comma-separated)", type=openapi.TYPE_STRING),
     openapi.Parameter('service_area', openapi.IN_FORM, description="Service areas covered by the service provider (comma-separated)", type=openapi.TYPE_STRING),
+    openapi.Parameter('add_service_area', openapi.IN_FORM, description="Additional service areas (comma-separated)", type=openapi.TYPE_STRING),
     openapi.Parameter('average_cost_per_hour', openapi.IN_FORM, description="Average cost per hour charged by the service provider", type=openapi.TYPE_NUMBER),
     openapi.Parameter('years_experience', openapi.IN_FORM, description="Years of experience of the service provider", type=openapi.TYPE_INTEGER),
     openapi.Parameter('image', openapi.IN_FORM, description="Image file of the service provider", type=openapi.TYPE_FILE),
@@ -464,4 +471,245 @@ vendor_order_detail_post = [
     openapi.Parameter("payment_status", openapi.IN_FORM, description="Payment status of the order", required=False, type=openapi.TYPE_STRING, enum=["Paid", "Pending", "Refunded"]),
     openapi.Parameter("customer_details", openapi.IN_FORM, description="Customer details in JSON format", required=False, type=openapi.TYPE_STRING),
     openapi.Parameter("more_info", openapi.IN_FORM, description="Additional information about the order", required=False, type=openapi.TYPE_STRING),
+]
+
+
+
+# Blog
+
+blog_post_params = [
+        openapi.Parameter(
+            'Authorization',
+            openapi.IN_HEADER,
+            description="Bearer <token>",
+            required=True,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'title',
+            openapi.IN_FORM,
+            description="Title of the blog",
+            required=True,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'author',
+            openapi.IN_FORM,
+            description="Name of the author",
+            required=True,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'date',
+            openapi.IN_FORM,
+            description="Date in YYYY-MM-DD format",
+            required=True,
+            type=openapi.TYPE_STRING,
+            format='date'
+        ),
+        openapi.Parameter(
+            'content',
+            openapi.IN_FORM,
+            description="Content of the blog (Rich Text)",
+            required=True,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'image',
+            openapi.IN_FORM,
+            description="Image file for the blog",
+            required=False,
+            type=openapi.TYPE_FILE
+        ),
+    ]
+
+
+blog_update_params = [
+        openapi.Parameter(
+            'Authorization',
+            openapi.IN_HEADER,
+            description="Bearer <token>",
+            required=True,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'blog_id',
+            openapi.IN_PATH,
+            description="ID of the blog to update",
+            required=True,
+            type=openapi.TYPE_INTEGER
+        ),
+        openapi.Parameter(
+            'title',
+            openapi.IN_FORM,
+            description="Title of the blog",
+            required=False,  # It's an update, so not always required
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'author',
+            openapi.IN_FORM,
+            description="Name of the author",
+            required=False,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'date',
+            openapi.IN_FORM,
+            description="Date in YYYY-MM-DD format",
+            required=False,
+            type=openapi.TYPE_STRING,
+            format='date'
+        ),
+        openapi.Parameter(
+            'content',
+            openapi.IN_FORM,
+            description="Content of the blog (Rich Text)",
+            required=False,
+            type=openapi.TYPE_STRING
+        ),
+        openapi.Parameter(
+            'image',
+            openapi.IN_FORM,
+            description="Image file for the blog",
+            required=False,
+            type=openapi.TYPE_FILE
+        )
+    ]
+
+
+list_services_params = [
+    openapi.Parameter(
+        'Authorization',
+        openapi.IN_HEADER,
+        description="Bearer <token>",
+        required=True,
+        type=openapi.TYPE_STRING
+    ),
+]
+
+service_search_params = [
+    openapi.Parameter(
+        'Authorization',
+        openapi.IN_HEADER,
+        description="Bearer <token>",
+        required=True,
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        'search_query',
+        openapi.IN_QUERY,
+        description="Search services by name or type",
+        required=False,
+        type=openapi.TYPE_STRING
+    ),
+]
+
+
+
+my_booked_services_params = [
+    openapi.Parameter(
+        'Authorization',
+        openapi.IN_HEADER,
+        description="Bearer <token>",
+        required=True,
+        type=openapi.TYPE_STRING
+    ),
+]
+
+decline_booking_params = [
+    openapi.Parameter(
+        'Authorization',
+        openapi.IN_HEADER,
+        description="Bearer <token>",
+        required=True,
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        'booking_id',
+        openapi.IN_PATH,
+        description="ID of the booking to decline",
+        required=True,
+        type=openapi.TYPE_INTEGER
+    ),
+]
+
+# OTP Varification
+
+send_otp_params = [
+    openapi.Parameter(
+        'email',
+            openapi.IN_FORM,
+        description="Email address to which the OTP will be sent",
+        required=True,
+        type=openapi.TYPE_STRING
+    )
+]
+
+verify_otp_params = [
+    openapi.Parameter(
+        'email',
+        openapi.IN_FORM,
+        description="Email address associated with the OTP",
+        required=True,
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        'otp',
+        openapi.IN_FORM,
+        description="OTP code received in the email",
+        required=True,
+        type=openapi.TYPE_STRING
+    )
+]
+
+# Top Users
+top_users_params = [
+    openapi.Parameter(
+        'Authorization',
+        openapi.IN_HEADER,
+        description="Bearer <token>",
+        required=True,
+        type=openapi.TYPE_STRING
+    ),
+]
+
+# User Query
+
+user_query_post = [
+    openapi.Parameter(
+        "Authorization", 
+        openapi.IN_HEADER, 
+        description="Bearer <token>", 
+        required=True, 
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        "full_name", 
+        openapi.IN_FORM, 
+        description="Full name of the user submitting the query", 
+        required=True, 
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        "email", 
+        openapi.IN_FORM, 
+        description="Email address of the user", 
+        required=True, 
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        "subject", 
+        openapi.IN_FORM, 
+        description="Subject of the query", 
+        required=True, 
+        type=openapi.TYPE_STRING
+    ),
+    openapi.Parameter(
+        "message", 
+        openapi.IN_FORM, 
+        description="Detailed message or query from the user", 
+        required=True, 
+        type=openapi.TYPE_STRING
+    ),
 ]

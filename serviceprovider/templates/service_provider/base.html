@@ -24,6 +24,7 @@
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet">
     <link href="{% static 'css/blog.css'%}" rel="stylesheet">
 
+    <link rel="icon" sizes="16x16" href="{% static 'app_common/css/images/logo_ches 1.png'%}" type="image/jpeg">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
@@ -33,58 +34,71 @@
 <body>
     <input type="hidden" id="fetchUserDetailsUrl" value="{% url 'chat:fetch_user_details' %}">
     <input type="hidden" id="fetchMessagesUrl" value="{% url 'chat:fetch_messages' %}">
-    <div class="wrapper">
+    <div class="wrapper" id="MyBase">
         <aside id="sidebar">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa fa-tree"></i>
                 </button>
                 <div class="sidebar-logo">
-                    <a href="#">CHES</a>
+                    <a href="#" id="a_underline">CHES</a>
                 </div>
             </div>
             <ul class="sidebar-nav">
                 <li class="sidebar-item">
-                    <a href="{% url 'service_provider:service_provider_profile' %}" class="sidebar-link">
+                    <a href="{% url 'service_provider:service_provider_profile' %}" class="sidebar-link" id="a_underline">
                         <i class="lni lni-user"></i>
                         <span>Profile</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{% url 'service_provider:service_list' %}" class="sidebar-link">
-                        <i class="lni lni-popup"></i>
+                    <a href="{% url 'service_provider:service_list' %}" class="sidebar-link" id="a_underline">
+                        <i class="lni lni-list"></i>
                         <span>Service List</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{% url 'service_provider:my_all_bookings' %}" class="sidebar-link">
-                        <i class="lni lni-popup"></i>
+                    <a href="{% url 'service_provider:my_all_bookings' %}" class="sidebar-link" id="a_underline">
+                        <i class="lni lni-book"></i>
                         <span>All Bookings</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{% url 'chat:all_messages' %}" class="sidebar-link">
-                        <i class="lni lni-popup"></i>
+                    <a href="{% url 'chat:all_messages' %}" class="sidebar-link" id="a_underline">
+                        <i class="lni lni-comments"></i>
                         <span>Messages</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                        data-bs-target="#manage_blogs" aria-expanded="false" aria-controls="manage_blogs">
-                        <i class="lni lni-protection"></i>
+                        data-bs-target="#manage_blogs" aria-expanded="false" aria-controls="manage_blogs" id="a_underline">
+                        <i class="lni lni-pencil-alt"></i>
                         <span>Manage Blogs</span>
                     </a>
                     <ul id="manage_blogs" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
-                            <a href="{% url 'blogs:sp_all_blogs' %}" class="sidebar-link">All Blogs</a>
+                            <a href="{% url 'blogs:sp_all_blogs' %}" class="sidebar-link" id="a_underline">
+                                <i class="lni lni-files"></i> 
+                                All Blogs
+                            </a>
+
                         </li>
                         <li class="sidebar-item">
-                            <a href="{% url 'blogs:sp_blog_list' %}" class="sidebar-link">My Blogs</a>
+                            <a href="{% url 'blogs:sp_blog_list' %}" class="sidebar-link" id="a_underline">
+                                <i class="lni lni-files"></i> 
+                                My Blogs
+                            </a>
                         </li>
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{% url 'app_common:logout' %}" class="sidebar-link">
+                    <a href="{% url 'service_provider:sp_contact_page' %}" class="sidebar-link" id="a_underline">
+                        <i class="lni lni-envelope"></i>
+                        <span>Contact Us</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'app_common:logout' %}" class="sidebar-link" id="a_underline">
                         <i class="lni lni-exit"></i>
                         <span>Logout</span>
                     </a>
@@ -94,20 +108,20 @@
         <div class="main" style="padding: 0%;">
             <nav class="navbar navbar-expand-lg navbar-light bg-light px-4 py-3">
                 <div class="container-fluid d-flex justify-content-between">
-                    <div>
+                    <div class="me-2">
                         <a href="{% url 'service_provider:service_provider_dash' %}">
-                            <div class=""><img src="{% static 'vendor_dashboard/images/green-logo.png' %}"
-                                    style="height: 60px; width: 100px;" /></div>
+                            <div class=""><img src="{% static 'app_common/css/images/logo_ches 1.png'%}"
+                                    style="height: 50px; width: 50px;" /></div>
                         </a>
 
                     </div>
                     <div class="navbar-collapse collapse d-flex justify-content-between">
                         <div>
-                            <a class="fw-bold fs-4 mb-3 text-dark"
-                                href="{% url 'service_provider:service_provider_dash' %}">Service Provider Dashboard</a>
+                            <a class=" fs-4  text-dark" id="a_underline"
+                                href="{% url 'service_provider:service_provider_dash' %}"><h4> Gardning Services Of Odisha</h4></a>
                         </div>
                         <ul class="navbar-nav ms-auto">
-
+                            
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -170,7 +184,7 @@
 
             <footer class="footer">
                 <div class="container-fluid">
-                    <div class="row text-body-secondary">
+                    <!-- <div class="row text-body-secondary">
                         <div class="col-6 text-start ">
                             <a class="text-body-secondary" href=" #">
                                 <strong>CHES</strong>
@@ -188,6 +202,27 @@
                                     <a class="text-body-secondary" href="#">Terms & Conditions</a>
                                 </li>
                             </ul>
+                        </div>
+                    </div> -->
+                    <div>
+                        <div class="row">
+                            <div class="py-3 d-flex justify-content-between My_containeR">
+                                <a href="#">
+                                    <img class="loGo_img" style="width: 50px; height: 50px;"  src="{% static 'app_common/css/images/logo5.png'%}" alt="">
+                                </a>
+                                <a href="#">
+                                    <img class="loGo_img" style="width: 50px; height: 50px;"  src="{% static 'app_common/css/images/logo_ches 1.png'%}" alt="">
+                                </a>
+                                <a href="#">
+                                    <img class="loGo_img" style="width: 50px; height: 50px;"  src="{% static 'app_common/css/images/logo3.png'%}" alt="">
+                                </a>
+                                <a href="#">
+                                    <img class="" style="width: 100px; height: 50px;" src="{% static 'app_common/css/images/logo4.jpeg'%}" alt="">
+                                </a>
+                                <a href="#">
+                                    <img class="loGo_img" style="width: 50px; height: 50px;" src="{% static 'app_common/css/images/logo1.png'%}" alt="">
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

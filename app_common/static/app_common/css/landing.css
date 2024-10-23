@@ -22,9 +22,26 @@ h3,h5,h1,h2,h4,p,h6{
   height: 120vh; /* Ensure this is enough to fit the viewport height */
   width: 100%;
   margin-top: 66px;
+  padding-top: 40vh;
+
+
 }
 
- 
+.My_containeR2 {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  background-color: white; /* Optional: Add background color for clarity */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow effect */
+}
+
 nav {
   width: 100%;
   padding: 10px 0 0;
@@ -137,10 +154,10 @@ nav label.cancel {
 #check {
   display: none;
 }
-.lading_body{
+/* .lading_body{
   margin-top: 110px;
   padding-left: 92px;
-}
+} */
 .lading_body h1{
   color: white;
   font-size: 65px;
@@ -164,7 +181,7 @@ nav label.cancel {
 
 .about-img {
   width: 100%;
-  height: auto;
+  height: 530px !important;
   border-radius: 100px 0 100px 0;
 
 }
@@ -473,7 +490,10 @@ img {
   background-color: #959e92; /* Change background color on hover */
 
 }
-
+.loGo_img{
+  width: 50px;
+  height: 50px;
+}
 
 /*========= footer end========= */
 
@@ -625,6 +645,9 @@ img {
 
 @media (max-width: 768px) {
 
+  .My_containeR2{
+    padding: 0 .3rem;
+  }
   #first-menu {
     display: none !important; /* Hide the first-menu div on small screens */
   }
@@ -641,7 +664,7 @@ nav .menu-container{
     width: 100%;
     padding: 15px 20px 20px 15px ;
     margin: 0;
-    background-color: #1a4909;
+    background-color: #ffffff;
     align-items: center;
     box-sizing: border-box;
   }
@@ -654,7 +677,7 @@ nav .menu-container{
     padding: 15px 20px 20px 15px ;
     display: flex;
     align-items: center;
-    background-color: #1a4909;
+    background-color: #ffffff;
   }
   
 
@@ -668,7 +691,7 @@ nav .menu-container{
     padding-top: 45px;
     height: 100%;
     text-align: left; /* Keeps the text left-aligned */
-    background: #1a4909f6;
+    background: #fffffff6;
     box-shadow: 0 5px 10px #b0b0b5;
     z-index: 12;
     transition: all 0.3s ease;
@@ -678,7 +701,7 @@ nav .menu-container{
     display: block;
     font-size: 16px;
     width: 100%;
-    color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     margin-top: 30px;
     text-align: left; /* Align the text to the left */
     padding-left: 10px; /* Add padding to keep some space from the left edge */

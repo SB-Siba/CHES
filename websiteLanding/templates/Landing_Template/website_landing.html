@@ -9,52 +9,68 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link rel="stylesheet" href="{%  static 'app_common/css/website_landing.css' %}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-<link rel="icon" sizes="16x16" href="{% static 'app_common/css/images/icon.jpg'%}" type="image/jpeg">
+<link rel="icon" sizes="16x16" href="{% static 'app_common/css/images/logo_ches 1.png'%}" type="image/jpeg">
 
 
 </head>
 <body>
-
-
-<div >
-    <nav class=" fixed-top">
-        <div class="  mx-lg-5">
+    <div class="py-3 d-flex justify-content-between My_containeR">
+        <a href="#">
+            <img class="loGo_img" src="{% static 'app_common/css/images/logo5.png'%}" alt="">
+        </a>
+        <a href="#">
+            <img class="loGo_img" src="{% static 'app_common/css/images/logo_ches 1.png'%}" alt="">
+        </a>
+        <a href="#">
+            <img class="loGo_img" src="{% static 'app_common/css/images/logo3.png'%}" alt="">
+        </a>
+        <a href="#">
+            <img class="" style="width: 100px; height: 50px;" src="{% static 'app_common/css/images/logo4.jpeg'%}" alt="">
+        </a>
+        <a href="#">
+            <img class="loGo_img" src="{% static 'app_common/css/images/logo1.png'%}" alt="">
+        </a>
+    </div>
     
-        <div class="menu" id="second-menu">
-            <div class="logo">
-            <a href="#">CHES</a>
+    <nav  id="second-menu" class="py-2" >
+        <div class="My_containeR" >
+            <div class="menu" >
+                <div class="logo">
+                    <a href="#">
+                        <img class="loGo_img" src="{% static 'app_common/css/images/logo_ches 1.png'%}" alt="">
+                    </a>
+                </div>
+                <input type="checkbox" id="check">
+                <label class="btn bars text-black" for="check"><i class="fas fa-bars "></i></label>
+                <ul class="menu">
+                    <label class="btn cancel" for="check"><i class="fas fa-times text-black"></i></label>
+                    <li><a class="logo_an" href="">About Us</a></li>
+                    <li><a class="logo_an" href="">Contact Us</a></li>
+                    <li><a class="logo_an" href="">Privacy Policy</a></li>
+                </ul>
             </div>
-            <input type="checkbox" id="check">
-            <label class="btn bars text-black" for="check"><i class="fas fa-bars "></i></label>
-            <ul class="menu">
-                <label class="btn cancel" for="check"><i class="fas fa-times text-black"></i></label>
-                <li><a class="logo_an" href="">About Us</a></li>
-                <li><a class="logo_an" href="">Contact Us</a></li>
-                <li><a class="logo_an" href="">Privacy Policy</a></li>
-                <!-- <li><a class="logo_an" href="{% url 'app_common:login' %}">Login</a></li> -->
-            </ul>
-            
-        </div>
         </div>
     </nav>
     
+    
 
-    </div>
 <!-- HEro Section -->
 
 <div id="heroCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
 <div class="carousel-inner">
 <div class="carousel-item active" id="carousel-item-1">
     <div class="carousel-caption text-start">
-    <h1 class="service_hd_2">Nurture Your Garden</h1>
+    <h1 class="service_hd_2">Inovation Project on Rooftop <br>
+        and Home Gardening in Odisha</h1>
     <p class="">Discover the best tips and tools for a flourishing garden.</p>  
     
     </div>
 </div>
 <div class="carousel-item" id="carousel-item-2">
     <div class="carousel-caption text-start">
-    <h1 class="service_hd_2">Explore Rare Plants</h1>
-    <p class="">Add unique and exotic plants to your collection.</p>
+    <h1 class="service_hd_2"> Home Gardeners Of Odisha</h1>
+    <p class="">Inovation Project on Rooftop <br>
+        and Home Gardening in Odisha</p>
     
     </div>
 </div>
@@ -84,31 +100,32 @@
 </div>
 
 <!-- HEro Section -->
-<!-- main Content  -->
-<div class="row mx-lg-5 mx-2 mb-5 hidden-section">
-    <!-- Left side: Image -->
-    <div class="col-lg-6">
-        <img class="main_content_img" src="{% static 'app_common/css/images/welcom2.jpg'%}" alt="">
-    </div>
-    
-    <!-- Right side: Heading, Description, and Button -->
-    <div class="col-lg-6 d-flex flex-column justify-content-center position-relative bg_imG">
-        <h1 class="display-5 mb-3">Welcome to <br><span class="display-5a">CHES</span></h1>
 
-        <p class="lead1 mb-4">
-            The Central Horticulture Experimental Station (CHES) is committed to enhancing the quality of horticultural research and development across the region. We provide expert services and solutions exclusively in the state of Odisha. Before proceeding, please make sure to read the important disclaimer regarding our service availability.
-        </p>
+<!-- main Content  -->
+<div class="My_containeR">
+    <div class="row  mx-lg-0 mx-2 mb-5 hidden-section">
+        <!-- Left side: Image -->
+        <div class="col-lg-6 ">
+            <img class="main_content_img" src="{% static 'app_common/css/images/welcome3.jpg'%}" alt="">
+        </div>
         
-        <!-- Button to trigger modal -->
-        <div class="mt-3">
-            <button class="btn btn-succeSS d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#disclaimerModal">
-                Read Disclaimer &nbsp; <i class="bi bi-arrow-right"></i>
-            </button>
+        <!-- Right side: Heading, Description, and Button -->
+        <div class="col-lg-6 d-flex flex-column justify-content-center position-relative bg_imG">
+            <h1 class="display-5 mb-3">Welcome to <br><span class="display-5a">CHES</span></h1>
+    
+            <p class="lead1 mb-4">
+                The Central Horticulture Experimental Station (CHES) is committed to enhancing the quality of horticultural research and development across the region. We provide expert services and solutions exclusively in the state of Odisha. Before proceeding, please make sure to read the important disclaimer regarding our service availability.
+            </p>
+            
+            <!-- Button to trigger modal -->
+            <div class="mt-3">
+                <button class="btn btn-succeSS d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#disclaimerModal">
+                    Read Disclaimer &nbsp; <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
         </div>
     </div>
 </div>
-
-
 
 <!-- Modal structure remains the same as before -->
 
@@ -123,7 +140,7 @@
             </div>
             <div class="modal-body">
                 <div class="alert alert-info">
-                    <p><strong>Disclaimer:</strong> Our services are currently established and operational exclusively in the state of Odisha. If you are accessing this page from a different region or state, please be aware that our services may not be available in your location at this time.</p>
+                    <p><strong>Disclaimer:</strong> The transactions conducted on this platform are soley between the service provides/vendors and the buyers. The platform adminstrators do not assume any libality or responsibility for the qulity, saftey, legality or any other aspect of the products and services offered. All dealings are at the sole risk of the parties involved.</p>
                 </div>
                 <form id="disclaimerForm" method="post">
                     {% csrf_token %}
@@ -149,71 +166,75 @@
 
 <!-- =========== About ========== -->
 <div class="about_row mb-5">
-    <div class="row my-5 px-lg-5 px-2 ">
-        <div class="col-lg-8 column-left">
-            <div class="lading_body2">
-                <h3 class="mb-3">About CHES</h3>
-                <div class="ms-lg-5 ps-lg-4">
-                    <h1 class="mb-3">
-                        Our Roots in Agricultural Excellence
-                    </h1>
-                    <p class="">
-                        At CHES, we are dedicated to advancing the field of horticulture through innovative solutions and sustainable practices. Our mission is to provide top-quality resources and support to gardeners, landscapers, and horticulturists across the globe.
-                    </p>
-                    <p class="">
-                        With a team of experienced professionals and a passion for plants, we offer a wide range of services, from expert advice to cutting-edge horticultural technologies. Our goal is to foster growth, both in the garden and in our community.
-                    </p>
-                    <p class="">
-                        We believe in the power of collaboration and strive to build strong partnerships with local and international horticultural organizations. By sharing knowledge and resources, we aim to drive progress and enhance the quality of horticultural practices worldwide.
-                    </p>
-                    <p class="">
-                        Join us at CHES to explore the future of horticulture and cultivate a greener, more vibrant world together.
-                    </p>
-                    <div class="mt-3">
-                        <button class="btn btn-succeSS d-flex align-items-center" >
-                            Read More &nbsp; <i class="bi bi-arrow-right"></i>
-                        </button>
-                    </div>
-                </div>
+    <div  class="My_containeR ">
 
-                </div>
-        </div>
-        <div class="col-lg-4 mt-5  column-right">
-            <img class="about-img" src="{% static 'app_common/css/images/about6.jpg'%}" alt="">
+        <div class="row my-5 mx-lg-0  px-2 ">
+            <div class="col-lg-8 column-left">
+                <div class="lading_body2">
+                    <h3 class="mb-3">About CHES</h3>
+                    <div class="ms-lg-5 ps-lg-4">
+                        <h1 class="mb-3">
+                            Our Roots in Agricultural Excellence
+                        </h1>
+                        <p class="">
+                            At CHES, we are dedicated to advancing the field of horticulture through innovative solutions and sustainable practices. Our mission is to provide top-quality resources and support to gardeners, landscapers, and horticulturists across the globe.
+                        </p>
+                        <p class="">
+                            With a team of experienced professionals and a passion for plants, we offer a wide range of services, from expert advice to cutting-edge horticultural technologies. Our goal is to foster growth, both in the garden and in our community.
+                        </p>
+                        <p class="">
+                            We believe in the power of collaboration and strive to build strong partnerships with local and international horticultural organizations. By sharing knowledge and resources, we aim to drive progress and enhance the quality of horticultural practices worldwide.
+                        </p>
+                        <p class="">
+                            Join us at CHES to explore the future of horticulture and cultivate a greener, more vibrant world together.
+                        </p>
+                        <div class="mt-3">
+                            <button class="btn btn-succeSS d-flex align-items-center" >
+                                Read More &nbsp; <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+    
+                    </div>
+            </div>
+            <div class="col-lg-4 mt-5  column-right">
+                <img class="about-img" src="{% static 'app_common/css/images/about6.jpg'%}" alt="">
+            </div>
         </div>
     </div>
 </div>
 
-
 <!-- =========== About ========== -->
 
 <!-- ==========service========= -->
-<div class="row mx-lg-5 mx-2 mb-5 justify-content-center">
-    <!-- Service 1 -->
-    <div class="col-md-4 mb-4 service-left">
-        <div class="service-box">
-            <img src="{% static 'app_common/css/images/serv1.png' %}" alt="Care of Garden">
-            <h5 class="service-title">Flower Garden</h5>
-            <p class="service-description">Ut sit amet ipsum sit amet nibh rutrum faucibus gravida a eros orci varius.</p>
-            <a href="#" class="read-more">Read More</a>
+<div class="My_containeR">
+    <div class="row mx-lg-0 mx-2 mb-5 justify-content-center">
+        <!-- Service 1 -->
+        <div class="col-md-4 mb-4 service-left">
+            <div class="service-box">
+                <img src="{% static 'app_common/css/images/serv1.png' %}" alt="Care of Garden">
+                <h5 class="service-title">Flower Garden</h5>
+                <p class="service-description">Ut sit amet ipsum sit amet nibh rutrum faucibus gravida a eros orci varius.</p>
+                <a href="#" class="read-more">Read More</a>
+            </div>
         </div>
-    </div>
-    <!-- Service 2 -->
-    <div class="col-md-4 mb-4 service-middle">
-        <div class="service-box">
-            <img src="{% static 'app_common/css/images/serv2.png' %}" alt="Flower Service">
-            <h5 class="service-title">Planting</h5>
-            <p class="service-description">Natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus nibh.</p>
-            <a href="#" class="read-more">Read More</a>
+        <!-- Service 2 -->
+        <div class="col-md-4 mb-4 service-middle">
+            <div class="service-box">
+                <img src="{% static 'app_common/css/images/serv2.png' %}" alt="Flower Service">
+                <h5 class="service-title">Planting</h5>
+                <p class="service-description">Natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus nibh.</p>
+                <a href="#" class="read-more">Read More</a>
+            </div>
         </div>
-    </div>
-    <!-- Service 3 -->
-    <div class="col-md-4 mb-4 service-right">
-        <div class="service-box">
-            <img src="{% static 'app_common/css/images/serv3.png' %}" alt="Spinach Service">
-            <h5 class="service-title">Care Of Garden</h5>
-            <p class="service-description">Velit nec sodales iaculis nisi arcu vehicula odio nec dictum augue elit ante.</p>
-            <a href="#" class="read-more">Read More</a>
+        <!-- Service 3 -->
+        <div class="col-md-4 mb-4 service-right">
+            <div class="service-box">
+                <img src="{% static 'app_common/css/images/serv3.png' %}" alt="Spinach Service">
+                <h5 class="service-title">Care Of Garden</h5>
+                <p class="service-description">Velit nec sodales iaculis nisi arcu vehicula odio nec dictum augue elit ante.</p>
+                <a href="#" class="read-more">Read More</a>
+            </div>
         </div>
     </div>
 </div>
@@ -221,57 +242,59 @@
 <!-- ======== service ========== -->
 
 <!-- ========== Gallery ========= -->
-<div class="row mx-0 my-5 bg_row_service px-5 gallery-container">
+<div class="row mx-0 my-5 bg_row_service px-2 px-lg-0 gallery-container">
     <h2 class="gallery-heading text-white">Our Gallery</h2>
-    <div class="gallery">
-      <div class="gallery-item">
-        <img src="https://images.pexels.com/photos/14106714/pexels-photo-14106714.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Gallery Image 1">
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.pexels.com/photos/11417318/pexels-photo-11417318.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Gallery Image 2">
-      </div>
-      <div class="gallery-item">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoRN42-kF1qG7obYjDv6xrF0hWOkv6NeDYyQ&s" alt="Gallery Image 3">
-      </div>
-      <div class="gallery-item">
-        <img src="{% static 'app_common/css/images/gallery7.jpg'%}" alt="Gallery Image 4">
-      </div>
-      <div class="gallery-item">
-        <img src="{% static 'app_common/css/images/gallery4.jpg'%}" alt="Gallery Image 5">
-      </div>
-      <div class="gallery-item">
-        <img src="{% static 'app_common/css/images/gallery2.jpg'%}" alt="Gallery Image 6">
-      </div>
-      <div class="gallery-item">
-        <img src="{% static 'app_common/css/images/gallery9.jpg'%}" alt="Gallery Image 7">
-      </div>
-      <div class="gallery-item">
-        <img src="{% static 'app_common/css/images/gallery10.jpg'%}" alt="Gallery Image 8">
-      </div>
-      <div class="gallery-item">
-        <img src="{% static 'app_common/css/images/gallery6.jpg'%}" alt="Gallery Image 9">
-      </div>
-      <div class="gallery-item">
-        <img src="{% static 'app_common/css/images/gallery11.webp'%}" alt="Gallery Image 10">
-      </div>
-      <div class="gallery-item">
-        <img src="{% static 'app_common/css/images/gallery16.jpg'%}" alt="Gallery Image 11">
-      </div>
-      <div class="gallery-item">
-        <img src="{% static 'app_common/css/images/gallery13.jpg'%}" alt="Gallery Image 12">
-      </div>
-      <div class="gallery-item">
-        <img src="{% static 'app_common/css/images/gallery12.webp'%}" alt="Gallery Image 13">
-      </div>
-      <div class="gallery-item">
-        <img src="{% static 'app_common/css/images/gallery14.jpg'%}" alt="Gallery Image 14">
-      </div>
-      <div class="gallery-item">
-        <img src="{% static 'app_common/css/images/gallery15.jpg'%}" alt="Gallery Image 15">
-      </div>
-      <div class="gallery-item">
-        <img src="{% static 'app_common/css/images/gallery17.webp'%}" alt="Gallery Image 16">
-      </div>
+    <div class="My_containeR">
+        <div class="gallery">
+            <div class="gallery-item">
+              <img src="https://images.pexels.com/photos/14106714/pexels-photo-14106714.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Gallery Image 1">
+            </div>
+            <div class="gallery-item">
+              <img src="https://images.pexels.com/photos/11417318/pexels-photo-11417318.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Gallery Image 2">
+            </div>
+            <div class="gallery-item">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoRN42-kF1qG7obYjDv6xrF0hWOkv6NeDYyQ&s" alt="Gallery Image 3">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery7.jpg'%}" alt="Gallery Image 4">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery4.jpg'%}" alt="Gallery Image 5">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery2.jpg'%}" alt="Gallery Image 6">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery9.jpg'%}" alt="Gallery Image 7">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery10.jpg'%}" alt="Gallery Image 8">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery6.jpg'%}" alt="Gallery Image 9">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery11.webp'%}" alt="Gallery Image 10">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery16.jpg'%}" alt="Gallery Image 11">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery13.jpg'%}" alt="Gallery Image 12">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery12.webp'%}" alt="Gallery Image 13">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery14.jpg'%}" alt="Gallery Image 14">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery15.jpg'%}" alt="Gallery Image 15">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery17.webp'%}" alt="Gallery Image 16">
+            </div>
+          </div>
     </div>
 </div>
 
@@ -279,27 +302,29 @@
 <!-- ========== Gallery ========= -->
 
 <!-- ======= Counter ========= -->
-<div class="row mx-lg-5 mx-2 counter-section">
-    <div class="row">
-        <div class="col-md-3 col-sm-6 counter-box">
-            <div class="icon">🍓</div>
-            <div class="number" data-target="4900">0 <span>+</span></div>
-            <p>Organic Food</p>
-        </div>
-        <div class="col-md-3 col-sm-6 counter-box">
-            <div class="icon">⭐</div>
-            <div class="number" data-target="6003">0</div>
-            <p>Happy Customers</p>
-        </div>
-        <div class="col-md-3 col-sm-6 counter-box">
-            <div class="icon">👨‍👩‍👧</div>
-            <div class="number" data-target="900">0</div>
-            <p>Experience Team</p>
-        </div>
-        <div class="col-md-3 col-sm-6 counter-box">
-            <div class="icon">🍽️</div>
-            <div class="number" data-target="1500">0</div>
-            <p>Monthly Food Order</p>
+<div class="My_containeR">
+    <div class="row mx-lg-0 mx-2 counter-section">
+        <div class="row">
+            <div class="col-md-3 col-sm-6 counter-box">
+                <div class="icon">🍓</div>
+                <div class="number" data-target="4900">0 <span>+</span></div>
+                <p>Organic Food</p>
+            </div>
+            <div class="col-md-3 col-sm-6 counter-box">
+                <div class="icon">⭐</div>
+                <div class="number" data-target="6003">0</div>
+                <p>Happy Customers</p>
+            </div>
+            <div class="col-md-3 col-sm-6 counter-box">
+                <div class="icon">👨‍👩‍👧</div>
+                <div class="number" data-target="900">0</div>
+                <p>Experience Team</p>
+            </div>
+            <div class="col-md-3 col-sm-6 counter-box">
+                <div class="icon">🍽️</div>
+                <div class="number" data-target="1500">0</div>
+                <p>Monthly Food Order</p>
+            </div>
         </div>
     </div>
 </div>
@@ -307,93 +332,95 @@
 <!--============= Counter========== -->
 
 <!-- faq -->
-<div class="row mx-lg-5 mx-2  mb-5">
-<div class="px-0 mt-5">
-<h2 class="text-center mb-4 fq_head">Frequently Asked Questions</h2>
-<div class="accordion" id="faqsAccordion">
-    <div class="accordion-item mb-2">
-        <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                What is the National Horticulture Program?
-            </button>
-        </h2>
-        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqsAccordion">
-            <div class="accordion-body">
-                The National Horticulture Program is an initiative aimed at promoting sustainable horticulture practices, supporting farmers, and enhancing the production and quality of fruits, vegetables, and other horticultural crops in the country.
+<div class="My_containeR">
+    <div class="row mx-lg-0 mx-2  mb-5">
+        <div class="px-0 mt-5">
+        <h2 class="text-center mb-4 fq_head">Frequently Asked Questions</h2>
+        <div class="accordion" id="faqsAccordion">
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        What is the National Horticulture Program?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqsAccordion">
+                    <div class="accordion-body">
+                        The National Horticulture Program is an initiative aimed at promoting sustainable horticulture practices, supporting farmers, and enhancing the production and quality of fruits, vegetables, and other horticultural crops in the country.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        How can I participate in the program?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqsAccordion">
+                    <div class="accordion-body">
+                        You can participate in the National Horticulture Program by registering through the official website, attending workshops and training sessions, and applying for grants and subsidies available for horticultural projects.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        What types of crops are supported under the program?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqsAccordion">
+                    <div class="accordion-body">
+                        The program supports a wide range of horticultural crops including fruits, vegetables, spices, medicinal plants, floriculture, and plantation crops like tea and coffee.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        Are there any financial aids available?
+                   </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqsAccordion">
+                    <div class="accordion-body">
+                        Yes, the National Horticulture Program offers various financial aids including subsidies, grants, and loans to support farmers and entrepreneurs in the horticulture sector.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        How can I get access to training and resources?
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqsAccordion">
+                    <div class="accordion-body">
+                        Training and resources are provided through various channels including online courses, workshops, and agricultural extension services. You can also access educational materials and guides from the program's official website.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingSix">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        Who can I contact for more information?
+                    </button>
+                </h2>
+                <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqsAccordion">
+                    <div class="accordion-body">
+                        You can contact the National Horticulture Program's customer service through the official website or reach out to your local agricultural extension office for more personalized assistance.
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="accordion-item mb-2">
-        <h2 class="accordion-header" id="headingTwo">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                How can I participate in the program?
-            </button>
-        </h2>
-        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqsAccordion">
-            <div class="accordion-body">
-                You can participate in the National Horticulture Program by registering through the official website, attending workshops and training sessions, and applying for grants and subsidies available for horticultural projects.
-            </div>
         </div>
-    </div>
-    <div class="accordion-item mb-2">
-        <h2 class="accordion-header" id="headingThree">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                What types of crops are supported under the program?
-            </button>
-        </h2>
-        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqsAccordion">
-            <div class="accordion-body">
-                The program supports a wide range of horticultural crops including fruits, vegetables, spices, medicinal plants, floriculture, and plantation crops like tea and coffee.
-            </div>
+        
+        
         </div>
-    </div>
-    <div class="accordion-item mb-2">
-        <h2 class="accordion-header" id="headingFour">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                Are there any financial aids available?
-           </button>
-        </h2>
-        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqsAccordion">
-            <div class="accordion-body">
-                Yes, the National Horticulture Program offers various financial aids including subsidies, grants, and loans to support farmers and entrepreneurs in the horticulture sector.
-            </div>
-        </div>
-    </div>
-    <div class="accordion-item mb-2">
-        <h2 class="accordion-header" id="headingFive">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                How can I get access to training and resources?
-            </button>
-        </h2>
-        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqsAccordion">
-            <div class="accordion-body">
-                Training and resources are provided through various channels including online courses, workshops, and agricultural extension services. You can also access educational materials and guides from the program's official website.
-            </div>
-        </div>
-    </div>
-    <div class="accordion-item mb-2">
-        <h2 class="accordion-header" id="headingSix">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                Who can I contact for more information?
-            </button>
-        </h2>
-        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqsAccordion">
-            <div class="accordion-body">
-                You can contact the National Horticulture Program's customer service through the official website or reach out to your local agricultural extension office for more personalized assistance.
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
-
 </div>
 <!-- faq -->
 <!-- footer -->
 
-<footer class="footer">
-<div class=" mt-5">
-    <div class="row mx-5">
+<footer class="footer ">
+<div class="My_containeR mt-5">
+    <div class="row mx-lg-0 mx-5">
             <div class="col-md-5">
             <div class="row">
     <!-- Logo and Newsletter Column -->
@@ -480,7 +507,7 @@
 
             </div>
 
-            <div class="row pt-4 pb-2 mt-5 px-lg-5" style="background-color: #5E9E02; border-radius: 5px;">
+            <div class="row pt-4 pb-2 mt-5 px-lg-5 rounded" style="background-color: #5E9E02;">
             <div class="col-12 col-md-6 d-flex justify-content-md-start justify-content-center footer_2div">
                 <p class="text-center text-md-start">©Copyright - All Right Reserved. Designed ❤️ by 
                     <a href="https://techaviait.com/" style="color: white;" target="_blank">Techavia IT Solutions</a>
@@ -646,6 +673,17 @@ document.addEventListener("DOMContentLoaded", function() {
     observer.observe(counterSection);
 });
 
+
+window.addEventListener("scroll", function() {
+    var navbar = document.getElementById("second-menu");
+    var sticky = navbar.offsetTop;
+
+    if (window.pageYOffset > sticky) {
+        navbar.classList.add("fixed"); // Add the fixed class to navbar when scrolling past it
+    } else {
+        navbar.classList.remove("fixed"); // Remove the fixed class when scrolling back up
+    }
+});
 
 
     // counter

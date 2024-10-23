@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.hashers import make_password
@@ -40,6 +41,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     instagram_link = models.URLField(null=True,blank=True, max_length=2048)
     twitter_link = models.URLField(null=True,blank=True, max_length=2048)
     youtube_link = models.URLField(null=True,blank=True, max_length=2048)
+
+    token = models.CharField(max_length=100, null=True, blank=True)
 
     # we are storing some extra data in the meta data field
     meta_data = models.JSONField(default= dict, null=True, blank = True)
@@ -95,6 +98,25 @@ class User(AbstractBaseUser, PermissionsMixin):
 
         return avg_rating
 
+    def generate_reset_password_token(self):
+        token = str(uuid.uuid4())
+        self.token = token
+        self.save()
+        return token
+
+    def reset_password(self, token, new_password):
+        if self.token == token:
+            self.set_password(new_password)
+            self.token = None  # Clear the token after password reset
+            self.save()
+            return True
+        return False
+    
+
+class CategoryForProduces(models.Model):
+    category_name = models.CharField(max_length = 250,null = True,blank = True)
+
+
 class GaredenQuizModel(models.Model):
     user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)
     questionANDanswer = models.JSONField(null= False, blank= False) 
@@ -144,6 +166,7 @@ class User_Query(models.Model):
     email = models.EmailField(null=False, blank=False)
     subject = models.CharField(max_length=250, null=False, blank=False)
     message = models.TextField(null=False, blank=False)
+    reply = models.TextField(null=True, blank= True)
     date_sent = models.DateTimeField(auto_now_add=True)
     is_solve = models.BooleanField(default = False)
 
@@ -157,15 +180,16 @@ class SellProduce(models.Model):
     SI_UNIT_CHOICES = [
         ('Kilogram', 'Kilogram'),
         ('Gram', 'Gram'),
-        ('Liter', 'Liter'),
+        ('Litre', 'Litre'),
         ('Units', 'Units'),
     ]
     user = models.ForeignKey(User,on_delete=models.CASCADE,null= True, blank= True)
-    product_name = models.CharField(max_length=250,blank=True,null=True,default="No Title")
+    produce_category = models.ForeignKey(CategoryForProduces,on_delete=models.CASCADE,null= True, blank= True)
+    product_name = models.CharField(max_length=250,blank=True,null=True)
     product_image = models.ImageField(upload_to='productforsell/',null=True, blank=True)
-    product_quantity = models.FloatField(default=0.0,null=True,blank=True)
+    product_quantity = models.FloatField(null=True,blank=True)
     SI_units = models.CharField(max_length=20, choices=SI_UNIT_CHOICES,null=True,blank=True)
-    ammount_in_green_points = models.PositiveIntegerField(default=0,null=True,blank=True)
+    ammount_in_green_points = models.PositiveIntegerField(null=True,blank=True)
     date_time = models.DateTimeField(auto_now_add=True)
     is_approved = models.CharField(max_length=10, choices= APPROVEREJECT, default='pending')
     reason = models.TextField(null=True, blank=True)
@@ -222,18 +246,12 @@ class ProduceBuy(models.Model):
     date_time = models.DateTimeField(auto_now_add=True)
 
 class VendorDetails(models.Model):
-    BUSINESS_CATEGORIES = (
-        ('plants', 'Plants'),
-        ('tools', 'Tools'),
-        ('seeds', 'Seeds'),
-        ('other', 'Other'),
-    )
     vendor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='vendor_details')
     business_name = models.CharField(max_length=255)
     business_address = models.CharField(max_length=255)
     business_description = models.TextField()
     business_license_number = models.CharField(max_length=50)
-    business_category = models.CharField(max_length=20, choices=BUSINESS_CATEGORIES)
+    business_category = models.CharField(max_length=20, null=True,blank=True)
     establishment_year = models.PositiveIntegerField()
     website = models.URLField(blank=True)
     established_by = models.CharField(max_length=100, blank=True)
@@ -268,25 +286,27 @@ class ProductFromVendor(models.Model):
     sgst = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'), editable=False)
     cgst = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'), editable=False)
 
-    def calculate_discounted_price(self):
-        """
-        Calculate the discounted price based on the discount percentage.
-        """
-        if self.discount_percentage > 0:
-            discount_amount = (self.discount_percentage / 100) * self.discount_price
-            discounted_price = self.discount_price - discount_amount
-            return discounted_price
-        else:
-            return self.discount_price
-    
     def calculate_avg_rating(self):
+        """
+        Calculate the average rating from the JSONField 'ratings'.
+        Ratings is expected to be a list of dictionaries with a 'rating' key.
+        """
+        if not isinstance(self.ratings, list) or len(self.ratings) == 0:
+            # If ratings is not a list or is an empty list, return 0 as the average rating
+            return 0
+
         total_rating = 0
         num_ratings = len(self.ratings)
 
-        # Calculate total rating
+        # Iterate over the ratings list and calculate total rating
         for rating_data in self.ratings:
-            rating = float(rating_data['rating'])  # Convert rating to float
-            total_rating += rating
+            try:
+                # Attempt to get the 'rating' key from each rating dictionary and convert it to a float
+                rating = float(rating_data.get('rating', 0))
+                total_rating += rating
+            except (TypeError, ValueError):
+                # In case of any invalid data, continue with the next rating
+                continue
 
         # Calculate average rating
         if num_ratings > 0:
@@ -296,6 +316,7 @@ class ProductFromVendor(models.Model):
             avg_rating = 0
 
         return avg_rating
+
 
     def save(self, *args, **kwargs):
         # Calculate green_coins_required as a percentage of the discount_price

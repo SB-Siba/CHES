@@ -1,0 +1,120 @@
+{% extends 'vendor_dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+
+<style>
+.profile-container{
+
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius:10px;
+        min-height: 80vh;
+}
+.img_body{
+    background: rgb(31,120,43);
+background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%, rgba(31,120,43,1) 80%);
+border-radius: 10px;
+display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:flex-start;
+    padding-top: 3rem;
+}
+.profile-img img{
+    border-radius: 50%;
+    width: 8rem;
+    height: 8rem;
+}
+.profile-head {
+    text-align: center;
+    margin-top: 2rem;
+}
+.box{
+    border-bottom: 1px solid gray;
+    
+}
+.edit_btn:hover{
+    border: 2px solid white;
+    
+}
+</style>
+<div class="container  m-4 mt-5  ">
+    <form method="post">
+        <div class="row  profile-container  ">
+            <div class="col-md-5   img_body" >
+                {% if garden_profile_obj.user.user_image %}
+                <div class="profile-img ">
+                    <img src="{{garden_profile_obj.garden_image.url}}" alt="" />
+                </div>
+                {% else %}
+                <div class="profile-img ">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog"
+                        alt="" />
+                </div>
+                {% endif %}
+                <div class="profile-head text-white">
+                    <h3 class="text-white">
+                        {{garden_profile_obj.user.full_name}}
+                    </h3>
+                    <p>
+                        {{garden_profile_obj.user.email}}
+                    </p>
+                </div>
+                <a href="{% url 'vendor_dashboard:vendor_gardeningprofileupdate' %}" class="btn edit_btn  text-white btn-lg mt-3">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+            </div>
+            <div class="col-md-7">
+              
+                <div class="tab-content profile-tab mt-5 p-4" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row box mb-3">
+                            <div class="col-md-6">
+                                <p><strong>Garden Area:</strong></p>
+                            </div>
+                            <div class="col-md-6">
+                                {% if garden_profile_obj.garden_area %}
+                                    <p>{{garden_profile_obj.garden_area}} sqft</p>
+                                {% else %}
+                                    <p class="text-danger">Not Available</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row box mb-3">
+                            <div class="col-md-6">
+                                <p><strong>Number of Plants:</strong></p>
+                            </div>
+                            <div class="col-md-6">
+                                {% if garden_profile_obj.number_of_plants %}
+                                    <p>{{garden_profile_obj.number_of_plants}}</p>
+                                {% else %}
+                                    <p class="text-danger">Not Available</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row box mb-3">
+                            <div class="col-md-6">
+                                <p><strong>Number of Unique Plants:</strong></p>
+                            </div>
+                            <div class="col-md-6">
+                                {% if garden_profile_obj.number_of_unique_plants %}
+                                    <p>{{garden_profile_obj.number_of_unique_plants}}</p>
+                                {% else %}
+                                    <p class="text-danger">Not Available.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                            {% if garden_profile_obj %}
+                                <p>
+                                    * In your <b>{{garden_area}} sq.ft</b> area you can impliment <b>{{trees}} trees</b> and <b>{{pots}} pots</b>.
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock main_content %}

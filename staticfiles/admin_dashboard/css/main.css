@@ -9,7 +9,13 @@
 .fa-bell{
     color: #81CC2A;
 }
+
+.sidebar-dark .nav-item ul{
+    background-color: #1F782B;
+    border-radius: 4px;
+}
 .sidebar-dark .nav-item .nav-link{
+  
     color: #fff;
     font-weight: 600;
 }
@@ -25,33 +31,125 @@
     color: #FFD600;
     font-weight: 600;
 }
-.dash-card1{
-background-color: #1E295B;
+
+.card-header{
+    background-color: #1F782B;
+    color: white;
+}
+.card-header a{
+    color: white !important;
+}
+
+.dash-card1 {
+    background-color: #2544cf9a; /* Fallback background color */
+    background-image: url(../images/card1.jpeg); /* Replace with your image URL */
+    background-size: cover; /* Ensures the image covers the entire area */
+    background-position: center; /* Centers the image */
+    background-blend-mode: multiply; /* Blends the color with the image */
+    color: white;
+    
 }
 
 .dash-card2{
-    background-color: #15A085;
+    background-color: #15a08483;
+    background-image: url(../images/card2.jpg);
+    background-size: cover; 
+    background-position: center;
+    background-blend-mode: multiply; 
+    color: white;
 }
 
 .dash-card3{
-    background-color: #F39C13;
+    background-color: #f39d1368;
+    background-image: url(../images/card3.jpeg);
+    background-size: cover; 
+    background-position: center;
+    background-blend-mode: multiply; 
+    color: white;
 }
 .dash-card4{
-    background-color: #7C51F4;
+    background-color: #7c51f460;
+    background-image: url(../images/card4);
+    background-size: cover; 
+    background-position: center;
+    background-blend-mode: multiply; 
+    color: white;
 }
 .dash-card5{
-    background-color: #2980B9;
+    background-color: #297fb978;
+    background-image: url(../images/card5.jpeg);
+    background-size: cover; 
+    background-position: center;
+    background-blend-mode: multiply; 
+    color: white;
 }
 .dash-card6{
-    background-color: #F50909;
+    background-color: #f5090977;
+    background-image: url(../images/card6.jpg);
+    background-size: cover; 
+    background-position: center;
+    background-blend-mode: multiply; 
+    color: white;
 }
 .dash-card7{
-    background-color: #8E44AD;
+    background-color: #8d44adb6;
+    background-image: url(../images/card7.jpeg);
+    background-size: cover; 
+    background-position: center;
+    background-blend-mode:multiply; 
+    color: white;
 }
 .dash-card8{
-    background-color: #F46D87;
+    background-color: #f46d88a3;
+    background-image: url(../images/card8);
+    background-size: cover; 
+    background-position: center;
+    background-blend-mode:multiply; 
+    color: white;
 }
-
+.dash-card9{
+    background-color: #8af46d3c;
+    background-image: url(../images/card9.webp);
+    background-size: cover; 
+    background-position: center;
+    background-blend-mode:multiply; 
+    color: white;
+}
+.dash-card10{
+    background-color: #6df0f43c;
+    background-image: url(../images/card10.jpg);
+    background-size: cover; 
+    background-position: center;
+    background-blend-mode:multiply; 
+    color: white;
+}
+.dash-card11{
+    background-color: #f46df43c;
+    background-image: url(../images/card11.jpeg);
+    background-size: cover; 
+    background-position: center;
+    background-blend-mode:multiply; 
+    color: white;
+}
+.dash-card12{
+    background-color: #ea44813c;
+    background-image: url(../images/card12.jpg);
+    background-size: cover; 
+    background-position: center;
+    background-blend-mode:multiply; 
+    color: white;
+}
+.dash-card13{
+    background-color: #eace44a6;
+    background-image: url(../images/card13.jpeg);
+    background-size: cover; 
+    background-position: center;
+    background-blend-mode:multiply; 
+    color: white;
+}
+.Adm_das_card{
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
 /* admin_dash - User Dashboard */
 .admin_dash .search_sec{
     width: 37%;
@@ -65,15 +163,23 @@ background-color: #1E295B;
 }
 
 .form-control {
-    height: 50px;
-    border-radius: 0;
-    border: 1px solid #1f782b;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 7px;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
-
+.form-control:focus {
+    border-bottom-color: #37af2c;
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+} 
 .qry-sub{
-    border-radius: 0px;
-    border: 1px solid #1f782b;
-    padding: 0 20px;
+    border-radius: 0 4px 4px 0;
+    
+    padding: 0 12px;
 }
 .qry-sub i{
     counter-reset: #1f782b;
@@ -92,8 +198,10 @@ background-color: #1E295B;
 .table-light tbody+tbody, .table-light td, .table-light th, .table-light thead th {
     border-color: #fbfcfd;
     background-color: #1f782b;
+    font-size: 12px !important;
     color: #fff;
 }
+
 .table-responsive {
     display: block;
     width: 100%;
@@ -103,6 +211,7 @@ background-color: #1E295B;
     padding: 33px 12px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
 .admin_dash .search_sec {
     width: 37%;
     float: right;
@@ -124,9 +233,69 @@ background-color: #1E295B;
 .qry-sub{
     background-color: #1f782b;
 }
-
+.qry-sub:hover{
+    background-color: #008000;
+}
 
 .qry-sub i {
     color: #fff;
+}
+#table_BTN{
+
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #008000;
+    color: white;
+    background-color: #008000;
+    text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+#table_BTN:hover{
+    text-decoration: none;
+    background: rgb(5,131,47);
+    background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(4,99,19,1) 52%, rgba(6,175,27,1) 100%);
+    color: #fff !important;
+    transition: 0.5rem;
+    text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+}
+#table_BTN2{
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #e42918;
+    color: white;
+    background-color: #e42918;
+    text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  }
+  #table_BTN2:hover{
+    background: rgb(215, 6, 26);
+    background: linear-gradient(344deg, rgb(215, 6, 26) 14%, rgb(166, 8, 6) 52%, rgb(224, 15, 8) 100%);
+    color: #fff !important;
+    transition: 0.5rem;
+    text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+  }
+  #table_BTN3{
+    padding: 5px 10px;
+    border-radius:0 5px 5px 0;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #008000;
+    color: white;
+    background-color: #008000;
+    text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+  #t_daTa{
+    font-size: 12px;
+}
+.modal-header{
+    background-color: #008000;
+    color: white;
 }
 

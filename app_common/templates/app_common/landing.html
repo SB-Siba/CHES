@@ -15,138 +15,171 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha384-oS4TFIAtFt5S6Gx2coZRwyOomJ5z1iX6Cn5u9z9Bks4b7mHr3y7QqD1gBsxs9f2e" crossorigin="anonymous" />
-  <link rel="icon" sizes="16x16" href="{% static 'app_common/css/images/icon.jpg'%}" type="image/jpeg">
+  <link rel="icon" sizes="16x16" href="{% static 'app_common/css/images/logo_ches 1.png'%}" type="image/jpeg">
 </head>
 <body>
+   
   <div >
-    <nav class=" fixed-top">
-      <div class=" mx-lg-5">
-    
-        <div class="menu" id="second-menu">
-          <div class="logo">
-            <a href="#">CHES</a>
+    <nav class="fixed-top  ">
+        <div class=" My_containeR2">
+      
+          <div class="menu" id="second-menu">
+            <div class="logo">
+                <a href="#">
+                    <img class="loGo_img" src="{% static 'app_common/css/images/logo_ches 1.png'%}" alt="">
+                </a>
+            </div>
+            <input type="checkbox" id="check">
+            <label class="btn bars text-white" for="check"><i class="fas fa-bars"></i></label>
+            <ul>
+              <label class="btn cancel" for="check"><i class="fas fa-times text-white"></i></label>
+              <li><a class="logo_an" href="{% url 'app_common:register' 'is_rtg' %}">RTG Registration</a></li>
+              <li><a class="logo_an" href="{% url 'app_common:register' 'is_vendor' %}">Vendor Registration</a></li>
+              <li><a class="logo_an" href="{% url 'app_common:register' 'is_serviceprovider' %}">Service Provider Registration</a></li>
+              <li><a class="logo_an" href="{% url 'app_common:login' %}">Login</a></li>
+            </ul>
           </div>
-          <input type="checkbox" id="check">
-          <label class="btn bars text-white" for="check"><i class="fas fa-bars"></i></label>
-          <ul>
-            <label class="btn cancel" for="check"><i class="fas fa-times text-white"></i></label>
-            <li><a class="logo_an" href="{% url 'app_common:register' 'is_rtg' %}">RTG Registration</a></li>
-            <li><a class="logo_an" href="{% url 'app_common:register' 'is_vendor' %}">Vendor Registration</a></li>
-            <li><a class="logo_an" href="{% url 'app_common:register' 'is_serviceprovider' %}">Service Provider Registration</a></li>
-            <li><a class="logo_an" href="{% url 'app_common:login' %}">Login</a></li>
-          </ul>
         </div>
-      </div>
-    </nav>
+      </nav>
   
 
   </div>
+
+
 <!-- hero -->
   <div class="header_body ">
-    <div class="lading_body  ">
+    <div class="lading_body My_containeR2 ">
       <div>
         <div class="">
           <h3> Best Agriculture Farm</h3>
         </div>
         <div class="my-3">
               <h1 >
-                Agriculture <br>
-                With Love For Nature
+                
+
+                Inovation Project on <br> Rooftop
+                and <br>Home Gardening in Odisha
+
+
               </h1>
         </div>
       </div>
     </div>
   </div>
+
+  <div class=" py-3  d-flex justify-content-between align-items-center My_containeR2">
+    <a href="#">
+        <img class="loGo_img" src="{% static 'app_common/css/images/logo5.png'%}" alt="">
+    </a>
+    <a href="#">
+        <img class="loGo_img" src="{% static 'app_common/css/images/logo_ches 1.png'%}" alt="">
+    </a>
+    <a href="#">
+        <img class="loGo_img" src="{% static 'app_common/css/images/logo3.png'%}" alt="">
+    </a>
+    <a href="#">
+        <img class="" style="width: 100px; height: 50px;" src="{% static 'app_common/css/images/logo4.jpeg'%}" alt="">
+    </a>
+    <a href="#">
+        <img class="loGo_img" src="{% static 'app_common/css/images/logo1.png'%}" alt="">
+    </a>
+</div>
 <!------------ About-------------- -->
-  <div class="row my-5 mx-lg-5 mx-1 about_row">
-    <div class="col-lg-7">
-        <div class="lading_body2">
-            <h3 class="mb-3"> About CHES</h3>
-            <h1 class="mb-5">
-                Our Company and the Traditions <br> of Agricultural Farming
-            </h1>
-            <p class="">
-                At CHES, we are dedicated to advancing the field of horticulture through innovative solutions and sustainable practices. Our mission is to provide top-quality resources and support to gardeners, landscapers, and horticulturists across the globe.
-            </p>
-            <p class="">
-                With a team of experienced professionals and a passion for plants, we offer a wide range of services, from expert advice to cutting-edge horticultural technologies. Our goal is to foster growth, both in the garden and in our community.
-            </p>
-            <p class="">
-                We believe in the power of collaboration and strive to build strong partnerships with local and international horticultural organizations. By sharing knowledge and resources, we aim to drive progress and enhance the quality of horticultural practices worldwide.
-            </p>
-            <p class="">
-                Join us at CHES to explore the future of horticulture and cultivate a greener, more vibrant world together.
-            </p>
+<div class="My_containeR2">
+    <div class="row my-5 mx-lg-0 mx-1 about_row">
+        <div class="col-lg-7">
+            <div class="lading_body2">
+                <h3 class="mb-3"> About CHES</h3>
+                <h1 class="mb-5">
+                    Our Company and the Traditions <br> of Agricultural Farming
+                </h1>
+                <p class="">
+                    At CHES, we are dedicated to advancing the field of horticulture through innovative solutions and sustainable practices. Our mission is to provide top-quality resources and support to gardeners, landscapers, and horticulturists across the globe.
+                </p>
+                <p class="">
+                    With a team of experienced professionals and a passion for plants, we offer a wide range of services, from expert advice to cutting-edge horticultural technologies. Our goal is to foster growth, both in the garden and in our community.
+                </p>
+                <p class="">
+                    We believe in the power of collaboration and strive to build strong partnerships with local and international horticultural organizations. By sharing knowledge and resources, we aim to drive progress and enhance the quality of horticultural practices worldwide.
+                </p>
+                <p class="">
+                    Join us at CHES to explore the future of horticulture and cultivate a greener, more vibrant world together.
+                </p>
+            </div>
         </div>
-    </div>
-    <div class="col-lg-5">
-        <img class="about-img" src="{% static 'app_common/css/images/about5.jpg'%}" alt="">
+        <div class="col-lg-5">
+            <img class="about-img" src="{% static 'app_common/css/images/about5.jpg'%}" alt="">
+        </div>
     </div>
 </div>
 <!------------ About-------------- -->
 
 <!------------ Service-------------- -->
-<div class="row mx-0 my-5 bg_row_service px-5">
+<div class="row mx-0 my-5 bg_row_service px-lg-0  ">
 
-  <div class="col-lg-12">
-    <div class="row align-items-center service_fst_row">
-      <div class="col-lg-4">
-        <div class="">
-          <div>
-            <div class="">
-              <h3 class="service_hd_1">What We’re Doing</h3>
-            </div>
-            <div class="">
-              <h1 class="service_hd_2">
-                Service We <br>
-                Provide
-              </h1>
-            </div>
-          </div>
+  <div class="col-lg-12 ">
+        <div class="My_containeR2">
+            <div class="row align-items-center service_fst_row">
+                <div class="col-lg-4">
+                  <div class="">
+                    <div>
+                      <div class="">
+                        <h3 class="service_hd_1">What We’re Doing</h3>
+                      </div>
+                      <div class="">
+                        <h1 class="service_hd_2">
+                          Service We <br>
+                          Provide
+                        </h1>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              
+                <!-- Divider -->
+                <div class="col-lg-1 text-center">
+                  <div class="vertical-divider"></div>
+                </div>
+              
+                <div class="col-lg-7">
+                  <p class="text-white   service_para">
+                    At CHES, we advance horticulture with innovative, sustainable practices. Our expert team provides top resources and advice to support gardeners and horticulturists. We value collaboration and eco-friendly approaches, striving to cultivate a greener, more vibrant world.
+                  </p>
+                </div>
+              </div>
         </div>
-      </div>
-    
-      <!-- Divider -->
-      <div class="col-lg-1 text-center">
-        <div class="vertical-divider"></div>
-      </div>
-    
-      <div class="col-lg-7">
-        <p class="text-white   service_para">
-          At CHES, we advance horticulture with innovative, sustainable practices. Our expert team provides top resources and advice to support gardeners and horticulturists. We value collaboration and eco-friendly approaches, striving to cultivate a greener, more vibrant world.
-        </p>
-      </div>
-    </div>
   </div>
 
   <div class="col-lg-12">
-    <div class="row mt-5">
-        <div class="col-md-3">
-            <div class="product-card">
-                <img src="{% static 'app_common/css/images/footer11.webp' %}" alt="Agriculture Products" class="product-image">
-                <h4>Agriculture Products</h4>
-                <p class="mb-3">We deliver high-quality agricultural products, ensuring sustainability, innovation, and boosting the global food supply chain.</p>
+    <div class="My_containeR2">
+        <div class="row mt-5">
+            <div class="col-md-3">
+                <div class="product-card">
+                    <img src="{% static 'app_common/css/images/footer11.webp' %}" alt="Agriculture Products" class="product-image">
+                    <h4>Agriculture Products</h4>
+                    <p class="mb-3">We deliver high-quality agricultural products, ensuring sustainability,innovation, and boosting the global food supply </p>
+                </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="product-card">
-                <img src="{% static 'app_common/css/images/footer4.jpeg' %}" alt="Organic Products" class="product-image">
-                <h4>Organic Products</h4>
-                <p class="mb-3">Our organic products are pure, natural, and carefully crafted for a healthier, more sustainable lifestyle and health.</p>
+            <div class="col-md-3">
+                <div class="product-card">
+                    <img src="{% static 'app_common/css/images/footer4.jpeg' %}" alt="Organic Products" class="product-image">
+                    <h4>Organic Products</h4>
+                    <p class="mb-3">Our organic products are pure, natural, and carefully crafted for a healthier, more sustainable lifestyle and health</p>
+                </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="product-card">
-                <img src="{% static 'app_common/css/images/footer10.jpg' %}" alt="Fresh Vegetables" class="product-image">
-                <h4>Fresh Vegetables</h4>
-                <p class="mb-3">Experience the freshness of our vegetables, harvested daily and delivered directly to your doorstep as you want to get it.</p>
+            <div class="col-md-3">
+                <div class="product-card">
+                    <img src="{% static 'app_common/css/images/footer10.jpg' %}" alt="Fresh Vegetables" class="product-image">
+                    <h4>Fresh Vegetables</h4>
+                    <p class="mb-3">Experience the freshness of our vegetables, harvested daily and delivered directly to your doorstep as you want to get it</p>
+                </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="product-card">
-                <img src="{% static 'app_common/css/images/footer10.avif' %}" alt="Dairy Products" class="product-image">
-                <h4>Dairy Products</h4>
-                <p class="mb-3">Enjoy our high-quality dairy products, sourced from trusted farms committed to ethical and sustainable practices.</p>
+            <div class="col-md-3">
+                <div class="product-card">
+                    <img src="{% static 'app_common/css/images/footer10.avif' %}" alt="Dairy Products" class="product-image">
+                    <h4>Dairy Products</h4>
+                    <p class="mb-3">Enjoy our high-quality dairy products, sourced from trusted farms committed to ethical and sustainable practices</p>
+                </div>
             </div>
         </div>
     </div>
@@ -157,156 +190,155 @@
 
 <!------------ service-------------- -->
 <!------------ Landscaping-------------- -->
-
-  <div class="row align-items-center mx-lg-5 mx-1 mb-5" >
-      <div class="col-lg-7 col-12">
-          <p class="welcome-text">Welcome to <span class="highlight">CHES</span></p>
-          <h1 class="land_head">How to Grow <span class="highlight2">Landscaping</span> &amp; Gardening of Planting</h1>
-          
-          <p class="land_para" >
-              Transform your outdoor space with expert landscaping and gardening tips. Whether you're planting 
-              trees, flowers, or creating a serene landscape, discover the best practices to nurture a thriving 
-              garden and enhance your home's curb appeal.
-          </p>
-          <div class="services">
-              <div class="service">
-                  <i class="bi bi-shield-check service-icon"></i>
-                  <h6>Quality Gardening Service</h6>
-              </div>
-              <div class="service">
-                  <i class="bi bi-shield-check service-icon"></i>
-                  <h6>30+ Years of Experience</h6>
-              </div>
-          </div>
-          <ul class="features">
-              <li>Get expert advice on sustainable gardening.</li>
-              <li>Learn the best practices for soil preparation.</li>
-              <li>Discover innovative landscaping ideas.</li>
-          </ul>
-          <a href="#" class="btn btn-success">Find Out More</a>
-      </div>
-      <div class="col-lg-5 col-12">
-          <img src="{% static 'app_common/css/images/grow1.jpg'%}" alt="Gardening" class="img-fluid">
-      </div>
-  </div>
-
-
-<!------------ Landscaping-------------- -->
-
-
-<!------------ Testimonial-------------- -->
-
-<div class="row my-5 mx-lg-5 mx-1">
-  <div class=" ">
-    <div class="testimonial-slider">
-        <div class="testimonial-slide">
-            <div class="testimonial-box">
-                <div class="testimonial-icon">
-                    <i class="bi bi-quote"></i>
-                </div>
-                <div class="testimonial-text">
-                    <p><i>CHES transformed our garden with expert advice and amazing service. Thank you!</i></p>
-                </div>
-                <div class="testimonial-img d-flex justify-content-center">
-                    <img src="https://i.ibb.co/hKgs8gm/profile.jpg" alt="profile">
-                </div>
-                <div class="testimonial-name">
-                    <h4>Mahesh Sethi</h4>
-                </div>
+<div class="My_containeR2">
+    
+  <div class="row align-items-center mx-lg-0 mx-1 mb-5" >
+    <div class="col-lg-7 col-12">
+        <p class="welcome-text">Welcome to <span class="highlight">CHES</span></p>
+        <h1 class="land_head">How to Grow <span class="highlight2">Landscaping</span> &amp; Gardening of Planting</h1>
+        
+        <p class="land_para" >
+            Transform your outdoor space with expert landscaping and gardening tips. Whether you're planting 
+            trees, flowers, or creating a serene landscape, discover the best practices to nurture a thriving 
+            garden and enhance your home's curb appeal.
+        </p>
+        <div class="services">
+            <div class="service">
+                <i class="bi bi-shield-check service-icon"></i>
+                <h6>Quality Gardening Service</h6>
+            </div>
+            <div class="service">
+                <i class="bi bi-shield-check service-icon"></i>
+                <h6>30+ Years of Experience</h6>
             </div>
         </div>
-        <div class="testimonial-slide">
-            <div class="testimonial-box">
-                <div class="testimonial-icon">
-                    <i class="bi bi-quote"></i>
-                </div>
-                <div class="testimonial-text">
-                    <p><i>Amazing support! CHES’s plant care advice made our garden thrive beautifully.</i></p>
-                </div>
-                <div class="testimonial-img d-flex justify-content-center">
-                    <img src="https://img.freepik.com/premium-photo/portrait-handsome-young-bearded-pakistani-man-casual-shirt-green-background_994418-691.jpg" alt="profile">
-                </div>
-                <div class="testimonial-name">
-                    <h4>Rahul Jen</h4>
-                </div>
-            </div>
-        </div>
-        <div class="testimonial-slide">
-            <div class="testimonial-box">
-                <div class="testimonial-icon">
-                    <i class="bi bi-quote"></i>
-                </div>
-                <div class="testimonial-text">
-                    <p><i>CHES provided the best plant selection advice. Our garden looks stunning. Love it !</i></p>
-                </div>
-                <div class="testimonial-img d-flex justify-content-center">
-                    <img src="https://www.profilebakery.com/wp-content/uploads/2024/04/Profilebakery.jpeg" alt="profile">
-                </div>
-                <div class="testimonial-name">
-                    <h4>Madhab Reddy</h4>
-                </div>
-            </div>
-        </div>
-        <div class="testimonial-slide">
-            <div class="testimonial-box">
-                <div class="testimonial-icon">
-                    <i class="bi bi-quote"></i>
-                </div>
-                <div class="testimonial-text">
-                    <p><i>Highly recommend CHES! Their organic solutions worked wonders for our plants.</i></p>
-                </div>
-                <div class="testimonial-img d-flex justify-content-center">
-                    <img src="https://www.profilebakery.com/wp-content/uploads/2023/04/Profile-Image-AI.jpg" alt="profile">
-                </div>
-                <div class="testimonial-name">
-                    <h4>Nitin Sah</h4>
-                </div>
-            </div>
-        </div>
-        <div class="testimonial-slide">
-            <div class="testimonial-box">
-                <div class="testimonial-icon">
-                    <i class="bi bi-quote"></i>
-                </div>
-                <div class="testimonial-text">
-                    <p><i>CHES’s recommendations were spot on! Our garden is flourishing beautifully now.</i></p>
-                </div>
-                <div class="testimonial-img d-flex justify-content-center">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShZ75KKy6w0Rw_ExGPMO1ZcccgpjXaK-xKgQ&s" alt="profile">
-                </div>
-                <div class="testimonial-name">
-                    <h4>Hritik Kamal</h4>
-                </div>
-            </div>
-        </div>
-        <div class="testimonial-slide">
-            <div class="testimonial-box">
-                <div class="testimonial-icon">
-                    <i class="bi bi-quote"></i>
-                </div>
-                <div class="testimonial-text">
-                    <p><i>CHES’s sustainable gardening tips made a huge difference. Our garden thrives!</i></p>
-                </div>
-                <div class="testimonial-img d-flex justify-content-center">
-                    <img src="https://img.freepik.com/free-photo/smiling-businessman-face-portrait-wearing-suit_53876-148138.jpg?w=740&t=st=1723114258~exp=1723114858~hmac=8bd75b9a333f28e5fd8b9e3e667ccb5e29893b0022a88deefb0e66ccc5c3daa5" alt="profile">
-                </div>
-                <div class="testimonial-name">
-                    <h4>Suraj Sen</h4>
-                </div>
-            </div>
-        </div>
+        <ul class="features">
+            <li>Get expert advice on sustainable gardening.</li>
+            <li>Learn the best practices for soil preparation.</li>
+            <li>Discover innovative landscaping ideas.</li>
+        </ul>
+        <a href="#" class="btn btn-success">Find Out More</a>
+    </div>
+    <div class="col-lg-5 col-12">
+        <img src="{% static 'app_common/css/images/grow1.jpg'%}" alt="Gardening" class="img-fluid">
     </div>
 </div>
 </div>
+<!------------ Landscaping-------------- -->
+
+<!------------ Testimonial-------------- -->
+
+<div class="My_containeR2">
+    <div class="row my-5 mx-lg-0 mx-1">
+        <div class=" ">
+          <div class="testimonial-slider">
+              <div class="testimonial-slide">
+                  <div class="testimonial-box">
+                      <div class="testimonial-icon">
+                          <i class="bi bi-quote"></i>
+                      </div>
+                      <div class="testimonial-text">
+                          <p><i>CHES transformed our garden with expert advice and amazing service. Thank you!</i></p>
+                      </div>
+                      <div class="testimonial-img d-flex justify-content-center">
+                          <img src="https://i.ibb.co/hKgs8gm/profile.jpg" alt="profile">
+                      </div>
+                      <div class="testimonial-name">
+                          <h4>Mahesh Sethi</h4>
+                      </div>
+                  </div>
+              </div>
+              <div class="testimonial-slide">
+                  <div class="testimonial-box">
+                      <div class="testimonial-icon">
+                          <i class="bi bi-quote"></i>
+                      </div>
+                      <div class="testimonial-text">
+                          <p><i>Amazing support! CHES’s plant care advice made our garden thrive beautifully.</i></p>
+                      </div>
+                      <div class="testimonial-img d-flex justify-content-center">
+                          <img src="https://img.freepik.com/premium-photo/portrait-handsome-young-bearded-pakistani-man-casual-shirt-green-background_994418-691.jpg" alt="profile">
+                      </div>
+                      <div class="testimonial-name">
+                          <h4>Rahul Jen</h4>
+                      </div>
+                  </div>
+              </div>
+              <div class="testimonial-slide">
+                  <div class="testimonial-box">
+                      <div class="testimonial-icon">
+                          <i class="bi bi-quote"></i>
+                      </div>
+                      <div class="testimonial-text">
+                          <p><i>CHES provided the best plant selection advice. Our garden looks stunning. Love it !</i></p>
+                      </div>
+                      <div class="testimonial-img d-flex justify-content-center">
+                          <img src="https://www.profilebakery.com/wp-content/uploads/2024/04/Profilebakery.jpeg" alt="profile">
+                      </div>
+                      <div class="testimonial-name">
+                          <h4>Madhab Reddy</h4>
+                      </div>
+                  </div>
+              </div>
+              <div class="testimonial-slide">
+                  <div class="testimonial-box">
+                      <div class="testimonial-icon">
+                          <i class="bi bi-quote"></i>
+                      </div>
+                      <div class="testimonial-text">
+                          <p><i>Highly recommend CHES! Their organic solutions worked wonders for our plants.</i></p>
+                      </div>
+                      <div class="testimonial-img d-flex justify-content-center">
+                          <img src="https://www.profilebakery.com/wp-content/uploads/2023/04/Profile-Image-AI.jpg" alt="profile">
+                      </div>
+                      <div class="testimonial-name">
+                          <h4>Nitin Sah</h4>
+                      </div>
+                  </div>
+              </div>
+              <div class="testimonial-slide">
+                  <div class="testimonial-box">
+                      <div class="testimonial-icon">
+                          <i class="bi bi-quote"></i>
+                      </div>
+                      <div class="testimonial-text">
+                          <p><i>CHES’s recommendations were spot on! Our garden is flourishing beautifully now.</i></p>
+                      </div>
+                      <div class="testimonial-img d-flex justify-content-center">
+                          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShZ75KKy6w0Rw_ExGPMO1ZcccgpjXaK-xKgQ&s" alt="profile">
+                      </div>
+                      <div class="testimonial-name">
+                          <h4>Hritik Kamal</h4>
+                      </div>
+                  </div>
+              </div>
+              <div class="testimonial-slide">
+                  <div class="testimonial-box">
+                      <div class="testimonial-icon">
+                          <i class="bi bi-quote"></i>
+                      </div>
+                      <div class="testimonial-text">
+                          <p><i>CHES’s sustainable gardening tips made a huge difference. Our garden thrives!</i></p>
+                      </div>
+                      <div class="testimonial-img d-flex justify-content-center">
+                          <img src="https://img.freepik.com/free-photo/smiling-businessman-face-portrait-wearing-suit_53876-148138.jpg?w=740&t=st=1723114258~exp=1723114858~hmac=8bd75b9a333f28e5fd8b9e3e667ccb5e29893b0022a88deefb0e66ccc5c3daa5" alt="profile">
+                      </div>
+                      <div class="testimonial-name">
+                          <h4>Suraj Sen</h4>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      </div>
+</div>
 
 
 <!------------ Testimonial-------------- -->
-  
-
 
 <footer class="footer">
-        <div class=" mt-5">
-            <div class="row mx-5">
+        <div class=" My_containeR2 mt-5">
+            <div class="row mx-5 mx-lg-0">
                   <div class="col-md-5">
                     <div class="row">
           <!-- Logo and Newsletter Column -->
@@ -461,6 +493,16 @@ $(document).ready(function() {
         });
     });
 
+//     window.addEventListener("scroll", function() {
+//     var navbar = document.getElementById("second-menu");
+//     var sticky = navbar.offsetTop;
+
+//     if (window.pageYOffset > sticky) {
+//         navbar.classList.add("fixed"); 
+//     } else {
+//         navbar.classList.remove("fixed");
+//     }
+// });
 </script>
 </body>
 </html>

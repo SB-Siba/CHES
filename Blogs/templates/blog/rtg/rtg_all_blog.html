@@ -37,11 +37,10 @@
                             <i class="fa-solid fa-share"></i> Share
                         </button>
                     </div>
-                    
 
                     <!-- Share Modal -->
                     <div class="modal fade" id="shareModal{{ blog.id }}" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="shareModalLabel">Share this Blog</h5>
@@ -60,6 +59,12 @@
                                         <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri|urlencode }}&text={{ blog.title|urlencode }} - {{ blog.content|truncatechars:200|urlencode }}" 
                                             target="_blank" class="btn btn-sm btn-info">
                                                 <i class="fa-brands fa-twitter"></i> Share on Twitter
+                                        </a>
+
+                                        <!-- WhatsApp Share -->
+                                        <a href="https://wa.me/?text={{ blog.title|urlencode }} - {{ request.build_absolute_uri|urlencode }}" 
+                                           target="_blank" class="btn btn-sm btn-success">
+                                            <i class="fa-brands fa-whatsapp"></i> Share on WhatsApp
                                         </a>
                                     </div>
                                 </div>

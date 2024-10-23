@@ -9,6 +9,7 @@
     height: 220px;
     border-radius: 5px;
     transition: transform 0.3s ease; /* Smooth zoom effect */
+    object-fit: contain;
   }
   
   /* Zoom effect on hover */

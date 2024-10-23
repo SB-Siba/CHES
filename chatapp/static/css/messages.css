@@ -213,8 +213,8 @@
 
   /* Custom scrollbar styles for chat panel */
   .chat-panel{
-    max-height: 130.8vh; 
-    height: 130.8vh;
+    max-height: 100.8vh; 
+    height: 100.8vh;
     overflow-y: auto;
     overflow-x: hidden;
   }

@@ -9,7 +9,7 @@
         <h2 class="py-lg-3 py-2">All Blog</h2>
         <div class="row">
             {% for blog in blogs %}
-            <div class="col col-12 col-lg-6 my-lg-5 my-2">
+            <div class="col col-12 col-lg-6 col-md-6 my-lg-5 my-2">
                 <div class="BlogImage">
                     <a href="{% url 'blogs:admin_blog_details' slug=blog.slug %}">
                         <img src="{{ blog.image.url }}" alt="blog_img">

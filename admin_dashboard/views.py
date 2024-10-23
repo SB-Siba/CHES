@@ -1,17 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
 from django.views import View
-from django.contrib import messages
-from django.conf import settings
 from app_common import models as common_models
 from django.utils.decorators import method_decorator
 from django.db.models import Q
 from helpers import utils
 from django.db.models import Count
 from django.db.models import Sum
-from django.db.models.functions import TruncMonth
-from django.utils import timezone
-from Blogs.models import Blogs
+from django.db.models.functions import Coalesce
 
+from app_common.error import render_error_page
+from . import forms
 app = "admin_dashboard/"
 
 @method_decorator(utils.super_admin_only, name='dispatch')
@@ -61,7 +60,7 @@ class AdminDashboard(View):
         default_cities = ["Bhubaneswar", "Cuttack", "Jaipur", "Brahmapur", "Sambalpur"]
 
         # Query the database for city-wise data
-        city_data = common_models.User.objects.values('city').annotate(total=Count('city'))
+        city_data = common_models.User.objects.filter(is_approved=True).values('city').annotate(total=Count('city'))
 
         # Initialize the data structure
         city_counts = {city: 0 for city in default_cities}
@@ -98,6 +97,46 @@ class AdminDashboard(View):
             common_models.User.objects.get(id=entry['user']).full_name
             for entry in top_users
         ]
+
+        top_users_by_coins = common_models.User.objects.filter(coins__gt=0,is_approved = True).order_by('-coins')[:10]
+        positions = [
+            'winner', 'first_runner_up', 'second_runner_up','fourth',
+            'fifth', 'sixth', 'seventh', 'eighth', 'ninth','tenth'
+        ]
+
+        leaderboard = {
+            position: top_users_by_coins[i] if i < len(top_users_by_coins) else None
+            for i, position in enumerate(positions)
+        }
+
+         # Aggregate total green points used in purchases from ProduceBuy
+        total_green_points_buy = common_models.ProduceBuy.objects.aggregate(
+            total_green_points_buy=Coalesce(Sum('ammount_based_on_quantity_buyer_want'), 0)
+        )
+        # Multiply the aggregated value by 2 to get the desired turnover value
+        total_green_points_buy_value = total_green_points_buy['total_green_points_buy'] * 2
+
+        # Calculate total green coins from Orders
+        total_green_coins_orders = 0
+        orders = common_models.Order.objects.all()
+        
+        for order in orders:
+            order_meta_data = order.order_meta_data
+            if order_meta_data and 'products' in order_meta_data:
+                products = order_meta_data['products']
+                for product_id, product_data in products.items():
+                    if 'coinexchange' in product_data:
+                        if product_data['coinexchange'] != None:
+                            total_green_coins_orders += float(product_data['coinexchange'])
+                        else:
+                            total_green_coins_orders += 0
+        # Calculate the overall total green coins turnover
+        total_green_coins_turnover = (
+            total_green_points_buy_value +
+            (total_green_coins_orders*2)
+        )
+
+      
         context = {
             'not_approvedlist': not_approvedlist,
             'not_approvedlist_rtg': not_approvedlist_rtg,
@@ -134,10 +173,13 @@ class AdminDashboard(View):
             'chart_data': chart_data,
             'activity_data':activity_data,
             'activity_label':activity_label,
+            'leaderboard':leaderboard,
+            "total_green_coins_turnover":total_green_coins_turnover,
         }
 
         return render(request, self.template, context)
 
+@method_decorator(utils.super_admin_only, name='dispatch')
 class CityDetailView(View):
     template_name = app + "city_detail.html"
 
@@ -149,14 +191,14 @@ class CityDetailView(View):
 
         if city_name == "Other":
             # Filter users from cities not in the default list
-            rtgs = common_models.User.objects.filter(is_rtg=True).exclude(city__in=default_cities)
-            vendors = common_models.User.objects.filter(is_vendor=True).exclude(city__in=default_cities)
-            service_providers = common_models.User.objects.filter(is_serviceprovider=True).exclude(city__in=default_cities)
+            rtgs = common_models.User.objects.filter(is_rtg=True,is_approved = True).exclude(city__in=default_cities)
+            vendors = common_models.User.objects.filter(is_vendor=True,is_approved = True).exclude(city__in=default_cities)
+            service_providers = common_models.User.objects.filter(is_serviceprovider=True,is_approved = True).exclude(city__in=default_cities)
             
             # Aggregate data for all non-default cities
-            total_users = common_models.User.objects.filter(city__in=default_cities).count()
+            total_users = common_models.User.objects.filter(city__in=default_cities,is_approved = True).count()
 
-            rtgs_and_vendors = common_models.User.objects.filter(Q(is_rtg=True) | Q(is_vendor=True)).exclude(city__in=default_cities)
+            rtgs_and_vendors = common_models.User.objects.filter(Q(is_rtg=True) | Q(is_vendor=True),is_approved = True).exclude(city__in=default_cities)
 
             activity_label = []
             activity_data = []
@@ -221,17 +263,28 @@ class CityDetailView(View):
             labels = ['RTGs', 'Vendors', 'Service Providers']
             chart_data = [rtgs.count(), vendors.count(), service_providers.count()]
 
+            top_rtgs_and_vendors_coins = common_models.User.objects.filter(Q(is_rtg=True) | Q(is_vendor=True),is_approved = True).exclude(city__in=default_cities).order_by('-coins')[:10]
+            positions = [
+                'winner', 'first_runner_up', 'second_runner_up','fourth',
+                'fifth', 'sixth', 'seventh', 'eighth', 'ninth','tenth'
+            ]
+
+            leaderboard = {
+                position: top_rtgs_and_vendors_coins[i] if i < len(top_rtgs_and_vendors_coins) else None
+                for i, position in enumerate(positions)
+            }
+
         else:
             # For specific cities, use the city_name
-            rtgs = common_models.User.objects.filter(is_rtg=True, city=city_name)
-            vendors = common_models.User.objects.filter(is_vendor=True, city=city_name)
-            service_providers = common_models.User.objects.filter(is_serviceprovider=True, city=city_name)
+            rtgs = common_models.User.objects.filter(is_rtg=True, city=city_name,is_approved = True)
+            vendors = common_models.User.objects.filter(is_vendor=True, city=city_name,is_approved = True)
+            service_providers = common_models.User.objects.filter(is_serviceprovider=True, city=city_name,is_approved = True)
             
-            total_users = common_models.User.objects.filter(city=city_name).count()
+            total_users = common_models.User.objects.filter(city=city_name,is_approved = True).count()
 
             rtgs_and_vendors = common_models.User.objects.filter(
                 Q(is_rtg=True) | Q(is_vendor=True),
-                city=city_name
+                city=city_name,is_approved = True
             )
 
             activity_label = []
@@ -296,6 +349,20 @@ class CityDetailView(View):
             print(graph_data)
             labels = ['RTGs', 'Vendors', 'Service Providers']
             chart_data = [rtgs.count(), vendors.count(), service_providers.count()]
+
+            top_rtgs_and_vendors_coins = common_models.User.objects.filter(
+                Q(is_rtg=True) | Q(is_vendor=True),
+                city=city_name,is_approved = True
+            ).order_by('-coins')[:10]
+            positions = [
+                'winner', 'first_runner_up', 'second_runner_up','fourth',
+                'fifth', 'sixth', 'seventh', 'eighth', 'ninth','tenth'
+            ]
+
+            leaderboard = {
+                position: top_rtgs_and_vendors_coins[i] if i < len(top_rtgs_and_vendors_coins) else None
+                for i, position in enumerate(positions)
+            }
         # Pass data to template
         context = {
             'city_name': city_name,
@@ -305,6 +372,117 @@ class CityDetailView(View):
             'total_users': total_users,
             'graph_data': graph_data,
             'labels': labels,
-            'chart_data': chart_data
+            'chart_data': chart_data,
+            'leaderboard': leaderboard
         }
         return render(request, self.template_name, context)
+    
+@method_decorator(utils.super_admin_only, name='dispatch')
+class ProducesCategory(View):
+    template = app + "produces_categories.html"
+    model = common_models.CategoryForProduces
+
+    def get(self, request, *args, **kwargs):
+        categories_of_produces = self.model.objects.all()
+        context = {
+            'categories_of_produces': categories_of_produces
+            }
+        return render(request,self.template,context)
+    
+class ProducesCategoryAdd(View):
+    template = app + "produces_category_add.html"
+    model = common_models.CategoryForProduces
+    form = forms.AddCategoryForProduces
+
+    def get(self, request, *args, **kwargs):
+        form = self.form()
+        context = {
+            'form': form
+            }
+        return render(request,self.template,context)
+    
+    def post(self,request):
+        try:
+            form = self.form(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect(reverse('admin_dashboard:produces_categories'))
+            else:
+                error_message = f"please correct these : {form.errors}"
+                return render_error_page(request, error_message)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)
+        
+@method_decorator(utils.super_admin_only, name='dispatch')
+class ProducescategoryUpdate(View):
+    template = app + "produces_category_update.html"
+    model = common_models.CategoryForProduces
+    form = forms.AddCategoryForProduces
+
+    def get(self, request, category_id):
+        try:
+            category_for_produces = get_object_or_404(self.model, id=category_id)
+            context = {
+                "category_for_produces": category_for_produces,
+                "form": self.form(instance=category_for_produces),
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)
+        
+    def post(self, request, category_id):
+        try:
+            category_for_produces = self.model.objects.get(id=category_id)
+            form = self.form(request.POST, request.FILES, instance=category_for_produces)
+
+            if form.is_valid():
+                form.save()
+                return redirect(reverse('admin_dashboard:produces_categories'))
+            else:
+                error_message = f"please correct these : {self.form.errors}"
+                return render_error_page(request, error_message)
+
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)
+
+@method_decorator(utils.super_admin_only, name='dispatch')
+class DeleteProducesCategory(View):
+    model = common_models.CategoryForProduces
+
+    def get(self, request, category_id):
+        try:
+            self.model.objects.get(id=category_id).delete()
+            return redirect(reverse('admin_dashboard:produces_categories'))
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)
+
+
+@method_decorator(utils.super_admin_only, name='dispatch')
+class ProducesCategorySearch(View):
+    model = common_models.CategoryForProduces
+    template = app + "produces_categories.html"
+
+    def post(self, request):
+        try:
+            query = request.POST.get('query', '')
+            filter_by = request.POST.get('filter_by', 'all')
+
+            if filter_by == "id":
+                categories_of_produces_list = self.model.objects.filter(id=query)
+            elif filter_by == "name":
+                categories_of_produces_list = self.model.objects.filter(category_name__icontains=query)
+            elif filter_by == "all":
+                categories_of_produces_list = self.model.objects.filter(
+                    Q(id__icontains=query) | Q(category_name__icontains=query)
+                )
+            context = {
+                "categories_of_produces": categories_of_produces_list,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)

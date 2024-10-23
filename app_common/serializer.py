@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from .models import (
     Booking,
+    CategoryForProduces,
     Order,
     ProduceBuy,
     ProductFromVendor,
@@ -9,7 +10,8 @@ from .models import (
     Service,
     User, 
     GardeningProfile, 
-    GaredenQuizModel, 
+    GaredenQuizModel,
+    User_Query, 
     VendorDetails, 
     ServiceProviderDetails,
     GardeningProfileUpdateRequest,
@@ -92,9 +94,30 @@ class GardeningQuizQuestionSerializer(serializers.Serializer):
 
 
 class VendorDetailsSerializer(serializers.ModelSerializer):
+    # Assuming custom_business_category will be an optional field
+    custom_business_category = serializers.CharField(required=False, allow_blank=True)
+
     class Meta:
         model = VendorDetails
-        fields = ['business_name', 'business_address', 'business_description', 'business_license_number', 'business_category', 'establishment_year', 'website', 'established_by']
+        fields = [
+            'business_name',
+            'business_address',
+            'business_description',
+            'business_license_number',
+            'business_category',
+            'custom_business_category',  # Add this field to handle custom category input
+            'establishment_year',
+            'website',
+            'established_by'
+        ]
+
+    def validate(self, data):
+        # Example validation to ensure custom business category is provided if 'other' is selected
+        if data.get('business_category') == 'other' and not data.get('custom_business_category'):
+            raise serializers.ValidationError({
+                'custom_business_category': 'This field is required if "business_category" is set to "other".'
+            })
+        return data
 
 class ServiceProviderDetailsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -170,17 +193,30 @@ class UserActivitySerializer(serializers.ModelSerializer):
         fields = ['activity_title', 'activity_content', 'activity_image']
 
 class SellProduceSerializer(serializers.ModelSerializer):
+    user_full_name = serializers.SerializerMethodField()
+
     class Meta:
         model = SellProduce
-        fields = '__all__'
+        fields = '__all__'  # All fields including the new field
 
+    def get_user_full_name(self, obj):
+        # Ensure that the user exists and return the full name
+        if obj.user:
+            return obj.user.get_full_name() if hasattr(obj.user, 'get_full_name') else f"{obj.user.full_name}"
+        return None
+    
 class ProduceBuySerializer(serializers.ModelSerializer):
+    seller_name = serializers.CharField(source='seller.full_name', read_only=True) 
+    buyer_name = serializers.CharField(source='buyer.full_name', read_only=True)
+
     class Meta:
         model = ProduceBuy
         fields = [
             'id',
             'buyer',
             'seller',
+            'buyer_name',      
+            'seller_name',     
             'sell_produce',
             'product_name',
             'SI_units',
@@ -188,7 +224,8 @@ class ProduceBuySerializer(serializers.ModelSerializer):
             'quantity_buyer_want',
             'date_time'
         ]
-        read_only_fields = ['id', 'buyer', 'seller', 'sell_produce', 'product_name', 'SI_units', 'buying_status', 'date_time']
+        read_only_fields = ['id', 'buyer', 'seller', 'buyer_name', 'seller_name', 'sell_produce', 'product_name', 'SI_units', 'buying_status', 'date_time']
+
 
 
 class SendPaymentLinkSerializer(serializers.ModelSerializer):
@@ -211,10 +248,10 @@ class AllActivitiesSerializer(serializers.ModelSerializer):
     like_count = serializers.SerializerMethodField()
     comment_count = serializers.SerializerMethodField()
     user_liked = serializers.SerializerMethodField()
-
+    user_full_name = serializers.SerializerMethodField()
     class Meta:
         model = UserActivity
-        fields = ['id', 'is_accepted', 'likes', 'comments', 'like_count', 'comment_count', 'user_liked']
+        fields = ['id','user_full_name', 'is_accepted', 'likes', 'comments', 'like_count', 'comment_count', 'user_liked','activity_image','activity_title','activity_content']
 
     def get_like_count(self, obj):
         return len(obj.likes)
@@ -228,8 +265,9 @@ class AllActivitiesSerializer(serializers.ModelSerializer):
             return request.user.full_name in obj.likes
         return False
     
-class LikeSerializer(serializers.Serializer):
-    activity_id = serializers.IntegerField()
+    def get_user_full_name(self,obj):
+        return obj.user.full_name
+
 
 class CommentSerializer(serializers.Serializer):
     post_id = serializers.IntegerField()
@@ -239,11 +277,20 @@ class RateOrderSerializer(serializers.Serializer):
     order_id = serializers.IntegerField(required=True)
     rating = serializers.FloatField(required=True, min_value=0, max_value=5)
 
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'full_name', 'email', 'user_image']
+
+
 class ProductFromVendorSerializer(serializers.ModelSerializer):
     average_rating = serializers.FloatField(source='calculate_avg_rating', read_only=True)
     discounted_price = serializers.DecimalField(source='calculate_discounted_price', max_digits=10, decimal_places=2, read_only=True)
     has_message = serializers.SerializerMethodField()
-
+    vendor = serializers.SerializerMethodField()  # Use method field for vendor
+    
     class Meta:
         model = ProductFromVendor
         fields = [
@@ -251,6 +298,10 @@ class ProductFromVendorSerializer(serializers.ModelSerializer):
             'image', 'stock', 'category', 'reason', 'green_coins_required',
             'discount_percentage', 'ratings', 'average_rating', 'discounted_price', 'has_message'
         ]
+
+    def get_vendor(self, obj):
+        # Manually serialize the vendor object using the UserSerializer
+        return UserSerializer(obj.vendor, context=self.context).data
 
     def get_has_message(self, obj):
         request = self.context.get('request')
@@ -260,15 +311,20 @@ class ProductFromVendorSerializer(serializers.ModelSerializer):
             return msg_obj.exists()
         return False
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'full_name', 'email', 'user_image']
 
+
+class ServiceDetailsSerializer(serializers.ModelSerializer):
+    provider = UserSerializer()
+    class Meta:
+        model = Service
+        fields = ['id','provider','service_type', 'name', 'description', 'price_per_hour']
+        
 class MessageSerializer(serializers.ModelSerializer):
+    sender = UserSerializer()
+    receiver = UserSerializer()
     class Meta:
         model = Message
-        fields = ['id', 'message_status', 'messages', 'is_read']
+        fields = ['id','sender', 'receiver','message_status', 'messages', 'is_read','last_message']
 
 class SendMessageSerializer(serializers.Serializer):
     receiver_id = serializers.IntegerField()
@@ -309,17 +365,68 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
 class ServiceProviderProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceProviderDetails
-        fields = ['service_type', 'service_area', 'average_cost_per_hour', 'years_experience']
+        fields = ['average_cost_per_hour', 'years_experience'] 
+
+    def update(self, instance, validated_data):
+        # Update average_cost_per_hour and years_experience
+        instance.average_cost_per_hour = validated_data.get('average_cost_per_hour', instance.average_cost_per_hour)
+        instance.years_experience = validated_data.get('years_experience', instance.years_experience)
+        
+        # Save the instance
+        instance.save()
+        return instance
 
 class ServiceSerializer(serializers.ModelSerializer):
+    provider_name = serializers.CharField(source='provider.full_name', read_only=True)
+    provider_id = serializers.IntegerField(source='provider.id', read_only=True)
+
     class Meta:
         model = Service
-        fields = ['id', 'service_type', 'name', 'description', 'price_per_hour']
+        fields = ['id', 'service_type', 'name', 'description', 'price_per_hour', 'provider_id', 'provider_name']
 
 class BookingSerializer(serializers.ModelSerializer):
+    gardener_full_name = serializers.SerializerMethodField()
+    provider_full_name = serializers.SerializerMethodField()
+    provider_id = serializers.SerializerMethodField()
+    service_name = serializers.SerializerMethodField()  # Add service name field
+    service_price_per_hour = serializers.SerializerMethodField()  # Add service price per hour field
+    created_at = serializers.DateTimeField(format='%Y-%m-%d at %H:%M')
+    booking_date = serializers.DateTimeField(format='%Y-%m-%d at %H:%M')
+
     class Meta:
         model = Booking
         fields = '__all__'
+        extra_fields = [
+            'gardener_full_name', 'provider_full_name', 'provider_id',
+            'service_name', 'service_price_per_hour'
+        ]
+
+    def get_gardener_full_name(self, obj):
+        if obj.gardener:
+            return obj.gardener.full_name if obj.gardener.full_name else None
+        return None
+
+    def get_provider_full_name(self, obj):
+        if obj.service and obj.service.provider:
+            return obj.service.provider.full_name if obj.service.provider.full_name else None
+        return None
+
+    def get_provider_id(self, obj):
+        if obj.service and obj.service.provider:
+            return obj.service.provider.id
+        return None
+
+    def get_service_name(self, obj):
+        if obj.service:
+            return obj.service.name
+        return None
+
+    def get_service_price_per_hour(self, obj):
+        if obj.service:
+            return obj.service.price_per_hour
+        return None
+
+
 
 class AuthServiceProviderDetailsSerializer(serializers.ModelSerializer):
     service_type = serializers.CharField()
@@ -339,19 +446,6 @@ class AuthServiceProviderDetailsSerializer(serializers.ModelSerializer):
         data['service_area'] = [item.strip() for item in data['service_area'].split(',')] if data.get('service_area') else []
         data['add_service_area'] = [item.strip() for item in data['add_service_area'].split(',')] if data.get('add_service_area') else []
         return data
-
-    def create(self, validated_data):
-        add_service_type = validated_data.pop('add_service_type', [])
-        add_service_area = validated_data.pop('add_service_area', [])
-        
-        # Merge additional service types and areas with the existing ones
-        service_type = validated_data['service_type'] + add_service_type
-        service_area = validated_data['service_area'] + add_service_area
-        
-        validated_data['service_type'] = service_type
-        validated_data['service_area'] = service_area
-        
-        return super().create(validated_data)
 # ================================== VENDOR ============================================
 
 class VendorSerializer(serializers.ModelSerializer):
@@ -368,6 +462,43 @@ class OrderUpdateSerializer(serializers.ModelSerializer):
 # ================================== Blog ============================================
 
 class BlogSerializer(serializers.ModelSerializer):
+    blog_by = serializers.SerializerMethodField()
+
     class Meta:
         model = Blogs
-        fields = '__all__'
+        fields = ['id','slug','title', 'author', 'date', 'content', 'image', 'blog_by']
+
+    def get_blog_by(self,obj):
+        if obj.user.full_name:
+            return obj.user.full_name
+        else:
+            return obj.user.email
+# Rank Serializer
+
+class UserRankSerializer(serializers.ModelSerializer):
+    rank = serializers.SerializerMethodField()
+    is_rtg = serializers.BooleanField()  # To show if the user is RTG
+    is_vendor = serializers.BooleanField()  # To show if the user is Vendor
+    user_image = serializers.ImageField()  # To show the user's profile image
+
+    class Meta:
+        model = User
+        fields = ['full_name', 'email', 'coins', 'rank', 'is_rtg', 'is_vendor', 'user_image']  # Add more fields if needed
+
+    def get_rank(self, obj):
+        # Calculate the rank based on the number of users with more coins
+        higher_scores_count = User.objects.filter(coins__gt=obj.coins).count()
+        return higher_scores_count + 1
+
+
+class CategoryForProducesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryForProduces
+        fields = ['id', 'category_name']
+
+
+class UserQuerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User_Query
+        fields = ['id', 'user', 'full_name', 'email', 'subject', 'message', 'date_sent', 'is_solve']
+        read_only_fields = ['id', 'date_sent']

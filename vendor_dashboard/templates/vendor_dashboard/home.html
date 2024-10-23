@@ -236,6 +236,103 @@
         {% endfor %}
       </div>
 
+      <hr style="border: 2px solid gray;" >
+
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+            <div class="card leaderbaord mb-4">
+                <main>
+                    <div id="leaderboardheader">
+                        <p class="fw-bold pt-3" style="font-size: 25px; color: black;">Leader Board</p>
+
+                        <div class="filter-container">
+                            <select id="city-filter" class="form-select">
+                                <option value="all">All</option>
+                                <option value="Bhubaneswar">Bhubaneswar</option>
+                                <option value="Cuttack">Cuttack</option>
+                                <option value="Brahmapur">Brahmapur</option>
+                                <option value="Puri">Puri</option>
+                                <option value="Balasore">Balasore</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="leaderboard">
+                        <table  class="" >
+                            {% for leader_user in users_orderby_coins %}
+                            <tr data-rank="" data-city="{{ leader_user.city }}" class="leaderRow ltr">
+                                <td class="number lc" style="font-size: x-large;">
+                                    {{ forloop.counter }}
+                                </td>
+                                <td class="name lc">{{ leader_user.full_name }}</td>
+                                <td class="points lc">
+                                    {{ leader_user.coins }}
+                                    {% if forloop.first %}
+                                    🏅 
+                                    {% endif %} 
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <!-- Content Column -->
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+
+            <!-- Project Card Example -->
+            <div class="card shadow mb-4">
+                <div class="card card-info">
+                    <div class="card-header  d-flex justify-content-between align-items-center py-3">
+                        <h4 class="card-title">My Activity</h4>
+                    </div>
+                    <div class="card-body">
+                        <div style="height: 220px;">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+{% endblock main_content %}
+
+{% block script %}
+    <script>
+      const users_name = {{ users_name|safe }};
+      const u_coins = {{ u_coins|safe }};
+      
+      const ctx = document.getElementById('myChart');
+  
+      new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: users_name,
+              datasets: [{
+                  label: 'Points',
+                  data: u_coins,
+                  backgroundColor: 'rgba(0,191,131)', // Green color with 20% opacity
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 2
+              }]
+          },
+          options: {
+              scales: {
+                  x: {
+                      ticks: {
+                          display: false
+                      }
+                  },
+                  y: {
+                      beginAtZero: true
+                  }
+              }
+          }
+      });    
+  </script>
       <script>
         document.addEventListener("DOMContentLoaded", function () {
             const tabs = document.querySelectorAll(".leaderboard-tab");
@@ -259,4 +356,4 @@
       <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
 
     
-{% endblock main_content %}
+{% endblock script %}

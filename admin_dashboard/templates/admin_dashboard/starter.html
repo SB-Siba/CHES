@@ -26,7 +26,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app_common/css/style.css'%}">
     <link href="{% static 'admin_dashboard/css/image_hover.css'%}" rel="stylesheet">
     <link href="{% static 'admin_dashboard/css/blog.css'%}" rel="stylesheet">
-    <link rel="icon" sizes="16x16" href="{% static 'app_common/css/images/icon.jpg'%}" type="image/jpeg">
+    <link rel="icon" sizes="16x16" href="{% static 'app_common/css/images/logo_ches 1.png'%}" type="image/jpeg">
 </head>
 
 <body id="page-top">
@@ -38,7 +38,7 @@
         <ul class="navbar-nav sidebar side-nav sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'admin_dashboard:admin_dashboard' %}">
-                <div class="sidebar-brand-text mx-3"><img src="{% static 'admin_dashboard/images/green-logo.png' %}" class="mt-5"/></div>
+                <div class=" mx-3"><img src="{% static 'app_common/css/images/logo_ches 1.png'%}"style="height: 50px; width: 50px;" class=""/></div>
             </a>
 
             <!-- Divider -->
@@ -99,18 +99,18 @@
             </a>
             <ul id="add_users" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="{% url 'app_common:register' 'is_rtg' %}" class="nav-link">
+                    <a href="{% url 'admin_dashboard:add_rtg' %}" class="nav-link">
                         <span>Add Rtg</span>
                     </a>
                     
                 </li>
                 <li class="sidebar-item">
-                    <a href="{% url 'app_common:register' 'is_vendor' %}" class="nav-link">
+                    <a href="{% url 'admin_dashboard:add_vendor' %}" class="nav-link">
                         <span>Add Vendor</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{% url 'app_common:register' 'is_serviceprovider' %}" class="nav-link">
+                    <a href="{% url 'admin_dashboard:add_service_provider' %}" class="nav-link">
                         <span>Add Service Provider</span>
                     </a>
                 </li>
@@ -163,7 +163,13 @@
                     {% endif %}
                 </a>
             </li>
-
+            <!-- Categories of Produces -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_dashboard:produces_categories' %}">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Produces Categories</span>
+                </a>
+            </li>
         <!-- Blogs -->
         <li class="nav-item">
             <a href="#" class="nav-link collapsed has-dropdown" data-bs-toggle="collapse"
@@ -197,6 +203,15 @@
         </li>
             <!-- Nav Item - Charts -->
             <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_dashboard:users_query_list' %}">
+                    <i class="fa-solid fa-coins"></i>
+                    <span>Users Query</span>
+                    {% if total_queries_from_user > 0 %}
+                        <span class="badge badge-danger badge-counter">{{total_queries_from_user}}</span>
+                    {% endif %}
+                </a>
+            </li>
+            <li class="nav-item">
             <a class="nav-link" href="{% url 'admin_dashboard:produce_order_list' %}">
                 <i class="fa-solid fa-coins"></i>
                 <span>Produce Orders</span></a>
@@ -223,7 +238,7 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
+                    <a href="{% url 'admin_dashboard:admin_dashboard' %}" class="text-decoration-none" style="color: black;"> <h4>Inovative Project on Rooftop and Home Gardning in Odiash</h4></a>
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
@@ -234,15 +249,6 @@
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                           
-                        </li>
 
                         <!-- Nav Item - Alerts -->
                         <!--li class="nav-item dropdown no-arrow mx-1">
@@ -308,19 +314,6 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
-                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
@@ -347,9 +340,25 @@
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
+                <div class="container my-0">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy;</span>
+                        <div class="py-3 d-flex justify-content-between My_containeR">
+                            <a href="#">
+                                <img class="loGo_img" style="width: 50px; height: 50px;"  src="{% static 'app_common/css/images/logo5.png'%}" alt="">
+                            </a>
+                            <a href="#">
+                                <img class="loGo_img" style="width: 50px; height: 50px;"  src="{% static 'app_common/css/images/logo_ches 1.png'%}" alt="">
+                            </a>
+                            <a href="#">
+                                <img class="loGo_img" style="width: 50px; height: 50px;"  src="{% static 'app_common/css/images/logo3.png'%}" alt="">
+                            </a>
+                            <a href="#">
+                                <img class="" style="width: 100px; height: 50px;" src="{% static 'app_common/css/images/logo4.jpeg'%}" alt="">
+                            </a>
+                            <a href="#">
+                                <img class="loGo_img" style="width: 50px; height: 50px;" src="{% static 'app_common/css/images/logo1.png'%}" alt="">
+                            </a>
+                        </div>
                     </div>
                 </div>
             </footer>

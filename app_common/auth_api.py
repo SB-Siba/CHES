@@ -75,15 +75,15 @@ class LoginAPIView(APIView):
                     if user.is_rtg:
                         login(request, user)
                         token, _ = Token.objects.get_or_create(user=user)
-                        return Response({'message': 'Login successful, Hii Roof Top Gardener','token': token.key}, status=status.HTTP_200_OK)
+                        return Response({'message': 'Login successful, Hii Roof Top Gardener','token': token.key,"id":user.id}, status=status.HTTP_200_OK)
                     elif user.is_vendor:
                         login(request, user)
                         token, _ = Token.objects.get_or_create(user=user)
-                        return Response({'message': 'Login successful, Hii Vendor','token': token.key}, status=status.HTTP_200_OK)
+                        return Response({'message': 'Login successful, Hii Vendor','token': token.key,"id":user.id}, status=status.HTTP_200_OK)
                     elif user.is_serviceprovider:
                         login(request, user)
                         token, _ = Token.objects.get_or_create(user=user)
-                        return Response({'message': 'Login successful, Hii Service Provider','token': token.key}, status=status.HTTP_200_OK)
+                        return Response({'message': 'Login successful, Hii Service Provider','token': token.key,"id":user.id}, status=status.HTTP_200_OK)
                 else:
                     return Response({'message': "Your account hasn't been approved yet."}, status=status.HTTP_401_UNAUTHORIZED)
             else:
@@ -104,6 +104,7 @@ class LogoutAPIView(APIView):
         return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
 
 class GardeningDetailsAPIView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
     @swagger_auto_schema(
         tags=["Authentication API'S"],
         operation_description="Gardening Detail API",
@@ -175,6 +176,7 @@ class GardeningQuizAPIView(APIView):
 
 class VendorDetailsAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
+
     @swagger_auto_schema(
         tags=["Authentication API'S"],
         operation_description="Vendor Data API",
@@ -186,15 +188,39 @@ class VendorDetailsAPIView(APIView):
             user = User.objects.get(email=u_email)
             serializer = VendorDetailsSerializer(data=request.data)
             if serializer.is_valid():
-                vendor_details = serializer.save(vendor=user)
+                business_category = serializer.validated_data.get('business_category')
+                custom_business_category = request.data.get('custom_business_category', '')
+
+                # Use custom business category if 'other' is selected
+                if business_category == 'other' and custom_business_category:
+                    business_category = custom_business_category
+
+                # Update or create the vendor details
+                vendor_details, created = VendorDetails.objects.update_or_create(
+                    vendor=user,
+                    defaults={
+                        'business_name': serializer.validated_data['business_name'],
+                        'business_address': serializer.validated_data['business_address'],
+                        'business_description': serializer.validated_data['business_description'],
+                        'business_license_number': serializer.validated_data['business_license_number'],
+                        'business_category': business_category,
+                        'establishment_year': serializer.validated_data['establishment_year'],
+                        'website': serializer.validated_data['website'],
+                        'established_by': serializer.validated_data['established_by'],
+                    }
+                )
                 return Response({'message': 'Details added successfully'}, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         except User.DoesNotExist:
             return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'message': f"An error occurred: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ServiceProviderDetailsAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
+
     @swagger_auto_schema(
         tags=["Authentication API'S"],
         operation_description="API to add service provider details",
@@ -202,12 +228,42 @@ class ServiceProviderDetailsAPIView(APIView):
         responses={201: 'Details added successfully', 400: 'Validation error', 404: 'User not found'}
     )
     def post(self, request, u_email):
-        user = User.objects.get(email=u_email)
-        serializer = AuthServiceProviderDetailsSerializer(data=request.data)
-        if serializer.is_valid():
-            service_provider_detail = serializer.save(provider=user)
-            return Response(AuthServiceProviderDetailsSerializer(service_provider_detail).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = User.objects.get(email=u_email)
+            serializer = AuthServiceProviderDetailsSerializer(data=request.data)
+            if serializer.is_valid():
+                service_type = serializer.validated_data['service_type']
+                service_area = serializer.validated_data['service_area']
+
+                # Handle additional service types and areas
+                additional_service_type = request.data.get('add_service_type', '')
+                if additional_service_type:
+                    additional_service_types = [s.strip() for s in additional_service_type.split(',')]
+                    service_type.extend(additional_service_types)
+
+                additional_service_area = request.data.get('add_service_area', '')
+                if additional_service_area:
+                    additional_service_areas = [a.strip() for a in additional_service_area.split(',')]
+                    service_area.extend(additional_service_areas)
+
+                # Update or create the service provider details
+                service_provider_detail, created = ServiceProviderDetails.objects.update_or_create(
+                    provider=user,
+                    defaults={
+                        'service_type': service_type,
+                        'service_area': service_area,
+                        'average_cost_per_hour': serializer.validated_data['average_cost_per_hour'],
+                        'years_experience': serializer.validated_data['years_experience'],
+                    }
+                )
+                return Response(AuthServiceProviderDetailsSerializer(service_provider_detail).data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except User.DoesNotExist:
+            return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'message': f"An error occurred: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ForgotPasswordAPIView(APIView):
     parser_classes = [FormParser, MultiPartParser]
@@ -272,3 +328,53 @@ class ResetPasswordAPIView(APIView):
                 else:
                     return Response({"error": "Passwords doesn't match."}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class PrivacyPolicyAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["Authentication API'S"],
+        operation_description="Privacy policy",
+        responses={201: 'Privacy policy content', 400: 'Validation error'}
+    )
+
+    def get(self, request, *args, **kwargs):
+        # Replace this string with your actual privacy policy content
+        privacy_policy_content = """
+        Your privacy is important to us, and maintaining your trust and confidence is one of our highest priorities. We respect your right to keep your personal information confidential and understand your desire to avoid unwanted solicitations. We use the information we collect about you to process orders and to provide a more personalized shopping experience. Please read on for more detail about our privacy policy.
+        ...
+        """
+        data = {
+            'privacy_policy': privacy_policy_content
+        }
+        return Response(data, status=status.HTTP_200_OK)
+    
+class AboutUsAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["Authentication API'S"],
+        operation_description="About Us",
+        responses={201: 'About Us content', 400: 'Validation error'}
+    )
+    def get(self, request, *args, **kwargs):
+        # Replace this string with your actual "About Us" content
+        about_us_content = """
+        Welcome to our company. We are committed to providing the best services...
+        """
+        data = {
+            'about_us': about_us_content
+        }
+        return Response(data, status=status.HTTP_200_OK)
+    
+class TermsAndConditionsAPIView(APIView):
+    @swagger_auto_schema(
+        tags=["Authentication API'S"],
+        operation_description="Terms and Conditions",
+        responses={201: 'Terms and Conditions', 400: 'Validation error'}
+    )
+    def get(self, request, *args, **kwargs):
+        # Replace this string with your actual "Terms and Conditions" content
+        terms_and_conditions_content = """
+        By using our services, you agree to the following terms and conditions...
+        """
+        data = {
+            'terms_and_conditions': terms_and_conditions_content
+        }
+        return Response(data, status=status.HTTP_200_OK)

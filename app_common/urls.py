@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views,auth_api,api_of_rtg,api_of_serviceprovider,api_of_vendor
+from . import top_users_api, views,auth_api,api_of_rtg,api_of_serviceprovider,api_of_vendor,email_otp_api
 from django.contrib.auth import views as auth_view
 from . forms import PasswordChangeForm
 app_name = 'app_common'
@@ -12,10 +12,8 @@ urlpatterns = [
     path('authentication/logout', views.Logout.as_view(), name = "logout"),
     path("passwordChange/",auth_view.PasswordChangeView.as_view(template_name = 'app_common/authentication/changepassword.html',form_class = PasswordChangeForm,success_url = '/passwordchangedone'),name='passwordchange'),
     path("passwordchangedone/",auth_view.PasswordChangeDoneView.as_view(template_name = 'app_common/authentication/changepassworddone.html'),name='passwordchangedone'),
-    path('password-reset/', views.CustomPasswordResetView.as_view(),name='password-reset'),
-    path('password-reset/done/', views.CustomPasswordResetDoneView.as_view(),name='password_reset_done'),
-    path('password-reset-confirm/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(),name='password_reset_confirm'),
-    path('password-reset-complete/',views.CustomPasswordResetCompleteView.as_view(),name='password_reset_complete'),
+    path('forgot_password/', views.ForgotPasswordView.as_view(), name = "forgot_password"),
+    path('reset-password/<uuid:token>/', views.ResetPasswordView.as_view(), name='reset_password'),
 
     path('add-gardening-details/<str:u_email>', views.GardeningDetails.as_view(), name='gardeningdetails'),
     path('gardening-quiz/<str:u_email>', views.gardening_quiz_view, name='gardeningquiz'),
@@ -79,7 +77,12 @@ urlpatterns = [
     path('api/rtg/blogs/<int:blog_id>/delete/', api_of_rtg.BlogDeleteAPIView.as_view(), name='blog-delete'),
     path('api/rtg/blogs/view/', api_of_rtg.BlogViewAPIView.as_view(), name='blog-view'),
     path('api/rtg/blogs/<slug:slug>/', api_of_rtg.BlogDetailsAPIView.as_view(), name='blog-details'),
-    path('api/rtg/blogs/search/', api_of_rtg.BlogSearchAPIView.as_view(), name='blog-search'),
+
+    path('api/rtg/list-of-services-by-service-provider/', api_of_rtg.ListOfServicesByServiceProvidersAPIView.as_view(), name='rtg_all_services_by_sp'),
+    path('api/rtg/services/search/', api_of_rtg.ServiceSearchAPIView.as_view(), name='rtg_service_search'),
+    path('api/rtg/services/<int:service_id>/', api_of_rtg.ServiceDetailsAPIView.as_view(), name='rtg_service_details'),
+    path('api/rtg/my-booked-services/', api_of_rtg.MyBookedServicesAPIView.as_view(), name='rtg_my_booked_services'),
+    path('api/rtg/bookings/<int:booking_id>/decline/', api_of_rtg.DeclineBookingAPIView.as_view(), name='rtg_decline_booking'),
 
     # ----------------------------- Service Provider ------------------------------------
     path('api/service_provider/profile/', api_of_serviceprovider.ServiceProviderProfileAPI.as_view(), name='service_provider_profile_api'),
@@ -96,7 +99,6 @@ urlpatterns = [
     path('api/sp/blogs/<int:blog_id>/delete/', api_of_serviceprovider.SpBlogDeleteAPIView.as_view(), name='sp_blog_delete_api'),
     path('api/sp/blogs/view/', api_of_serviceprovider.SpBlogViewAPIView.as_view(), name='sp_blog_view_api'),
     path('api/sp/blogs/<slug:slug>/details/', api_of_serviceprovider.SpBlogDetailsAPIView.as_view(), name='sp_blog_details_api'),
-    path('api/sp/blogs/search/', api_of_serviceprovider.SpBlogSearchAPIView.as_view(), name='sp_blog_search_api'),
     
     # ----------------------------- Vendor ------------------------------------
 
@@ -142,8 +144,26 @@ urlpatterns = [
     path('vendor/blogs/<int:blog_id>/delete/', api_of_vendor.VendorBlogDeleteAPIView.as_view(), name='vendor-blog-delete'),
     path('vendor/blogs/view/', api_of_vendor.VendorBlogViewAPIView.as_view(), name='vendor-blog-view'),
     path('vendor/blogs/<slug:slug>/', api_of_vendor.VendorBlogDetailsAPIView.as_view(), name='vendor-blog-details'),
-    path('vendor/blogs/search/', api_of_vendor.VendorBlogSearchAPIView.as_view(), name='vendor-blog-search'),
+
+    path('api/vendor/list-of-services-by-service-provider/', api_of_vendor.ListOfServicesByServiceProvidersAPIView.as_view(), name='vendor_all_services_by_sp'),
+    path('api/vendor/services/search/', api_of_vendor.ServiceSearchAPIView.as_view(), name='vendor_service_search'),
+    path('api/vendor/services/<int:service_id>/', api_of_vendor.ServiceDetailsAPIView.as_view(), name='vendor_service_details'),
+    path('api/vendor/my-booked-services/', api_of_vendor.MyBookedServicesAPIView.as_view(), name='vendor_my_booked_services'),
+    path('api/vendor/bookings/<int:booking_id>/decline/', api_of_vendor.DeclineBookingAPIView.as_view(), name='vendor_decline_booking'),
+
+    # OTP
+    path('api/email/send-otp/', email_otp_api.SendOTPAPIView.as_view(), name='send_otp_api'),
+    path('api/email/verify-otp/', email_otp_api.VerifyOTPAPIView.as_view(), name='verify_otp_api'), 
+
+    #top Users
+    path('api/top-users/', top_users_api.TopUsersAPIView.as_view(), name='top_users'),
+    # Category for produces
+    path('api/produces/categories/', api_of_rtg.CategoryForProducesListView.as_view(), name='produces-category-list'),
+    #  User Query
+    path('api/user/query/', api_of_rtg.UserQueryCreateView.as_view(), name='user-query-api'),
+
+    path('api/privacy-policy/', auth_api.PrivacyPolicyAPIView.as_view(), name='privacy-policy-api'),
+    path('api/about-us/', auth_api.AboutUsAPIView.as_view(), name='about-us-api'),
+    path('api/terms-and-conditions/', auth_api.TermsAndConditionsAPIView.as_view(), name='terms-and-conditions-api'),
 
 ]
-
-#   app_common:register

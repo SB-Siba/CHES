@@ -1,13 +1,12 @@
 {% extends 'admin_dashboard/starter.html' %}
 {% load static %}
-{% block title %}Room List{% endblock title %}
+{% block title %}Pending SP List{% endblock title %}
 {% block content %}
 <div class="page-wapper">
     {% include 'app_common/snippets/alert.html' %}
     <div class="search_sec">
 
-        <form method="GET" action="{% url 'admin_dashboard:search_user' %}">
-            {% csrf_token %}
+        <form method="get" action="{% url 'admin_dashboard:search_user_sp_pending' %}">
             <div class="table_search_box">
 
                 <select class="form-control selects" name="search_by" aria-label="Default select example">
@@ -44,8 +43,16 @@
                 {% for s_provider,s_provider_detail in service_provider_data %}
                 <tr>
                     <td id="t_daTa">{{ s_provider.email }}</td>
-                    <td id="t_daTa">{{ s_provider_detail.service_type|slice:"1:-1" }}</td>
-                    <td id="t_daTa">{{ s_provider_detail.service_area|slice:"1:-1" }}</td>
+                    <td id="t_daTa">
+                        {% for type in s_provider_detail.service_type %}
+                            {{ type }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td id="t_daTa">
+                        {% for area in s_provider_detail.service_area %}
+                            {{ area }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
                     <td id="t_daTa">{{ s_provider_detail.average_cost_per_hour }}</td>
                     <td id="t_daTa">{{s_provider_detail.years_experience}}</td>
                     <td id="t_daTa">
@@ -64,6 +71,5 @@
             </tbody>
         </table>
     </div>
-
 </div>
 {% endblock content %}

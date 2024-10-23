@@ -87,7 +87,7 @@ class RegisterForm(forms.ModelForm):
 
     confirm_password = forms.CharField(
         widget=forms.PasswordInput(attrs={
-            'class': 'form-control', 
+            'class': 'form-control',
             'placeholder': 'Confirm Password', 
             'required': 'required'
         })
@@ -97,6 +97,18 @@ class RegisterForm(forms.ModelForm):
         model = models.User
         fields = ["full_name", "email", "contact", "city", "password", "confirm_password"]
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+
+        if email:
+            email = email.lower()  # Normalize to lowercase
+
+            # Check if email already exists in the database
+            if models.User.objects.filter(email=email).exists():
+                raise ValidationError("Email is already in use.")
+
+        return email
+    
     def clean(self):
         cleaned_data = super().clean()
         city = cleaned_data.get("city")
@@ -176,6 +188,12 @@ class GardeningQuizForm(forms.Form):
     
 
 class VendorDetailsForm(forms.ModelForm):
+    BUSINESS_CATEGORIES = (
+        ('plants', 'Plants'),
+        ('tools', 'Tools'),
+        ('seeds', 'Seeds'),
+        ('other', 'Other'),
+    )
     class Meta:
         model = models.VendorDetails
         fields = ['business_name', 'business_address', 'business_description', 'business_license_number',
@@ -185,10 +203,11 @@ class VendorDetailsForm(forms.ModelForm):
     business_address = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Business Address'}))
     business_description = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'class': 'form-control', 'placeholder': 'Business Description'}))
     business_license_number = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'GST Number'}))
-    business_category = forms.ChoiceField(choices=models.VendorDetails.BUSINESS_CATEGORIES, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Business Category'}))
+    business_category = forms.ChoiceField(choices=BUSINESS_CATEGORIES, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Business Category'}))
     establishment_year = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Establishment Year'}))
     website = forms.URLField(required=False, widget=forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'Website'}))
     established_by = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Owner Name'}))
+    custom_business_category = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Specify Custom Category'}))
 
 
 class ServiceProviderDetailsForm(forms.ModelForm):
@@ -232,4 +251,60 @@ class ServiceProviderDetailsForm(forms.ModelForm):
     )
     years_experience = forms.IntegerField(
         widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Years of Experience'})
+    )
+
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField()
+    
+ 
+class ResetPasswordForm(forms.Form):
+    new_password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
+
+
+
+
+class contactForm(forms.Form):
+    class Meta:
+        model = models.User_Query
+        fields = ["full_name", "email", "subject", "message"]
+
+    full_name = forms.CharField(max_length=255, label="Enter Full Name")
+    full_name.widget.attrs.update(
+        {
+            "class": "form-control",
+            "type": "text",
+            "placeholder": "Full Name",
+            "required": "required",
+        }
+    )
+
+    email = forms.CharField(label="Email")
+    email.widget.attrs.update(
+        {
+            "class": "form-control",
+            "type": "email",
+            "placeholder": "user@gmail.com",
+            "required": "required",
+        }
+    )
+
+    subject = forms.CharField(label="Enter Subject")
+    subject.widget.attrs.update(
+        {
+            "class": "form-control",
+            "type": "text",
+            "placeholder": "Subject",
+            "required": "required",
+        }
+    )
+
+    message = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter message here",
+                "required": "required",
+            }
+        )
     )

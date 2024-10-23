@@ -52,12 +52,6 @@ class UpdateProfileForm(forms.Form):
         ),
         required=False,
     )
-    youtube_link = forms.URLField(
-        widget=forms.URLInput(
-            attrs={"class": "form-control", "placeholder": "Youtube Link"}
-        ),
-        required=False,
-    )
 
     address = forms.CharField(
         widget=forms.Textarea(
@@ -144,17 +138,21 @@ class ActivityAddForm(forms.Form):
     activity_image.widget.attrs.update({"class": "form-control", "type": "file"})
 
 
+from django import forms
+from app_common import models as common_models
+
 class SellProduceForm(forms.ModelForm):
     SI_UNIT_CHOICES = [
         ("Kilogram", "Kilogram"),
         ("Gram", "Gram"),
-        ("Liter", "Liter"),
+        ("Litre", "Litre"),
         ("Units", "Units"),
     ]
 
     class Meta:
         model = common_models.SellProduce
         fields = [
+            "produce_category", 
             "product_name",
             "product_image",
             "product_quantity",
@@ -163,6 +161,7 @@ class SellProduceForm(forms.ModelForm):
             "validity_duration_days",
         ]
         widgets = {
+            "produce_category": forms.Select(attrs={"class": "form-control"}), 
             "product_name": forms.TextInput(
                 attrs={"class": "form-control", "placeholder": "Enter Produce Name"}
             ),
@@ -184,6 +183,14 @@ class SellProduceForm(forms.ModelForm):
         widget=forms.FileInput(attrs={"class": "form-control"}),
     )
 
+    def __init__(self, *args, **kwargs):
+        super(SellProduceForm, self).__init__(*args, **kwargs)
+        # Populate produce_category choices
+        self.fields['produce_category'].choices = [
+            (category.id, category.category_name) 
+            for category in common_models.CategoryForProduces.objects.all()
+        ]
+
 
 class BuyQuantityForm(forms.Form):
     quantity = forms.IntegerField(
@@ -200,11 +207,11 @@ class BuyQuantityForm(forms.Form):
 
 class BuyAmmountForm(forms.Form):
     ammount_based_on_buyer_quantity = forms.IntegerField(
-        label="Ammount Based On Quantity",
+        label="Amount Based On Quantity",
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
-                "placeholder": "Enter Ammount",
+                "placeholder": "Enter Amount",
                 "required": "required",
             }
         ),

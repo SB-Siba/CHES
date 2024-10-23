@@ -27,10 +27,10 @@
           <div class="card-body text-center">
             <div class="">
               {% if user.user_image %}
-              <img src="{{user.user_image.url}}" class="rounded-circle img-fluid" style="width: 100px;" />
+              <img src="{{user.user_image.url}}" class="rounded-circle img-fluid" style="width: 120px; height: 120px;" />
               {% else %}
               <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-                class="rounded-circle img-fluid" style="width: 100px;" />
+                class="rounded-circle img-fluid" style="width: 120px; height: 120px;" />
               {% endif %}
             </div>
             <h4 class="mb-2">{{user.full_name}}</h4>
@@ -40,26 +40,30 @@
             <p class="">{{user.city}}</p>
 
             <div class="mb-4 pb-2 d-flex justify-content-center">
-              <a href="{{user.facebook_link}} m-2">
-                <button type="button" class=" social_btn">
-                  <i class="fab fa-facebook-f "></i>
-                </button>
-              </a>
-              <a href="{{user.instagram_link}}">
-                <button type="button" class=" social_btn">
-                  <i class="fab fa-instagram "></i>
-                </button>
-              </a>
-              <a href="{{user.twitter_link}}">
-                <button type="button" class=" social_btn">
-                  <i class="fab fa-twitter "></i>
-                </button>
-              </a>
-              <a href="{{user.youtube_link}}">
-                <button type="button" class=" social_btn">
-                  <i class="fab fa-youtube fa-lg"></i> <!-- YouTube -->
-                </button>
-              </a>
+              {% if user.facebook_link %}
+                <a href="{{user.facebook_link}}">
+                  <button type="button" class=" social_btn">
+                    <i class="fab fa-facebook-f "></i>
+                  </button>
+                </a>
+              
+              {% endif %}
+              {% if user.instagram_link %}
+                <a href="{{user.instagram_link}}">
+                  <button type="button" class=" social_btn">
+                    <i class="fab fa-instagram "></i>
+                  </button>
+                </a>
+             
+              {% endif %}
+              {% if user.twitter_link %}
+                <a href="{{user.twitter_link}}">
+                  <button type="button" class=" social_btn">
+                    <i class="fab fa-twitter "></i>
+                  </button>
+                </a>
+              
+              {% endif %}
             </div>
 
 
@@ -160,7 +164,6 @@
           </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
