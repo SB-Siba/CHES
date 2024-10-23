@@ -63,10 +63,11 @@ class ServiceProviderUpdateForm(forms.Form):
 class ServiceAddForm(forms.ModelForm):
     class Meta:
         model = models.Service
-        fields = ['name', 'description', 'price_per_hour', 'service_type']
+        fields = ['name', 'description','service_image', 'price_per_hour', 'service_type']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),  # Text input with form-control class
             'description': forms.Textarea(attrs={'class': 'form-control'}),  # Textarea with form-control class
+            'service_image': forms.FileInput(attrs={'class': 'form-control'}),  # File input for service image
             'price_per_hour': forms.NumberInput(attrs={'class': 'form-control'}),  # Number input with form-control class
             'service_type': forms.TextInput(attrs={'class': 'form-control'}),  # Select dropdown with form-control class
         }

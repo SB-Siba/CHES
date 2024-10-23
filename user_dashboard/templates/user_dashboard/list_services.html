@@ -30,7 +30,14 @@
     <div class="row">
         {% for service in services %}
         <div class="col-md-4 mb-4">
-            <div class="card h-100  service-card">
+            <div class="card h-100 service-card">
+                <!-- Service Image -->
+                {% if service.service_image %}
+                <img src="{{ service.service_image.url }}" class="card-img-top" alt="{{ service.name }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <img src="{% static 'default-service-image.jpg' %}" class="card-img-top" alt="No Image Available" style="height: 200px; object-fit: cover;">
+                {% endif %}
+                
                 <div class="card-body">
                     <h5 class="card-title">{{ service.name }}</h5>
                     <p class="card-text"><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
@@ -46,5 +53,6 @@
         </div>
         {% endfor %}
     </div>
+    
 </div>
 {% endblock content %}

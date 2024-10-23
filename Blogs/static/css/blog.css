@@ -246,6 +246,10 @@ color: #fff;
 #t_daTa{
     font-size: 12px;
 }
+#tb-head{
+    background-color: #1F782B;
+    color: white;
+}
 #table_BTN{
 
     padding: 5px 10px;

@@ -7,23 +7,29 @@
    <div class="text-center my-lg-4 text-secondary">
     <h4>Add Your Blogs</h4>
    </div>
-    <div class="card h-100">
-        <form action="" method="post" enctype="multipart/form-data" class="p-lg-4 lh-lg">
-                {% csrf_token %}
-                {{ form.media }}
-                <div class="row">
-                    {% for field in form %}
-                        <div class="col-12">
-                            <div class="form-group">
-                                {{ field.label_tag }}
-                                {{ field }}
-                            </div>
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-10">
+            <div class="card h-100">
+                <form action="" method="post" enctype="multipart/form-data" class="p-lg-4 lh-lg">
+                        {% csrf_token %}
+                        {{ form.media }}
+                        <div class="row">
+                            {% for field in form %}
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        {{ field.label_tag }}
+                                        {{ field }}
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    {% endfor %}
-                </div>
-                <br>
-            <button type="submit" class="btn btn-success w-100">Add Your Blog</button>
-        </form>
+                        <br>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class=" w-50" id="table_BTN">Add Your Blog</button>
+                        </div>
+                </form>
+            </div>
+        </div>
     </div>
    </div>
 </section>

@@ -19,10 +19,10 @@ h3,h5,h1,h2,h4,p,h6{
 .header_body {
   background: url(images/landing14.jpg) no-repeat center top;
   background-size: cover;
-  height: 120vh; /* Ensure this is enough to fit the viewport height */
+  height: 100vh; /* Ensure this is enough to fit the viewport height */
   width: 100%;
   margin-top: 66px;
-  padding-top: 40vh;
+  padding-top: 28vh;
 
 
 }
