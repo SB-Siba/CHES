@@ -2,14 +2,15 @@
     overflow: hidden;
     position: relative;
     border-radius: 5px; /* Optional: for consistency with the image */
+    height: 220px;
   }
   
   /* Image styling */
   .v_product_img {
-    height: 220px;
+    height: 100%;
     border-radius: 5px;
     transition: transform 0.3s ease; /* Smooth zoom effect */
-    object-fit: contain;
+    object-fit: cover;
   }
   
   /* Zoom effect on hover */
