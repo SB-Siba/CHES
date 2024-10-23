@@ -382,7 +382,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ['id', 'service_type', 'name', 'description', 'price_per_hour', 'provider_id', 'provider_name']
+        fields = ['id', 'service_type', 'name', 'description', 'price_per_hour', 'provider_id', 'provider_name','service_image']
 
 class BookingSerializer(serializers.ModelSerializer):
     gardener_full_name = serializers.SerializerMethodField()

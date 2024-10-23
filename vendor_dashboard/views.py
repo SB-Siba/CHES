@@ -37,7 +37,7 @@ class VendorDashboard(View):
     def get(self, request):
         try:
             user = request.user 
-            vendors = common_models.User.objects.filter(is_vendor=True)[:5]
+            vendors = common_models.User.objects.filter(is_vendor=True)[:10]
             valid_order_statuses = ["Placed", "Accepted", "On_Way", "Delivered"]
 
             def calculate_earnings(vendor, start_date, end_date):
@@ -76,10 +76,10 @@ class VendorDashboard(View):
             earnings_year = calculate_earnings(user, start_of_year, today)
 
             users_orderby_coins = common_models.User.objects.filter(
-                Q(is_rtg=True) | Q(is_vendor=True),
+                Q(is_vendor=True),
                 is_approved=True,
                 is_superuser=False
-            ).order_by('-coins')[:5]
+            ).order_by('-coins')[:10]
             users_name = [u.full_name for u in users_orderby_coins]
             user_coins = [u_coin.coins for u_coin in users_orderby_coins]
             print(users_name,user_coins)
@@ -209,17 +209,17 @@ class VendorSellProduct(View):
     model = common_models.ProductFromVendor
 
     def get(self,request):
-        try:
+        # try:
             data = {
                 'form': self.form_class(),
             }
             return render(request,self.template,data)
-        except Exception as e:
-            error_message = f"An unexpected error occurred: {str(e)}"
-            return render_error_page(request, error_message, status_code=400)
+        # except Exception as e:
+        #     error_message = f"An unexpected error occurred: {str(e)}"
+        #     return render_error_page(request, error_message, status_code=400)
     
     def post(self,request):
-        try:
+        # try:
             user = request.user
             form = self.form_class(request.POST,request.FILES)
             if form.is_valid(): 
@@ -236,9 +236,9 @@ class VendorSellProduct(View):
             else:
                 error_message = f"Error! Please check your inputs."
                 return render_error_page(request, error_message, status_code=400)
-        except Exception as e:
-            error_message = f"An unexpected error occurred: {str(e)}"
-            return render_error_page(request, error_message, status_code=400)
+        # except Exception as e:
+        #     error_message = f"An unexpected error occurred: {str(e)}"
+        #     return render_error_page(request, error_message, status_code=400)
     
 @method_decorator(utils.login_required, name='dispatch')
 class VendorSoldProducts(View):
@@ -764,7 +764,7 @@ class SellProduceView(View):
                 product_image = form.cleaned_data['product_image']    
                 product_quantity = form.cleaned_data['product_quantity']
                 SI_units = form.cleaned_data['SI_units']
-                ammount_in_green_points = form.cleaned_data['ammount_in_green_points']
+                amount_in_green_points = form.cleaned_data['amount_in_green_points']
                 validity_duration_days = form.cleaned_data['validity_duration_days']
 
                 # Save SellProduce
@@ -789,7 +789,7 @@ class SellProduceView(View):
                         'product_name':sellObj.product_name,
                         'product_quantity':sellObj.product_quantity,
                         'SI_units':sellObj.SI_units,
-                        'ammount_in_green_points':sellObj.ammount_in_green_points,
+                        'amount_in_green_points':sellObj.amount_in_green_points,
                         'validity_duration_days':sellObj.validity_duration_days,
                         'product_image':produce_image_url,
                         },
@@ -854,7 +854,8 @@ class GreenCommerceProductCommunity(View):
 
             # Filter produce items that are approved and not posted by the current user
             produce_query = self.model.objects.exclude(user=request.user).filter(is_approved="approved")
-            
+            print(produce_query)
+
             # Apply filters based on category and search query
             if selected_category and selected_category != "all":
                 produce_query = produce_query.filter(produce_category=selected_category)
@@ -863,7 +864,6 @@ class GreenCommerceProductCommunity(View):
 
             # Order by latest date and fetch the list of produce objects
             produce_obj = produce_query.order_by("-date_time")
-            
             # Calculate ratings and check message status for each produce object
             ratings_list = [i.user.calculate_avg_rating() for i in produce_obj]
             message_status = [
@@ -903,7 +903,7 @@ class BuyingBegins(View):
             seller = sell_prod_obj.user
             product_quantity = sell_prod_obj.product_quantity
             SI_units = sell_prod_obj.SI_units
-            ammount_in_green_points = sell_prod_obj.ammount_in_green_points
+            amount_in_green_points = sell_prod_obj.amount_in_green_points
 
             form_data = request.POST
             quantity = int(form_data['quantity'])
@@ -911,7 +911,7 @@ class BuyingBegins(View):
             # print(type(prod_id),type(quantity))
             if product_quantity >= quantity:
                 try:
-                    if buyer.wallet >= ammount_in_green_points:
+                    if buyer.wallet >= amount_in_green_points:
                         buying_obj = common_models.ProduceBuy(buyer = buyer,seller = seller,sell_produce = sell_prod_obj,product_name = sell_prod_obj.product_name,SI_units = SI_units,buying_status = 'BuyInProgress',quantity_buyer_want = quantity)
                         buying_obj.save()
                         # Send email to the buyer
