@@ -758,7 +758,8 @@ class SellProduceView(View):
         try:
             user = request.user
             form = self.form_class(request.POST,request.FILES)
-            if form.is_valid(): 
+            if form.is_valid():
+                produce_category = form.cleaned_data['produce_category']
                 product_name = form.cleaned_data['product_name'] 
                 product_image = form.cleaned_data['product_image']    
                 product_quantity = form.cleaned_data['product_quantity']
@@ -768,7 +769,15 @@ class SellProduceView(View):
 
                 # Save SellProduce
                 
-                sellObj=self.model(user = user,product_name = product_name,product_image = product_image,product_quantity = product_quantity,SI_units = SI_units,ammount_in_green_points = ammount_in_green_points,validity_duration_days = validity_duration_days)
+                sellObj=self.model(user = user,
+                product_name = product_name,
+                product_image = product_image,
+                product_quantity = product_quantity,
+                SI_units = SI_units,
+                ammount_in_green_points = ammount_in_green_points,
+                validity_duration_days = validity_duration_days,
+                produce_category=produce_category,  # Use the ID directly
+                 )
                 sellObj.save()
                 produce_image_url = request.build_absolute_uri(sellObj.product_image.url)
 
