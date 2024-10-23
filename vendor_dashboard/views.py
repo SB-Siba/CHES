@@ -759,6 +759,7 @@ class SellProduceView(View):
             user = request.user
             form = self.form_class(request.POST,request.FILES)
             if form.is_valid(): 
+                produce_category = form.cleaned_data['produce_category']
                 product_name = form.cleaned_data['product_name'] 
                 product_image = form.cleaned_data['product_image']    
                 product_quantity = form.cleaned_data['product_quantity']
@@ -768,7 +769,7 @@ class SellProduceView(View):
 
                 # Save SellProduce
                 
-                sellObj=self.model(user = user,product_name = product_name,product_image = product_image,product_quantity = product_quantity,SI_units = SI_units,amount_in_green_points = amount_in_green_points,validity_duration_days = validity_duration_days)
+                sellObj=self.model(user = user,produce_category=produce_category,product_name = product_name,product_image = product_image,product_quantity = product_quantity,SI_units = SI_units,amount_in_green_points = amount_in_green_points,validity_duration_days = validity_duration_days)
                 sellObj.save()
                 produce_image_url = request.build_absolute_uri(sellObj.product_image.url)
 
@@ -778,6 +779,7 @@ class SellProduceView(View):
                     context={
                         'full_name':sellObj.user.full_name,
                         'product_name':sellObj.product_name,
+                        'produce_category':produce_category,
                         'product_quantity':sellObj.product_quantity,
                         'SI_units':sellObj.SI_units,
                         'amount_in_green_points':sellObj.amount_in_green_points,
