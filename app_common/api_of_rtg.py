@@ -13,11 +13,12 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from . import swagger_doccumentation
 from django.db.models.functions import Lower
 from django.contrib.auth.hashers import make_password
-from .models import Booking, Order, ProduceBuy, ProductFromVendor, Service, ServiceProviderDetails, User, GardeningProfile,UserActivity,SellProduce,CategoryForProduces
+from .models import Booking, CategoryForServices, Order, ProduceBuy, ProductFromVendor, Service, ServiceProviderDetails, User, GardeningProfile,UserActivity,SellProduce,CategoryForProduces
 from django.utils.dateparse import parse_datetime
 from .serializer import (
     BookingSerializer,
     CategoryForProducesSerializer,
+    CategoryForServieProviderSerializer,
     CheckoutFormSerializer,
     CommentSerializer,
     MessageSerializer,
@@ -222,12 +223,12 @@ class BuyingBeginsAPIView(APIView):
             sell_prod_obj = SellProduce.objects.get(id=prod_id)
             seller = sell_prod_obj.user
             product_quantity = sell_prod_obj.product_quantity
-            ammount_in_green_points = sell_prod_obj.ammount_in_green_points
+            amount_in_green_points = sell_prod_obj.amount_in_green_points
 
             quantity = int(request.data.get('quantity'))
 
             if product_quantity >= quantity:
-                if buyer.wallet >= ammount_in_green_points * quantity:
+                if buyer.wallet >= amount_in_green_points * quantity:
                     buying_obj = ProduceBuy(
                         buyer=buyer,
                         seller=seller,
@@ -351,7 +352,7 @@ class ProduceBuyAPIView(APIView):
             # Update sell produce
             sell_prod_obj = SellProduce.objects.get(id=sell_prod.id)
             sell_prod_obj.product_quantity -= buy_prod_obj.quantity_buyer_want
-            sell_prod_obj.ammount_in_green_points -= ammount_for_quantity_want
+            sell_prod_obj.amount_in_green_points -= ammount_for_quantity_want
 
             # Update buy product status
             buy_prod_obj.buying_status = "BuyCompleted"
@@ -1008,22 +1009,57 @@ class BlogDetailsAPIView(APIView):
 
 # Services
 
+# class ListOfServicesByServiceProvidersAPIView(APIView):
+#     @swagger_auto_schema(
+#         tags=["Roof Top Gardeners"],
+#         operation_description="List Of Services By Service Provider",
+#         manual_parameters=swagger_doccumentation.list_services_params,
+#         responses={201: ServiceSerializer(many=True)}
+#     )
+#     def get(self, request):
+#         try:
+#             services = Service.objects.all()
+#             serializer = ServiceSerializer(services, many=True)
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         except Exception as e:
+#             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+from rest_framework.exceptions import NotFound
+
 class ListOfServicesByServiceProvidersAPIView(APIView):
+    """
+    API view to list all categories or services under a selected category.
+    """
     @swagger_auto_schema(
         tags=["Roof Top Gardeners"],
-        operation_description="List Of Services By Service Provider",
+        operation_description="List Services by Category",
         manual_parameters=swagger_doccumentation.list_services_params,
-        responses={201: ServiceSerializer(many=True)}
+        responses={200: ServiceSerializer(many=True)}
     )
     def get(self, request):
         try:
-            services = Service.objects.all()
-            serializer = ServiceSerializer(services, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            # Get the category ID from query parameters
+            category_id = request.query_params.get('category_id')
+
+            if category_id:
+                # If a category is selected, return the services within that category
+                try:
+                    selected_category = CategoryForServices.objects.get(id=category_id)
+                except CategoryForServices.DoesNotExist:
+                    raise NotFound(detail="Category not found")
+
+                services = Service.objects.filter(service_type=selected_category)
+                serializer = ServiceSerializer(services, many=True)
+                return Response({'services': serializer.data, 'selected_category': selected_category.service_category}, status=status.HTTP_200_OK)
+            else:
+                # If no category is selected, return the list of categories
+                categories = CategoryForServices.objects.all()
+                category_serializer = CategoryForServieProviderSerializer(categories, many=True)
+                return Response({'categories': category_serializer.data}, status=status.HTTP_200_OK)
+        
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-
+        
 class ServiceSearchAPIView(APIView):
     @swagger_auto_schema(
         tags=["Roof Top Gardeners"],
@@ -1218,4 +1254,16 @@ class CategoryForProducesListView(APIView):
     def get(self, request, *args, **kwargs):
         categories = CategoryForProduces.objects.all()
         serializer = CategoryForProducesSerializer(categories, many=True)
+        return Response(serializer.data)
+    
+
+class CategoryForServiceProviderListView(APIView):
+    @swagger_auto_schema(
+        tags=["ServiceProvider Categories"],
+        operation_description="All Categories Of ServiceProvider.",
+        responses={200: CategoryForServieProviderSerializer(many=True)}
+    )
+    def get(self, request, *args, **kwargs):
+        categories = CategoryForServices.objects.all()
+        serializer = CategoryForServieProviderSerializer(categories, many=True)
         return Response(serializer.data)

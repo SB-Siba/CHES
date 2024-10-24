@@ -22,7 +22,6 @@
                     <div class="col-lg-7">
 
                         <form method="post" action="" class="">
-                            {% include 'app_common/snippets/alert.html' %}
                             {% csrf_token %}
                             {{form.as_p}}
                             <div style="text-align:center;">

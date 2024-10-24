@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate
 from .models import (
     Booking,
     CategoryForProduces,
+    CategoryForServices,
     Order,
     ProduceBuy,
     ProductFromVendor,
@@ -496,6 +497,10 @@ class CategoryForProducesSerializer(serializers.ModelSerializer):
         model = CategoryForProduces
         fields = ['id', 'category_name']
 
+class CategoryForServieProviderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategoryForServices
+        fields = ['id', 'service_category', 'image']
 
 class UserQuerySerializer(serializers.ModelSerializer):
     class Meta:

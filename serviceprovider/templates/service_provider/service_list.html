@@ -45,6 +45,7 @@
                             <tr>
                                 <th scope="col">Service Image</th>
                                 <th scope="col">Service Name</th>
+                                <th scope="col">Service Type</th>
                                 <th scope="col">Description</th>
                                 <th scope="col">Price/Hour</th>
                                 <th scope="col">Action</th>
@@ -64,6 +65,7 @@
                                     <td>
                                         <a class="text-heading text-primary-hover font-semibold" href="#">{{ service.name }}</a>
                                     </td>
+                                    <td>{{ service.service_type.service_category }}</td>
                                     <td>{{ service.description }}</td>
                                     <td>{{ service.price_per_hour }}</td>
                                     <td>

@@ -1,23 +1,30 @@
+/* 
 .timeline {
     list-style-type: none;
     max-height: 80vh;
     overflow-y: auto;
-    overflow-x: hidden;
+    -ms-overflow-style: none; 
     margin: 0;
     padding: 0;
     position: relative;
     
 }
+.timeline::-webkit-scrollbar {
+    display: none !important;  /* For Chrome, Safari, and Opera, hide the scrollbar */
+
 /* For the profile image */
-.timeline-header .userimage img,
+/* .timeline-header .userimage img,
 .timeline-comment-box .user img {
     width: 40px;
     height: 40px;
-    border-radius: 50%; /* This ensures the image is circular */
+    border-radius: 50%; /* This ensures the image is circular *
     object-fit: cover;
-}
+}  */
 
 /* For the post images */
+.timeline{
+    list-style-type: none;
+}
 .timeline img {
     max-width: 100%;
     width: 100%;
@@ -25,25 +32,6 @@
     object-fit: cover;
     display: block;
 }
-
-.timeline::-webkit-scrollbar{
-    width: 3px !important;;
-}
-
-.timeline::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-}
-
-.timeline::-webkit-scrollbar-thumb {
-    background-color: #e7ece8; 
-    border-radius: 10px; 
-    border: 3px solid #f1f1f1; 
-}
-
-.timeline::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-}
-
 
 .timeline {
     scrollbar-width: thin;
@@ -131,7 +119,7 @@ color: white!important;
     line-height: 50px
 }
 
-.timeline-header .userimage {
+.timeline-header .post_prof  {
     float: left;
     width: 34px;
     height: 34px;
@@ -139,6 +127,10 @@ color: white!important;
     overflow: hidden;
     margin: 8px 10px -2px 0;
    
+}
+.timeline-header .post_prof img {
+    max-width: 100%;
+    max-height: 100%
 }
 
 .timeline-header .username {
