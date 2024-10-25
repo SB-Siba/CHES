@@ -747,14 +747,14 @@ class CheckoutAPIView(APIView):
 
         data = {
             "vendor_product": vendor_product_obj.name,
-            "gross_amount": round(ord_meta_data['gross_value'], 2),
-            "our_price": round(ord_meta_data['our_price'], 2),
-            "discount_amount": '{:.2f}'.format(ord_meta_data['discount_amount']),
-            "discount_percentage": round(ord_meta_data['discount_percentage'], 2),
-            "gst": '{:.2f}'.format(float(ord_meta_data['charges']["GST"])),
-            "total": round(ord_meta_data['final_value'], 2),
+            "gross_amount": round(float(ord_meta_data['gross_value']), 2),
+            "our_price": round(float(ord_meta_data['our_price']), 2),
+            "discount_amount": '{:.2f}'.format(float(ord_meta_data['discount_amount'])),
+            "discount_percentage": round(float(ord_meta_data['discount_percentage']), 2),
+            # "gst": '{:.2f}'.format(float(ord_meta_data['charges'].get("GST", 0))),
+            "total": round(float(ord_meta_data['final_value']), 2),
             "offer_discount": offer_discount,
-            "delivery_charge": float(ord_meta_data['charges']["Delivary"]),
+            "delivery_charge": float(ord_meta_data['charges'].get("Delivery", 0)),
         }
         return JsonResponse(data, safe=False)
 
@@ -779,7 +779,7 @@ class CheckoutAPIView(APIView):
             ord_meta_data = {}
             for i, j in order_details.items():
                 ord_meta_data.update(j)
-            t_price = round(ord_meta_data['final_value'], 2)
+            t_price = round(float(ord_meta_data['final_value']), 2)
 
             try:
                 vendor = get_object_or_404(User, email=vendor_email)

@@ -63,14 +63,14 @@ class ServiceProviderUpdateForm(forms.Form):
 class ServiceAddForm(forms.ModelForm):
     class Meta:
         model = models.Service
-        fields = ['name', 'description', 'service_image', 'price_per_hour', 'service_type']
+        fields = [ 'service_type','description', 'service_image', 'price_per_hour']
         
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),  # Text input with form-control class
+            # 'name': forms.TextInput(attrs={'class': 'form-control'}),  # Text input with form-control class
+            'service_type': forms.Select(attrs={'class': 'form-control'}),  # Dropdown for service type with form-control class
             'description': forms.Textarea(attrs={'class': 'form-control'}),  # Textarea with form-control class
             'service_image': forms.FileInput(attrs={'class': 'form-control'}),  # File input for service image
             'price_per_hour': forms.NumberInput(attrs={'class': 'form-control'}),  # Number input with form-control class
-            'service_type': forms.Select(attrs={'class': 'form-control'}),  # Dropdown for service type with form-control class
         }
 
     def __init__(self, *args, **kwargs):

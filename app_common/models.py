@@ -119,7 +119,7 @@ class CategoryForProduces(models.Model):
 class CategoryForServices(models.Model):
     service_category = models.CharField(max_length = 250,null = True,blank = True)
     image = models.ImageField(upload_to='service_categories/', null=True, blank=True) 
-    
+
     def __str__(self):
         return self.service_category
 
@@ -410,12 +410,13 @@ class ServiceProviderDetails(models.Model):
 class Service(models.Model):
     provider = models.ForeignKey(User, on_delete=models.CASCADE)
     produce_category = models.ForeignKey(CategoryForProduces,on_delete=models.CASCADE,null= True, blank= True)
-    name = models.CharField(max_length=100)
+    # name = models.CharField(max_length=100)
     description = models.TextField()
     service_image = models.ImageField(upload_to='service/',null=True, blank=True)
     price_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     service_type = models.ForeignKey(CategoryForServices, on_delete=models.CASCADE,null= True, blank= True)
+    sp_details = models.ForeignKey(ServiceProviderDetails,on_delete=models.CASCADE,null= True, blank= True)
 
 class Booking(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE)

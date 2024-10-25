@@ -76,9 +76,20 @@
                 {% endif %}
                 
                 <div class="card-body">
-                    <h5 class="card-title">{{ service.name }}</h5>
+                    <h5 class="card-title"><strong>Provider Name:</strong>{{ service.provider.full_name }}</h5>
+                    <h5 class="card-title"><strong>Service city:</strong>
+                        {% if service.sp_details and service.sp_details.service_area %}
+                            {% for city in service.sp_details.service_area %}
+                                {{ city }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Not available
+                        {% endif %}
+                    </h5>
+                    
+                    
                     <p class="card-text"><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
-                    <a href="{% url 'vendor_dashboard:service_details' service.id %}" class="btn btn-primary">View Details</a>
+                    <a href="{% url 'vendor_dashboard:service_details' service.id %}" class="btn btn-primary">Book Service</a>
                 </div>
             </div>
         </div>
