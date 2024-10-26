@@ -14,3 +14,24 @@ class AddCategoryForProduces(forms.ModelForm):
             'placeholder': 'Enter Category Name',  # Updated placeholder to be more accurate
         })
     )
+
+class AddCategoryForServices(forms.ModelForm):
+    class Meta:
+        model = models.CategoryForServices
+        fields = ["service_category", "image"]  
+
+    service_category = forms.CharField(
+        required=True,
+        label="Enter Service Category Name",
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter ServiceCategory Name',
+        })
+    )
+    image = forms.ImageField(
+        required=False,  # Optional field
+        widget=forms.ClearableFileInput(attrs={
+            'class': 'form-control',
+        }),
+        label="Upload Category Image"
+    )

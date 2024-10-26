@@ -90,6 +90,13 @@ urlpatterns = [
     path('produces_category_delete/<int:category_id>',views.DeleteProducesCategory.as_view(), name='produces_category_delete'),
     path('produces_category/',views.ProducesCategorySearch.as_view(), name='produces_category_search'),
     
+    # Categories service provider
+    path('services_categories/',views.ServicesCategory.as_view(), name='services_categories'),
+    path('services_category_add/',views.ServiceCategoryAdd.as_view(), name='services_category_add'),
+    path('services_category_update/<int:category_id>',views.ServiceCategoryUpdate.as_view(), name='services_category_update'),
+    path('services_category_delete/<int:category_id>',views.DeleteServiceCategory.as_view(), name='services_category_delete'),
+    path('services_category/',views.ServiceCategorySearch.as_view(), name='services_category_search'),
+
     # User Query
     path('users_query/list/',Query.UsersQueryList.as_view(), name='users_query_list'),
     path('users_query/reply/<int:id>/',Query.QueryReply.as_view(), name='query_reply'),

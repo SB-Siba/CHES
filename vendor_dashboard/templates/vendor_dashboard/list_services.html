@@ -1,5 +1,6 @@
 {% extends 'vendor_dashboard/base.html' %}
 {% load static %}
+{% block title %}Service List{% endblock title %}
 
 {% block main_content %}
 <!-- Custom CSS -->
@@ -14,37 +15,55 @@
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     }
 
-    .service-card {
+    .category-card, .service-card {
         border: none;
         border-radius: 15px;
-        overflow: hidden;
         transition: transform 0.3s, box-shadow 0.3s;
+        text-align: center;
+        padding: 15px;
+        background-color: #f8f9fa;
+        cursor: pointer;
     }
 
-    .service-card:hover {
+    .category-card:hover, .service-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
-    .service-image {
-        height: 200px;
+    .category-image, .service-image {
+        height: 150px;
         object-fit: cover;
+        margin-bottom: 15px;
     }
 </style>
+
 <div class="container my-4">
     <h2 class="mb-4">Available Services</h2>
 
-    <!-- Search Form -->
-    <div class="d-flex justify-content-end mb-4">
-        <form method="get" action="{% url 'vendor_dashboard:service_search' %}" class="d-flex w-50">
-            <input type="text" name="search_query" class="form-control me-2 search-input" placeholder="Search for services..." aria-label="Search">
-            <button class="btn btn-outline-primary search-btn" type="submit">
-                <i class="fa-solid fa-search"></i>
-            </button>
-        </form>
+    <!-- If no category is selected, show the categories -->
+    {% if categories %}
+    <h4>Select a Category:</h4>
+    <div class="row mb-4">
+        {% for category in categories %}
+        <div class="col-md-4 mb-4">
+            <a href="?category_id={{ category.id }}">
+                <div class="category-card shadow-sm">
+                    <!-- Category Image -->
+                    {% if category.image %}
+                    <img src="{{ category.image.url }}" class="category-image" alt="{{ category.service_category }}">
+                    {% else %}
+                    <img src="{% static 'default-category-image.jpg' %}" class="category-image" alt="No Image Available">
+                    {% endif %}
+                    <h5>{{ category.service_category }}</h5>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
     </div>
 
-    <!-- Services List -->
+    <!-- If a category is selected, show the services in that category -->
+    {% elif services %}
+    <h4>Services in {{ selected_category.service_category }}:</h4>
     <div class="row">
         {% for service in services %}
         <div class="col-md-4 mb-4">
@@ -57,20 +76,31 @@
                 {% endif %}
                 
                 <div class="card-body">
-                    <h5 class="card-title">{{ service.name }}</h5>
+                    <h5 class="card-title"><strong>Provider Name:</strong>{{ service.provider.full_name }}</h5>
+                    <h5 class="card-title"><strong>Service city:</strong>
+                        {% if service.sp_details and service.sp_details.service_area %}
+                            {% for city in service.sp_details.service_area %}
+                                {{ city }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Not available
+                        {% endif %}
+                    </h5>
+                    
+                    
                     <p class="card-text"><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
-                    <a href="{% url 'vendor_dashboard:service_details' service.id %}" class="btn btn-primary">View Details</a>
+                    <a href="{% url 'vendor_dashboard:service_details' service.id %}" class="btn btn-primary">Book Service</a>
                 </div>
-            </div>
-        </div>
-        {% empty %}
-        <div class="col-12">
-            <div class="alert alert-info" role="alert">
-                No services available.
             </div>
         </div>
         {% endfor %}
     </div>
+    <a href="{% url 'vendor_dashboard:list_services' %}" class="btn btn-secondary mt-4">Back to Categories</a>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        No services available for this category.
+    </div>
+    {% endif %}
     
 </div>
 {% endblock main_content %}

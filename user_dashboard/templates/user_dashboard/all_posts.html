@@ -19,12 +19,13 @@
             <li>
                 <div class="timeline-body">
                     <div class="timeline-header">
-                        {% if post.user.user_image %}
-                        <span class="userimage"><img src="{{post.user.user_image.url}}"
-                                alt=""></span>
+                        <div class="post_prof">
+                            {% if post.user.user_image %}
+                        <span class="userimage"><img src="{{post.user.user_image.url}}" alt=""></span>
                         {% else %}
                         <span class="userimage"><img src="https://bootdey.com/img/Content/avatar/avatar3.png"></span>
                         {% endif %}
+                        </div>
                         <span class="username">{{post.user.full_name}} <small class="mx-3">{{post.date_time}}</small></span>
                     </div>
                     <div class="timeline-content">

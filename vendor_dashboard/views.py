@@ -1047,7 +1047,7 @@ class ProduceBuyView(View):
             # Update product quantity and amount in green points
             sell_prod_obj = common_models.SellProduce.objects.get(id=sell_prod.id)
             sell_prod_obj.product_quantity -= buy_prod_obj.quantity_buyer_want
-            sell_prod_obj.ammount_in_green_points -= amount_for_quantity_want
+            sell_prod_obj.amount_in_green_points -= amount_for_quantity_want
 
             # Update the buying status
             buy_prod_obj.buying_status = "BuyCompleted"
@@ -1335,19 +1335,41 @@ class ServiceProvidersList(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+# @method_decorator(utils.login_required, name='dispatch')
+# class ListOfServicesByServiceProviders(View):
+#     template = app + "list_services.html"
+#     model = common_models.Service
+
+#     def get(self, request):
+#         try:
+#             services = self.model.objects.all()
+#             return render(request , self.template , {'services' : services})
+#         except Exception as e:
+#             error_message = f"An unexpected error occurred: {str(e)}"
+#             return render_error_page(request, error_message, status_code=400)
+        
 @method_decorator(utils.login_required, name='dispatch')
 class ListOfServicesByServiceProviders(View):
     template = app + "list_services.html"
-    model = common_models.Service
+    service_model = common_models.Service
+    category_model = common_models.CategoryForServices
 
     def get(self, request):
         try:
-            services = self.model.objects.all()
-            return render(request , self.template , {'services' : services})
+            category_id = request.GET.get('category_id')  # Get the category from query parameters
+            if category_id:
+                # If a category is selected, show services within that category
+                selected_category = self.category_model.objects.get(id=category_id)
+                services = self.service_model.objects.filter(service_type=selected_category)
+                return render(request, self.template, {'services': services, 'selected_category': selected_category})
+            else:
+                # If no category is selected, show the list of categories
+                categories = self.category_model.objects.all()
+                return render(request, self.template, {'categories': categories})
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-        
+
 
 @method_decorator(utils.login_required, name='dispatch')
 class ServiceSearchView(View):

@@ -486,3 +486,114 @@ class ProducesCategorySearch(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message)
+
+
+@method_decorator(utils.super_admin_only, name='dispatch')
+class ServicesCategory(View):
+    template = app + "services_categories.html"
+    model = common_models.CategoryForServices
+
+    def get(self, request, *args, **kwargs):
+        categories_of_services = self.model.objects.all()
+        context = {
+            'categories_of_services': categories_of_services
+            }
+        return render(request,self.template,context)
+    
+class ServiceCategoryAdd(View):
+    template = app + "service_category_add.html"
+    model = common_models.CategoryForServices
+    form = forms.AddCategoryForServices
+
+    def get(self, request, *args, **kwargs):
+        form = self.form()
+        context = {
+            'form': form
+            }
+        return render(request,self.template,context)
+    
+    def post(self,request):
+        try:
+            form = self.form(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                return redirect(reverse('admin_dashboard:services_categories'))
+            else:
+                error_message = f"please correct these : {form.errors}"
+                return render_error_page(request, error_message)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)
+        
+@method_decorator(utils.super_admin_only, name='dispatch')
+class ServiceCategoryUpdate(View):
+    template = app + "service_category_update.html"
+    model = common_models.CategoryForServices
+    form = forms.AddCategoryForServices
+
+    def get(self, request, category_id):
+        try:
+            category_for_serivices = get_object_or_404(self.model, id=category_id)
+            context = {
+                "category_for_serivices": category_for_serivices,
+                "form": self.form(instance=category_for_serivices),
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)
+        
+    def post(self, request, category_id):
+        try:
+            category_for_serivices = self.model.objects.get(id=category_id)
+            form = self.form(request.POST, request.FILES, instance=category_for_serivices)
+
+            if form.is_valid():
+                form.save()
+                return redirect(reverse('admin_dashboard:services_categories'))
+            else:
+                error_message = f"please correct these : {self.form.errors}"
+                return render_error_page(request, error_message)
+
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)
+
+@method_decorator(utils.super_admin_only, name='dispatch')
+class DeleteServiceCategory(View):
+    model = common_models.CategoryForServices
+
+    def get(self, request, category_id):
+        try:
+            self.model.objects.get(id=category_id).delete()
+            return redirect(reverse('admin_dashboard:services_categories'))
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)
+
+
+@method_decorator(utils.super_admin_only, name='dispatch')
+class ServiceCategorySearch(View):
+    model = common_models.CategoryForServices
+    template = app + "services_categories.html"
+
+    def post(self, request):
+        try:
+            query = request.POST.get('query', '')
+            filter_by = request.POST.get('filter_by', 'all')
+
+            if filter_by == "id":
+                categories_of_service_list = self.model.objects.filter(id=query)
+            elif filter_by == "name":
+                categories_of_service_list = self.model.objects.filter(service_category__icontains=query)
+            elif filter_by == "all":
+                categories_of_service_list = self.model.objects.filter(
+                    Q(id__icontains=query) | Q(service_category__icontains=query)
+                )
+            context = {
+                "categories_of_services": categories_of_service_list,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message)
