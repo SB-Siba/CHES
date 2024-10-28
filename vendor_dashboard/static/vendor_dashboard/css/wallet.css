@@ -18,11 +18,17 @@
   .users .card{
     width: 25%;
     margin: 10px;
-    background: #fff;
     text-align: center;
     border-radius: 10px;
     padding: 10px;
-    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+    background-color: #02920efd; /* Fallback background color */
+    background-image: url(../../../../admin_dashboard/static/admin_dashboard/images/card1.jpeg); /* Replace with your image URL */
+    background-size: cover; /* Ensures the image covers the entire area */
+    background-position: center; /* Centers the image */
+    background-blend-mode: multiply; /* Blends the color with the image */
+    color: white;
+ 
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   }
   .users .card h4{
     text-transform: uppercase;
@@ -89,4 +95,33 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 9999; /* Ensure it's above other elements */
+}
+#Box {
+  background-color: #2544cf9a; /* Fallback background color */
+  background-image: url(../../../../admin_dashboard/static/admin_dashboard/images/card1.jpeg); /* Replace with your image URL */
+  background-size: cover; /* Ensures the image covers the entire area */
+  background-position: center; /* Centers the image */
+  background-blend-mode: multiply; /* Blends the color with the image */
+  color: white;
+  width: 100%;
+}
+
+.dash-card2{
+  background-color: #15a08483;
+  background-image: url(../../../../admin_dashboard/static/admin_dashboard/images/card2.jpg);
+  background-size: cover; 
+  background-position: center;
+  background-blend-mode: multiply; 
+  color: white;
+  width: 100%;
+}
+
+.dash-card3{
+  background-color: #f39d1368;
+  background-image: url(../../../../admin_dashboard/static/admin_dashboard/images/card3.jpeg);
+  background-size: cover; 
+  background-position: center;
+  background-blend-mode: multiply; 
+  color: white;
+  width: 100%;
 }

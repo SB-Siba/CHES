@@ -31,14 +31,14 @@
         object-fit: cover;
     }
 </style>
-<div class="container my-4">
-    <h2 class="mb-4">Available Services</h2>
+<div class="container my-4" style="min-height: 100vh;">
+    <h3 class="mb-4">Available Services</h3>
 
     <!-- Search Form -->
     <div class="d-flex justify-content-end mb-4">
-        <form method="get" action="{% url 'vendor_dashboard:service_search' %}" class="d-flex w-50">
+        <form method="get" action="{% url 'vendor_dashboard:service_search' %}" class="d-flex align-items-center w-50">
             <input type="text" name="search_query" class="form-control me-2 search-input" placeholder="Search for services..." aria-label="Search">
-            <button class="btn btn-outline-primary search-btn" type="submit">
+            <button class=" my_search_btn mb-" type="submit">
                 <i class="fa-solid fa-search"></i>
             </button>
         </form>
@@ -48,7 +48,7 @@
     <div class="row">
         {% for service in services %}
         <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm service-card">
+            <div class="card h-100  service-carD">
                 <!-- Service Image -->
                 {% if service.service_image %}
                 <img src="{{ service.service_image.url }}" class="card-img-top service-image" alt="{{ service.name }}">
@@ -59,7 +59,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ service.name }}</h5>
                     <p class="card-text"><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
-                    <a href="{% url 'vendor_dashboard:service_details' service.id %}" class="btn btn-primary">View Details</a>
+                    <a href="{% url 'vendor_dashboard:service_details' service.id %}" class="" id="table_BTN">View Details</a>
                 </div>
             </div>
         </div>
