@@ -318,7 +318,7 @@ class ServiceDetailsSerializer(serializers.ModelSerializer):
     provider = UserSerializer()
     class Meta:
         model = Service
-        fields = ['id','provider','service_type','description', 'price_per_hour']
+        fields = ['id','provider','service_type',  'description', 'price_per_hour']
         
 class MessageSerializer(serializers.ModelSerializer):
     sender = UserSerializer()

@@ -317,7 +317,7 @@ service_list_get = [
 service_list_post = [
     openapi.Parameter("Authorization", openapi.IN_HEADER, description="Bearer <token>", required=True, type=openapi.TYPE_STRING),
     openapi.Parameter('service_type', openapi.IN_FORM, description="Type of service", type=openapi.TYPE_STRING),
-    # openapi.Parameter('name', openapi.IN_FORM, description="Name of the service", type=openapi.TYPE_STRING),
+    
     openapi.Parameter('description', openapi.IN_FORM, description="Description of the service", type=openapi.TYPE_STRING),
     openapi.Parameter('price_per_hour', openapi.IN_FORM, description="Price per hour for the service", type=openapi.TYPE_NUMBER),
     openapi.Parameter('service_image', openapi.IN_FORM, description="Image of the service", type=openapi.TYPE_FILE),
