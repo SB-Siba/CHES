@@ -56,7 +56,7 @@
                                 <tr>
                                     <td>
                                         {% if service.service_image %}
-                                            <img src="{{ service.service_image.url }}" alt="{{ service.name }}" style="width: 100px; height: auto;">
+                                            <img src="{{ service.service_image.url }}"style="width: 100px; height: auto;">
                                         {% else %}
                                             <img src="{% static 'default-service-image.jpg' %}" alt="No Image" style="width: 100px; height: auto;">
                                         {% endif %}
