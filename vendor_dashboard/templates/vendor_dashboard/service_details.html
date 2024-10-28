@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block main_content %}
-<h2>Service Details - {{ service.name }}</h2>
+<h2>Service Details - {{ service.service_type }}</h2>
 <p><strong>Provider:</strong> {{ service.provider.full_name }}</p>
 <p><strong>Description:</strong> {{ service.description }}</p>
 <p><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>

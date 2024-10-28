@@ -1,8 +1,8 @@
-{% extends 'vendor_dashboard/base.html' %}
+{% extends 'user_dashboard/starter.html' %}
 {% load static %}
 {% block title %}Service List{% endblock title %}
 
-{% block main_content %}
+{% block content %}
 <!-- Custom CSS -->
 <style>
     .search-input {
@@ -89,13 +89,13 @@
                     
                     
                     <p class="card-text"><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
-                    <a href="{% url 'vendor_dashboard:service_details' service.id %}" class="btn btn-primary">Book Service</a>
+                    <a href="{% url 'user_dashboard:service_details' service.id %}" class="btn btn-primary">Book Service</a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-    <a href="{% url 'vendor_dashboard:list_services' %}" class="btn btn-secondary mt-4">Back to Categories</a>
+    <a href="{% url 'user_dashboard:list_services' %}" class="btn btn-secondary mt-4">Back to Categories</a>
     {% else %}
     <div class="alert alert-info" role="alert">
         No services available for this category.
@@ -103,4 +103,4 @@
     {% endif %}
     
 </div>
-{% endblock main_content %}
+{% endblock content %}
