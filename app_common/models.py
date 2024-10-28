@@ -410,7 +410,7 @@ class ServiceProviderDetails(models.Model):
 class Service(models.Model):
     provider = models.ForeignKey(User, on_delete=models.CASCADE)
     produce_category = models.ForeignKey(CategoryForProduces,on_delete=models.CASCADE,null= True, blank= True)
-    # name = models.CharField(max_length=100)
+    
     description = models.TextField()
     service_image = models.ImageField(upload_to='service/',null=True, blank=True)
     price_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
