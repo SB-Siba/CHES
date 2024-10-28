@@ -381,10 +381,11 @@ class ServiceSerializer(serializers.ModelSerializer):
     provider_name = serializers.CharField(source='provider.full_name', read_only=True)
     provider_id = serializers.IntegerField(source='provider.id', read_only=True)
     sp_area = serializers.JSONField(source='sp_details.service_area', read_only=True)
+    service_type_name = serializers.CharField(source='service_type.service_category', read_only=True)
 
     class Meta:
         model = Service
-        fields = ['id', 'service_type','description', 'price_per_hour', 'provider_id', 'provider_name','service_image','sp_area']
+        fields = ['id', 'service_type','description', 'price_per_hour', 'provider_id', 'provider_name','service_image','sp_area','service_type_name']
 
 class BookingSerializer(serializers.ModelSerializer):
     gardener_full_name = serializers.SerializerMethodField()
