@@ -161,11 +161,18 @@ class ServiceList(View):
 
     def post(self, request):
         try:
-            form = self.form_class(request.POST, request.FILES)  # Include request.FILES here
+            form = self.form_class(request.POST, request.FILES)  # Include request.FILES for image fields
             if form.is_valid():
-                service = form.save(commit=False)  # Create the instance but don't save it yet
+                service = form.save(commit=False)  # Create the instance without saving yet
                 service.provider = request.user  # Set the provider
-                service.save()  # Save the instance
+
+                # Automatically set sp_details based on the provider
+                try:
+                    service.sp_details = common_models.ServiceProviderDetails.objects.get(provider=request.user)
+                except common_models.ServiceProviderDetails.DoesNotExist:
+                    service.sp_details = None  # or handle this case as needed
+
+                service.save()  # Save the instance with sp_details
                 messages.success(request, f"{service.name} is added to the service list.")
                 return redirect("service_provider:service_list")
             else:
@@ -174,6 +181,7 @@ class ServiceList(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
 
 
 @method_decorator(utils.login_required, name='dispatch')

@@ -88,7 +88,6 @@ class ServiceListAPIView(APIView):
         manual_parameters=swagger_doccumentation.service_list_get,
         responses={200: "Fetched successfully", 400: "Error While Fetching"},
     )
-
     def get(self, request):
         services = Service.objects.filter(provider=request.user)
         serializer = ServiceSerializer(services, many=True)
@@ -102,13 +101,20 @@ class ServiceListAPIView(APIView):
         manual_parameters=swagger_doccumentation.service_list_post,
         responses={200: "Added successfully", 400: "Error While Adding."},
     )
-
     def post(self, request):
+        # Get the ServiceProviderDetails instance for the authenticated user
+        try:
+            sp_details = ServiceProviderDetails.objects.get(provider=request.user)
+        except ServiceProviderDetails.DoesNotExist:
+            return Response({"error": "ServiceProviderDetails not found for this user"}, status=status.HTTP_400_BAD_REQUEST)
+        
         serializer = ServiceSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(provider=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # Save the service and link it to the user's ServiceProviderDetails
+            service = serializer.save(provider=request.user, sp_details=sp_details)
+            return Response(ServiceSerializer(service).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ServiceUpdateAPIView(APIView):
     def get_object(self, service_id):

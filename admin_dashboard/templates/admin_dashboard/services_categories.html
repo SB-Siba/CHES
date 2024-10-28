@@ -1,0 +1,110 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Category For Services{% endblock title %}
+
+{% block content %}
+
+<main class="py-3">
+    <div class="container">
+        <h4>All Service Categories</h4>
+        <div class="vstack gap-4">
+            <div class="d-flex justify-content-between align-items-center flex-column flex-sm-row gap-3">
+                <form class="my-2 " action="{% url 'admin_dashboard:services_category_search' %}" method="post">
+                    {% csrf_token %}
+                    <div class="hstack gap-2">
+                        <select style="width: 6rem;" name="filter_by" class="form-select form-select1 form-control mt-5" aria-label="Default select example">
+                            <option value="all">All</option>
+                            <option value="id">ID</option>
+                            <option value="name">Name</option>
+                        </select>
+                        <span class="input-group">
+                            <input type="text" name="query" placeholder="Search Here" class="form-control form-select1" required />
+                            <button type="submit" class=" " id="table_BTN"><i class='fa fa-search'></i></button>
+                        </span>
+                    </div>
+                </form>
+                <div class=" " id="table_BTN">
+                    <a href="{% url 'admin_dashboard:services_category_add' %}" class="text-white text-decoration-none">
+                        <i class='fa fa-plus-square'></i> Create a category For Service
+                    </a>
+                </div>
+            </div>
+
+            <div class="tablecard">
+                <div class="table-responsive">
+                    <table class="table table-hover table-nowrap">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="" id="tb-head" scope="col">Category ID</th>
+                                <th class="" id="tb-head" scope="col">Category Name</th>
+                                <th class="" id="tb-head" scope="col">Category Image</th>
+                                <th class="" id="tb-head" scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        {% if categories_of_services %}
+                            <tbody id="test_table_tbody">
+                                {% for category in categories_of_services %}
+                                <tr>
+                                    <td class="tb-body">
+                                        <a class="text-heading text-primary-hover font-semibold"
+                                            href="{% url 'admin_dashboard:services_category_update' category.id %}">
+                                            {{ category.id }}
+                                        </a>
+                                    </td>
+                                    <td class="tb-body">{{ category.service_category }}</td>
+                                    <td>
+                                        {% if category.image %}
+                                            <img src="{{ category.image.url }}" alt="{{ category.service_category }}" width="100" />
+                                        {% else %}
+                                            No image
+                                        {% endif %}
+                                    </td>
+                                    <td class="tb-body">
+                                        <a href="{% url 'admin_dashboard:services_category_update' category.id %}"
+                                            class="me-2" id="table_BTN">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <button class="" id="table_BTN2" data-bs-toggle="modal" data-bs-target="#deleteModal{{ category.id }}">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+
+                                        <!-- Delete Modal -->
+                                        <div class="modal fade" id="deleteModal{{ category.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete the category "{{ category.service_category }}"?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="" id="table_BTN" data-bs-dismiss="modal">Cancel</button>
+                                                        <a href="{% url 'admin_dashboard:services_category_delete' category.id %}" class=""  id="table_BTN2" >Delete</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        {% else %}
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="text-center fw-bold text-secondary">
+                                        No Category For Services Available.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}
