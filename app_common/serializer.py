@@ -391,7 +391,7 @@ class BookingSerializer(serializers.ModelSerializer):
     gardener_full_name = serializers.SerializerMethodField()
     provider_full_name = serializers.SerializerMethodField()
     provider_id = serializers.SerializerMethodField()
-    service_name = serializers.SerializerMethodField()  # Add service name field
+    service_type = serializers.SerializerMethodField()  # Add service name field
     service_price_per_hour = serializers.SerializerMethodField()  # Add service price per hour field
     created_at = serializers.DateTimeField(format='%Y-%m-%d at %H:%M')
     booking_date = serializers.DateTimeField(format='%Y-%m-%d at %H:%M')
@@ -401,7 +401,7 @@ class BookingSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_fields = [
             'gardener_full_name', 'provider_full_name', 'provider_id',
-            'service_name', 'service_price_per_hour'
+            'service_type', 'service_price_per_hour'
         ]
 
     def get_gardener_full_name(self, obj):
@@ -419,9 +419,9 @@ class BookingSerializer(serializers.ModelSerializer):
             return obj.service.provider.id
         return None
 
-    def get_service_name(self, obj):
-        if obj.service:
-            return obj.service.name
+    def get_service_type(self, obj):
+        if obj.service and obj.service.service_type:
+            return obj.service.service_type.service_category  
         return None
 
     def get_service_price_per_hour(self, obj):
