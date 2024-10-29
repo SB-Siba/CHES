@@ -136,10 +136,10 @@ class ServiceList(View):
             search_query = request.GET.get('search')
 
             if search_by and search_query:
-                if search_by == "name":
+                if search_by == "service_type":
                     service_list = self.model.objects.filter(
                         provider=request.user,
-                        name__icontains=search_query
+                        service_type__icontains=search_query
                     ).order_by('-id')
                 elif search_by == "service_type":
                     service_list = self.model.objects.filter(
@@ -173,7 +173,7 @@ class ServiceList(View):
                     service.sp_details = None  # or handle this case as needed
 
                 service.save()  # Save the instance with sp_details
-                messages.success(request, f"{service.name} is added to the service list.")
+                messages.success(request, f"{service.service_type} is added to the service list.")
                 return redirect("service_provider:service_list")
             else:
                 # Handle form errors
@@ -207,7 +207,7 @@ class ServiceUpdate(View):
             form = self.form_class(request.POST, request.FILES, instance=service)
             if form.is_valid():
                 form.save()
-                messages.success(request, f"{request.POST['name']} is updated successfully.")
+                messages.success(request, f"{request.POST['service_type']} is updated successfully.")
                 return redirect("service_provider:service_list")
             else:
                 for field, errors in form.errors.items():

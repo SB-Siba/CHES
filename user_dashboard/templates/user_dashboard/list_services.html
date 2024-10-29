@@ -1,8 +1,8 @@
-{% extends 'vendor_dashboard/base.html' %}
+{% extends 'user_dashboard/starter.html' %}
 {% load static %}
 {% block title %}Service List{% endblock title %}
 
-{% block main_content %}
+{% block content %}
 <!-- Custom CSS -->
 <style>
     .search-input {
@@ -38,10 +38,11 @@
 </style>
 
 <div class="container my-4">
-    <h2 class="mb-4">Available Services</h2>
 
     <!-- If no category is selected, show the categories -->
     {% if categories %}
+    <h3 class="mb-4">Available Services</h3>
+
     <h4>Select a Category:</h4>
     <div class="row mb-4">
         {% for category in categories %}
@@ -75,9 +76,9 @@
                 <img src="{% static 'default-service-image.jpg' %}" class="card-img-top service-image" alt="No Image Available">
                 {% endif %}
                 
-                <div class="card-body">
-                    <h5 class="card-title"><strong>Provider Name:</strong>{{ service.provider.full_name }}</h5>
-                    <h5 class="card-title"><strong>Service city:</strong>
+                <div class="text-left ">
+                    <h6 class="card-title"><strong>Provider Name:</strong>{{ service.provider.full_name }}</h6>
+                    <h6 class="card-title"><strong>Service city:</strong>
                         {% if service.sp_details and service.sp_details.service_area %}
                             {% for city in service.sp_details.service_area %}
                                 {{ city }}{% if not forloop.last %}, {% endif %}
@@ -85,17 +86,17 @@
                         {% else %}
                             Not available
                         {% endif %}
-                    </h5>
+                    </h6>
                     
                     
                     <p class="card-text"><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
-                    <a href="{% url 'vendor_dashboard:service_details' service.id %}" class="btn btn-primary">Book Service</a>
+                    <a href="{% url 'user_dashboard:service_details' service.id %}" class="" id="table_BTN">Book Service</a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-    <a href="{% url 'vendor_dashboard:list_services' %}" class="btn btn-secondary mt-4">Back to Categories</a>
+    <!-- <a href="{% url 'vendor_dashboard:list_services' %}" class="btn btn-secondary mt-4">Back to Categories</a> -->
     {% else %}
     <div class="alert alert-info" role="alert">
         No services available for this category.
@@ -103,4 +104,4 @@
     {% endif %}
     
 </div>
-{% endblock main_content %}
+{% endblock content %}
