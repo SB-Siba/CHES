@@ -14,7 +14,7 @@
 
 </head>
 <body>
-    <div class="py-3 d-flex justify-content-between My_containeR">
+    <div class="py-3 d-flex justify-content-center gap-5 My_containeR">
         <a href="#">
             <img class="loGo_img" src="{% static 'app_common/css/images/logo5.png'%}" alt="">
         </a>
@@ -51,9 +51,6 @@
             </div>
         </div>
     </nav>
-    
-    
-
 <!-- HEro Section -->
 
 <div id="heroCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
@@ -69,8 +66,8 @@
 <div class="carousel-item" id="carousel-item-2">
     <div class="carousel-caption text-start">
     <h1 class="service_hd_2"> Home Gardeners Of Odisha</h1>
-    <p class="">Innovation Project on Rooftop <br>
-        and Home Gardening in Odisha</p>
+    <p class="">Transforming Urban Spaces with Rooftop 
+        and Home Gardens Across Odisha</p>
     
     </div>
 </div>
@@ -83,9 +80,8 @@
 </div>
 <div class="carousel-item" id="carousel-item-4">
     <div class="carousel-caption text-start">
-    <h1 class="service_hd_2">Sustainable Gardening</h1>
-    <p class="">Adopt eco-friendly practices for a greener future.</p>
-    
+    <h1 class="service_hd_2">Bring Nature Closer with Home Gardening</h1>
+    <p class="">Transform your space into a lush, sustainable sanctuary.</p>
     </div>
 </div>
 </div>
@@ -140,7 +136,7 @@
             </div>
             <div class="modal-body">
                 <div class="alert alert-info">
-                    <p><strong>Disclaimer:</strong> The transactions conducted on this platform are soley between the service provides/vendors and the buyers. The platform adminstrators do not assume any libality or responsibility for the qulity, saftey, legality or any other aspect of the products and services offered. All dealings are at the sole risk of the parties involved.</p>
+                    <p><strong>Disclaimer:</strong> The transactions conducted on this platform are solely between the service provides/vendors and the buyers. The platform adminstrators do not assume any libality or responsibility for the qulity, saftey, legality or any other aspect of the products and services offered. All dealings are at the sole risk of the parties involved.</p>
                 </div>
                 <form id="disclaimerForm" method="post">
                     {% csrf_token %}
@@ -212,32 +208,34 @@
         <!-- Service 1 -->
         <div class="col-md-4 mb-4 service-left">
             <div class="service-box">
-                <img src="{% static 'app_common/css/images/serv1.png' %}" alt="Care of Garden">
+                <img src="{% static 'app_common/css/images/serv1.png' %}" alt="Flower Garden">
                 <h5 class="service-title">Flower Garden</h5>
-                <p class="service-description">Ut sit amet ipsum sit amet nibh rutrum faucibus gravida a eros orci varius.</p>
-                <a href="#" class="read-more">Read More</a>
+                <p class="service-description">Create a vibrant, colorful garden with beautiful flowers for a relaxing outdoor space.</p>
+                
             </div>
         </div>
         <!-- Service 2 -->
         <div class="col-md-4 mb-4 service-middle">
             <div class="service-box">
-                <img src="{% static 'app_common/css/images/serv2.png' %}" alt="Flower Service">
+                <img src="{% static 'app_common/css/images/serv2.png' %}" alt="Planting">
                 <h5 class="service-title">Planting</h5>
-                <p class="service-description">Natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus nibh.</p>
-                <a href="#" class="read-more">Read More</a>
+                <p class="service-description">Start your garden with expert planting techniques for healthy, thriving plants year-round.</p>
+                
             </div>
         </div>
         <!-- Service 3 -->
         <div class="col-md-4 mb-4 service-right">
             <div class="service-box">
-                <img src="{% static 'app_common/css/images/serv3.png' %}" alt="Spinach Service">
+                <img src="{% static 'app_common/css/images/serv3.png' %}" alt="Care Of Garden">
                 <h5 class="service-title">Care Of Garden</h5>
-                <p class="service-description">Velit nec sodales iaculis nisi arcu vehicula odio nec dictum augue elit ante.</p>
-                <a href="#" class="read-more">Read More</a>
+                <p class="service-description">Learn essential tips for watering, pruning, and maintaining your garden's health.</p>
+                
             </div>
         </div>
     </div>
 </div>
+
+
 
 <!-- ======== service ========== -->
 

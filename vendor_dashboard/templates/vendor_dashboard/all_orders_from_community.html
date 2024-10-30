@@ -42,6 +42,7 @@
         color: #ffc107; /* Yellow color for stars on hover */
     }
 </style>
+<div style="min-height: 100vh;">
     <div class="page-wapper m-4">
         {% include 'app_common/snippets/alert.html' %}
         <div class="">
@@ -81,9 +82,9 @@
                                     Rate This
                                 </a>
                             {% elif order.buying_status == "BuyInProgress" %}
-                                <a class="btn btn-success" disabled>Not Done Yet</a>
+                                <a class="" id="table_BTN" disabled>Not Done Yet</a>
                             {% else %}
-                                <a class="btn btn-success" disabled>Rated</a>
+                                <a class="" id="table_BTN" disabled>Rated</a>
                             {% endif %}   
                         </td>
                         <!-- <td>
@@ -135,6 +136,8 @@
             </div>
         </div>
     </div>
+
+</div>
 
 {% endblock main_content %}
 {% block script %}

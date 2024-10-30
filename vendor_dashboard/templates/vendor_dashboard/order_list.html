@@ -1,16 +1,34 @@
 {% extends 'vendor_dashboard/base.html' %}
 {% load static %}
 {% block main_content %}
+<head>
+  <style>
+    .form-control {
+      border: none;
+      border-bottom: 2px solid #ccc;
+      border-radius: 7px;
+      padding: 5px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .form-control:focus {
+      border-bottom-color: #37af2c;
+      outline: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
 
+  </style>
+</head>
 <header>
   <div class="container-fluid">
-    <div class="border-bottom pt-6 ">
+    <div class="border-bottom pt-6">
       <div class="row">
         <div class="col-sm col-6">
-          <h1 class="h2 ls-tight">Order List</h1>
+          <h1 class="h3 ls-tight">Order List</h1>
         </div>
         <div class="col-sm col-6 d-flex justify-content-end">
-          <h1 class="h2 ls-tight">Total Income : <b class="text-success">{{income}} /-</b></h1>
+          <h1 class="h3 ls-tight">Total Income : <b class="text-success">{{income}} /-</b></h1>
         </div>
       </div>
     </div>
@@ -18,25 +36,26 @@
 </header>
 
 <main class="py-6 bg-surface-secondary">
-
-
   <div class="container-fluid">
     <div class="vstack gap-4">
-      <div class="utility_order">
-        <button class="btn btn-outline-primary my-1" data-bs-toggle="modal" data-bs-target="#order_filter">
-          <i class="fa-solid fa-filter" style="color: #005cfa;"></i>
-          filter
+      <!-- Filter and Search Row -->
+      <div class="d-flex justify-content-end align-items-baseline mb-3">
+        <!-- Filter Button -->
+        <button class="btn btn-outline-secondary me-2" id="table_BTN" data-bs-toggle="modal" data-bs-target="#order_filter">
+          <i class="fa-solid fa-filter"></i> Filter
         </button>
-
-        <form method="get" action="{% url 'vendor_dashboard:vendor_order_search' %}">
+        
+        <!-- Search Form -->
+        <form method="get" action="{% url 'vendor_dashboard:vendor_order_search' %}" class="d-flex align-items-baseline">
           {% csrf_token %}
-          <input class="form-control" type="text" name="query" placeholder="SEARCH ID" required />
-          <button class="btn">
-            <i class="fa-solid fa-magnifying-glass fa-shake" style="color: #a805ff;"></i>
+          <input class="form-control " type="text" name="query" placeholder="SEARCH ID" required />
+          <button class="" id="table_BTN" type="submit">
+            <i class="fa-solid fa-magnifying-glass fa-shake"></i>
           </button>
         </form>
       </div>
 
+      <!-- Order Table -->
       <div class="card">
         <div class="table-responsive">
           <table class="table table-hover table-nowrap">
@@ -54,23 +73,15 @@
               <tr>
                 <td>
                   <a target="_blank" href="{% url 'vendor_dashboard:order_detail' order.uid %}">
-                    {{order.uid}}
+                    {{ order.uid }}
                   </a>
                 </td>
-                <td>
-                  <!-- {% if 'final_value' in order.order_meta_data %}
-                    {{ order.order_meta_data.final_value }}
-                  {% else %}
-                    {{ order.order_meta_data.final_cart_value }}
-                  {% endif %} -->
-                  {{order.order_value}}
-                </td>
-                <td>{{order.transaction_id}}</td>
-                <td>{{order.order_status}}</td>
-                <td>{{order.payment_status}}</td>
+                <td>{{ order.order_value }}</td>
+                <td>{{ order.transaction_id }}</td>
+                <td>{{ order.order_status }}</td>
+                <td>{{ order.payment_status }}</td>
               </tr>
               {% endfor %}
-
             </tbody>
           </table>
         </div>
@@ -79,8 +90,7 @@
   </div>
 </main>
 
-
-<!-- filter -->
+<!-- Filter Modal -->
 <div class="modal fade" id="order_filter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -89,24 +99,20 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div id="order_filter">
-
-        <form id="" method="get" action="{% url 'vendor_dashboard:order_status_search' %}">
+        <form method="get" action="{% url 'vendor_dashboard:order_status_search' %}" class="d-flex justify-content-center">
           {% csrf_token %}
           <div>
             <select class="form-select" aria-label="Default select example" name="filter_by">
               {% for status in order_status_options %}
-                <option value="{{status.1}}">{{status.1}}</option>
+              <option value="{{ status.1 }}">{{ status.1 }}</option>
               {% endfor %}
             </select>
-
-            <button class="btn btn-primary" type="submit">
-              search
+            <button class="btn btn-outline-primary mt-3" type="submit">
+              Search
             </button>
           </div>
         </form>
-
       </div>
-
     </div>
   </div>
 </div>

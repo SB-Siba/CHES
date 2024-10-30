@@ -36,7 +36,7 @@ box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rg
 .icon-circle {
 background-color: #089000; /* Green background color */
 border-radius: 50%;
-padding: 5px; /* Adjust the padding for the circle size */
+padding: 12px; /* Adjust the padding for the circle size */
 display: flex;
 align-items: center;
 justify-content: center;
@@ -48,7 +48,7 @@ color: white; /* Icon color */
 font-size: 18px; /* Adjust the icon size */
 }
 
-/* Reduce font size and line height */
+
 .text-content p {
 font-size: 14px; /* Adjust the font size */
 line-height: 1.2; /* Reduce line height */

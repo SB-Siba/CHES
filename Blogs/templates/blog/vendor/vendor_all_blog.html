@@ -3,7 +3,7 @@
 
 {% block main_content %}
 
-<section>
+<section class="" style="min-height: 100vh;">
 
     
     <div class="container my-lg-3 my-2">
@@ -26,17 +26,19 @@
                         <p class="m-0 pt-1">
                             {{ blog.content|truncatechars:150| safe }}
                         </p>
-                        <a href="{% url 'blogs:vendor_blog_details' slug=blog.slug %}">
-                            <button class="learn-more mt-3 mb-3 m-lg-0">
-                                <span class="circle" aria-hidden="true">
-                                    <span class="icon arrow"></span>
-                                </span>
-                                <span class="button-text">Read More</span>
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'blogs:vendor_blog_details' slug=blog.slug %}">
+                                <button class="learn-more mt-3 mb-3 m-lg-0">
+                                    <span class="circle" aria-hidden="true">
+                                        <span class="icon arrow"></span>
+                                    </span>
+                                    <span class="button-text">Read More</span>
+                                </button>
+                            </a>
+                            <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#shareModal{{ blog.id }}">
+                                <i class="fa-solid fa-share"></i> Share
                             </button>
-                        </a>
-                        <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#shareModal{{ blog.id }}">
-                            <i class="fa-solid fa-share"></i> Share
-                        </button>
+                        </div>
                       </div>
                     </div>
                 

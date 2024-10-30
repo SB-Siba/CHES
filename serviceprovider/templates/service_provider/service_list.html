@@ -61,14 +61,14 @@
                                     {% endif %}
                                 </td>
                                 <td>{{ service.service_type.service_category }}</td>
-                                <td>{{ service.description }}</td>
+                                <td style="max-width: 30vw;">{{ service.description }}</td>
                                 <td>{{ service.price_per_hour }}</td>
                                 <td>
-                                    <a href="{% url 'service_provider:service_update' service.id %}" class="btn btn-sm btn-square btn-neutral">
-                                        <i class="fas fa-edit text-success fs-5"></i>
+                                    <a href="{% url 'service_provider:service_update' service.id %}" class="me-2" id="table_BTN">
+                                        <i class="fas fa-edit  fs-5"></i>
                                     </a>
-                                    <a href="{% url 'service_provider:service_delete' service.id %}">
-                                        <i class="fa-solid fa-trash text-danger"></i>
+                                    <a href="{% url 'service_provider:service_delete' service.id %}" id="table_BTN2">
+                                        <i class="fa-solid fa-trash "></i>
                                     </a>
                                 </td>
                             </tr>

@@ -19,7 +19,7 @@
                 {% if booking.status == 'confirmed' %}
                     <a href="{% url 'user_dashboard:rtg_decline_booking' booking.id %}" class="btn btn-danger">Cancel Booking</a>
                 {% endif %}
-                <a href="{% url 'chat:startmessages' booking.service.provider.id 'None' %}" class="details_btn">Message Provider</a>
+                <a href="{% url 'chat:startmessages' booking.service.provider.id 'None' %}" class="" id="table_BTN">Message Provider</a>
             </li>
             {% empty %}
             <li class="list-group-item">You have not booked any services yet.</li>

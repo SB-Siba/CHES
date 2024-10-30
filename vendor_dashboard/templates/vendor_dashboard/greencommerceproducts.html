@@ -100,8 +100,8 @@
                     <div class="modal fade" id="userprofile" data-bs-backdrop="static" data-bs-keyboard="false"
                         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content" style="border-radius: 15px; background-color: green;">
-                                <div class="modal-header bg-warning">
+                            <div class="modal-content" >
+                                <div class="modal-header ">
                                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Seller Profile</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -109,7 +109,7 @@
                                 <div class="modal-body">
                                     <div class="container h-100 w-100">
                                         <div class="d-flex justify-content-center align-items-center">
-                                            <div class="card w-100 h-100" style="background-color: green;border: none;">
+                                            <div class="card w-100 h-100" >
                                                 <div class="card-body text-black mx-0 me-0 my-0 w-100 h-100">
                                                     <div class="d-flex align-items-center mb-4">
                                                         <div class="flex-shrink-0">
@@ -157,32 +157,32 @@
                                                         </div>
                                                     </div>
                                                     <hr>
-                                                    <div class="mb-0 list-unstyled d-flex justify-content-evenly" style="color: yellow;">
+                                                    <div class="mb-0 list-unstyled d-flex justify-content-evenly" style="color: rgb(15, 168, 1);">
                                                         <li>
                                                             <small>
                                                                 <p class="mb-2 h5">{{prod.user.coins}}</p>
-                                                                <p class="text-white mb-0">Coins</p>
+                                                                <p class=" text-dark  mb-0">Coins</p>
                                                             </small>
                                                         </li>
                                                         <li class="px-3">
                                                             <small>
                                                                 <p class="mb-2 h5">{{prod.user.total_income}}</p>
-                                                                <p class="text-white mb-0">Income</p>
+                                                                <p class=" text-dark  mb-0">Income</p>
                                                             </small>
                                                         </li>
                                                         <li>
                                                             <small>
                                                                 <p class="mb-2 h5">{{prod.user.total_invest}}</p>
-                                                                <p class="text-white mb-0">Purchase</p>
+                                                                <p class=" text-dark mb-0">Purchase</p>
                                                             </small>
                                                         </li>
                                                         <li>
                                                             <small>
                                                                 <div class="d-flex">
                                                                     <p class="mb-2 h5">{{u_rating}}</p>
-                                                                    <i class="fas fa-star text-warning mt-1 mx-1"></i>
+                                                                    <i class="fas fa-star text-success mb-2 mx-1"></i>
                                                                 </div>
-                                                                <p class="text-white mb-0">Ratings</p>
+                                                                <p class="text-dark mb-0">Ratings</p>
                                                             </small>
                                                         </li>
                                                     </div>
@@ -215,7 +215,7 @@
                             {{form.as_p}}
     
                             <div style="text-align: center;margin-top: 2rem;">
-                                <button class="btn btn-block btn-success" type="submit">Send</button>
+                                <button class="" id="table_BTN" type="submit">Send</button>
                             </div>
                         </form>
                     </div>

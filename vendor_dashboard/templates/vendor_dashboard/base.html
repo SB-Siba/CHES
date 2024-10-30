@@ -224,11 +224,12 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{% url 'app_common:logout' %}" class="sidebar-link">
+                    <a href="{% url 'app_common:logout' %}" class="sidebar-link" onclick="return confirm('Do you want to logout?')">
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <span>Logout</span>
                     </a>
                 </li>
+                
                 <!---->
             <!-- <li class="sidebar-item " style="margin-top: 50px;">
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
@@ -329,7 +330,9 @@
                 </div>
             </nav>
             {% block main_content %}
-                
+                <div style="min-height: 120vh;">
+                    
+                </div>
             {% endblock main_content %}
 
             <footer class="footer " >

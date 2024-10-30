@@ -2,28 +2,48 @@
 {% load static %}
 
 {% block main_content %}
-
+<head>
+    <style>
+        .form-control {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 7px;
+    padding: 4px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    height: 36px;
+}
+.form-control:focus {
+    border-bottom-color: #37af2c;
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+    </style>
+</head>
 <main class="py-6">
     <div class=container>
     <h4>All Blogs</h4>
         <div class="vstack gap-4">
-            <div class="d-flex justify-content-between flex-column flex-sm-row gap-3">
+            <div class="d-flex justify-content-between align-items-baseline  gap-3">
                 <form class="my-3 mx-2" action="{% url 'blogs:vendor_blog_search' %}" method="post">
                     {% csrf_token %}
                     <div class="hstack gap-2">
-                        <select style="width: 6rem;" name="filter_by" class="form-select form-select1" aria-label="Default select example">
+                        <select style="width: 6rem;" name="filter_by" class="form-select form-select1 form-control" aria-label="Default select example">
                             <option value="all">All</option>
                             <option value="id">ID</option>
                             <option value="name">Name</option>
                         </select>
-                        <span  class="input-group ">
-                            <input type="text" name="query" placeholder="Search Here" class="form-control form-select1" required />
-                            <button type="submit" class="input-group-text form-select1"><i class='fa fa-search' ></i></button>
-                        </span>
+                        <div class="d-flex justify-content-baseline">
+                            <span  class="input-group ">
+                                <input type="text" name="query" placeholder="Search Here" class="form-control form-select1" required />
+                                <button type="submit" class=" form-select1 mb-4" id="table_BTN" ><i class='fa fa-search' ></i></button>
+                            </span>
+                        </div>
                     </div>
                 </form>
-                <div class="btn-group catagory-btn">
-                    <a href="{% url 'blogs:vendor_blog_add' %}">
+                <div class=" ">
+                    <a href="{% url 'blogs:vendor_blog_add' %}" id="table_BTN">
                         <i class='fa fa-plus-square'></i> Create a New Blog
                     </a>
                 </div>
@@ -55,11 +75,11 @@
                                     <td class="tb-body">{{ blog.author }}</td>
                                     <td class="tb-body">
                                         <a href="{% url 'blogs:vendor_blog_update' blog.id %}"
-                                            class="btn btn-sm btn-square btn-neutral text-success">
+                                            class="me-2" id="table_BTN">
                                             <i class="fa-solid fa-pen-to-square"></i>                                        
                                         </a>
                                         <a href="#" 
-                                            class="btn btn-sm btn-square btn-neutral text-danger" 
+                                            class="" id="table_BTN2" 
                                             onclick="delete_blog(this)" 
                                             p_title="{{ blog.title }}" 
                                             p_id="{{ blog.id }}">

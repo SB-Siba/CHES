@@ -2,9 +2,9 @@
 {% load static %}
 
 {% block main_content %}
-<div class="row m-4">
+<div class="row m-4 d-flex justify-content-center" style="min-height: 100vh;">
 {% for i in bbeigins_obj %}
-     <div class="col-md-6 mb-4">
+     <div class="col-md-10 mb-4">
         <div class="col-md-12 p-4" style="background-color: #e9f7ef; border: 1px solid #28a745; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
             <div class="">
                 <h4 class="card-title">Hey {{i.seller.full_name}},</h4>
@@ -19,7 +19,7 @@
                 
                 <div>
                     {% if i.payment_link == "NotAvailable" %}
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#paymentModal{{ i.id }}">Send Payment Link</button>
+                        <button type="button" class="" id="table_BTN" data-bs-toggle="modal" data-bs-target="#paymentModal{{ i.id }}">Send Payment Link</button>
                         <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#rejectModal{{ i.id }}">Reject this order</button>
                     {% else %}
                         <small class="text-success">Payment Link Sent Successfully.</small>

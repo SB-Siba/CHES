@@ -6,16 +6,10 @@
 <main class="py-6">
     <div class=container>
     <h4>All Blogs</h4>
-<<<<<<< HEAD
         <div class="vstack ">
             <div class="d-flex justify-content-between align-items-baseline ">
                 <form class="my-3 " action="{% url 'blogs:sp_blog_search' %}" method="post">
-=======
-        <div class="vstack gap-4">
-            <div class="d-flex justify-content-between align-items-center flex-column flex-sm-row gap-3">
-                <form class="my-3 mx-2" action="{% url 'blogs:sp_blog_search' %}" method="post">
->>>>>>> 45ffc039bdd479196ba680491d44ba648ccdf1fd
-                    {% csrf_token %}
+                        {% csrf_token %}
                     <div class="hstack gap-2">
                         <select style="width: 6rem;" name="filter_by" class="form-select form-select1 form-control" aria-label="Default select example">
                             <option value="all">All</option>

@@ -1357,7 +1357,7 @@ class ServiceDetails(View):
                     template_name="mail_template/booking_confirmation.html",
                     context = {
                     'gardener_name': request.user.full_name,
-                    'service_name': service.name,  # Assuming the service has a name attribute
+                    'service_name': service.service_type,  # Assuming the service has a name attribute
                     },                 
                     recipient_list=[request.user.email]
                 )

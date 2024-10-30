@@ -26,7 +26,7 @@
       margin-bottom: 10px;    
   }
   </style>
-<div class="page-wapper" >
+<div class="page-wapper" style="min-height: 100vh;" >
     
     <div class="row d-flex justify-content-center  mt-5">
         <div class="col-lg-6 col-md-6 sell_wrapper p-5">
@@ -35,8 +35,8 @@
                 {% csrf_token %}
                 {{form.as_p}}
                 
-                <div style="text-align: center;margin-top: 2rem;">
-                    <button class="btn py-2 w-100" id="editb" type="submit">Add Activity</button>
+                <div class="d-flex justify-content-center" style="text-align: center;margin-top: 2rem;">
+                    <button class=" py-2 w-50"  id="table_BTN" type="submit">Add Activity</button>
                 </div>
             </form>
         </div>
