@@ -8,18 +8,18 @@
   <head>
     <link rel="stylesheet" href="{% static '/user_dashboard/css/services.css '%}">
   </head>
-  <div class="row">
+  <div class="row "  >
     <form method="GET" action="{% url 'user_dashboard:greencommerceproducts' %}">
-      <div class="row">
-        <div class="col-md-6">
+      <div class="row ">
+        <div class="col-md-6 col-12">
           <div class="d-flex align-items-center">
-            <label for="category-filter" class="me-2">Filter by Category:</label>
-            <select class="form-select form-control " style="width: 300px;" id="category-filter" name="category" onchange="this.form.submit()">
+            <!-- <label for="category-filter" class="me-2">Filter by Category:</label> -->
+            <select class="form-select form-control " style="max-width: 380px;" id="category-filter" name="category" onchange="this.form.submit()">
               <option value="">
                 {% if selected_category_name %}
                   {{ selected_category_name }}
                 {% else %}
-                  Select
+                Filter by Category:
                 {% endif %}
               </option>
               <option value="all">All Categories</option>
@@ -30,7 +30,7 @@
           </div>
         </div>
         
-        <div class="col-md-6">
+        <div class="col-md-6 col-12">
           <div class="d-flex mb-3">
             {% if searchquery %}
               <input type="text" name="search_query" class="form-control search-input me-2" aria-label="Search" value="{{ searchquery }}">
@@ -47,278 +47,294 @@
     </form>
     
   </div>
-<div class="row">
-  {% for prod,m_status,u_rating in zipped_value %}
-  <div class="col-md-3 col-sm-6 card-div">
-    <div class="product-grid my-3">
-      <div class="card">
-        <div class="product-image">
-          <a href="#" class="image">
-            <img class="pic-1" src="{{prod.product_image.url}}" />
-            <img class="pic-2" src="{{prod.product_image.url}}" />
+<div class="row min_height_div" >
+{% for prod,m_status,u_rating in zipped_value %}
+<div class="col-md-3 col-12 card-div">
+  <div class="product-grid my-3">
+    <div class="card">
+     <!-- Product Image with Modal Trigger -->
+<div class="product-image">
+  <a href="#" class="image" data-toggle="modal" data-target="#productModal{{ prod.id }}">
+    <img class="pic-1" src="{{ prod.product_image.url }}" />
+    <img class="pic-2" src="{{ prod.product_image.url }}" />
+  </a>
+  {% if not m_status %}
+  <ul class="product-links">
+      <li>
+          <a href="{% url 'chat:startmessages' prod.user.id prod.product_name %}" data-tip="message">
+              <i class="fas fa-sms"></i>
           </a>
-          {% if not m_status %}
-          <ul class="product-links">
-            <li>
-              <a
-                href="{% url 'chat:startmessages' prod.user.id prod.product_name %}"
-                data-tip="message"
-                ><i class="fas fa-sms"></i
-              ></a>
-            </li>
-          </ul>
-          {% endif %}
-        </div>
-    <div class="product-content">
-      <div class="d-flex justify-content-between align-items-center">
-          <small style="font-size: large; font-weight: bold;">{{prod.product_name|truncatechars:10 }}</small>
-          <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="cursor: pointer;" onclick="setProductId({{ prod.id }})">
-              <i class="fas fa-bolt" style="font-size: small;">&nbsp;<small>Buy Now</small></i>
-          </a>
-      </div>
-      <div class="d-flex justify-content-between">
-          <div class="text-secondary" style="font-weight: bold;">
-              {{prod.product_quantity}}&nbsp;<small>{{prod.SI_units}}</small></div>
-          <div class="price text-success"><i
-                  class="fa-solid fa-coins fa-1x text-success">&nbsp;&nbsp;</i>{{prod.amount_in_green_points}}
-          </div>
-      </div>
+      </li>
+  </ul>
+  {% endif %}
+</div>
 
-      <div class="d-flex justify-content-between">
-          <div class="text-info">
-              <a data-bs-toggle="modal" data-bs-target="#userprofile" style="cursor: pointer;">
-                  <small>By : {{prod.user.full_name}}</small>
-              </a>
+<!-- Modal Structure -->
+<div class="modal fade" id="productModal{{ prod.id }}" tabindex="-1" role="dialog" aria-labelledby="productModalLabel{{ prod.id }}" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="productModalLabel{{ prod.id }}">Product Image</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
           </div>
-          <div class="text-info"><small>Days Left: {{prod.days_left_to_expire}}</small></div>
-      </div>
-      <div class="modal fade" id="userprofile" data-bs-backdrop="static" data-bs-keyboard="false"
-          tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                  <div class="modal-header " id="modal-header">
-                      <h1 class="modal-title text-white fs-5" id="staticBackdropLabel">Seller Profile</h1>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal"
-                          aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                      <div class="container h-100 w-100">
-                          <div class="d-flex justify-content-center align-items-center">
-                              <div class="card w-100 h-100" >
-                                  <div class="card-body text-black mx-0 me-0 my-0 w-100 h-100">
-                                      <div class="d-flex align-items-center mb-4">
-                                          <div class="flex-shrink-0">
-                                              {% if prod.user.user_image %}
-                                              <img src="{{prod.user.user_image.url}}"
-                                                  alt="Generic placeholder image"
-                                                  class="img-fluid rounded-circle border border-dark border-3"
-                                                  style="width: 70px; height: 70px;">
-                                              {% else %}
-                                              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-2.webp"
-                                                  alt="Generic placeholder image"
-                                                  class="img-fluid rounded-circle border border-dark border-3"
-                                                  style="width: 70px; height: 70px;">
-                                              {% endif %}
-                                          </div>
-                                          <div class="flex-grow-1">
-                                              <div class="d-flex flex-column align-items-start mx-2">
-                                                  <p class="mb-0 me-2">Name : {{prod.user.full_name}}</p>
-                                                  <p class="mb-0 me-2">Email : {{prod.user.email}}</p>
-                                                  <p class="mb-0 me-2">City : {{prod.user.city}}</p>
-                                              </div>
-                                              <div class="d-flex flex-row align-items-start mx-2">
-                                                {% if prod.user.facebook_link %}
-                                                <a href="{{prod.user.facebook_link}}">
-                                                  <button type="button" class="btn btn-outline-primary btn-floating mr-2">
-                                                    <i class="fab fa-facebook-f fa-lg"></i>
-                                                  </button>
-                                                </a>
-                                                {% endif %}
-                                                {% if prod.user.instagram_link %}
-                                                <a href="{{prod.user.instagram_link}}">
-                                                  <button type="button" class="btn btn-outline-primary btn-floating mr-2">
-                                                    <i class="fab fa-instagram fa-lg"></i>
-                                                  </button>
-                                                </a>
-                                                {% endif %}
-                                                {% if prod.user.twitter_link %}
-                                                <a href="{{prod.user.twitter_link}}">
-                                                  <button type="button" class="btn btn-outline-primary btn-floating mr-2">
-                                                    <i class="fab fa-twitter fa-lg"></i>
-                                                  </button>
-                                                </a>
-                                                {% endif %}
-                                              </div>
-                                          </div>
-                                      </div>
-                                      <hr>
-                                      <div class="mb-0 list-unstyled d-flex justify-content-evenly" style="color: rgb(18, 170, 4);">
-                                          <li>
-                                              <small>
-                                                  <p class="mb-2 h5">{{prod.user.coins}}</p>
-                                                  <p class="text-dark  mb-0">Coins</p>
-                                              </small>
-                                          </li>
-                                          <li class="px-3">
-                                              <small>
-                                                  <p class="mb-2 h5">{{prod.user.total_income}}</p>
-                                                  <p class="text-dark  mb-0">Income</p>
-                                              </small>
-                                          </li>
-                                          <li>
-                                              <small>
-                                                  <p class="mb-2 h5">{{prod.user.total_invest}}</p>
-                                                  <p class="text-dark  mb-0">Purchase</p>
-                                              </small>
-                                          </li>
-                                          <li>
-                                              <small>
-                                                  <div class="d-flex">
-                                                      <p class="mb-2 h5">{{u_rating}}</p>
-                                                      <i class="fas fa-star  mt-1 mx-1" style="color: rgb(1, 152, 1);"></i>
-                                                  </div>
-                                                  <p class="text-dark mb-0">Ratings</p>
-                                              </small>
-                                          </li>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+          <div class="modal-body text-center">
+              <img src="{{ prod.product_image.url }}" class="img-fluid h-100 w-100" alt="Product Image">
           </div>
       </div>
   </div>
+</div>
+
+  <div class="product-content">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <small style="font-size: large; font-weight: bold;">{{prod.product_name|truncatechars:10 }}</small>
+        <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="cursor: pointer;" class="buy_community_btn" onclick="setProductId({{ prod.id }})">
+            <i class="fas fa-bolt" style="font-size: small;">&nbsp;<small>Buy Now</small></i>
+        </a>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="text-secondary" style="font-weight: bold;">
+            {{prod.product_quantity}}&nbsp;<small>{{prod.SI_units}}</small></div>
+        <div class="price text-success"><i
+                class="fa-solid fa-coins fa-1x text-success">&nbsp;&nbsp;</i>{{prod.amount_in_green_points}}
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="text-info">
+            <a data-bs-toggle="modal" data-bs-target="#userprofile" style="cursor: pointer;">
+                <small>By : {{prod.user.full_name}}</small>
+            </a>
+        </div>
+        <div class="text-info"><small>Days Left: {{prod.days_left_to_expire}}</small></div>
+    </div>
+    <div class="modal fade" id="userprofile" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header " id="modal-header">
+                    <h1 class="modal-title text-white fs-5" id="staticBackdropLabel">Seller Profile</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container h-100 w-100">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="card w-100 h-100" >
+                                <div class="card-body text-black mx-0 me-0 my-0 w-100 h-100">
+                                    <div class="d-flex align-items-center mb-4">
+                                        <div class="flex-shrink-0">
+                                            {% if prod.user.user_image %}
+                                            <img src="{{prod.user.user_image.url}}"
+                                                alt="Generic placeholder image"
+                                                class="img-fluid rounded-circle border border-dark border-3"
+                                                style="width: 70px; height: 70px;">
+                                            {% else %}
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-2.webp"
+                                                alt="Generic placeholder image"
+                                                class="img-fluid rounded-circle border border-dark border-3"
+                                                style="width: 70px; height: 70px;">
+                                            {% endif %}
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="d-flex flex-column align-items-start mx-2">
+                                                <p class="mb-0 me-2">Name : {{prod.user.full_name}}</p>
+                                                <p class="mb-0 me-2">Email : {{prod.user.email}}</p>
+                                                <p class="mb-0 me-2">City : {{prod.user.city}}</p>
+                                            </div>
+                                            <div class="d-flex flex-row align-items-start mx-2">
+                                              {% if prod.user.facebook_link %}
+                                              <a href="{{prod.user.facebook_link}}">
+                                                <button type="button" class="btn btn-outline-primary btn-floating mr-2">
+                                                  <i class="fab fa-facebook-f fa-lg"></i>
+                                                </button>
+                                              </a>
+                                              {% endif %}
+                                              {% if prod.user.instagram_link %}
+                                              <a href="{{prod.user.instagram_link}}">
+                                                <button type="button" class="btn btn-outline-primary btn-floating mr-2">
+                                                  <i class="fab fa-instagram fa-lg"></i>
+                                                </button>
+                                              </a>
+                                              {% endif %}
+                                              {% if prod.user.twitter_link %}
+                                              <a href="{{prod.user.twitter_link}}">
+                                                <button type="button" class="btn btn-outline-primary btn-floating mr-2">
+                                                  <i class="fab fa-twitter fa-lg"></i>
+                                                </button>
+                                              </a>
+                                              {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="mb-0 list-unstyled d-flex justify-content-evenly" style="color: rgb(18, 170, 4);">
+                                        <li>
+                                            <small>
+                                                <p class="mb-2 h5">{{prod.user.coins}}</p>
+                                                <p class="text-dark  mb-0">Coins</p>
+                                            </small>
+                                        </li>
+                                        <li class="px-3">
+                                            <small>
+                                                <p class="mb-2 h5">{{prod.user.total_income}}</p>
+                                                <p class="text-dark  mb-0">Income</p>
+                                            </small>
+                                        </li>
+                                        <li>
+                                            <small>
+                                                <p class="mb-2 h5">{{prod.user.total_invest}}</p>
+                                                <p class="text-dark  mb-0">Purchase</p>
+                                            </small>
+                                        </li>
+                                        <li>
+                                            <small>
+                                                <div class="d-flex">
+                                                    <p class="mb-2 h5">{{u_rating}}</p>
+                                                    <i class="fas fa-star  mt-1 mx-1" style="color: rgb(1, 152, 1);"></i>
+                                                </div>
+                                                <p class="text-dark mb-0">Ratings</p>
+                                            </small>
+                                        </li>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-        <div
-          class="modal fade"
-          id="userprofile"
-          data-bs-backdrop="static"
-          data-bs-keyboard="false"
-          tabindex="-1"
-          aria-labelledby="staticBackdropLabel"
-          aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="background-color: #14453b">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">
-                  Seller Profile
-                </h1>
-                <button
-                  type="button"
-                  class="btn-close close_btn"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div class="container h-100 w-100">
-                  <div class="d-flex justify-content-center align-items-center">
+      <div
+        class="modal fade"
+        id="userprofile"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style="background-color: #14453b">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                Seller Profile
+              </h1>
+              <button
+                type="button"
+                class="btn-close close_btn"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="container h-100 w-100">
+                <div class="d-flex justify-content-center align-items-center">
+                  <div
+                    class="card w-100 h-100 my-3 m-3 my-card"
+                    style="
+                      background-color: #1f782b;
+                      border: none;
+                      box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+                        rgba(0, 0, 0, 0.22) 0px 10px 10px;
+                    ">
                     <div
-                      class="card w-100 h-100 my-3 m-3 my-card"
-                      style="
-                        background-color: #1f782b;
-                        border: none;
-                        box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
-                          rgba(0, 0, 0, 0.22) 0px 10px 10px;
-                      ">
+                      class="card-body text-black mx-0 me-0 my-0 w-100 h-100">
+                      <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0">
+                          {% if prod.user.user_image %}
+                          <img
+                            src="{{prod.user.user_image.url}}"
+                            alt="Generic placeholder image"
+                            class="img-fluid rounded-circle border border-dark border-3"
+                            style="width: 80px" />
+                          {% else %}
+                          <img
+                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-2.webp"
+                            alt="Generic placeholder image"
+                            class="img-fluid rounded-circle border border-dark border-3"
+                            style="width: 80px" />
+                          {% endif %}
+                        </div>
+                        <div class="flex-grow-1">
+                          <div
+                            class="d-flex flex-column text-white align-items-start mx-3">
+                            <p class="mb-0 me-2">
+                              <b>Name :</b> {{prod.user.full_name}}
+                            </p>
+                            <p class="mb-0 me-2">
+                              <b>Email :</b> {{prod.user.email}}
+                            </p>
+                            <p class="mb-0 me-2">
+                              <b>City :</b> {{prod.user.city}}
+                            </p>
+                          </div>
+                          <div
+                            class="d-flex flex-row align-items-start my-3 mx-3">
+                            <a href="{{prod.user.facebook_link}}">
+                              <button
+                                type="button"
+                                class="btn btn-outline-primary btn-floating mr-2">
+                                <i class="fab fa-facebook-f fa-lg"></i>
+                              </button>
+                            </a>
+                            <a href="{{prod.user.instagram_link}}">
+                              <button
+                                type="button"
+                                class="btn btn-outline-danger btn-floating mr-2">
+                                <i class="fab fa-instagram fa-lg"></i>
+                              </button>
+                            </a>
+                            <a href="{{prod.user.twitter_link}}">
+                              <button
+                                type="button"
+                                class="btn btn-outline-primary btn-floating mr-2">
+                                <i class="fab fa-twitter fa-lg"></i>
+                              </button>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <hr />
                       <div
-                        class="card-body text-black mx-0 me-0 my-0 w-100 h-100">
-                        <div class="d-flex align-items-center mb-3">
-                          <div class="flex-shrink-0">
-                            {% if prod.user.user_image %}
-                            <img
-                              src="{{prod.user.user_image.url}}"
-                              alt="Generic placeholder image"
-                              class="img-fluid rounded-circle border border-dark border-3"
-                              style="width: 80px" />
-                            {% else %}
-                            <img
-                              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-2.webp"
-                              alt="Generic placeholder image"
-                              class="img-fluid rounded-circle border border-dark border-3"
-                              style="width: 80px" />
-                            {% endif %}
-                          </div>
-                          <div class="flex-grow-1">
-                            <div
-                              class="d-flex flex-column text-white align-items-start mx-3">
-                              <p class="mb-0 me-2">
-                                <b>Name :</b> {{prod.user.full_name}}
-                              </p>
-                              <p class="mb-0 me-2">
-                                <b>Email :</b> {{prod.user.email}}
-                              </p>
-                              <p class="mb-0 me-2">
-                                <b>City :</b> {{prod.user.city}}
-                              </p>
+                        class="mb-0 list-unstyled d-flex flex-row"
+                        style="color: yellow">
+                        <li>
+                          <small>
+                            <p class="mb-2 h5">{{prod.user.wallet}}</p>
+                            <p class="text-white mb-0">Wallets Balance</p>
+                          </small>
+                        </li>
+                        <li>
+                          <small>
+                            <p class="mb-2 h5">{{prod.user.coins}}</p>
+                            <p class="text-white mb-0">Coins</p>
+                          </small>
+                        </li>
+                        <li class="px-3">
+                          <small>
+                            <p class="mb-2 h5">{{prod.user.total_income}}</p>
+                            <p class="text-white mb-0">Income</p>
+                          </small>
+                        </li>
+                        <li>
+                          <small>
+                            <p class="mb-2 h5">{{prod.user.total_invest}}</p>
+                            <p class="text-white mb-0">Purchase</p>
+                          </small>
+                        </li>
+                        <li>
+                          <small>
+                            <div class="d-flex">
+                              <p class="mb-2 h5">{{u_rating}}</p>
+                              <i
+                                class="fas fa-star text-warning mt-1 mx-1"></i>
                             </div>
-                            <div
-                              class="d-flex flex-row align-items-start my-3 mx-3">
-                              <a href="{{prod.user.facebook_link}}">
-                                <button
-                                  type="button"
-                                  class="btn btn-outline-primary btn-floating mr-2">
-                                  <i class="fab fa-facebook-f fa-lg"></i>
-                                </button>
-                              </a>
-                              <a href="{{prod.user.instagram_link}}">
-                                <button
-                                  type="button"
-                                  class="btn btn-outline-danger btn-floating mr-2">
-                                  <i class="fab fa-instagram fa-lg"></i>
-                                </button>
-                              </a>
-                              <a href="{{prod.user.twitter_link}}">
-                                <button
-                                  type="button"
-                                  class="btn btn-outline-primary btn-floating mr-2">
-                                  <i class="fab fa-twitter fa-lg"></i>
-                                </button>
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                        <hr />
-                        <div
-                          class="mb-0 list-unstyled d-flex flex-row"
-                          style="color: yellow">
-                          <li>
-                            <small>
-                              <p class="mb-2 h5">{{prod.user.wallet}}</p>
-                              <p class="text-white mb-0">Wallets Balance</p>
-                            </small>
-                          </li>
-                          <li>
-                            <small>
-                              <p class="mb-2 h5">{{prod.user.coins}}</p>
-                              <p class="text-white mb-0">Coins</p>
-                            </small>
-                          </li>
-                          <li class="px-3">
-                            <small>
-                              <p class="mb-2 h5">{{prod.user.total_income}}</p>
-                              <p class="text-white mb-0">Income</p>
-                            </small>
-                          </li>
-                          <li>
-                            <small>
-                              <p class="mb-2 h5">{{prod.user.total_invest}}</p>
-                              <p class="text-white mb-0">Purchase</p>
-                            </small>
-                          </li>
-                          <li>
-                            <small>
-                              <div class="d-flex">
-                                <p class="mb-2 h5">{{u_rating}}</p>
-                                <i
-                                  class="fas fa-star text-warning mt-1 mx-1"></i>
-                              </div>
-                              <p class="text-white mb-0">Ratings</p>
-                            </small>
-                          </li>
-                        </div>
+                            <p class="text-white mb-0">Ratings</p>
+                          </small>
+                        </li>
                       </div>
                     </div>
                   </div>
@@ -330,7 +346,8 @@
       </div>
     </div>
   </div>
-  {% endfor %}
+</div>
+{% endfor %}
 
   <!-- Modal -->
   <div
@@ -344,7 +361,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content my_modal">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel">
+          <h1 class="modal-title text-white fs-5" id="staticBackdropLabel">
             How much Quantity You Want !!!
           </h1>
           <button
@@ -359,7 +376,7 @@
             {{form.as_p}}
 
             <div style="text-align: center; margin-top: 3.5rem">
-              <button class="btn btn-block my_modal_btn" type="submit">
+              <button class="" id="table_BTN" type="submit">
                 Send
               </button>
             </div>

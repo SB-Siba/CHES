@@ -289,6 +289,16 @@ input[type="checkbox"].checkbox:checked + .form-check-label {
 #table_head_bg{
   background-color: #008000;
   color: white;
+    vertical-align: top;
+    padding: 8px 1px 8px 5px; 
+    text-align: left; 
+    white-space: nowrap;
+    
+}
+@media (max-width: 768px){
+  #table_head_bg{
+    font-size: 12px !important;
+  }
 }
 /* ============ Service List ============ */
 /* =========all booking =========== */
@@ -297,3 +307,56 @@ input[type="checkbox"].checkbox:checked + .form-check-label {
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 /* =========all booking =========== */
+ /* ======== OffCanvas ======== */
+ @media (max-width: 992px) {
+
+  #accordionSidebar {
+      display: none;
+  }
+
+  #content-wrapper {
+      margin-left: 0;
+  }
+
+  .offcanvas {
+      width: 75%; 
+  }
+}
+
+.offcanvas {
+  background-color: #135d01f4 !important;
+  color: white; 
+}
+.offcanvas a {
+  text-decoration: none;
+}
+
+.offcanvas-header .offcanvas-title {
+  color: white; 
+}
+
+.offcanvas-header .btn-close {
+  filter: invert(1); 
+}
+
+
+.offcanvas-body .navbar-nav .nav-link {
+  color: white;
+}
+
+.offcanvas-body .navbar-nav .nav-link:hover {
+  color: #ccc; 
+}
+.fa-chevron-down{
+  font-size: 10px;
+}
+#offcanvasGardeningProfile.show + .navbar-nav .rotate-icon {
+  transform: rotate(90deg); /* Rotates the arrow downward */
+  transition: transform 0.3s ease;
+}
+
+.rotate-icon {
+  transition: transform 0.3s ease;
+}
+
+/* ======== OffCanvas ======== */

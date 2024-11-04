@@ -37,7 +37,7 @@
     }
 </style>
 
-<div class="container my-4">
+<div class=" my-4">
 
     <!-- If no category is selected, show the categories -->
     {% if categories %}
@@ -47,7 +47,7 @@
     <div class="row mb-4">
         {% for category in categories %}
         <div class="col-md-4 mb-4">
-            <a href="?category_id={{ category.id }}">
+            <a href="?category_id={{ category.id }}" class="text-decoration-none">
                 <div class="category-card shadow-sm">
                     <!-- Category Image -->
                     {% if category.image %}
@@ -55,7 +55,7 @@
                     {% else %}
                     <img src="{% static 'default-category-image.jpg' %}" class="category-image" alt="No Image Available">
                     {% endif %}
-                    <h5>{{ category.service_category }}</h5>
+                    <h5 class="text-black text-decoration-none">{{ category.service_category }}</h5>
                 </div>
             </a>
         </div>
@@ -96,7 +96,7 @@
         </div>
         {% endfor %}
     </div>
-    <a href="{% url 'user_dashboard:list_services' %}" class="btn btn-secondary mt-4">Back to Categories</a>
+    <!-- <a href="{% url 'user_dashboard:list_services' %}" class="btn btn-secondary mt-4">Back to Categories</a> -->
     {% else %}
     <div class="alert alert-info" role="alert">
         No services available for this category.

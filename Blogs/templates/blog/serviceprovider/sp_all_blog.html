@@ -4,8 +4,8 @@
 {% block s_vendor_content %}
 
 <section>
-    <div class="container my-lg-3 my-2">
-        <h3 class="py-lg-3 py-2">All Blogs</h3>
+    <div class="container my-lg-3 my-2 min_height_div">
+        <h3 class="">All Blogs</h3>
         <div class="row">
             {% for blog in blogs %}
             <div class="col col-12 col-lg-6 my-lg-3 my-2">
@@ -16,15 +16,15 @@
                 </div>
                 <div class=" blog_title">
                     <h5 class="mt-lg-3 mt-3">
-                        <a href="{% url 'blogs:sp_blog_details' slug=blog.slug %}">{{ blog.title }}</a>
+                        <a class="text-decoration-none" href="{% url 'blogs:sp_blog_details' slug=blog.slug %}">{{ blog.title }}</a>
                     </h5>
                     <p>{{ blog.date }}</p>
                     <p>
                         {{ blog.content|truncatechars:200| safe }}
                     </p>
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-between align-items-baseline mt-3">
                         <a href="{% url 'blogs:sp_blog_details' slug=blog.slug %}">
-                            <button class="learn-more mt-3 mb-3 m-lg-0">
+                            <button class="learn-more  mb-3 m-lg-0">
                                 <span class="circle" aria-hidden="true">
                                     <span class="icon arrow"></span>
                                 </span>
@@ -32,7 +32,7 @@
                             </button>
                         </a>
                         <!-- Share Button -->
-                        <button class="btn btn-sm btn-secondary mt-3" data-bs-toggle="modal" data-bs-target="#shareModal{{ blog.id }}">
+                        <button class="btn btn-sm btn-secondary " data-bs-toggle="modal" data-bs-target="#shareModal{{ blog.id }}">
                             <i class="fa-solid fa-share"></i> Share
                         </button>
                     </div>

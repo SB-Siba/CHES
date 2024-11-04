@@ -8,11 +8,11 @@
 <head>
   
 </head>
-<div class="container mt-3">
+<div class=" mt-3">
     <div class="row d-flex align-items-center justify-content-center">
-        <div class="col-lg-8 sell_wrapper">
-            <form method="post" action="" class="p-4" enctype="multipart/form-data">
-                <div class="form_sec">
+        <div class="col-lg-8 col-12 ">
+            <form method="post" action="" class="" enctype="multipart/form-data">
+                <div class="">
                     {% include 'app_common/snippets/alert.html' %}
                     {% csrf_token %}
                     {{form.as_p}}

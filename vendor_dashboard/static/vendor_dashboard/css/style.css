@@ -323,3 +323,36 @@ a.sidebar-link:hover {
 /* .post_img{
     height: 450px !important;
 } */
+ 
+.offcanvas {
+    background-color: green;
+    color: white; 
+}
+
+.offcanvas-header .offcanvas-title {
+    color: white; 
+}
+
+.offcanvas-header .btn-close {
+    filter: invert(1); 
+}
+
+
+.offcanvas-body .navbar-nav .nav-link {
+    color: white;
+}
+
+.offcanvas-body .navbar-nav .nav-link:hover {
+    color: #ccc; 
+}
+.fa-chevron-down{
+    font-size: 10px;
+}
+#offcanvasGardeningProfile.show + .navbar-nav .rotate-icon {
+    transform: rotate(90deg); /* Rotates the arrow downward */
+    transition: transform 0.3s ease;
+}
+
+.rotate-icon {
+    transition: transform 0.3s ease;
+}

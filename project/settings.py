@@ -1,18 +1,18 @@
 from pathlib import Path
 import os
 from django.contrib.messages import constants as messages
-from dotenv import dotenv_values
+# from dotenv import dotenv_values
 
-env_vars = dotenv_values(".env")
+# env_vars = dotenv_values(".env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECRET_KEY = str(os.getenv('SECRET_KEY'))
-SECRET_KEY = env_vars['SECRET_KEY']
+SECRET_KEY = ['#w8wl7b(y@!thxcn!029g-!j_xg1qindd9v!pc%n(64!5evef(']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env_vars['DEBUG']
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -86,23 +86,23 @@ WSGI_APPLICATION = "project.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env_vars["DB_NAME"],
-        "USER": env_vars["DB_USER"],
-        "PASSWORD": env_vars["DB_PASSWORD"],
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
-    }
-}
-
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": env_vars["DB_NAME"],
+#         "USER": env_vars["DB_USER"],
+#         "PASSWORD": env_vars["DB_PASSWORD"],
+#         "HOST": "127.0.0.1",
+#         "PORT": "5432",
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

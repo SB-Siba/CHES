@@ -73,7 +73,7 @@ h1, h2 , h3 ,h4 {
 .dash-card3{
     background: rgb(126,55,148);
 background: linear-gradient(349deg, rgba(164, 30, 185, 0.656) 0%, rgba(170, 37, 197, 0.676) 48%, rgba(143, 1, 153, 0.615) 80%),url(../img/card3.jpeg) no-repeat center center;
-border-left: 5px solid rgb(98, 195, 8);
+border-left: 5px solid rgb(1, 130, 20);
 background-size: cover; 
     color: white;
 }
@@ -215,7 +215,7 @@ background-size: cover;
     background-color: #fff;
     border: none;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    height: 160vh!important;
+    minheight: 160vh!important;
 }
 .user_profile h4{
     color: #4CAF50;
@@ -416,3 +416,57 @@ height: 8.2rem!important;
     width: 50px;
     height: 50px;
   }
+
+ /* ======== OffCanvas ======== */
+ @media (max-width: 992px) {
+
+    #accordionSidebar {
+        display: none;
+    }
+
+    #content-wrapper {
+        margin-left: 0;
+    }
+
+    .offcanvas {
+        width: 75%; 
+    }
+}
+
+.offcanvas {
+    background-color: green;
+    color: white; 
+}
+
+.offcanvas-header .offcanvas-title {
+    color: white; 
+}
+
+.offcanvas-header .btn-close {
+    filter: invert(1); 
+}
+
+
+.offcanvas-body .navbar-nav .nav-link {
+    color: white;
+}
+
+.offcanvas-body .navbar-nav .nav-link:hover {
+    color: #ccc; 
+}
+.fa-chevron-down{
+    font-size: 10px;
+}
+#offcanvasGardeningProfile.show + .navbar-nav .rotate-icon {
+    transform: rotate(90deg); /* Rotates the arrow downward */
+    transition: transform 0.3s ease;
+}
+
+.rotate-icon {
+    transition: transform 0.3s ease;
+}
+
+ /* ======== OffCanvas ======== */
+ .min_height_div{
+    min-height: 100vh;
+ }

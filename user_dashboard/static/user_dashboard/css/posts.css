@@ -29,16 +29,21 @@
     max-width: 100%;
     width: 100%;
     height: 450px;
-    object-fit: cover;
+    object-fit: fill;
     display: block;
 }
+
 
 .timeline {
     scrollbar-width: thin;
     scrollbar-color: #888 #f1f1f1; 
 }
 
-
+.userimage img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
 .timeline .timeline-time {
     position: absolute;
     left: 0;
@@ -142,6 +147,7 @@ color: white!important;
 .timeline-header .username,
 .timeline-header .username a {
     color: #ffffff
+
 }
 
 .timeline img {
@@ -222,7 +228,7 @@ color: white!important;
 .timeline-comment-box {
     background: #f2f3f4;
    
-    padding: 20px 25px
+    padding: 20px 10px
 }
 
 .timeline-comment-box .user {
@@ -265,3 +271,18 @@ color: white!important;
     color: #fff !important;
     transition: 0.5rem;
   }
+
+
+  @media (max-width: 568px){
+    .timeline img {
+        max-width: 100%;
+        width: 100%;
+        height: 300px;
+        object-fit: fill;
+        display: block;
+    }
+    .post_time  {
+        font-size: 10px;
+    }
+    
+}

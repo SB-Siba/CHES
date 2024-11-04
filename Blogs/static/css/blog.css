@@ -246,10 +246,22 @@ color: #fff;
 #t_daTa{
     font-size: 12px;
 }
+
+
 #tb-head{
-    background-color: #1F782B;
+    background-color: #008000;
     color: white;
+    vertical-align: top;
+    padding: 8px 1px 8px 5px; 
+    text-align: left; 
+    white-space: nowrap;
+    
 }
+@media (max-width: 768px){
+    #tb-head{
+      font-size: 12px !important;
+    }
+  }
 #table_BTN{
 
     padding: 5px 10px;
@@ -309,3 +321,6 @@ color: #fff;
     text-decoration: none;
     box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
   }
+  .min_height_div{
+    min-height: 100vh;
+ }
