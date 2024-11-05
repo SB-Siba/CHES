@@ -2,19 +2,26 @@
 {% load static %}
 
 {% block s_vendor_content %}
-<h2>My Service Bookings</h2>
-<ul class="list-group">
+<div class="mx-4">
+    <h3 class="mb-4">My Service Bookings</h3>
+<ul class="">
     {% for booking in bookings %}
-    <li class="list-group-item">
-        <h3>{{ booking.service.name }}</h3>
-        <p><strong>Gardener:</strong> {{ booking.gardener.full_name }}</p>
-        <p><strong>Booking Date:</strong> {{ booking.booking_date }}</p>
-        <p><strong>Status:</strong> {{ booking.status }}</p>
+    <li class="list-group-items px-4 py-3 mb-2">
+        <h5>{{ booking.service.name }}</h5>
+        <p><span><h6 style="display:inline;">Gardener:</h6> {{ booking.gardener.full_name }}</span></p>
+        <p><span><h6 style="display:inline;">Booking Date:</h6> {{ booking.booking_date }}</span></p>
+        <p><span><h6 style="display:inline;">Status:</h6> {{ booking.status }}</span></p>
+        
         {% if booking.status == 'pending' %}
-        <a href="{% url 'service_provider:confirm_booking' booking.id %}" class="btn btn-success">Confirm Booking</a>
-        <a href="{% url 'service_provider:decline_booking' booking.id %}" class="btn btn-danger">Decline Booking</a>
+        <a href="{% url 'service_provider:confirm_booking' booking.id %}" class="" id="table_BTN">Confirm Booking</a>
+        <a href="{% url 'service_provider:decline_booking' booking.id %}" 
+        class="" 
+        id="table_BTN2" 
+        onclick="return confirm('Are you sure you want to decline this booking?');">
+        Decline Booking
+     </a>
         {% elif booking.status == 'confirmed' %}
-        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+        <button type="button" class="" id="table_BTN" data-bs-toggle="modal"
             data-bs-target="#markCompleteModal-{{ booking.id }}">
             Mark As Complete
         </button>
@@ -35,8 +42,8 @@
                     <p>Are you sure you want to mark this booking as complete?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a href="{% url 'service_provider:mark_as_complete' booking.id %}" class="btn btn-success">Mark as
+                    <button type="button" class=""id="table_BTN2" data-bs-dismiss="modal">Close</button>
+                    <a href="{% url 'service_provider:mark_as_complete' booking.id %}" class="" id="table_BTN">Mark as
                         Complete</a>
                 </div>
             </div>
@@ -47,4 +54,5 @@
     <li class="list-group-item">No bookings found.</li>
     {% endfor %}
 </ul>
+</div>
 {% endblock s_vendor_content %}

@@ -76,6 +76,11 @@ class DirectBuySerializer(serializers.ModelSerializer):
                 coin_exchange = False
 
             products[product.name] = x
+            
+            taxable_price = product.taxable_price
+            gst_rate = product.gst_rate
+            gst_amount = taxable_price * (gst_rate / 100)
+            charges['GST'] = f"{gst_amount:.2f}"
 
         except Exception as e:
             print(e)

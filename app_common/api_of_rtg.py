@@ -222,12 +222,12 @@ class BuyingBeginsAPIView(APIView):
             sell_prod_obj = SellProduce.objects.get(id=prod_id)
             seller = sell_prod_obj.user
             product_quantity = sell_prod_obj.product_quantity
-            ammount_in_green_points = sell_prod_obj.ammount_in_green_points
+            amount_in_green_points = sell_prod_obj.amount_in_green_points
 
             quantity = int(request.data.get('quantity'))
 
             if product_quantity >= quantity:
-                if buyer.wallet >= ammount_in_green_points * quantity:
+                if buyer.wallet >= amount_in_green_points * quantity:
                     buying_obj = ProduceBuy(
                         buyer=buyer,
                         seller=seller,
@@ -351,7 +351,7 @@ class ProduceBuyAPIView(APIView):
             # Update sell produce
             sell_prod_obj = SellProduce.objects.get(id=sell_prod.id)
             sell_prod_obj.product_quantity -= buy_prod_obj.quantity_buyer_want
-            sell_prod_obj.ammount_in_green_points -= ammount_for_quantity_want
+            sell_prod_obj.amount_in_green_points -= ammount_for_quantity_want
 
             # Update buy product status
             buy_prod_obj.buying_status = "BuyCompleted"

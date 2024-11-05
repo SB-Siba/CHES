@@ -2,36 +2,34 @@
     background-image:url(images/logbg5.jpg) ;
     background-size: cover;
     height: 190vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-position: center center; /* Center the image */
-  background-repeat: no-repeat; /* Prevent image repetition */
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    background-position: center center; 
+    background-repeat: no-repeat; 
 }
+
 
 .login {
     width: 100%;
-    max-width: 450px;
-    
+    max-width: 450px; 
     border-radius: 8px;
-
 }
 .login h3 {
     text-align: center;
     margin-top: 1rem;
     margin-bottom: 1rem;
-   
 }
 .garden_btn{
     background:#027d10;      
-border: 2px solid rgb(125, 187, 125);
-margin-bottom: 20px;
-color: rgb(255, 255, 255);
-border-radius: 50px;
-padding: 10px 30px;
-font-weight: 700;
-width: 50%;
-margin-top: 1rem;
+    border: 2px solid rgb(125, 187, 125);
+    margin-bottom: 20px;
+    color: rgb(255, 255, 255);
+    border-radius: 50px;
+    padding: 10px 30px;
+    font-weight: 700;
+    width: 50%;
+    margin-top: 1rem;
 }
 .garden_btn:hover{
     background: rgb(31,120,43);

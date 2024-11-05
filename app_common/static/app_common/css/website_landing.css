@@ -24,9 +24,23 @@ body {
   .header_body {
   
   }
-  
-  nav {
+  .My_containeR {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  #second-menu.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
+    z-index: 999;
+    background-color: white;
+    
+}
+
+  nav {
+    width: 10060
     padding: 10px 0 0;
     background: #ffffff;
     box-shadow: none;
@@ -691,7 +705,11 @@ background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(5,121,23,1) 52%, 
     background-color: #959e92; /* Change background color on hover */
   
   }
-  
+  .loGo_img{
+    width: 50px;
+    height: 50px;
+  }
+
   /*========= footer end========= */
 
 
@@ -747,7 +765,9 @@ background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(5,121,23,1) 52%, 
 }
 
 @media (max-width: 768px) {
-
+ .My_containeR{
+  padding: 0 .3rem;
+}
     #first-menu {
       display: none !important; /* Hide the first-menu div on small screens */
     }

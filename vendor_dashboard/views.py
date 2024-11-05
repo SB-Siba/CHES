@@ -774,7 +774,7 @@ class SellProduceView(View):
                 product_image = product_image,
                 product_quantity = product_quantity,
                 SI_units = SI_units,
-                ammount_in_green_points = ammount_in_green_points,
+                amount_in_green_points = amount_in_green_points,
                 validity_duration_days = validity_duration_days,
                 produce_category=produce_category,  # Use the ID directly
                  )
@@ -1054,7 +1054,7 @@ class ProduceBuyView(View):
             # Update product quantity and amount in green points
             sell_prod_obj = common_models.SellProduce.objects.get(id=sell_prod.id)
             sell_prod_obj.product_quantity -= buy_prod_obj.quantity_buyer_want
-            sell_prod_obj.ammount_in_green_points -= amount_for_quantity_want
+            sell_prod_obj.amount_in_green_points -= amount_for_quantity_want
 
             # Update the buying status
             buy_prod_obj.buying_status = "BuyCompleted"

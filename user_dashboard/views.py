@@ -497,7 +497,7 @@ class AllSellRequests(View):
 class GreenCommerceProductCommunity(View):
     template = app + "greencommerceproducts.html"
     model = app_commonmodels.SellProduce
-    form = user_form.BuyQuantityForm    
+    form = user_form.BuyQuantityForm
 
     def get(self, request):
         try:
@@ -525,6 +525,7 @@ class GreenCommerceProductCommunity(View):
             produce_query = self.model.objects.exclude(user=request.user).filter(is_approved="approved")
             
             # Apply filters based on category and search query
+            # Determine selected category name if applicable
             if selected_category and selected_category != "all":
                 produce_query = produce_query.filter(produce_category=selected_category)
             if search_query:
@@ -559,8 +560,6 @@ class GreenCommerceProductCommunity(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-
-
 
 @method_decorator(utils.login_required, name='dispatch')
 class BuyingBegins(View):
@@ -1045,6 +1044,7 @@ class CheckoutView(View):
             for i,j in order_details.items():
                 ord_meta_data.update(j)
 
+            gst = ord_meta_data.get('charges', {}).get("GST", "0.00")
             discount_amount = float(ord_meta_data['discount_amount'])
             discount_amount = '{:.2f}'.format(discount_amount)
             delivery_charge = ord_meta_data['charges']["Delivery"]
@@ -1064,7 +1064,8 @@ class CheckoutView(View):
                 "discount_percentage":discount_percentage,
                 "total":t_price,
                 "offer_discount":offer_discount,
-                'delivery_charge':delivery_charge
+                'delivery_charge':delivery_charge,
+                'gst': gst
                 }
             return render(request, self.template, data)
         except Exception as e:
@@ -1108,6 +1109,7 @@ class CheckoutView(View):
                 for i,j in order_details.items():
                     ord_meta_data.update(j)
                     
+                gst = ord_meta_data.get('charges', {}).get("GST", "0.00")
                 t_price = ord_meta_data['final_value']
 
                 try:
@@ -1178,6 +1180,7 @@ class CheckoutView(View):
                 "gst":gst,
                 "total":t_price,
                 "offer_discount":offer_discount,
+                'gst': ord_meta_data['charges']['GST'],
                 'delivery_charge':delivery_charge
                 }
             return render(request, self.template, data)

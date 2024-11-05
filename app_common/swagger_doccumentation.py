@@ -152,7 +152,7 @@ sell_produce_post = [
     openapi.Parameter('product_image', openapi.IN_FORM, description="Image of the product", type=openapi.TYPE_FILE),
     openapi.Parameter('product_quantity', openapi.IN_FORM, description="Quantity of the product", type=openapi.TYPE_NUMBER),
     openapi.Parameter('SI_units', openapi.IN_FORM, description="Units of the product quantity", type=openapi.TYPE_STRING),
-    openapi.Parameter('ammount_in_green_points', openapi.IN_FORM, description="Amount in green points", type=openapi.TYPE_INTEGER),
+    openapi.Parameter('amount_in_green_points', openapi.IN_FORM, description="Amount in green points", type=openapi.TYPE_INTEGER),
     openapi.Parameter('validity_duration_days', openapi.IN_FORM, description="Validity duration in days", type=openapi.TYPE_INTEGER),
 ]
 

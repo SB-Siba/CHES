@@ -77,7 +77,7 @@
                         </td>
                         <td>
                             {% if not order.rating_given and order.buying_status == "PaymentDone" %}
-                                <a type="button" class="btn btn-success rate-order-btn" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">
+                                <a type="button" class="" id="table_BTN" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">
                                     Rate This
                                 </a>
                             {% elif order.buying_status == "BuyInProgress" %}

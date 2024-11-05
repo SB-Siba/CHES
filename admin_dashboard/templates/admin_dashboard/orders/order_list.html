@@ -85,18 +85,18 @@
         <h5 class="modal-title" id="staticBackdropLabel">Filter By Order Status</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div id="order_filter">
+      <div id="order_filter" class="d-flex justify-content-center">
 
         <form id="" method="get" action="{% url 'admin_dashboard:produce_order_status_search' %}">
           {% csrf_token %}
-          <div>
+          <div >
             <select class="form-select" aria-label="Default select example" name="filter_by">
               {% for status in order_status_options %}
                 <option value="{{status.1}}">{{status.1}}</option>
               {% endfor %}
             </select>
 
-            <button class="btn btn-primary" type="submit">
+            <button class="ms-2" id="table_BTN" type="submit">
               search
             </button>
           </div>
