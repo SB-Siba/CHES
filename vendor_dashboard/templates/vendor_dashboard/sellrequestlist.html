@@ -2,11 +2,13 @@
 {% load static %}
 
 {% block main_content %}
-
-<div style="min-height: 100vh;">
+<style>
+   
+</style>
+<div class="min_height_div">
     <div class="page-wrapper m-4">
         {% include 'app_common/snippets/alert.html' %}
-        <div class="">
+        <div class="table-responsive">
             <table class="table table-hover table-nowrap">
                 <thead class="table-light">
                     <tr>
@@ -22,11 +24,11 @@
                 <tbody>
                     {% for sell_request in sell_objs %}
                     <tr>
-                        <td>{{ sell_request.id }}</td>
+                        <td >{{ sell_request.id }}</td>
                         <td>{{ sell_request.product_name }}</td>
                         <td>{{ sell_request.product_quantity }}</td>
                         <td>{{ sell_request.SI_units }}</td>
-                        <td>
+                        <td class="status-column">
                             <img src="{{ sell_request.product_image.url }}" alt="Product Image" style="height: 50px; width: 50px;" class="zoom"
                                 data-bs-toggle="modal" data-bs-target="#imageModal{{ sell_request.id }}">
                         </td>
@@ -55,7 +57,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body text-center">
-                                    <img src="{{ sell_request.product_image.url }}" alt="Product Image" class="img-fluid">
+                                    <img src="{{ sell_request.product_image.url }}" alt="Product Image" class="img-fluid w-100">
                                 </div>
                             </div>
                         </div>

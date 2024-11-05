@@ -6,11 +6,11 @@
 <head>
   
 </head>
-<div class="container mt-3" style="min-height: 100vh;">
-    <div class="row d-flex align-items-center justify-content-center">
+<div class="container mt-3 min_height_div " >
+    <div class="row d-flex align-items-center justify-content-center mx-lg-0 mx-1">
         <div class="col-lg-8 sell_wrapper">
-            <form method="post" action="" class="p-4" enctype="multipart/form-data">
-                <div class="form_sec">
+            <form method="post" action="" class="p-lg-4 px-2 py-4" enctype="multipart/form-data">
+                <div class=" w-100">
                     {% include 'app_common/snippets/alert.html' %}
                     {% csrf_token %}
                     {{form.as_p}}

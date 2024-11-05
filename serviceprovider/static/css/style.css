@@ -358,5 +358,7 @@ input[type="checkbox"].checkbox:checked + .form-check-label {
 .rotate-icon {
   transition: transform 0.3s ease;
 }
-
+.fa-chevron-down{
+  font-size: 12px !important;
+}
 /* ======== OffCanvas ======== */

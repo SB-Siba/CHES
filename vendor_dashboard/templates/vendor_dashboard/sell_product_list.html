@@ -18,18 +18,19 @@
       outline: none;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
+   
   </style>
 </head>
 <div class="mt-2 m-4" style="min-height:100vh ;">
     {% include 'app_common/snippets/alert.html' %}
-    <div class="search_sec mt-3">
+    <div class="search_sec mt-lg-3 mt-2">
       <form method="get" action="{% url 'vendor_dashboard:vendor_search_sell_products' %}">
-          <div class="table_search_box d-flex justify-content-between">
-              <select class="form-control selects w-25" name="search_by" aria-label="Default select example" >
+          <div class="table_search_box d-lg-flex justify-content-between">
+              <select class="form-control selects " name="search_by" aria-label="Default select example" >
                   <option value="id">ID</option>
                   <option value="name">Name</option>
               </select>
-              <div class="d-flex justify-content-end align-items-baseline w-25">
+              <div class="d-flex justify-content-end align-items-baseline w-lg-25">
                 <input type="text" class="form-control " placeholder="Enter Query" name="query" required />
               <button class=""id="table_BTN" type="submit">
                   <i class="fa-solid fa-magnifying-glass"></i>
@@ -39,7 +40,7 @@
       </form>
     </div>
     
-    <div class="">
+    <div class="table-responsive">
         <table class="table table-hover table-nowrap">
             <thead class="table-light">
                 <tr>
@@ -60,7 +61,7 @@
                     <td>{{ product.stock }}</td>
                     <td>{{ product.discount_price }}</td>
                     <td>{{ product.max_price }}</td>
-                    <td>
+                    <td class="status-column">
                         <!-- Clickable image to open modal -->
                         <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="openImageModal('{{ product.image.url }}')">
                             <img src="{{ product.image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class="zoom">
@@ -70,12 +71,12 @@
                        <div class="d-flex justify-content-center gap-2">
                         <div class="px-2 py-2">
                             <a href="{% url 'vendor_dashboard:vendor_sell_product_update' product.id %}" id="table_BTN">
-                                <i class="fa-regular fa-pen-to-square fs-5"></i>
+                                <i class="fa-regular fa-pen-to-square "></i>
                             </a>
                         </div>
                         <div class="px-2 py-2">
                             <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteUrl({{ product.id }})" id="table_BTN2">
-                                <i class="fa fa-trash fs-5" aria-hidden="true"></i>
+                                <i class="fa fa-trash " aria-hidden="true"></i>
                               </a>
                         </div>
                        </div>

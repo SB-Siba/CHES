@@ -3,13 +3,13 @@
 
 {% block main_content %}
 
-<section class="" style="min-height: 100vh;">
+<section class="min_height_div" >
 
     
     <div class="container my-lg-3 my-2">
         <div class="row">
             {% for blog in blogs %}
-            <div class="col-md-6 mb-4 px-5">
+            <div class="col-md-6 col-12 mb-4 px-lg-5">
                 <div class="">
                     <div class="card1">
                       <div class="card-header">
@@ -26,7 +26,7 @@
                         <p class="m-0 pt-1">
                             {{ blog.content|truncatechars:150| safe }}
                         </p>
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between align-items-center">
                             <a href="{% url 'blogs:vendor_blog_details' slug=blog.slug %}">
                                 <button class="learn-more mt-3 mb-3 m-lg-0">
                                     <span class="circle" aria-hidden="true">

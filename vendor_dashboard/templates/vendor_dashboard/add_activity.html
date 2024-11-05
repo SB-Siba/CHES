@@ -26,20 +26,21 @@
       margin-bottom: 10px;    
   }
   </style>
-<div class="page-wapper" style="min-height: 100vh;" >
+<div class="min_height_div">
+  <div class=" page-wapper" >
     
-    <div class="row d-flex justify-content-center  mt-5">
-        <div class="col-lg-6 col-md-6 sell_wrapper p-5">
+    <div class="row d-flex justify-content-center   mt-5 mx-2">
+        <div class="col-lg-6 col-md-6 sell_wrapper p-lg-5 py-4">
             <form method="post" action="" enctype="multipart/form-data">
                 {% include 'app_common/snippets/alert.html' %}
                 {% csrf_token %}
                 {{form.as_p}}
-                
                 <div class="d-flex justify-content-center" style="text-align: center;margin-top: 2rem;">
-                    <button class=" py-2 w-50"  id="table_BTN" type="submit">Add Activity</button>
+                    <button class=" py-2 w-lg-50 w-100 "  id="table_BTN" type="submit">Add Activity</button>
                 </div>
             </form>
         </div>
     </div>
+</div>
 </div>
 {% endblock main_content %}

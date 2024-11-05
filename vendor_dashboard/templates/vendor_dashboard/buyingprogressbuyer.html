@@ -3,9 +3,9 @@
 
 {% block main_content %}
     {% for i in bbeigins_obj %}
-        <div class="row mt-4 d-flex justify-content-center">
-            <div class="col-md-10 mb-4">
-                <div class="col-md-12 p-4" style="background-color: #e9f7ef; border: 1px solid #28a745; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <div class="row mt-4 d-flex justify-content-center min_height_div">
+            <div class="col-md-10 mb-4 mx-2">
+                <div class="col-md-12 p-4 mx-2" style="background-color: #e9f7ef; border: 1px solid #28a745; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
                     <div class="card-body">
                         <h4 class="card-title">Hey {{i.buyer.full_name}},</h4>
                         <p class="card-text">You want to buy from {{i.seller.full_name}},

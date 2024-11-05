@@ -41,11 +41,27 @@
     #starRating input[type="radio"]:checked ~ label:hover ~ label {
         color: #ffc107; /* Yellow color for stars on hover */
     }
+    /* Responsive button styling */
+/* Adjust status and rating columns for smaller screens */
+@media (max-width: 576px) {
+    .status-column, .rating-column {
+        min-width: 140px; /* Set a minimum width as per your requirement */
+        white-space: nowrap; /* Prevents line breaks within these cells */
+    }
+
+    /* Optional: Reduce padding and font size for buttons on small screens */
+    .rate-order-btn {
+        padding: 5px 10px;
+        font-size: 0.85em;
+    }
+}
+
+
 </style>
 <div style="min-height: 100vh;">
     <div class="page-wapper m-4">
         {% include 'app_common/snippets/alert.html' %}
-        <div class="">
+        <div class="table-responsive">
             <table class="table table-hover table-nowrap">
                 <thead class="table-light">
                     <tr>
@@ -67,7 +83,7 @@
                         <td>{{ order.SI_units }}</td>
                         <td>{{ order.ammount_based_on_quantity_buyer_want }}</td>
                         
-                        <td>
+                        <td class="status-column">
                             {% if order.buying_status == "BuyCompleted" %}
                                 <span class="text-success">Completed</span>
                             {% elif order.buying_status == "BuyRejected" %}
@@ -76,17 +92,18 @@
                                 <span class="text-warning">In Progress</span>
                             {% endif %}
                         </td>
-                        <td>
+                        <td class="rating-column">
                             {% if not order.rating_given and order.buying_status == "BuyCompleted" %}
-                                <a type="button" class="btn btn-primary rate-order-btn" data-bs-toggle="modal" data-bs-target="#rateOrderModal" data-order-id="{{ order.id }}">
+                                <a type="button" class="btn btn-primary rate-order-btn text-nowrap" data-bs-toggle="modal" data-bs-target="#rateOrderModal" data-order-id="{{ order.id }}">
                                     Rate This
                                 </a>
                             {% elif order.buying_status == "BuyInProgress" %}
-                                <a class="" id="table_BTN" disabled>Not Done Yet</a>
+                                <a class="btn btn-secondary" id="table_BTN" disabled>Not Done Yet</a>
                             {% else %}
-                                <a class="" id="table_BTN" disabled>Rated</a>
+                                <a class="btn btn-secondary" id="table_BTN" disabled>Rated</a>
                             {% endif %}   
                         </td>
+                        
                         <!-- <td>
                             {% if not order.rating_given %}
                                 <a type="button" class="btn btn-primary rate-order-btn" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">

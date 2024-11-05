@@ -96,8 +96,8 @@
     transform: translate(-50%, -50%);
     z-index: 9999; /* Ensure it's above other elements */
 }
-#Box {
-  background-color: #2544cf9a; /* Fallback background color */
+.dash-carD1 {
+  background-color: #25cf449a; /* Fallback background color */
   background-image: url(../../../../admin_dashboard/static/admin_dashboard/images/card1.jpeg); /* Replace with your image URL */
   background-size: cover; /* Ensures the image covers the entire area */
   background-position: center; /* Centers the image */
@@ -106,7 +106,7 @@
   width: 100%;
 }
 
-.dash-card2{
+.dash-carD2{
   background-color: #15a08483;
   background-image: url(../../../../admin_dashboard/static/admin_dashboard/images/card2.jpg);
   background-size: cover; 
@@ -116,7 +116,7 @@
   width: 100%;
 }
 
-.dash-card3{
+.dash-carD3{
   background-color: #f39d1368;
   background-image: url(../../../../admin_dashboard/static/admin_dashboard/images/card3.jpeg);
   background-size: cover; 

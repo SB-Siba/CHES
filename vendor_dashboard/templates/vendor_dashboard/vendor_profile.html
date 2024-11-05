@@ -3,10 +3,19 @@
 
 {% block main_content %}
 
-<section class="section about-section gray-bg" id="about">
+<section class="section about-section gray-bg min_height_div" id="about">
     <div class="container   d-flex justify-content-center ">
-        <div class="col-lg-10 profile_Body py-5 px-4">
-            <div class="row align-items-center flex-row-reverse  mb-4">
+        <div class="col-lg-10 profile_Body py-5 px--lg-4 px-2">
+            <div class="row align-items-center  mb-4">
+                <div class="col-lg-4 d-flex justify-content-center">
+                    <div class=" mb-lg-0">
+                        {% if vendor_obj.vendor.user_image %}
+                            <img src="{{vendor_obj.vendor.user_image.url}}" style="height: 170px; width: 180px; border-radius: 50%; object-fit: contain;" alt="...">
+                        {% else %}
+                            <img src="https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="  style="height: 180px; width: 180px; border-radius: 50%;" alt="...">
+                        {% endif %}
+                    </div>
+                </div>
                 <div class="col-lg-8 fflex">
                     <div class="about-text go-to">
                         <h4 class="dark-color">{{vendor_obj.vendor.full_name}}</h4>
@@ -30,15 +39,7 @@
                         </div>
                     </ul>
                 </div>
-                <div class="col-lg-4 d-flex justify-content-center">
-                    <div class=" mb-lg-0">
-                        {% if vendor_obj.vendor.user_image %}
-                            <img src="{{vendor_obj.vendor.user_image.url}}" style="height: 170px; width: 180px; border-radius: 50%; object-fit: contain;" alt="...">
-                        {% else %}
-                            <img src="https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="  style="height: 180px; width: 180px; border-radius: 50%;" alt="...">
-                        {% endif %}
-                    </div>
-                </div>
+                
             </div>
     
             <div class="counter">

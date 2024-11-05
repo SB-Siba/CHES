@@ -4,13 +4,14 @@
 {% block title %}Buying Progress{% endblock title %}
 
 {% block content %}
-{% for i in bbeigins_obj %}
+
 
 <head>
     <link rel="stylesheet" href="{% static '/user_dashboard/css/buysell_progress.css '%}">
   </head>
-
 <div class="min_height_div">
+    {% for i in bbeigins_obj %}
+<div class="">
     <div class="row d-flex justify-content-center text-black">
         <div class="col-lg-10 cl-12  mb-4 px-lg-5 py-lg-4 px-3 py-4" id="prog_div">
             <h5>Hey <b>{{i.seller.full_name}}</b>, </h5>
@@ -80,5 +81,6 @@
     </div>
 </div>
 {% endfor %}
+</div>
 
 {% endblock content %}

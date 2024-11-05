@@ -38,8 +38,8 @@ display: flex;
     
 }
 </style>
-<div class="container  m-4 mt-5  ">
-    <form method="post">
+<div class="container  min_height_div mt-5  ">
+    <form method="post" class="mx-lg-5 mx-2">
         <div class="row  profile-container  ">
             <div class="col-md-5   img_body" >
                 {% if garden_profile_obj.user.user_image %}
@@ -60,7 +60,7 @@ display: flex;
                         {{garden_profile_obj.user.email}}
                     </p>
                 </div>
-                <a href="{% url 'vendor_dashboard:vendor_gardeningprofileupdate' %}" class="btn edit_btn  text-white btn-lg mt-3">
+                <a href="{% url 'vendor_dashboard:vendor_gardeningprofileupdate' %}" class="btn edit_btn  text-white btn-lg mt-3 mb-lg-0 mb-2 ">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
             </div>
