@@ -46,7 +46,8 @@
                                 <th scope="col">Service Image</th>
                                 <th scope="col">Service Type</th>
                                 <th scope="col">Description</th>
-                                <th scope="col">Price/Hour</th>
+                                <th scope="col">Basis</th>
+                                <th scope="col">Price</th>
                                 <th scope="col">Action</th>
                                 <th></th>
                             </tr>
@@ -63,6 +64,8 @@
                                     </td>
                                     <td>{{ service.service_type.service_category }}</td>
                                     <td>{{ service.description }}</td>
+                                    <td>{{ service.basis }}</td>
+
                                     <td>{{ service.price_per_hour }}</td>
                                     <td>
                                         <a href="{% url 'service_provider:service_update' service.id %}" class="btn btn-sm btn-square btn-neutral">

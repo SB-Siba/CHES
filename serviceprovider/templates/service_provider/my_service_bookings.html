@@ -9,7 +9,10 @@
     <li class="list-group-items px-4 py-3 mb-2">
         <h5>{{ booking.service.name }}</h5>
         <p><span><h6 style="display:inline;">Gardener:</h6> {{ booking.gardener.full_name }}</span></p>
+        <p><span><h6 style="display:inline;">Gardener City:</h6> {{ booking.gardener.city }}</span></p>
         <p><span><h6 style="display:inline;">Booking Date:</h6> {{ booking.booking_date }}</span></p>
+        <p><span><h6 style="display:inline;">Basis:</h6> {{ booking.service.basis }}</span></p>
+        <p><span><h6 style="display:inline;">Price:</h6> {{ booking.service.price_per_hour }}</span></p>
         <p><span><h6 style="display:inline;">Status:</h6> {{ booking.status }}</span></p>
         
         {% if booking.status == 'pending' %}
