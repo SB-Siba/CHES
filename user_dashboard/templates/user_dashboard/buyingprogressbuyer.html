@@ -9,8 +9,9 @@
         <link rel="stylesheet" href="{% static '/user_dashboard/css/buysell_progress.css '%}">
       </head>
 
-    <div class="row d-flex justify-content-center  text-black">
-        <div class="col-lg-10 cl-12  mb-4 px-5 py-4" id="prog_div">
+  <div class="min_height_div">
+    <div class="row d-flex justify-content-center  text-black ">
+        <div class="col-lg-10 cl-12  mb-4 px-lg-5 py-lg-4 p-3 py-4" id="prog_div">
             <h5>Hey <b>{{i.buyer.full_name}}</b>,</h5> 
             <h6>You want to buy from <b> {{i.seller.full_name}}</b>, Once he/she approve Payment option will be available.</h6>
             Product Details : <br>
@@ -24,8 +25,9 @@
                     <small class="text-danger">Order Not Approved By The Seller <Yet></Yet>.</small>
                 {% endif %}
             </div>
-            <hr>
+            
         </div>
     </div>
+  </div>
     {% endfor %}
 {% endblock content %}

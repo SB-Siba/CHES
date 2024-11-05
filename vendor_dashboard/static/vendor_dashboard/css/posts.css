@@ -220,3 +220,12 @@
 .timeline-comment-box .user+.input {
     margin-left: 44px
 }
+.post_img{
+    height: 450px !important;
+}
+@media (max-width: 768px){
+    .post_img{
+        height: 300px !important;
+        object-fit: fill;
+    }
+}

@@ -2,14 +2,14 @@
 {% load static %}
 
 {% block s_vendor_content %}
-<section class="py-6 bg-surface-secondary">
+<section class="py-6 bg-surface-secondary min_height_div">
    <div class="container">
    <div class="text-center my-lg-4 text-secondary">
     <h4>Add Your Blogs</h4>
    </div>
     <div class="row d-flex justify-content-center">
         <div class="col-lg-10">
-            <div class="card h-100">
+            <div class="card px-2 py-4">
                 <form action="" method="post" enctype="multipart/form-data" class="p-lg-4 lh-lg">
                         {% csrf_token %}
                         {{ form.media }}

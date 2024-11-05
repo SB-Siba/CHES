@@ -17,7 +17,7 @@
                         {% if post.user.user_image %}
                         <img src="{{ post.user.user_image.url }}" class="rounded-circle" alt="Profile Picture" style="width: 40px; height: 40px;">
                         {% else %}
-                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle" alt="Profile Picture" style="width: 40px; height: 40px;">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyAAHN1IvkJW72SdHrwRz4RKspaXwVJB9isd0c3-GcNf8qtXGampzmHFc&s" class="rounded-circle" alt="Profile Picture" style="width: 40px; height: 40px;">
                         {% endif %}
                     </div>
                     <div class="username ms-3">
@@ -28,10 +28,10 @@
 
                 <div class="card-body p-0">
                     {% if post.activity_image %}
-                    <img src="{{ post.activity_image.url }}" class="img-fluid w-100">
+                    <img src="{{ post.activity_image.url }}" class="img-fluid  post_img w-100 ">
                     {% endif %}
                     <div class="p-3">
-                        <h5>{{ post.activity_title }}</h5>
+                        <h5>{{ post.activity_title }} </h5>
                         <p>{{ post.activity_content }}</p>
                     </div>
 
@@ -53,7 +53,7 @@
                             </a>
                         </div>
                         <div>
-                            <button class="btn btn-link text-secondary p-0" data-bs-toggle="modal" data-bs-target="#shareModal{{ post.id }}">
+                            <button class="btn btn-link text-secondary p-0 text-decoration-none" data-bs-toggle="modal" data-bs-target="#shareModal{{ post.id }}">
                                 <i class="fa fa-share"></i> Share
                             </button>
                         </div>
@@ -66,11 +66,11 @@
                 </div>
 
                 <div class="card-footer bg-white">
-                    <form action="{% url 'vendor_dashboard:give_comment' %}" method="post" class="d-flex align-items-center">
+                    <form action="{% url 'vendor_dashboard:give_comment' %}" method="post" class="d-flex align-items-baseline">
                         {% csrf_token %}
                         <input type="hidden" name="post" value="{{ post.id }}">
                         <input type="text" class="form-control me-2" placeholder="Add a comment..." name="comment" required>
-                        <button type="submit" class="btn btn-success">Post</button>
+                        <button type="submit" class="btn btn-success ">Post</button>
                     </form>
                 </div>
 

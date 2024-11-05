@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block s_vendor_content %}
-<div class="mx-4">
+<div class="mx-lg-4 mx-3">
     <h3 class="mb-4">My Service Bookings</h3>
-<ul class="">
+<ul class="px-0">
     {% for booking in bookings %}
-    <li class="list-group-items px-4 py-3 mb-2">
+    <li class="list-group-items px-lg-4 px-2 pt-1 pb-5  pt-lg-3 pb-lg-5 mb-2">
         <h5>{{ booking.service.name }}</h5>
         <p><span><h6 style="display:inline;">Gardener:</h6> {{ booking.gardener.full_name }}</span></p>
         <p><span><h6 style="display:inline;">Booking Date:</h6> {{ booking.booking_date }}</span></p>

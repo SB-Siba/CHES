@@ -209,17 +209,17 @@ class VendorSellProduct(View):
     model = common_models.ProductFromVendor
 
     def get(self,request):
-        try:
+        # try:
             data = {
                 'form': self.form_class(),
             }
             return render(request,self.template,data)
-        except Exception as e:
-            error_message = f"An unexpected error occurred: {str(e)}"
-            return render_error_page(request, error_message, status_code=400)
+        # except Exception as e:
+        #     error_message = f"An unexpected error occurred: {str(e)}"
+        #     return render_error_page(request, error_message, status_code=400)
     
     def post(self,request):
-        try:
+        # try:
             user = request.user
             form = self.form_class(request.POST,request.FILES)
             if form.is_valid(): 
@@ -236,9 +236,9 @@ class VendorSellProduct(View):
             else:
                 error_message = f"Error! Please check your inputs."
                 return render_error_page(request, error_message, status_code=400)
-        except Exception as e:
-            error_message = f"An unexpected error occurred: {str(e)}"
-            return render_error_page(request, error_message, status_code=400)
+        # except Exception as e:
+        #     error_message = f"An unexpected error occurred: {str(e)}"
+        #     return render_error_page(request, error_message, status_code=400)
     
 @method_decorator(utils.login_required, name='dispatch')
 class VendorSoldProducts(View):

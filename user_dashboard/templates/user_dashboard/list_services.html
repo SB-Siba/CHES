@@ -30,23 +30,30 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
-    .category-image, .service-image {
+    .category-image {
+        height: 150px;
+        object-fit: cover;
+        margin-bottom: 15px;
+        width: 280px;
+    }
+    .service-image{
         height: 150px;
         object-fit: cover;
         margin-bottom: 15px;
     }
 </style>
 
-<div class="container my-4">
-    <h2 class="mb-4">Available Services</h2>
+<div class=" my-4">
 
     <!-- If no category is selected, show the categories -->
     {% if categories %}
+    <h3 class="mb-4">Available Services</h3>
+
     <h4>Select a Category:</h4>
     <div class="row mb-4">
         {% for category in categories %}
         <div class="col-md-4 mb-4">
-            <a href="?category_id={{ category.id }}">
+            <a href="?category_id={{ category.id }}" class="text-decoration-none">
                 <div class="category-card shadow-sm">
                     <!-- Category Image -->
                     {% if category.image %}
@@ -54,7 +61,7 @@
                     {% else %}
                     <img src="{% static 'default-category-image.jpg' %}" class="category-image" alt="No Image Available">
                     {% endif %}
-                    <h5>{{ category.service_category }}</h5>
+                    <h5 class="text-black text-decoration-none">{{ category.service_category }}</h5>
                 </div>
             </a>
         </div>
@@ -75,9 +82,9 @@
                 <img src="{% static 'default-service-image.jpg' %}" class="card-img-top service-image" alt="No Image Available">
                 {% endif %}
                 
-                <div class="card-body">
-                    <h5 class="card-title"><strong>Provider Name:</strong>{{ service.provider.full_name }}</h5>
-                    <h5 class="card-title"><strong>Service city:</strong>
+                <div class="text-left ">
+                    <h6 class="card-title"><strong>Provider Name:</strong>{{ service.provider.full_name }}</h6>
+                    <h6 class="card-title"><strong>Service city:</strong>
                         {% if service.sp_details and service.sp_details.service_area %}
                             {% for city in service.sp_details.service_area %}
                                 {{ city }}{% if not forloop.last %}, {% endif %}
@@ -85,17 +92,17 @@
                         {% else %}
                             Not available
                         {% endif %}
-                    </h5>
+                    </h6>
                     
                     
                     <p class="card-text"><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
-                    <a href="{% url 'user_dashboard:service_details' service.id %}" class="btn btn-primary">Book Service</a>
+                    <a href="{% url 'user_dashboard:service_details' service.id %}" class="" id="table_BTN">Book Service</a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-    <a href="{% url 'user_dashboard:list_services' %}" class="btn btn-secondary mt-4">Back to Categories</a>
+    <!-- <a href="{% url 'user_dashboard:list_services' %}" class="btn btn-secondary mt-4">Back to Categories</a> -->
     {% else %}
     <div class="alert alert-info" role="alert">
         No services available for this category.

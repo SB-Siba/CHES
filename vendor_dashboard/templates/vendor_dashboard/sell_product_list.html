@@ -2,23 +2,45 @@
 {% load static %}
 
 {% block main_content %}
-<div class="mt-2 m-4">
+<head>
+  <style>
+    .form-control {
+      border: none;
+      border-bottom: 2px solid #ccc;
+      border-radius: 7px;
+      padding: 5px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .form-control:focus {
+      border-bottom-color: #37af2c;
+      outline: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+   
+  </style>
+</head>
+<div class="mt-2 m-4" style="min-height:100vh ;">
     {% include 'app_common/snippets/alert.html' %}
-    <div class="search_sec">
+    <div class="search_sec mt-lg-3 mt-2">
       <form method="get" action="{% url 'vendor_dashboard:vendor_search_sell_products' %}">
-          <div class="table_search_box">
-              <select class="form-control selects" name="search_by" aria-label="Default select example">
+          <div class="table_search_box d-lg-flex justify-content-between">
+              <select class="form-control selects " name="search_by" aria-label="Default select example" >
                   <option value="id">ID</option>
                   <option value="name">Name</option>
               </select>
-              <input type="text" class="form-control" placeholder="Enter Query" name="query" required />
-              <button class="btn qry-sub" type="submit">
+              <div class="d-flex justify-content-end align-items-baseline w-lg-25">
+                <input type="text" class="form-control " placeholder="Enter Query" name="query" required />
+              <button class=""id="table_BTN" type="submit">
                   <i class="fa-solid fa-magnifying-glass"></i>
               </button>
+              </div>
           </div>
       </form>
-  </div>
-    <div class="">
+    </div>
+    
+    <div class="table-responsive">
         <table class="table table-hover table-nowrap">
             <thead class="table-light">
                 <tr>
@@ -39,17 +61,22 @@
                     <td>{{ product.stock }}</td>
                     <td>{{ product.discount_price }}</td>
                     <td>{{ product.max_price }}</td>
-                    <td><img src="{{ product.image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class="zoom"></td>
+                    <td class="status-column">
+                        <!-- Clickable image to open modal -->
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="openImageModal('{{ product.image.url }}')">
+                            <img src="{{ product.image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class="zoom">
+                        </a>
+                    </td>
                     <td>
                        <div class="d-flex justify-content-center gap-2">
-                        <div class="px-2 py-2 border bg-light">
-                            <a href="{% url 'vendor_dashboard:vendor_sell_product_update' product.id %}">
-                                <i class="fa-regular fa-pen-to-square fs-5" style="color: green;"></i>
+                        <div class="px-2 py-2">
+                            <a href="{% url 'vendor_dashboard:vendor_sell_product_update' product.id %}" id="table_BTN">
+                                <i class="fa-regular fa-pen-to-square "></i>
                             </a>
                         </div>
-                        <div class="px-2 py-2 border bg-light">
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteUrl({{ product.id }})">
-                                <i class="fa fa-trash text-danger fs-5" aria-hidden="true"></i>
+                        <div class="px-2 py-2">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteUrl({{ product.id }})" id="table_BTN2">
+                                <i class="fa fa-trash " aria-hidden="true"></i>
                               </a>
                         </div>
                        </div>
@@ -62,6 +89,20 @@
     </div>
 </div>
 
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Product Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Product Image" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -80,13 +121,18 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
 
-  <script>
+<script>
+    // Function to set the delete URL
     function setDeleteUrl(productId) {
       const deleteUrl = "{% url 'vendor_dashboard:vendor_sell_product_delete' 0 %}".replace('0', productId);
       document.getElementById('confirmDeleteButton').setAttribute('href', deleteUrl);
     }
-  </script>
-      
+    
+    // Function to open the image modal and set the image source
+    function openImageModal(imageUrl) {
+      document.getElementById('modalImage').src = imageUrl;
+    }
+</script>
 {% endblock main_content %}

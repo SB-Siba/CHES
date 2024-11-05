@@ -23,17 +23,17 @@ label
     margin-bottom: 10px;    
 }
 </style>
-    <div class="page-wapper" >
+    <div class="page-wapper min_height_div" >
         
-        <div class="row d-flex justify-content-center my-5">
-            <div class="col-lg-6 col-md-6 sell_wrapper  p-4 ">
+        <div class="row d-flex justify-content-center my-5 mx-2 mx-lg-0">
+            <div class="col-lg-6 col-md-6 sell_wrapper  p-lg-4 py-4 px-0">
                 <form method="post" action="" enctype="multipart/form-data" class="px-4">
                     {% include 'app_common/snippets/alert.html' %}
                     {% csrf_token %}
                     {{form.as_p}}
                     
-                    <div style="text-align: center;margin-top: 2rem;">
-                        <button class="btn w-100 py-2" id="editb" type="submit">Sell Now</button>
+                    <div class="d-flex justify-content-center" >
+                        <button class=" w-lg-50  w-100 py-2" id="table_BTN" type="submit">Sell Now</button>
                     </div>
                 </form>
             </div>

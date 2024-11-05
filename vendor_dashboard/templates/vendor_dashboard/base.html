@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 {% load static %}
 <html>
@@ -45,7 +46,7 @@
     <input type="hidden" id="fetchUserDetailsUrl" value="{% url 'chat:fetch_user_details' %}">
     <input type="hidden" id="fetchMessagesUrl" value="{% url 'chat:fetch_messages' %}">
     <div class="wrapper ">
-        <aside id="sidebar">
+        <aside id="sidebar" class="d-none d-lg-block">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa fa-tree"></i>
@@ -63,7 +64,7 @@
                 </li>
                 <li class="sidebar-item">
                     <a href="{% url 'vendor_dashboard:vendor_gardeningprofile' %}" class="sidebar-link">
-                        <i class="fa-solid fa-user"></i>
+                        <i class="fa-solid fa-seedling"></i>
                         <span>Gardening Profile</span>
                     </a>
                 </li>
@@ -182,29 +183,7 @@
                         </li>
                     </ul>
                 </li>
-                <!-- <li class="sidebar-item">
-                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                        data-bs-target="#multi" aria-expanded="false" aria-controls="multi">
-                        <i class="lni lni-layout"></i>
-                        <span>Multi Level</span>
-                    </a>
-                    <ul id="multi" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link collapsed" data-bs-toggle="collapse"
-                                data-bs-target="#multi-two" aria-expanded="false" aria-controls="multi-two">
-                                Two Links
-                            </a>
-                            <ul id="multi-two" class="sidebar-dropdown list-unstyled collapse">
-                                <li class="sidebar-item">
-                                    <a href="#" class="sidebar-link">Link 1</a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="#" class="sidebar-link">Link 2</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li> -->
+              
                 <li class="sidebar-item">
                     <a href="{% url 'vendor_dashboard:allposts' %}" class="sidebar-link">
                         <i class="fa-solid fa-signs-post"></i>
@@ -213,7 +192,7 @@
                 </li>
                 <li class="sidebar-item">
                     <a href="{% url 'chat:all_messages' %}" class="sidebar-link">
-                        <i class="fa-solid fa-comments"></i>
+                        <i class="fa-solid fa-message"></i>
                         <span>Messages</span>
                     </a>
                 </li>
@@ -224,88 +203,195 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{% url 'app_common:logout' %}" class="sidebar-link">
+                    <a href="{% url 'app_common:logout' %}" class="sidebar-link" onclick="return confirm('Do you want to logout?')">
                         <i class="fa-solid fa-right-from-bracket"></i>
                         <span>Logout</span>
                     </a>
                 </li>
-                <!---->
-            <!-- <li class="sidebar-item " style="margin-top: 50px;">
-                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                    data-bs-target="#Buying_selling" aria-expanded="false" aria-controls="Buying_selling">
-                                    <img class="avatar img-fluid lni lni-protection " src="{% static 'vendor_dashboard/images/account.png' %}" alt="User avatar">
-                                    <span class="">{{ user.full_name }}</span>
-                                </a>
-
-                <ul id="Buying_selling" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                    <li  class="sidebar-item">
-                        <a class="sidebar-link" href="{% url 'vendor_dashboard:vendor_profile' %}">
-                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-100"></i>
-                            Profile
-                        </a>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="#">
-                        <i class="fas fa-cogs    fa-sm fa-fw mr-2 text-gray-100"></i>
-                        Settings
-                    </a>
-                </li>
-                <li class="sidebar-item"><a class="sidebar-link" href="">
-                    <i class="fas fa-list    fa-sm fa-fw mr-2 text-gray-100"></i>
-                    Activity Log
-                </a></li>
-                <li class="sidebar-item"><a class="sidebar-link" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                    <i class="fas fa-sign-out-alt   fa-sm fa-fw mr-2 text-gray-100"></i>
-                    Logout
-                </a></li>
-                </ul>
-            </li> -->
+                
+            
             <!--Profile-->
             </ul>
         </aside>
+
+        <!-- Off-canvas sidebar for mobile -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
+        <div class="offcanvas-header">
+            <div class="d-flex align-items-center">
+                <button class="toggle-btn" type="button">
+                    <i class="fa fa-tree"></i>
+                </button>
+                <div class="sidebar-logo">
+                    <a href="#">Home Garden Input Vendor</a>
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <!-- Sidebar navigation links -->
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="{% url 'vendor_dashboard:vendor_profile' %}" class="sidebar-link">
+                        <i class="fa-solid fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'vendor_dashboard:vendor_gardeningprofile' %}" class="sidebar-link">
+                        <i class="fa-solid fa-seedling"></i>
+                        <span>Gardening Profile</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'vendor_dashboard:walletpage' %}" class="sidebar-link">
+                        <i class="fa-solid fa-wallet"></i>
+                        <span>Wallet</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'vendor_dashboard:list_services' %}" class="sidebar-link">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>List Of Services</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'vendor_dashboard:my_booked_services' %}" class="sidebar-link">
+                        <i class="fa-solid fa-calendar-check"></i>
+                        <span>My Booked Services</span>
+                    </a>
+                </li>
+                <!-- Additional items with dropdowns -->
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#G_Commerece" aria-expanded="false" aria-controls="G_Commerece">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                        <span>Green Commerce</span> <i class="fas fa-chevron-down  ms-2"></i>
+                    </a>
+                    <ul id="G_Commerece" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#offcanvasSidebar">
+                        <li class="sidebar-item">
+                            <a href="{% url 'vendor_dashboard:sellproduce' %}" class="sidebar-link">Sell Produce</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'vendor_dashboard:greencommerceproducts' %}" class="sidebar-link">Buy From Community</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'vendor_dashboard:allordersfromcommunity' %}" class="sidebar-link">My Community Orders</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'vendor_dashboard:allsellrequests' %}" class="sidebar-link">Sell Request</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#sell_Product" aria-expanded="false" aria-controls="sell_Product">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span> Selling </span> <i class="fas fa-chevron-down  ms-2"></i>
+                    </a>
+                    <ul id="sell_Product" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="{% url 'vendor_dashboard:vendor_sell_product' %}" class="sidebar-link">Sell Product</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'vendor_dashboard:vendor_sell_product_list' %}" class="sidebar-link">Sell Product List</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'vendor_dashboard:vendor_order_list' %}" class="sidebar-link"> <i class="fa-solid fa-money-check"></i>Sold Products</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#Activity" aria-expanded="false" aria-controls="Activity">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Activity</span> <i class="fas fa-chevron-down  ms-2"></i>
+                    </a>
+                    <ul id="Activity" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="{% url 'vendor_dashboard:addactivity' %}" class="sidebar-link">Add Activity</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'vendor_dashboard:activitylist' %}" class="sidebar-link">Activity List</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#manage_blogs" aria-expanded="false" aria-controls="manage_blogs">
+                        <i class="fa-solid fa-blog"></i>
+                        <span>Manage Blogs</span> <i class="fas fa-chevron-down  ms-2"></i>
+                    </a>
+                    <ul id="manage_blogs" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="{% url 'blogs:vendor_all_blogs' %}" class="sidebar-link">All Blogs</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'blogs:vendor_blog_list' %}" class="sidebar-link">My Blogs</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#Buying_selling" aria-expanded="false" aria-controls="Buying_selling">
+                        <i class="fa-solid fa-handshake"></i>
+                        <span>Buying and Selling</span><i class="fas fa-chevron-down  ms-2"></i>
+                    </a>
+                    <ul id="Buying_selling" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="{% url 'vendor_dashboard:buybeginsbuyerview' %}" class="sidebar-link">Buying</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'vendor_dashboard:buybeginssellerview' %}" class="sidebar-link">Selling</a>
+                        </li>
+                    </ul>
+                </li>
+              
+                <li class="sidebar-item">
+                    <a href="{% url 'vendor_dashboard:allposts' %}" class="sidebar-link">
+                        <i class="fa-solid fa-signs-post"></i>
+                        <span>Posts</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'chat:all_messages' %}" class="sidebar-link">
+                        <i class="fa-solid fa-message"></i>
+                        <span>Messages</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'vendor_dashboard:vendor_contact_page' %}" class="sidebar-link">
+                        <i class="fa-solid fa-comments"></i>
+                        <span>Contact Us</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'app_common:logout' %}" class="sidebar-link" onclick="return confirm('Do you want to logout?')">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
         <div class="main" style="padding: 0%;">
             <nav class="navbar navbar-expand-lg navbar-light  px-4 py-2" style="background-color: rgba(204, 208, 210, 0.587);">
                 <div class="container-fluid d-flex justify-content-between">
-                    <div>
+                    <button class="text-dark d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <div class="me-2">
                         <a href="{% url 'vendor_dashboard:vendor_dashboard' %}">
                             <div class=""><img src="{% static 'vendor_dashboard/images/green-logo.png' %}" style="height: 60px; width: 100px;"/></div>
                         </a>
                         
                     </div>
                     <div class="navbar-collapse collapse d-flex justify-content-between">
-                        <div>
-                            <a class="fw-bold fs-4 mb-3 text-dark" href="{% url 'vendor_dashboard:vendor_dashboard' %}">Vendor Dashboard</a>
+                        <div class="d-none d-lg-block">
+                            <a class=" mb-3 text-dark" href="{% url 'vendor_dashboard:vendor_dashboard' %}">
+                                <h4>Home Garden Input Vendor</h4>
+                            </a>
                         </div>
-                     <!-- <ul class="navbar-nav ms-auto">
-                               
-                            <li class="nav-item dropdown no-arrow">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.full_name }}</span>
-                                    <img class="avatar img-fluid" src="{% static 'vendor_dashboard/images/account.png' %}" alt="User avatar">
-                                </a>
-                                
-                                <ul class="dropdown-menu dropdown-menu-end shadow animated--grow-in" aria-labelledby="userDropdown">
-                                    <li><a class="dropdown-item" href="{% url 'vendor_dashboard:vendor_profile' %}">
-                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Profile
-                                    </a></li>
-                                    <li><a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Settings
-                                    </a></li>
-                                    <li><a class="dropdown-item" href="">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Activity Log
-                                    </a></li>
-                                    <li><div class="dropdown-divider"></div></li>
-                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Logout
-                                    </a></li>
-                                </ul>
-                            </li>
-                        </ul> -->  
+                     
                     </div>
                 </div>
                 <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
@@ -326,55 +412,33 @@
                     </div>
                 </div>
             </nav>
-                {% block main_content %}
- 
-                {% endblock main_content %}
+            {% block main_content %}
+                <div style="min-height: 120vh;">
+                    
+                </div>
+            {% endblock main_content %}
+
             <footer class="footer " >
                 <div class="container-fluid">
-                    <!-- <div class="row text-body-secondary">
-                        <div class="col-6 text-start ">
-                            <a class="text-body-secondary" href=" #">
-                                <strong>CHES</strong>
-                            </a>
-                        </div>
-                        <div class="col-6 text-end text-body-secondary d-none d-md-block">
-                            <ul class="list-inline mb-0">
-                                <li class="list-inline-item">
-                                    <a class="text-body-secondary" href="#">Contact</a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a class="text-body-secondary" href="#">About Us</a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a class="text-body-secondary" href="#">Terms & Conditions</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div> -->
-                    <div>
-                        <div class="row">
-                            <div class="d-flex justify-content-between My_containeR">
-                                <a href="#">
-                                    <img class="loGo_img" style="width: 50px; height: 50px;"  src="{% static 'app_common/css/images/logo5.png'%}" alt="">
-                                </a>
-                                <a href="#">
-                                    <img class="loGo_img" style="width: 50px; height: 50px;"  src="{% static 'app_common/css/images/logo_ches 1.png'%}" alt="">
-                                </a>
-                                <a href="#">
-                                    <img class="loGo_img" style="width: 50px; height: 50px;"  src="{% static 'app_common/css/images/logo3.png'%}" alt="">
-                                </a>
-                                <a href="#">
-                                    <img class="" style="width: 100px; height: 50px;" src="{% static 'app_common/css/images/logo4.jpeg'%}" alt="">
-                                </a>
-                                <a href="#">
-                                    <img class="loGo_img" style="width: 50px; height: 50px;" src="{% static 'app_common/css/images/logo1.png'%}" alt="">
-                                </a>
-                            </div>
-                        </div>
+                    <div class="d-flex justify-content-between py-3 " >
+                        <a href="#">
+                            <img class="loGo_img" style="width: 50px; height: 50px;"  src="{% static 'app_common/css/images/logo5.png'%}" alt="">
+                        </a>
+                        <a href="#">
+                            <img class="loGo_img" style="width: 50px; height: 50px;"  src="{% static 'app_common/css/images/logo_ches 1.png'%}" alt="">
+                        </a>
+                        <a href="#">
+                            <img class="loGo_img" style="width: 50px; height: 50px;"  src="{% static 'app_common/css/images/logo3.png'%}" alt="">
+                        </a>
+                        <a href="#">
+                            <img class="" style="width: 100px; height: 50px;" src="{% static 'app_common/css/images/logo4.jpeg'%}" alt="">
+                        </a>
+                        <a href="#">
+                            <img class="loGo_img" style="width: 50px; height: 50px;" src="{% static 'app_common/css/images/logo1.png'%}" alt="">
+                        </a>
                     </div>
                 </div>
             </footer>
-        
     </div>
     </div>
     {% block script %}

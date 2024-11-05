@@ -2,129 +2,131 @@
 {% load static %}
 
 {% block s_vendor_content %}
-<div class="row d-flex justify-content-center my-5 profoile_card">
-    <div class="col-lg-10 service_large_card py-5">
-        <div class="row">
-            <div class="col-md-3 d-flex justify-content-center">
-                <div class="profile-img">
-                    {% if service_provider_obj.provider.user_image %}
-                        <img src="{{service_provider_obj.provider.user_image.url}}"  alt="...">
-                    {% else %}
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA1xJHZCKtjNA8Ml6zyf9PtGf3h9fWqGaB220yI6HVrZhBKQJB8ckE31k&s"
-                        alt="" />
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-md-9">
-                <div class="profile-head">
-                    <div class="d-flex justify-content-between align-items-baseline">
-                        <h3 class="">
-                            {{service_provider_obj.provider.full_name}}
-                        </h3>
-                        <a href="{% url 'service_provider:update_service_provider_profile' %}" class="" name="btnAddMore" id="table_BTN" value="Edit Profile">Edit Profile</a>
+<div class="main-panel">
+    <div class="row d-flex justify-content-center my-5 profoile_card mx-2">
+        <div class="col-lg-10 service_large_card py--lg-5 py-4">
+            <div class="row">
+                <div class="col-md-3 d-flex justify-content-center">
+                    <div class="profile-img">
+                        {% if service_provider_obj.provider.user_image %}
+                            <img src="{{service_provider_obj.provider.user_image.url}}"  alt="...">
+                        {% else %}
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA1xJHZCKtjNA8Ml6zyf9PtGf3h9fWqGaB220yI6HVrZhBKQJB8ckE31k&s"
+                            alt="" />
+                        {% endif %}
                     </div>
-                    <h6>
-                        Service Provider
-                    </h6>
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active text-dark" id="home-tab" data-bs-toggle="tab" href="#home" role="tab"
-                                aria-controls="home" aria-selected="true">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab"
-                                aria-controls="profile" aria-selected="false">Details</a>
-                        </li>
-                    </ul>
                 </div>
-                <div class="tab-content profile-tab" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <div class="row">
-                            <div class="col-md-5">
-                                <label>User Id</label>
-                            </div>
-                            <div class="col-md-7">
-                                <p>{{service_provider_obj.provider.id}}</p>
-                            </div>
+                <div class="col-md-9">
+                    <div class="profile-head">
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <h3 class="">
+                                {{service_provider_obj.provider.full_name}}
+                            </h3>
+                            <a href="{% url 'service_provider:update_service_provider_profile' %}" class="" name="btnAddMore" id="table_BTN" value="Edit Profile">Edit Profile</a>
                         </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <label>Name</label>
-                            </div>
-                            <div class="col-md-7">
-                                <p>{{service_provider_obj.provider.full_name}}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <label>Email</label>
-                            </div>
-                            <div class="col-md-7">
-                                <p>{{service_provider_obj.provider.email}}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <label>Phone</label>
-                            </div>
-                            <div class="col-md-7">
-                                <p>{{service_provider_obj.provider.contact}}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <label>Profession</label>
-                            </div>
-                            <div class="col-md-7">
-                                <p>Service Provider</p>
-                            </div>
-                        </div>
+                        <h6>
+                            Service Provider
+                        </h6>
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active text-dark" id="home-tab" data-bs-toggle="tab" href="#home" role="tab"
+                                    aria-controls="home" aria-selected="true">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab"
+                                    aria-controls="profile" aria-selected="false">Details</a>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        <div class="row">
-                            <div class="col-md-5">
-                                <label>Experience</label>
-                            </div>
-                            <div class="col-md-7">
-                                <p>{{service_provider_obj.years_experience}} Years</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <label>Hourly Rate</label>
-                            </div>
-                            <div class="col-md-7">
-                                <p>{{service_provider_obj.average_cost_per_hour}}/hr</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <label>Availability Area</label>
-                            </div>
-                            <div class="col-md-7">
-                                {% for area in service_provider_obj.service_area %}
-                                <div class="d-flex justify-content-between">
-                                    <p>{{ area  }}</p>
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>User Id</label>
                                 </div>
-                                {% endfor %}
+                                <div class="col-md-7">
+                                    <p>{{service_provider_obj.provider.id}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Name</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <p>{{service_provider_obj.provider.full_name}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Email</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <p>{{service_provider_obj.provider.email}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Phone</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <p>{{service_provider_obj.provider.contact}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Profession</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <p>Service Provider</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <label>Service Type</label>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Experience</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <p>{{service_provider_obj.years_experience}} Years</p>
+                                </div>
                             </div>
-                            <div class="col-md-7">
-                                {% for type in service_provider_obj.service_type %}
-                                    <p>{{ type  }}</p>
-                                {% endfor %}
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Hourly Rate</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <p>{{service_provider_obj.average_cost_per_hour}}/hr</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Availability Area</label>
+                                </div>
+                                <div class="col-md-7">
+                                    {% for area in service_provider_obj.service_area %}
+                                    <div class="d-flex justify-content-between">
+                                        <p>{{ area  }}</p>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>Service Type</label>
+                                </div>
+                                <div class="col-md-7">
+                                    {% for type in service_provider_obj.service_type %}
+                                        <p>{{ type  }}</p>
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+               
             </div>
-           
+    
         </div>
-
     </div>
 </div>
 <!-- <section class="mt-2">
