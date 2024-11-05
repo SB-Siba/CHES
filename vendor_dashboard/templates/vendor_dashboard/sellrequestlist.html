@@ -2,79 +2,104 @@
 {% load static %}
 
 {% block main_content %}
+<style>
+   
+</style>
+<div class="min_height_div">
+    <div class="page-wrapper m-4">
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th id="t-Head" scope="col">Request ID</th>
+                        <th id="t-Head" scope="col">Name</th>
+                        <th id="t-Head" scope="col">Quantity</th>
+                        <th id="t-Head" scope="col">Units</th>
+                        <th id="t-Head" scope="col">Image</th>
+                        <th id="t-Head" scope="col">Amount</th>
+                        <th id="t-Head" scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sell_request in sell_objs %}
+                    <tr>
+                        <td >{{ sell_request.id }}</td>
+                        <td>{{ sell_request.product_name }}</td>
+                        <td>{{ sell_request.product_quantity }}</td>
+                        <td>{{ sell_request.SI_units }}</td>
+                        <td class="status-column">
+                            <img src="{{ sell_request.product_image.url }}" alt="Product Image" style="height: 50px; width: 50px;" class="zoom"
+                                data-bs-toggle="modal" data-bs-target="#imageModal{{ sell_request.id }}">
+                        </td>
+                        <td>{{ sell_request.amount_in_green_points }}</td>
+                        <td>
+                            {% if sell_request.is_approved == "approved" %}
+                            <abbr title="Click To See The Reason" style="font-size: 1.5rem;">
+                                <span class="text-success btn" data-bs-toggle="modal" data-bs-target="#approveModal{{ sell_request.id }}">Approved</span>
+                            </abbr>
+                            {% elif sell_request.is_approved == "rejected" %}
+                            <abbr title="Click To See The Reason" style="font-size: 1.5rem;">
+                                <span class="text-danger btn" data-bs-toggle="modal" data-bs-target="#rejectModal{{ sell_request.id }}">Rejected</span>
+                            </abbr>
+                            {% else %}
+                            <span class="text-warning btn">Pending</span>
+                            {% endif %}
+                        </td>
+                    </tr>
 
-<div class="page-wrapper m-4">
-    {% include 'app_common/snippets/alert.html' %}
-    <div class="">
-        <table class="table table-hover table-nowrap">
-            <thead class="table-light">
-                <tr>
-                    <th id="t-Head" scope="col">Request ID</th>
-                    <th id="t-Head" scope="col">Name</th>
-                    <th id="t-Head" scope="col">Quantity</th>
-                    <th id="t-Head" scope="col">Units</th>
-                    <th id="t-Head" scope="col">Image</th>
-                    <th id="t-Head" scope="col">Amount</th>
-                    <th id="t-Head" scope="col">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for sell_request in sell_objs %}
-                <tr>
-                    <td>{{ sell_request.id }}</td>
-                    <td>{{ sell_request.product_name }}</td>
-                    <td>{{ sell_request.product_quantity }}</td>
-                    <td>{{ sell_request.SI_units }}</td>
-                    <td><img src="{{ sell_request.product_image.url }}" alt="Product Image" style="height: 50px; width: 50px;" class="zoom"></td>
-                    <td>{{ sell_request.amount_in_green_points }}</td>
-                    <td>
-                        {% if sell_request.is_approved == "approved" %}
-                        <abbr title="Click To See The Reason" style="font-size: 1.5rem;">
-                            <span class="text-success btn" data-bs-toggle="modal" data-bs-target="#approveModal{{ sell_request.id }}">Approved</span>
-                        </abbr>
-                        {% elif sell_request.is_approved == "rejected" %}
-                        <abbr title="Click To See The Reason" style="font-size: 1.5rem;">
-                            <span class="text-danger btn" data-bs-toggle="modal" data-bs-target="#rejectModal{{ sell_request.id }}">Rejected</span>
-                        </abbr>
-                        {% else %}
-                        <span class="text-warning btn">Pending</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                <!-- Reject Modal -->
-                <div class="modal fade" id="rejectModal{{ sell_request.id }}" tabindex="-1" aria-labelledby="rejectModalLabel{{ sell_request.id }}" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="rejectModalLabel{{ sell_request.id }}">Reject Reason</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body text-center text-danger" style="font-size: larger;">
-                                {{ sell_request.reason }}
+                    <!-- Image Modal -->
+                    <div class="modal fade" id="imageModal{{ sell_request.id }}" tabindex="-1" aria-labelledby="imageModalLabel{{ sell_request.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="imageModalLabel{{ sell_request.id }}">{{ sell_request.product_name }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <img src="{{ sell_request.product_image.url }}" alt="Product Image" class="img-fluid w-100">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- Approve Modal -->
-                <div class="modal fade" id="approveModal{{ sell_request.id }}" tabindex="-1" aria-labelledby="approveModalLabel{{ sell_request.id }}" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="approveModalLabel{{ sell_request.id }}">Approve Reason</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body text-center text-success" style="font-size: larger;">
-                                {{ sell_request.reason }}
+
+                    <!-- Reject Modal -->
+                    <div class="modal fade" id="rejectModal{{ sell_request.id }}" tabindex="-1" aria-labelledby="rejectModalLabel{{ sell_request.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="rejectModalLabel{{ sell_request.id }}">Reject Reason</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center text-danger" style="font-size: larger;">
+                                    {{ sell_request.reason }}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% include 'app_common/snippets/pagination.html' %}
+
+                    <!-- Approve Modal -->
+                    <div class="modal fade" id="approveModal{{ sell_request.id }}" tabindex="-1" aria-labelledby="approveModalLabel{{ sell_request.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="approveModalLabel{{ sell_request.id }}">Approve Reason</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center text-success" style="font-size: larger;">
+                                    {{ sell_request.reason }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
     </div>
 </div>
+
 {% endblock main_content %}
 
 {% block js %}

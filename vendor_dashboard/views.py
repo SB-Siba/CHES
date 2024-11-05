@@ -758,7 +758,7 @@ class SellProduceView(View):
         try:
             user = request.user
             form = self.form_class(request.POST,request.FILES)
-            if form.is_valid():
+            if form.is_valid(): 
                 produce_category = form.cleaned_data['produce_category']
                 product_name = form.cleaned_data['product_name'] 
                 product_image = form.cleaned_data['product_image']    
@@ -769,15 +769,7 @@ class SellProduceView(View):
 
                 # Save SellProduce
                 
-                sellObj=self.model(user = user,
-                product_name = product_name,
-                product_image = product_image,
-                product_quantity = product_quantity,
-                SI_units = SI_units,
-                amount_in_green_points = amount_in_green_points,
-                validity_duration_days = validity_duration_days,
-                produce_category=produce_category,  # Use the ID directly
-                 )
+                sellObj=self.model(user = user,produce_category=produce_category,product_name = product_name,product_image = product_image,product_quantity = product_quantity,SI_units = SI_units,amount_in_green_points = amount_in_green_points,validity_duration_days = validity_duration_days)
                 sellObj.save()
                 produce_image_url = request.build_absolute_uri(sellObj.product_image.url)
 
@@ -787,6 +779,7 @@ class SellProduceView(View):
                     context={
                         'full_name':sellObj.user.full_name,
                         'product_name':sellObj.product_name,
+                        'produce_category':produce_category,
                         'product_quantity':sellObj.product_quantity,
                         'SI_units':sellObj.SI_units,
                         'amount_in_green_points':sellObj.amount_in_green_points,
@@ -1342,19 +1335,41 @@ class ServiceProvidersList(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+# @method_decorator(utils.login_required, name='dispatch')
+# class ListOfServicesByServiceProviders(View):
+#     template = app + "list_services.html"
+#     model = common_models.Service
+
+#     def get(self, request):
+#         try:
+#             services = self.model.objects.all()
+#             return render(request , self.template , {'services' : services})
+#         except Exception as e:
+#             error_message = f"An unexpected error occurred: {str(e)}"
+#             return render_error_page(request, error_message, status_code=400)
+        
 @method_decorator(utils.login_required, name='dispatch')
 class ListOfServicesByServiceProviders(View):
     template = app + "list_services.html"
-    model = common_models.Service
+    service_model = common_models.Service
+    category_model = common_models.CategoryForServices
 
     def get(self, request):
         try:
-            services = self.model.objects.all()
-            return render(request , self.template , {'services' : services})
+            category_id = request.GET.get('category_id')  # Get the category from query parameters
+            if category_id:
+                # If a category is selected, show services within that category
+                selected_category = self.category_model.objects.get(id=category_id)
+                services = self.service_model.objects.filter(service_type=selected_category)
+                return render(request, self.template, {'services': services, 'selected_category': selected_category})
+            else:
+                # If no category is selected, show the list of categories
+                categories = self.category_model.objects.all()
+                return render(request, self.template, {'categories': categories})
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-        
+
 
 @method_decorator(utils.login_required, name='dispatch')
 class ServiceSearchView(View):
@@ -1417,7 +1432,7 @@ class ServiceDetails(View):
                     template_name="mail_template/booking_confirmation.html",
                     context = {
                     'gardener_name': request.user.full_name,
-                    'service_name': service.name,  # Assuming the service has a name attribute
+                    'service_name': service.service_type,  # Assuming the service has a name attribute
                     },                 
                     recipient_list=[request.user.email]
                 )

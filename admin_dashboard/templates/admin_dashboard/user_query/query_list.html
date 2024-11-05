@@ -27,12 +27,12 @@
                     <small class="text-muted">Sent on: {{ query.date_sent|date:"M d, Y H:i" }}</small>
                 </div>
                 <div>
-                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                    <button type="button" class="" id="table_BTN" data-toggle="modal"
                         data-target="#replyModal{{ query.id }}">
                         <i class="fas fa-reply"></i> View & Reply
                     </button>
                     <!-- Delete Button -->
-                    <button type="button" class="btn btn-danger" data-toggle="modal"
+                    <button type="button" class=""  id="table_BTN2"  data-toggle="modal"
                         data-target="#deleteModal{{ query.id }}">
                         <i class="fas fa-trash"></i> Delete
                     </button>
@@ -87,7 +87,7 @@
                             {{ form.is_solve }}
                         </div>
 
-                        <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i> Send
+                        <button type="submit" class=""  id="table_BTN" ><i class="fas fa-paper-plane"></i> Send
                             Reply</button>
                     </form>
                 </div>
@@ -123,7 +123,7 @@
     <nav aria-label="Page navigation" class="mt-4">
         <ul class="pagination justify-content-center">
             {% if message_list.has_previous %}
-            <li class="page-item">
+            <li class="page-item ">
                 <a class="page-link" href="?page={{ message_list.previous_page_number }}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -131,7 +131,7 @@
             {% endif %}
             {% for page_num in message_list.paginator.page_range %}
             <li class="page-item {% if page_num == message_list.number %}active{% endif %}">
-                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                <a class=""  id="table_BTN"  href="?page={{ page_num }}">{{ page_num }}</a>
             </li>
             {% endfor %}
             {% if message_list.has_next %}

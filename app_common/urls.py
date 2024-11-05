@@ -156,9 +156,14 @@ urlpatterns = [
     path('api/email/verify-otp/', email_otp_api.VerifyOTPAPIView.as_view(), name='verify_otp_api'), 
 
     #top Users
-    path('api/top-users/', top_users_api.TopUsersAPIView.as_view(), name='top_users'),
+    path('api/top-users-rtg/', top_users_api.TopRTGUsersAPIView.as_view(), name='top_users_rtg'),
+    path('api/top-users-vendor/', top_users_api.TopVendorUsersAPIView.as_view(), name='top_users_vendor'),
+
     # Category for produces
     path('api/produces/categories/', api_of_rtg.CategoryForProducesListView.as_view(), name='produces-category-list'),
+
+    # Category for service provider
+    path('api/services/spcategories/', api_of_rtg.CategoryForServiceProviderListView.as_view(), name='produces-spcategory-list'),
     #  User Query
     path('api/user/query/', api_of_rtg.UserQueryCreateView.as_view(), name='user-query-api'),
 

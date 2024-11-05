@@ -77,6 +77,10 @@ img {
   font-size: 15px;
 }
 
+.profile_Body{
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  border-radius: 4px;
+}
 @media (max-width: 991px) {
   .about-avatar {
     margin-top: 30px;
@@ -87,7 +91,7 @@ img {
   padding: 22px 20px;
   background: #ffffff;
   border-radius: 10px;
-  box-shadow: 0 0 30px rgba(31, 45, 61, 0.125);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 }
 .about-section .counter .count-data {
   margin-top: 10px;
@@ -103,26 +107,28 @@ img {
   margin: 0;
 }
 .dark-color {
-    color: #20247b;
+    color: #000000;
+    font-weight: 400 !important;
 }
 .fflex
 {
     display: flex;
     justify-content: space-around;
 }
-#editb
-{
-    border: 1.5px solid #37af2c;
-}
-#editb:hover
-{
-    background-color: #37af2c;
-    color: white;
-}
 
 #t-Head{
-  background-color: green;
+  background-color: #008000;
   color: white;
+  vertical-align: top;
+  padding: 8px 1px 8px 5px; 
+  text-align: left; 
+  white-space: nowrap;
+  
+}
+@media (max-width: 768px){
+  #t-Head{
+    font-size: 12px !important;
+  }
 }
 .table-responsive{
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
@@ -182,4 +188,55 @@ img {
 }
 .user-info h5 {
   margin: 0;
+}
+#table_BTN{
+
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid #008000;
+  color: white;
+  background-color: #008000;
+  text-decoration: none;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+#table_BTN:hover{
+  text-decoration: none;
+  background: rgb(5,131,47);
+  background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(4,99,19,1) 52%, rgba(6,175,27,1) 100%);
+  color: #fff !important;
+  transition: 0.5rem;
+  text-decoration: none;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+}
+#table_BTN2{
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid #e42918;
+  color: white;
+  background-color: #e42918;
+  text-decoration: none;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+#table_BTN2:hover{
+  background: rgb(215, 6, 26);
+  background: linear-gradient(344deg, rgb(215, 6, 26) 14%, rgb(166, 8, 6) 52%, rgb(224, 15, 8) 100%);
+  color: #fff !important;
+  transition: 0.5rem;
+  text-decoration: none;
+  box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+}
+#table_BTN3{
+  padding: 5px 10px;
+  border-radius:0 5px 5px 0;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid #008000;
+  color: white;
+  background-color: #008000;
+  text-decoration: none;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }

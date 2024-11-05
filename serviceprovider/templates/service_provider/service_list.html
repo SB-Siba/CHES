@@ -31,7 +31,7 @@
                             <button class="table_btn" style="height: 35px;" type="submit">Search</button>
                         </div>
                     </form>
-                    <div class="">
+                    <div class=" mb-3 d-flex justify-contnet-end ">
                         <a data-bs-toggle="modal" data-bs-target="#create_service" class="" id="table_BTN">
                             <i class="fa-solid fa-plus  border-2 rounded"></i><b class="mx-1">Create New Service</b>
                         </a>
@@ -39,42 +39,46 @@
                 </div>
                 
         <div class="">
-            <div class="service_large_card">
+            <div class="service_large_card table-responsive">
                 <table class="table table-hover table-nowrap">
                     <thead class="table-light bg-success">
                         <tr>
+                            <th class="rounded-top-start-1" id="table_head_bg" scope="col">Service Image</th>
                             <th class="rounded-top-start-1" id="table_head_bg" scope="col">Service Name</th>
                             <th id="table_head_bg" scope="col">Description</th>
                             <th id="table_head_bg" scope="col">Price/Hour</th>
                             <th class="rounded-top-end-1" id="table_head_bg" scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody id="test_table_tbody" >
+                    <tbody id="test_table_tbody">
                         {% for service in service_list %}
                             <tr>
                                 <td>
-                                    <a class="text-decoration-none  text-black" href="#">{{service.name}}</a>
+                                    {% if service.service_image %}
+                                        <img src="{{ service.service_image.url }}" alt="{{ service.name }}" style="width: 100px; height: auto;">
+                                    {% else %}
+                                        <img src="{% static 'default-service-image.jpg' %}" alt="No Image" style="width: 100px; height: auto;">
+                                    {% endif %}
                                 </td>
-                                <td>{{service.description}}</td>
-                                
-                                <td>{{service.price_per_hour}}</td>
-                                
-                                <td >
-                                    <a href="{% url 'service_provider:service_update' service.id %} " class=" text-white me-2" id="table_BTN">
-                                        <i class="fas fa-edit  "></i>
-                                    </a>
-                                    <a href="{% url 'service_provider:service_delete' service.id %}" class="text-white" id="table_BTN2" onclick="return confirm('Are you sure you want to delete it?');">
-                                        <i class="fa-solid fa-trash "></i>
-                                    </a>
-                                    
+                                <td>{{ service.service_type.service_category }}</td>
+                                <td style="max-width: 30vw;">{{ service.description }}</td>
+                                <td>{{ service.price_per_hour }}</td>
+                                <td>
+                                    <div class="d-flex flex-column flex-sm-row">
+                                        <a href="{% url 'service_provider:service_update' service.id %}" class="me-2 mb-1 mb-sm-0" id="table_BTN">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'service_provider:service_delete' service.id %}" class="mb-sm-0 " id="table_BTN2">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
+                                    </div>
                                 </td>
-                            </tr> 
+                            </tr>
                         {% endfor %}
-                        
                     </tbody>
-                    
                 </table>
             </div>
+            
           
         </div>
             </div>
@@ -106,8 +110,9 @@
               </form>
             </div>
             
-          </div>
+          
         </div>
       </div>
     </div>
+  </div>
 {% endblock s_vendor_content %}

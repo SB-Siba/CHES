@@ -9,13 +9,14 @@ from rest_framework.response import Response
 from chatapp.models import Message
 from rest_framework.parsers import FormParser, MultiPartParser
 from . import swagger_doccumentation
-from .models import Booking, Order, ProduceBuy, ProductFromVendor, Service, ServiceProviderDetails, VendorDetails, User, GardeningProfile,UserActivity,SellProduce
+from .models import Booking, CategoryForServices, Order, ProduceBuy, ProductFromVendor, Service, ServiceProviderDetails, VendorDetails, User, GardeningProfile,UserActivity,SellProduce
 from django.utils.dateparse import parse_datetime
 from django.db.models.functions import Lower
 from django.utils.timezone import make_aware
 from .serializer import (
     BlogSerializer,
     BookingSerializer,
+    CategoryForServieProviderSerializer,
     CheckoutFormSerializer,
     CommentSerializer,
     MessageSerializer,
@@ -1005,22 +1006,57 @@ class VendorBlogDetailsAPIView(APIView):
 
 # Services
 
+# class ListOfServicesByServiceProvidersAPIView(APIView):
+#     @swagger_auto_schema(
+#         tags=["All API Vendors"],
+#         operation_description="List Of Services By Service Provider",
+#         manual_parameters=swagger_doccumentation.list_services_params,
+#         responses={201: ServiceSerializer(many=True)}
+#     )
+#     def get(self, request):
+#         try:
+#             services = Service.objects.all()
+#             serializer = ServiceSerializer(services, many=True)
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         except Exception as e:
+#             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+from rest_framework.exceptions import NotFound
+
 class ListOfServicesByServiceProvidersAPIView(APIView):
+    """
+    API view to list all categories or services under a selected category.
+    """
     @swagger_auto_schema(
         tags=["All API Vendors"],
-        operation_description="List Of Services By Service Provider",
+        operation_description="List Services by Category",
         manual_parameters=swagger_doccumentation.list_services_params,
-        responses={201: ServiceSerializer(many=True)}
+        responses={200: ServiceSerializer(many=True)}
     )
     def get(self, request):
         try:
-            services = Service.objects.all()
-            serializer = ServiceSerializer(services, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            # Get the category ID from query parameters
+            category_id = request.query_params.get('category_id')
+
+            if category_id:
+                # If a category is selected, return the services within that category
+                try:
+                    selected_category = CategoryForServices.objects.get(id=category_id)
+                except CategoryForServices.DoesNotExist:
+                    raise NotFound(detail="Category not found")
+
+                services = Service.objects.filter(service_type=selected_category)
+                serializer = ServiceSerializer(services, many=True)
+                return Response({'services': serializer.data, 'selected_category': selected_category.service_category}, status=status.HTTP_200_OK)
+            else:
+                # If no category is selected, return the list of categories
+                categories = CategoryForServices.objects.all()
+                category_serializer = CategoryForServieProviderSerializer(categories, many=True)
+                return Response({'categories': category_serializer.data}, status=status.HTTP_200_OK)
+        
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-
+        
 class ServiceSearchAPIView(APIView):
     @swagger_auto_schema(
         tags=["All API Vendors"],

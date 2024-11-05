@@ -42,7 +42,8 @@
         color: #ffc107; /* Yellow color for stars on hover */
     }
 </style>
-    <div class="page-wapper">
+    <div class="page-wapper min_height_div">
+        <h3 class="mb-3">My Community Orders</h3>
         {% include 'app_common/snippets/alert.html' %}
         <div class="table-responsive">
             <table class="table table-hover table-nowrap">
@@ -52,12 +53,12 @@
                         <th id="t-Head" scope="col">P_Name</th>
                         <th id="t-Head" scope="col">Quantity</th>
                         <th id="t-Head" scope="col">Units</th>
-                        <th id="t-Head" scope="col">Ammount</th>
+                        <th id="t-Head" scope="col">Amount</th>
                         <th id="t-Head" scope="col">Status</th>
                         <th id="t-Head" scope="col">Rating</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="test_table_tbody">
                     {% for order in orders %}
                     <tr>
                         <td>{{ order.id }}</td>

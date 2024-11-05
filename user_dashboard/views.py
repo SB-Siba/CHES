@@ -1280,12 +1280,21 @@ class GardenerDownloadInvoice(View):
 @method_decorator(utils.login_required, name='dispatch')
 class ListOfServicesByServiceProviders(View):
     template = app + "list_services.html"
-    model = app_commonmodels.Service
+    service_model = app_commonmodels.Service
+    category_model = app_commonmodels.CategoryForServices
 
     def get(self, request):
         try:
-            services = self.model.objects.all()
-            return render(request , self.template , {'services' : services})
+            category_id = request.GET.get('category_id')  # Get the category from query parameters
+            if category_id:
+                # If a category is selected, show services within that category
+                selected_category = self.category_model.objects.get(id=category_id)
+                services = self.service_model.objects.filter(service_type=selected_category)
+                return render(request, self.template, {'services': services, 'selected_category': selected_category})
+            else:
+                # If no category is selected, show the list of categories
+                categories = self.category_model.objects.all()
+                return render(request, self.template, {'categories': categories})
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
@@ -1352,7 +1361,7 @@ class ServiceDetails(View):
                     template_name="mail_template/booking_confirmation.html",
                     context = {
                     'gardener_name': request.user.full_name,
-                    'service_name': service.name,  # Assuming the service has a name attribute
+                    'service_name': service.service_type,  # Assuming the service has a name attribute
                     },                 
                     recipient_list=[request.user.email]
                 )

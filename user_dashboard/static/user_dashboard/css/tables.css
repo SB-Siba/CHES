@@ -1,7 +1,17 @@
 #t-Head{
-    background-color: green;
+    background-color: #008000;
     color: white;
+    vertical-align: top;
+    padding: 8px 1px 8px 5px; 
+    text-align: left; 
+    white-space: nowrap;
+    
 }
+@media (max-width: 768px){
+    #t-Head{
+      font-size: 12px !important;
+    }
+  }
 .table-responsive{
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
@@ -22,4 +32,14 @@
 
 .zoom-container img.zoomed {
     transform: scale(2); /* Adjust the scale as needed */
+}
+#content_td{
+    max-width: 380px;
+    
+}
+@media (max-width: 768px){
+   #content_td{
+    min-width: 300px ;
+    
+   }
 }

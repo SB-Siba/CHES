@@ -4,33 +4,46 @@
 {% block title %}Wallet Page{% endblock title %}
 
 {% block content %}
-<section class="main">
+<div class="main min_height_div">
   <div class="main-top">
     <h1 >My Wallet</h1>
   </div>
-  <div class="users d-flex justify-content-between mb-4">
-    <div class="card  ps-4 pt-4 " id="Wallet-card1">
-      <h5 class="mb-4" style="color: rgb(3, 63, 205);">Total Balance</h5>
-      <p><i class="fa-solid fa-coins fa-3x text-primary"></i> <span class="mx-2"
-          style="font-weight: bold; color: rgb(3, 63, 205); font-size: 1.3em;">{{request.user.wallet}}</span></p>
-    </div>
-    <div class="card  ps-4 pt-4" id="Wallet-card2">
-      <h5 class="mb-4 " style="color: rgb(198, 172, 2);">Total Purchase</h5>
-      <p><i class="fa-solid fa-coins text-warning fa-3x"></i> <span class="mx-2"
-          style="font-weight: bold; color: rgb(233, 156, 13); font-size: 1.3em;">{{request.user.total_invest}}</span></p>
-    </div>
-    <div class="card ps-4 pt-4" id="Wallet-card3">
-      <h5 class="text-danger  mb-4">Total Earnings</h5>
-      <p><i class="fa-solid fa-coins fa-3x text-danger"></i> <span class="mx-2"
-          style="font-weight: bold; color: red; font-size: 1.3em;">{{request.user.total_income}}</span></p>
+  <div class="">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center p-4" id="Wallet-card1">
+          <h5 class="text-primary mb-3">Total Balance</h5>
+          <p><i class="fa-solid fa-coins fa-3x text-primary"></i> 
+            <span class="ms-2">{{ request.user.wallet }}</span>
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center p-4" id="Wallet-card2">
+          <h5 class="text-warning mb-3">Total Purchase</h5>
+          <p><i class="fa-solid fa-coins fa-3x text-warning"></i> 
+            <span class="ms-2">{{ request.user.total_invest }}</span>
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center p-4" id="Wallet-card3">
+          <h5 class="text-danger mb-3">Total Earnings</h5>
+          <p><i class="fa-solid fa-coins fa-3x text-danger"></i> 
+            <span class="ms-2">{{ request.user.total_income }}</span>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
+  
 
-  <section class="main">
+  <div class="main">
     <div class="main-top">
       <h1>Transactions</h1>
     </div>
-    <table class="table">
+   <div class="table-responsive">
+    <table class="table table ">
       <thead>
         <tr >
           <th id="t-Head">Product Name</th>
@@ -157,8 +170,9 @@
         {% endfor %}
       </tbody>
     </table>
-  </section>
-</section>
+   </div>
+  </div>
+</div>
 
 {% endblock content %}
 {% block scripts %}

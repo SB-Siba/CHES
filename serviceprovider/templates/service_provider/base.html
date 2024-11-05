@@ -35,7 +35,7 @@
     <input type="hidden" id="fetchUserDetailsUrl" value="{% url 'chat:fetch_user_details' %}">
     <input type="hidden" id="fetchMessagesUrl" value="{% url 'chat:fetch_messages' %}">
     <div class="wrapper" id="MyBase">
-        <aside id="sidebar">
+        <aside id="sidebar" class="d-none d-lg-block">
             <div class="d-flex">
                 <button class="toggle-btn" type="button">
                     <i class="fa fa-tree"></i>
@@ -98,27 +98,95 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="{% url 'app_common:logout' %}" class="sidebar-link" id="a_underline">
+                    <a href="{% url 'app_common:logout' %}" class="sidebar-link" id="a_underline" onclick="return confirm('Do you want to logout ?')">
                         <i class="lni lni-exit"></i>
                         <span>Logout</span>
                     </a>
                 </li>
             </ul>
         </aside>
+        <!-- offcanvas -->
+        <div class="offcanvas offcanvas-start " tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasSidebarLabel">Gardening Services Of Odisha</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="sidebar-nav">
+                    <li class="sidebar-item">
+                        <a href="{% url 'service_provider:service_provider_profile' %}" class="sidebar-link">
+                            <i class="lni lni-user"></i> Profile
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="{% url 'service_provider:service_list' %}" class="sidebar-link">
+                            <i class="lni lni-list"></i> Service List
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="{% url 'service_provider:my_all_bookings' %}" class="sidebar-link">
+                            <i class="lni lni-book"></i> All Bookings
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="{% url 'chat:all_messages' %}" class="sidebar-link">
+                            <i class="lni lni-comments "></i> Messages
+                        </a>
+                    </li>
+                    <!-- Manage Blogs Dropdown -->
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" data-bs-toggle="collapse" href="#offcanvasManageBlogs" role="button" aria-expanded="false" aria-controls="offcanvasManageBlogs">
+                            <i class="lni lni-pencil-alt"></i> Manage Blogs
+                            <i class="fas fa-chevron-down  ms-2"></i> <!-- Font Awesome Icon for Dropdown -->
+                        </a>
+                        <ul class="collapse list-unstyled" id="offcanvasManageBlogs">
+                            <li class="sidebar-item">
+                                <a href="{% url 'blogs:sp_all_blogs' %}" class="sidebar-link">
+                                    <i class="lni lni-files"></i> All Blogs
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{% url 'blogs:sp_blog_list' %}" class="sidebar-link">
+                                    <i class="lni lni-files"></i> My Blogs
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="sidebar-item">
+                        <a href="{% url 'service_provider:sp_contact_page' %}" class="sidebar-link">
+                            <i class="lni lni-envelope"></i> Contact Us
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="{% url 'app_common:logout' %}" class="sidebar-link"
+                        onclick="return confirm('Do you want to logout?')">
+                            <i class="lni lni-exit"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- offcanvas -->
         <div class="main" style="padding: 0%; ">
             <nav class="navbar navbar-expand-lg navbar-light bg-light px-4 py-3">
-                <div class="container-fluid d-flex justify-content-between">
-                    <div class="me-2">
-                        <a href="{% url 'service_provider:service_provider_dash' %}">
-                            <div class=""><img src="{% static 'app_common/css/images/logo_ches 1.png'%}"
-                                    style="height: 50px; width: 50px;" /></div>
-                        </a>
+                <div class="container-fluid d-flex justify-content-between mx-0">
 
+                    <button class="text-dark d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <div class="">
+                        <a href="{% url 'service_provider:service_provider_dash' %}">
+                            <div class="">
+                                <img src="{% static 'app_common/css/images/logo_ches 1.png'%}"
+                                    style="height: 50px; width: 50px;" />
+                            </div>
+                        </a>
                     </div>
-                    <div class="navbar-collapse collapse d-flex justify-content-between">
-                        <div>
+                    <div class="navbar-collapse collapse d-flex justify-content-between d-none d-lg-block">
+                        <div class="d-none d-lg-block">
                             <a class=" fs-4  text-dark" id="a_underline"
-                                href="{% url 'service_provider:service_provider_dash' %}"><h4> Gardning Services Of Odisha</h4></a>
+                                href="{% url 'service_provider:service_provider_dash' %}"><h4> Gardening Services Of Odisha</h4></a>
                         </div>
                         <ul class="navbar-nav ms-auto">
                             
@@ -137,19 +205,10 @@
                                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                             Profile
                                         </a></li>
-                                    <li><a class="dropdown-item" href="#">
-                                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Settings
-                                        </a></li>
-                                    <li><a class="dropdown-item" href="">
-                                            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Activity Log
-                                        </a></li>
-                                    <li>
-                                        <div class="dropdown-divider"></div>
-                                    </li>
+
                                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                            data-bs-target="#logoutModal">
+                                            data-bs-target="#logoutModal"
+                                            >
                                             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                             Logout
                                         </a></li>

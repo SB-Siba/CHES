@@ -4,20 +4,20 @@
 {% block title %}Blog List{% endblock title %}
 {% block content %}
 
-<div class="py-6">
-    <div class=container>
+<div class="py-6 min_height_div">
+    <div >
     <h4>All Blogs</h4>
         <div class="vstack ">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-lg-flex justify-content-between align-items-center mb-4">
                 <form class="my-3" action="{% url 'blogs:rtg_blog_search' %}" method="post">
                     {% csrf_token %}
                     <div class="hstack gap-2">
-                        <select style="width: 6rem;" name="filter_by" class="form-select form-select1" aria-label="Default select example">
+                        <select  style="width: 6rem;" name="filter_by" class="form-select form-select1 form-control" aria-label="Default select example">
                             <option value="all">All</option>
                             <option value="id">ID</option>
                             <option value="name">Name</option>
                         </select>
-                        <span  class="input-group ">
+                        <span  class="input-group mb-4 ">
                             <input type="text" name="query" placeholder="Search Here" class="form-control form-select1" required />
                             <button type="submit" class="text-white input-group-text form-select1" id="input-group-text"><i class='fa fa-search' ></i></button>
                         </span>
@@ -88,7 +88,7 @@
             </div>
         </div>
     </div>
-</mai>
+</div>
 
 {% endblock content %}
 {% block js %}

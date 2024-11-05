@@ -97,74 +97,99 @@
     background-color: green;
     border-radius: 5px;
   }
+  .card-header{
+    background-color: #145D01;
+    color: white;
+  }
+  #leaderboardheader {
+    width: 100%;
+    height: auto !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color:#145D01 !important;
+    padding: 1rem 2rem;
+    border-radius: 4px 4px 0 0 ;
+  }
+  .card-info{
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  }
+  @media (max-width: 768px) {
+    .leaderboard-tabs {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+    .leaderboard-tab {
+      padding: 10px 15px;
+      font-size: 12px;
+    }
+  }
 </style>
 
-<main class="content px-3 py-4">
-    <div class="container-fluid">
+<div class="mx-2  py-4 ">
+    <div class="">
         <div class="mb-3">
-
-            
-            <dotlottie-player src="https://lottie.host/f14f1f43-2059-4ac3-a9e5-b31b68e93504/v6DMtA5GXK.json" background="transparent" speed="1" style="width: 100%; height: 200px;" loop autoplay></dotlottie-player>
-            <div class="row">
-                <div class="col-12 col-md-4 ">
-                    <div class="card border-left-primary shadow h-100 py-2 dash-card1">
-                        <div class="card-body py-4" style="color: white;">
-                            <h5 class="mb-2 fw-bold">
-                                My Progress
-                                
-                            </h5>
-                            <p class="mb-2 fw-bold">
-                                <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{earnings_today}}
-                            </p>
-                            <div class="mb-0">
-                                <span class=" fw-bold">
-                                    Income Of Today
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4 ">
-                    <div class="card border-left-success shadow h-100 py-2 dash-card2">
-                        <div class="card-body py-4" style="color: white;">
-                            <h5 class="mb-2 fw-bold">
-                                My Progress
-                            </h5>
-                            <p class="mb-2 fw-bold">
-                                <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{earnings_month}}
-                            </p>
-                            <div class="mb-0">
-                                <span class="fw-bold">
-                                    Income Of This Month
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4 ">
-                    <div class="card border-left-success shadow h-100 py-2 dash-card3">
-                        <div class="card-body py-4" style="color: white;">
-                            <h5 class="mb-2 fw-bold">
-                                My Progress
-                            </h5>
-                            <p class="mb-2 fw-bold">
-                                <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{earnings_year}}
-                            </p>
-                            <div class="mb-0">
-                                <span class="fw-bold">
-                                    Income Of This Year
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
+            <dotlottie-player src="https://lottie.host/f14f1f43-2059-4ac3-a9e5-b31b68e93504/v6DMtA5GXK.json" background="transparent" speed="1" style="width: 100%; height: 200px;" loop autoplay></dotlottie-player>           
         </div>
     </div>
-</main>
+    <div class="row">
+      <div class="col-12 col-md-4  mb-2">
+          <div class="card shadow  py-2 dash-card1">
+              <div class="card-body py-4" style="color: white;">
+                  <h5 class="mb-2 fw-bold">
+                      My Progress
+                  </h5>
+                  <p class="mb-2 fw-bold">
+                      <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{earnings_today}}
+                  </p>
+                  <div class="mb-0">
+                      <span class=" fw-bold">
+                          Income Of Today
+                      </span>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-12 col-md-4 mb-2">
+          <div class=" card shadow  py-2 dash-card2">
+              <div class="card-body py-4" style="color: white;">
+                  <h5 class="mb-2 fw-bold">
+                      My Progress
+                  </h5>
+                  <p class="mb-2 fw-bold">
+                      <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{earnings_month}}
+                  </p>
+                  <div class="mb-0">
+                      <span class="fw-bold">
+                          Income Of This Month
+                      </span>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-12 col-md-4 ">
+          <div class=" card  shadow  py-2 dash-card3">
+              <div class="card-body py-4" style="color: white;">
+                  <h5 class="mb-2 fw-bold">
+                      My Progress
+                  </h5>
+                  <p class="mb-2 fw-bold">
+                      <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{earnings_year}}
+                  </p>
+                  <div class="mb-0">
+                      <span class="fw-bold">
+                          Income Of This Year
+                      </span>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
  <!-- Leaderboard Section -->
- <div class="leaderboard-section mx-4 mb-4">
+ <div class="leaderboard-section  my-4 mx-2">
     <div class="leaderboard-tabs">
       <button class="leaderboard-tab active" data-target="today">Today</button>
       <button class="leaderboard-tab" data-target="month">This Month</button>
@@ -203,7 +228,7 @@
             {% if vendor.user_image %}
             <img src="{{ vendor.user_image.url }}" alt="picture_{{ forloop.counter }}">
             {% else %}
-            <img src="{% static 'pic_2.png' %}" alt="picture_{{ forloop.counter }}">
+            <img src="{% static 'app_common/css/images/profile.png'%}" alt="picture_{{ forloop.counter }}">
             {% endif %}
             <span>{{ vendor.full_name }}</span>
           </div>
@@ -242,9 +267,9 @@
     <div class="row">
         <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
             <div class="card leaderbaord mb-4">
-                <main>
-                    <div id="leaderboardheader">
-                        <p class="fw-bold pt-3" style="font-size: 25px; color: black;">Leader Board</p>
+                <main class="">
+                    <div class="d-flex justify-content-between align-items-center" id="leaderboardheader">
+                        <h4 class="text-white  ">Leader Board</h4>
 
                         <div class="filter-container">
                             <select id="city-filter" class="form-select">
@@ -257,7 +282,7 @@
                             </select>
                         </div>
                     </div>
-                    <div id="leaderboard">
+                    <div class="w-100 ">
                         <table  class="" >
                             {% for leader_user in users_orderby_coins %}
                             <tr data-rank="" data-city="{{ leader_user.city }}" class="leaderRow ltr">
@@ -282,10 +307,10 @@
         <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
 
             <!-- Project Card Example -->
-            <div class="card shadow mb-4">
+            <div class="  mb-4">
                 <div class="card card-info">
-                    <div class="card-header  d-flex justify-content-between align-items-center py-3">
-                        <h4 class="card-title">My Activity</h4>
+                    <div class="card-header   d-flex justify-content-between align-items-center py-3">
+                        <h4 class="">My Activity</h4>
                     </div>
                     <div class="card-body">
                         <div style="height: 220px;">
