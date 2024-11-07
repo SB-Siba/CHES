@@ -6436,7 +6436,7 @@ button.bg-secondary:focus {
 }
 
 .bg-success {
-  background-color: #1cc88a !important;
+  background-color: #1F782B !important;
 }
 
 a.bg-success:hover, a.bg-success:focus,
@@ -10516,7 +10516,7 @@ a:focus {
 
 @media (min-width: 768px) {
   .sidebar {
-    width: 14rem !important;
+    width: 16rem !important;
   }
   .sidebar .nav-item .collapse {
     position: relative;
@@ -10554,7 +10554,7 @@ a:focus {
     display: inline;
   }
   .sidebar .nav-item .nav-link[data-toggle="collapse"]::after {
-    width: 1rem;
+    width: 2rem !important;
     text-align: center;
     float: right;
     vertical-align: 0;

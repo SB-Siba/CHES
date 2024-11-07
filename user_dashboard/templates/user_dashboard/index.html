@@ -99,6 +99,26 @@
     <!-- Content Row -->
     <div class="row">
         <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+            <div class="card " id="green-commerce-card">
+                <main>
+                    <div class="card-header bg-success" id="leaderboardheader">
+                        <h3 class="d-flex justify-content-center align-items-center text-white">
+                            Green Commerce 
+                        </h3>
+                    </div> 
+                    <div class="d-flex justify-content-center">
+                        <div id="lottie-animation" style="width: 100%; max-width: 300px; height: 300px;"></div>
+                    </div>
+    
+                    <div class="d-flex justify-content-end mb-3 me-3">
+                        <a href="{% url 'user_dashboard:ExploreGreenCommerce' %}" class="" id="table_BTN">
+                            Explore More
+                        </a>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
             <div class="card leaderbaord mb-4">
                 <main>
                     <div class="d-flex align-items-center" id="leaderboardheader">
@@ -136,11 +156,17 @@
                 </main>
             </div>
         </div>
+      
         <!-- Content Column -->
-        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+        
+    </div>
+    <!-- /.row -->
 
+    <!-- activity -->
+     <div class="row">
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
             <!-- Project Card Example -->
-            <div class="card shadow mb-4">
+            <div class="card  mb-4"  id="green-commerce-card">
                 <div class="card card-info">
                     <div class="card-header  d-flex justify-content-between align-items-center py-3">
                         <h3 class="card-title text-white">My Activity</h4>
@@ -153,15 +179,15 @@
                 </div>
             </div>
         </div>
-
-
-    </div>
-    <!-- /.row -->
+     </div>
+    <!-- activity -->
 </div>
 {% endblock content %}
 
 {% block scripts %}
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
 <script>
+
     const users_name = {{ users_name|safe }};
     const u_coins = {{ u_coins|safe }};
     
@@ -192,5 +218,27 @@
             }
         }
     });    
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        var animation = lottie.loadAnimation({
+            container: document.getElementById('lottie-animation'),
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: "{% static 'app_common/css/images/anim3.json' %}" 
+        });
+
+        
+        animation.addEventListener('DOMLoaded', function() {
+            console.log('Lottie animation loaded successfully.');
+        });
+
+        animation.addEventListener('data_failed', function() {
+            console.error('Failed to load Lottie animation.');
+        });
+    });
 </script>
 {% endblock scripts %}

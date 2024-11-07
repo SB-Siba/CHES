@@ -550,3 +550,5 @@ class ResetPasswordView(View):
         except Exception as e:
             error_message = f"An error occurred: {e}"
             return render_error_page(request, error_message, status_code=500)
+
+

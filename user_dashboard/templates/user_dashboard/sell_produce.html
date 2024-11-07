@@ -5,23 +5,80 @@
 
 {% block content %}
 <style>
-  
-
+    .my-button {
+        background-color: #28a745;
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
 </style>
-    <div class="page-wapper" >
-        <h3 class="add-new-title text-sm  pt-3">Produce / Produce Sell</h3>
-        <div class="row d-flex justify-content-center my-5">
-            <div class="col-lg-6 col-md-6 sell_wrapper  p-lg-5 p-4 ">
-                <form method="post" action="" enctype="multipart/form-data" class="">
-                    {% include 'app_common/snippets/alert.html' %}
-                    {% csrf_token %}
-                    {{form.as_p}}
-                    
-                    <div style="text-align: center;margin-top: 2rem;">
-                        <button class="my-button" id="button" type="submit">Sell Now</button>
-                    </div>
-                </form>
-            </div>
+
+<div class="page-wapper">
+    <h3 class="add-new-title text-sm pt-3">Produce / Produce Sell</h3>
+    <div class="row d-flex justify-content-center my-5">
+        <div class="col-lg-6 col-md-6 sell_wrapper p-lg-5 p-4">
+            <form id="sellForm" method="post" action="" enctype="multipart/form-data">
+                {% include 'app_common/snippets/alert.html' %}
+                {% csrf_token %}
+                {{ form.as_p }}
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="my-button text-white" id="button" type="submit">Add Product</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        const form = document.getElementById("sellForm");
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent immediate form submission
+            
+            // Trigger the SweetAlert toast with custom styles
+            Swal.fire({
+                toast: true,
+                position: 'bottom-end',
+                icon: 'success',
+                title: 'Your product has been sold successfully.',
+                text: 'Please wait! It will be listed once approved by an admin.',
+                showConfirmButton: false,
+                timer: 3000,  // Auto-hide after 3 seconds
+                timerProgressBar: true,
+                
+                // Custom gradient background and text color
+                background: 'radial-gradient(circle farthest-corner at 10% 20%, rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90%)',
+                color: '#ffffff',  // Custom text color (white)
+                iconColor: '#ffcc00', 
+                didOpen: (toast) => {
+                    // Set initial CSS styles for sliding effect
+                    toast.style.transform = 'translateX(100%)';
+                    toast.style.transition = 'transform 0.5s ease';
+
+                    // Trigger the slide-in effect after a small delay
+                    setTimeout(() => {
+                        toast.style.transform = 'translateX(0)'; // Slide to view
+                    }, 100);
+                }
+            });
+
+           
+            setTimeout(() => {
+                form.submit();  
+            }, 5000);            
+        });
+    });
+</script>
+
 {% endblock content %}
