@@ -85,6 +85,8 @@ class UpdateProfileView(View):
             'instagram_link':user.instagram_link,
             'twitter_link':user.twitter_link,
             'address':user.address,
+            'city':user.city,
+            'pin_code':user.pin_code,
             'user_image':user.user_image,
             }
 
@@ -111,6 +113,8 @@ class UpdateProfileView(View):
                 instagram_link = form.cleaned_data['instagram_link']
                 twitter_link = form.cleaned_data['twitter_link']
                 address = form.cleaned_data['address']
+                city = form.cleaned_data['city']
+                pin_code = form.cleaned_data['pin_code']
                 user_image = form.cleaned_data['user_image']
 
                 try:
@@ -119,6 +123,8 @@ class UpdateProfileView(View):
                     user.full_name = fullName
                     user.contact = contact
                     user.address = address
+                    user.city = city
+                    user.pin_code = pin_code
                     user.facebook_link = facebook_link
                     user.instagram_link = instagram_link
                     user.twitter_link = twitter_link
@@ -383,25 +389,44 @@ class ActivityList(View):
 @method_decorator(utils.login_required, name='dispatch')
 class WalletView(View):
     template = app + "wallet.html"
-    model = app_commonmodels.ProduceBuy
+    produce_buy_model = app_commonmodels.ProduceBuy
+    order_model = app_commonmodels.Order  # Adjust the import if needed
 
-    def get(self,request):
+    def get(self, request):
         user = request.user
         try:
-            transactions = self.model.objects.filter((Q(buyer=user) | Q(seller=user)) & Q(buying_status="PaymentDone") | Q(buying_status="BuyCompleted")).order_by('-date_time')
+            # Fetch transactions from ProduceBuy where buying_status is PaymentDone or BuyCompleted
+            produce_transactions = self.produce_buy_model.objects.filter(
+                Q(buyer=user) | Q(seller=user),
+                Q(buying_status="PaymentDone") | Q(buying_status="BuyCompleted")
+            ).order_by('-date_time')
+
+            # Fetch transactions from Order where payment_status is Paid or order_status is Delivered
+            order_transactions = self.order_model.objects.filter(
+                Q(customer=user) | Q(vendor=user),
+                Q(payment_status="Paid") | Q(order_status="Delivered")
+            ).order_by('-date')
+
+            # Process transactions to identify if the user is the buyer or seller/customer or vendor
             list_of_transactions = []
-            xyz = []
-            for i in transactions:
-                list_of_transactions.append(i)
-                if i.buyer == user:
-                    x = True
-                    xyz.append(x)
-                else:
-                    x = False
-                    xyz.append(x)
-            main_obj = zip(list_of_transactions,xyz)  
-            return render(request,self.template,locals())
-             
+            transaction_types = []
+
+            # Append ProduceBuy transactions with buyer/seller context
+            for transaction in produce_transactions:
+                list_of_transactions.append(transaction)
+                transaction_types.append('buyer' if transaction.buyer == user else 'seller')
+
+            # Append Order transactions with customer/vendor context
+            for transaction in order_transactions:
+                list_of_transactions.append(transaction)
+                transaction_types.append('customer' if transaction.customer == user else 'vendor')
+
+            # Combine into main object
+            main_obj = zip(list_of_transactions, transaction_types)
+
+            # Render the template with combined transactions
+            return render(request, self.template, {'main_obj': main_obj})
+
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
@@ -655,16 +680,18 @@ class BuyingBegins(View):
 class BuyBeginsSellerView(View):
     template = app + "buyingprogressseller.html"
     model = app_commonmodels.ProduceBuy
-    form = user_form.BuyAmmountForm
-    def get(self,request):
+    form_class = user_form.BuyAmmountForm
+
+    def get(self, request):
         try:
             user = request.user
             bbeigins_obj = self.model.objects.filter(seller=user, buying_status="BuyInProgress")
-            form = self.form
-            return render(request,self.template,locals())
+            form = self.form_class()  # Instantiate the form here
+            return render(request, self.template, {"bbeigins_obj": bbeigins_obj, "form": form})
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
 
 @method_decorator(utils.login_required, name='dispatch')
 class BuyBeginsBuyerView(View):
@@ -686,12 +713,16 @@ def send_payment_link(request, buy_id):
         if request.method == "POST":
             buy_obj = app_commonmodels.ProduceBuy.objects.get(id=buy_id)
             form_data = request.POST
-            amount_based_on_buyer_quantity = int(form_data['ammount_based_on_buyer_quantity'])
+            quantity = buy_obj.quantity_buyer_want  # Quantity buyer wants to purchase
+            amount_per_unit = buy_obj.sell_produce.amount_in_green_points  # Green points per unit
+            
+            # Calculate total amount based on quantity
+            amount_based_on_buyer_quantity = quantity * amount_per_unit
             buy_obj.payment_link = "Send"
             buy_obj.ammount_based_on_quantity_buyer_want = amount_based_on_buyer_quantity
             buy_obj.save()
 
-            # Send email notification to both buyer and seller using templates
+            # Send email notifications to buyer and seller
             send_template_email(
                 subject='New Payment Link Sent',
                 template_name='mail_template/payment_link.html',
@@ -1025,16 +1056,23 @@ class VendorsProduct(View):
 class CheckoutView(View):
     template = app + "checkout_page.html"
     form = user_form.CheckoutForm
-
+ 
     def get(self,request,vprod_id,vendor_email):
         try:
             user = request.user
             offer_discount = request.GET.get('offer_discount', None)
             
             initial_data = {
-            'username': user.email,
-            }
+            'email': user.email,
+            'full_name': user.full_name,
+            'contact_number': user.contact,
+            'address': user.address,
+            'city': user.city,
+            'pin_code': user.pin_code,
 
+            
+            }
+ 
             form = self.form(initial=initial_data)
             vendor_product_obj = get_object_or_404(app_commonmodels.ProductFromVendor,id = vprod_id)
             serializer = DirectBuySerializer(vendor_product_obj,context={'offer_discount': offer_discount})
@@ -1043,8 +1081,7 @@ class CheckoutView(View):
             ord_meta_data = {}
             for i,j in order_details.items():
                 ord_meta_data.update(j)
-
-            gst = ord_meta_data.get('charges', {}).get("GST", "0.00")
+ 
             discount_amount = float(ord_meta_data['discount_amount'])
             discount_amount = '{:.2f}'.format(discount_amount)
             delivery_charge = ord_meta_data['charges']["Delivery"]
@@ -1054,18 +1091,22 @@ class CheckoutView(View):
             t_price = ord_meta_data['final_value']
             our_price = ord_meta_data['our_price']
             gross_ammount = ord_meta_data['gross_value']
+            our_product_value = ord_meta_data['our_product_value']
+
+            coin_exchange = ord_meta_data['coin_exchange']
             # print(ord_meta_data)
             data = {
                 'form': form,
                 "vendor_product":vendor_product_obj,
                 "gross_ammount":gross_ammount,
+                "our_product_value":our_product_value,
                 "our_price":our_price,
                 "discount_ammount":discount_amount,
                 "discount_percentage":discount_percentage,
                 "total":t_price,
                 "offer_discount":offer_discount,
-                'delivery_charge':delivery_charge,
-                'gst': gst
+                'coin_exchange': coin_exchange,
+                'delivery_charge':delivery_charge
                 }
             return render(request, self.template, data)
         except Exception as e:
@@ -1078,28 +1119,23 @@ class CheckoutView(View):
             offer_discount = request.POST.get('offer_discount', None)
             if form.is_valid():
                 user = request.user
-                first_name = form.cleaned_data['first_name'] 
-                last_name = form.cleaned_data['last_name']    
-                username = form.cleaned_data['username']
-                contact_number = form.cleaned_data['contact_number']
+                full_name = form.cleaned_data['full_name']
                 email = form.cleaned_data['email']
+                contact_number = form.cleaned_data['contact_number']
                 address = form.cleaned_data['address']
                 city = form.cleaned_data['city']
-                zip_code = form.cleaned_data['zip_code']
-                same_address = form.cleaned_data['same_address']
-                save_info = form.cleaned_data['save_info']
-
+                pin_code = form.cleaned_data['pin_code']
+                
+ 
                 customer_details = {
-                    'first_name': first_name,
-                    'last_name': last_name,
-                    'username': username,
-                    'contact_number':contact_number,
+                    'full_name': full_name,
                     'email': email,
+                    'contact_number':contact_number,
                     'address': address,
                     'city': city,
-                    'zip_code': zip_code,
+                    'pin_code': pin_code,
                 }
-
+ 
                 prod_obj = get_object_or_404(app_commonmodels.ProductFromVendor,id = vprod_id)
                 
                 serializer = DirectBuySerializer(prod_obj,context={'offer_discount': offer_discount})
@@ -1109,9 +1145,8 @@ class CheckoutView(View):
                 for i,j in order_details.items():
                     ord_meta_data.update(j)
                     
-                gst = ord_meta_data.get('charges', {}).get("GST", "0.00")
                 t_price = ord_meta_data['final_value']
-
+ 
                 try:
                     vendor = get_object_or_404(app_commonmodels.User,email = vendor_email)
                     
@@ -1137,23 +1172,24 @@ class CheckoutView(View):
                     order.save()
                     prod_obj.stock -= 1
                     prod_obj.save()
-
+ 
                     send_template_email(
                         subject="Order Successfull",
                         template_name="mail_template/successfull_order_mail.html",
                         context={'full_name': user.full_name,"email":user.email,"order_number":order.uid,"order_date":order.date,"order_total":t_price},
                         recipient_list=[user.email]
                     )
-
+ 
                     return redirect("user_dashboard:user_dashboard")
                 except Exception as e:
                     error_message = f"Error while placing Order. {str(e)}"
                     return render_error_page(request, error_message, status_code=400)
                 
             initial_data = {
-            'username': request.user.email,
+            'email': request.user.email,
+            'full_name': request.user.full_name
             }
-
+ 
             form = self.form(initial=initial_data)
             vendor_product_obj = get_object_or_404(app_commonmodels.ProductFromVendor,id = vprod_id)
             serializer = DirectBuySerializer(vendor_product_obj,context={'offer_discount': offer_discount})
@@ -1162,7 +1198,7 @@ class CheckoutView(View):
             ord_meta_data = {}
             for i,j in order_details.items():
                 ord_meta_data.update(j)
-
+ 
             discount_amount = ord_meta_data['discount_amount']
             gst = ord_meta_data['charges']["GST"]
             delivery_charge = float(ord_meta_data['charges']["Delivary"])
@@ -1170,6 +1206,7 @@ class CheckoutView(View):
             t_price = ord_meta_data['final_value']
             our_price = ord_meta_data['our_price']
             gross_ammount = ord_meta_data['gross_value']
+
             data = {
                 'form': form,
                 "vendor_product":vendor_product_obj,
@@ -1180,14 +1217,13 @@ class CheckoutView(View):
                 "gst":gst,
                 "total":t_price,
                 "offer_discount":offer_discount,
-                'gst': ord_meta_data['charges']['GST'],
                 'delivery_charge':delivery_charge
                 }
             return render(request, self.template, data)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-        
+                    
 @method_decorator(utils.login_required, name='dispatch')
 class AllOrdersFromVendors(View):
     model = app_commonmodels.Order
@@ -1441,3 +1477,11 @@ class RateOrderFromVendor(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
+            
+class ExploreGreenCommerce(View):
+    template = app + 'ExploreGreenCommerce.html'
+
+    def get(self, request):
+  
+        return render(request,self.template)

@@ -61,6 +61,12 @@ display: flex;
                     <p>
                         {{garden_profile_obj.user.email}}
                     </p>
+                    <p>
+                       Gender: {{garden_profile_obj.gender}}
+                    </p>
+                    <p>
+                        Caste: {{garden_profile_obj.caste}}
+                    </p>
                 </div>
                 <a href="{% url 'user_dashboard:gardeningprofileupdate' %}" class="btn edit_btn  text-white btn-lg mt-3">
                     <i class="fa-solid fa-pen-to-square"></i>

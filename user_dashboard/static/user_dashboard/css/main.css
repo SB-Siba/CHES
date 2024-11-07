@@ -16,8 +16,34 @@ h1, h2 , h3 ,h4 {
 .sidebar-dark .nav-item .nav-link{
     color: #fff;
     font-weight: 600;
+    
+    border-radius: 4px;
 }
 
+.sidebar-dark .nav-item {
+    border: 1px solid rgb(153, 154, 128) !important;
+    border-left: 3px solid greenyellow !important;
+    margin: 5px 10px;
+    border-radius: 4px;
+}
+.sidebar .nav-item .nav-link[data-toggle="collapse"]::after {
+    width: 2.8rem !important;
+    text-align: center;
+    float: right;
+    vertical-align: 0;
+    border: 0;
+    font-weight: 900;
+    content: '\f107';
+    font-family: 'Font Awesome 5 Free';
+  }
+  .bg-success {
+    background-color: #1F782B !important;
+  }
+  a.bg-success:hover, a.bg-success:focus,
+button.bg-success:hover,
+button.bg-success:focus {
+  background-color: #148924 !important;
+}
 .sidebar-dark .nav-item.active .nav-link {
     color: #fff;
     background-color: #14453B;
@@ -54,48 +80,80 @@ h1, h2 , h3 ,h4 {
     height: 25vh;
 }
 .dash-card1 {
-    background: rgb(3,17,94);
-    background: linear-gradient(355deg, rgba(2, 25, 156, 0.8) 0%, rgba(44, 56, 223, 0.496) 48%, rgba(27, 35, 142, 0.8) 100%), 
-                url(../img/card1.jpg) no-repeat center center;
+    
+    background-image: linear-gradient( 60deg,  rgba(34,34,34,1) 0%, rgba(8, 0, 153, 0.861) 29.7%, rgba(118, 6, 166, 0.863) 63.4%, rgba(233,0,64,0.58) 100.1% ),  url(../img/card1.jpg); 
     background-size: cover; 
-    border-left: 5px solid rgb(255, 0, 0);
-    color: white; 
+    background-position: center;
+    background-repeat: no-repeat; 
+    color: white;
+    opacity: 1;
 }
 
 .dash-card2{
-    background: rgba(0, 191, 131, 0.668);
-    background: linear-gradient(349deg, rgba(32, 140, 106, 0.685) 0%, rgba(42, 217, 144, 0.602) 48%, rgba(0, 193, 113, 0.673) 80%),url(../img/card2.jpeg) no-repeat center center;
-    border-left:5px solid  blue;
+    background-image: linear-gradient( 98.3deg,  rgba(0, 0, 0, 0.87) 10.6%, rgba(255, 0, 0, 0.836) 97.7% ), 
+    url(../img/card2.jpeg); 
     background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
     color: white;
+    opacity: 1;
 }
 
 .dash-card3{
-    background: rgb(126,55,148);
-background: linear-gradient(349deg, rgba(164, 30, 185, 0.656) 0%, rgba(170, 37, 197, 0.676) 48%, rgba(143, 1, 153, 0.615) 80%),url(../img/card3.jpeg) no-repeat center center;
-border-left: 5px solid rgb(1, 130, 20);
-background-size: cover; 
+    background: linear-gradient(60deg, rgba(11, 64, 236, 0.944) 12%, rgba(255, 0, 38, 0.723) 100%), 
+    url(../img/card3.jpeg) ; 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
     color: white;
+    opacity: 1; 
 }
 .dash-card4{
-    background: rgb(183,166,0);
-background: linear-gradient(349deg, rgba(183, 165, 0, 0.827) 0%, rgba(197, 197, 37, 0.596) 48%, rgba(152, 150, 30, 0.687) 80%),url(../img/card4.jpg) no-repeat center center;
-border-left: 5px solid rgb(192, 1, 106);
-background-size: cover; 
+    background: linear-gradient(60deg, rgba(9, 9, 121, 0.913) 12%, rgba(0, 213, 255, 0.962) 100%), 
+    url(../img/card4.jpg); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
     color: white;
+    opacity: 1;
 }
 .dash-card5{
-   background-color: #F39C13;
+    background-image: radial-gradient( circle farthest-corner at 6.6% 12%,  rgba(63, 0, 126, 0.804) 20.8%, rgba(0, 255, 162, 0.806) 100.2% ), 
+    url(../img/card5.jpg); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
+    color: white;
+    opacity: 1;
 }
 .dash-card6{
-    background-color: #F50909;
+    background: linear-gradient(45deg, rgba(54, 125, 191, 0.941) 10%, rgba(242, 62, 170, 0.872) 97%), 
+    url(../img/card6.jpg); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
+    color: white;
+    opacity: 1;
 }
 .dash-card7{
-    background-color: #8E44AD;
+    background-image: linear-gradient( 20deg,  rgba(238, 80, 159, 0.939) 10.4%, rgba(255, 100, 100, 0.81) 43.8%, rgba(0, 91, 219, 0.815) 105.8% ), 
+    url(../img/card7.jpg); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
+    color: white;
+    opacity: 1;
 }
 .dash-card8{
-    background-color: #F46D87;
+    background-image: linear-gradient( 134.6deg,  rgba(201, 37, 108, 0.935) 15.4%, rgba(117, 16, 124, 0.759) 74.7% ), 
+    url(../img/card8.jpg); 
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat; 
+    color: white;
+    opacity: 1;
 }
+
 .sell_wrapper{
     background-color: #fff;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
@@ -470,3 +528,13 @@ height: 8.2rem!important;
  .min_height_div{
     min-height: 100vh;
  }
+ /* lottie */
+ .lottie_DiV{
+    min-height: 80vh !important;
+    
+ }
+ .lottie_animation{
+    width: 500px;
+    height: 300px;
+ }
+ /* lottie */

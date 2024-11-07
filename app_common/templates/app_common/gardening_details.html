@@ -64,6 +64,14 @@
                     <form class="px-2" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
+                            {{ form.gender.label_tag }}
+                            {{ form.gender }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.caste.label_tag }}
+                            {{ form.caste }}
+                        </div>
+                        <div class="form-group">
                             {{ form.garden_area.label_tag }}
                             {{ form.garden_area }}
                         </div>

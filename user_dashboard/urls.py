@@ -47,7 +47,7 @@ urlpatterns = [
     path('service_details/<int:service_id>/', views.ServiceDetails.as_view(), name='service_details'),
     path('my_booked_services/', views.MyBookedServices.as_view(), name='my_booked_services'),
     path('rtg/decline_booking/<int:booking_id>', views.rtg_decline_booking, name='rtg_decline_booking'),
-
+    path('ExploreGreenCommerce/', views.ExploreGreenCommerce.as_view(), name='ExploreGreenCommerce'),
 ]
 
 #  user_dashboard:user_dashboard
