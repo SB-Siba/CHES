@@ -28,14 +28,21 @@
                     <div>
                         <h6 class="my-0">Our Price</h6>
                     </div>
-                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{our_price}}</span>
+                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{our_product_value}}</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
-                        <h6 class="my-0">Discount</h6>
+                        <h6 class="my-0">Green Coin Discount</h6>
                     </div>
-                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{discount_ammount}}({{discount_percentage}}%)</span>
+                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{coin_exchange  }}</span>
                 </li>
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <div>
+                        <h6 class="my-0">Total Discount</h6>
+                    </div>
+                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{discount_ammount}}</span>
+                </li>
+                
                 <!--<li class="list-group-item d-flex justify-content-between bg-light">
                     <div class="">
                         <h6 class="my-0">GST</h6>
@@ -67,25 +74,21 @@
                 <input type="hidden" name="offer_discount" value="{{ offer_discount }}">
                 <div class="row">
                     <div class="col-md-6 mb-2">
-                        <label for="id_first_name">First name</label>
-                        {{ form.first_name }}
+                        <label for="id_first_name">Full name</label>
+                        {{ form.full_name }}
                         <div class="invalid-feedback"> Valid first name is required. </div>
                     </div>
-                    <div class="col-md-6 mb-2">
-                        <label for="id_last_name">Last name</label>
-                        {{ form.last_name }}
-                        <div class="invalid-feedback"> Valid last name is required. </div>
-                    </div>
+                    
                 </div>
                 <div class="mb-3">
-                    <label for="id_username">Username</label>
+                    <label for="id_username">Email</label>
                     <div class="input-group ">
                         
-                            {{ form.username }}
+                            {{ form.email }}
                         
                         
 
-                        <div class="invalid-feedback" style="width: 100%;"> Your username is required. </div>
+                        <div class="invalid-feedback" style="width: 100%;"> Your email is required. </div>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -98,11 +101,7 @@
                         <div class="invalid-feedback" style="width: 100%;"> Your contact number is required. </div>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="id_email">Email <span class="text-muted">(Optional)</span></label>
-                    {{ form.email }}
-                    <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
-                </div>
+                
                 <div class="mb-3">
                     <label for="id_address">Address</label>
                     {{ form.address }}
@@ -115,19 +114,10 @@
                         <div class="invalid-feedback"> Please provide a valid city. </div>
                     </div>
                     <div class="col-md-6 mb-4">
-                        <label for="id_zip_code">Zip</label>
-                        {{ form.zip_code }}
-                        <div class="invalid-feedback"> Zip code required. </div>
+                        <label for="id_zip_code">Pincode</label>
+                        {{ form.pin_code }}
+                        <div class="invalid-feedback"> Pin code required. </div>
                     </div>
-                </div>
-                <hr class="mb-4">
-                <div class="custom-control custom-checkbox">
-                    {{ form.same_address }}
-                    <label class="custom-control-label" for="id_same_address">Shipping address is the same as my billing address</label>
-                </div>
-                <div class="custom-control custom-checkbox ">
-                    {{ form.save_info }}
-                    <label class="custom-control-label" for="id_save_info">Save this information for next time</label>
                 </div>
                 <hr class="mb-4">
                 <button class="btn btn-succesS btn-lg w-100" type="submit">Continue to checkout</button>

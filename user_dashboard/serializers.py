@@ -32,15 +32,18 @@ class DirectBuySerializer(serializers.ModelSerializer):
         total_value = 0
         charges = {}
         gross_value = 0  # market price or product_max_price
+        our_product_value = 0  # market price or product_max_price
+
         our_price = 0
         final_payable_amount = 0
 
         products = {}
         product_list = []
-        coin_exchange = None
+        coin_exchange = 0
         try:
             product = get_object_or_404(models.ProductFromVendor, id=obj.id)
             gross_value += float(product.max_price)
+            our_product_value = float(product.discount_price)
             x = {}
             # ____________
             if self.context.get('offer_discount') == "1":
@@ -51,7 +54,7 @@ class DirectBuySerializer(serializers.ModelSerializer):
                 x['price_per_unit'] = f"{float(product.discount_price):.2f}"
                 x['our_price'] = f"{float(product.discount_price):.2f}"
                 x['total_price'] = f"{our_price:.2f}"
-                x["coinexchange"] = f"{float(product.green_coins_required):.2f}" if product.green_coins_required is not None else None
+                x["coinexchange"] = f"{float(product.green_coins_required):.2f}" if product.green_coins_required is not None else "0.00"
                 x["forpercentage"] = f"{discount_percentage:.2f}"
                 x["taxable_price"] = f"{product.taxable_price:.2f}"
                 x["gst"] = f"{product.gst_rate:.2f}"
@@ -59,7 +62,7 @@ class DirectBuySerializer(serializers.ModelSerializer):
                 x["sgst"] = f"{product.sgst:.2f}"
                 x["product_id"] = f"{product.id}"
 
-                coin_exchange = True
+                coin_exchange = product.green_coins_required if product.green_coins_required is not None else 0
             else:
                 product_discounted_price = float(product.discount_price)
                 our_price = product_discounted_price
@@ -67,20 +70,15 @@ class DirectBuySerializer(serializers.ModelSerializer):
                 x['price_per_unit'] = f"{float(product.discount_price):.2f}"
                 x['our_price'] = f"{our_price:.2f}"
                 x['total_price'] = f"{our_price:.2f}"
-                x["coinexchange"] = None
+                x["coinexchange"] = "0.00"
                 x["forpercentage"] = None
                 x["taxable_price"] = f"{product.taxable_price:.2f}"
                 x["gst"] = f"{product.gst_rate:.2f}"
                 x["cgst"] = f"{product.cgst:.2f}"
                 x["sgst"] = f"{product.sgst:.2f}"
-                coin_exchange = False
+                coin_exchange = 0
 
             products[product.name] = x
-            
-            taxable_price = product.taxable_price
-            gst_rate = product.gst_rate
-            gst_amount = taxable_price * (gst_rate / 100)
-            charges['GST'] = f"{gst_amount:.2f}"
 
         except Exception as e:
             print(e)
@@ -91,11 +89,12 @@ class DirectBuySerializer(serializers.ModelSerializer):
             'products': products,
             'total_items': total_items,
             'gross_value': f"{gross_value:.2f}",
+            'our_product_value': f"{our_product_value:.2f}",
             'our_price': f"{our_price:.2f}",
             'discount_amount': f"{discount_amount:.2f}",
             'discount_percentage': f"{round(discount_percentage, 1):.2f}",
             'charges': charges,
-            'coin_exchange': coin_exchange
+            'coin_exchange': f"{float(coin_exchange):.2f}"  # Show actual amount if coin_exchange is true, otherwise 0
         }
 
         # calculating final amount by adding the charges
@@ -123,8 +122,6 @@ class DirectBuySerializer(serializers.ModelSerializer):
         fields = [
             "products_data",
         ]
-
-
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:

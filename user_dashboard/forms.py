@@ -62,6 +62,19 @@ class UpdateProfileForm(forms.Form):
         )
     )
 
+    city = forms.ChoiceField(
+        choices=[("", "Choose..."), ("Bhubaneswar", "Bhubaneswar"),("Cuttack","Cuttack"),("Puri","Puri"),("Bhadrak","Bhadrak"),("Berahmpur","Berahmpur")],
+        widget=forms.Select(
+            attrs={"class": "custom-select d-block w-100", "required": True}
+        ),
+    )
+    pin_code = forms.CharField(
+        max_length=10,
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "", "required": True}
+        ),
+    )
+
     user_image = forms.FileField(required=False)
     user_image.widget.attrs.update({"class": "form-control", "type": "file"})
 
@@ -219,22 +232,17 @@ class BuyAmmountForm(forms.Form):
 
 
 class CheckoutForm(forms.Form):
-    first_name = forms.CharField(
+    full_name = forms.CharField(
         max_length=100,
         widget=forms.TextInput(
             attrs={"class": "form-control", "placeholder": "", "required": True}
         ),
     )
-    last_name = forms.CharField(
+    
+    email = forms.CharField(
         max_length=100,
         widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "", "required": True}
-        ),
-    )
-    username = forms.CharField(
-        max_length=100,
-        widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": "Username", "required": True}
+            attrs={"class": "form-control", "placeholder": "email", "required": True}
         ),
     )
     contact_number = forms.CharField(
@@ -243,12 +251,7 @@ class CheckoutForm(forms.Form):
             attrs={"class": "form-control", "placeholder": "Contact", "required": True}
         ),
     )
-    email = forms.EmailField(
-        required=False,
-        widget=forms.EmailInput(
-            attrs={"class": "form-control", "placeholder": "you@example.com"}
-        ),
-    )
+    
     address = forms.CharField(
         max_length=255,
         widget=forms.TextInput(
@@ -265,18 +268,11 @@ class CheckoutForm(forms.Form):
             attrs={"class": "custom-select d-block w-100", "required": True}
         ),
     )
-    zip_code = forms.CharField(
+    pin_code = forms.CharField(
         max_length=10,
         widget=forms.TextInput(
             attrs={"class": "form-control", "placeholder": "", "required": True}
         ),
     )
-    same_address = forms.BooleanField(
-        required=False,
-        widget=forms.CheckboxInput(attrs={"class": "custom-control-input"}),
-    )
-    save_info = forms.BooleanField(
-        required=False,
-        widget=forms.CheckboxInput(attrs={"class": "custom-control-input"}),
-    )
+    
 

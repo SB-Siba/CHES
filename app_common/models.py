@@ -14,8 +14,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(null=True, blank = True,unique = True)
     password = models.TextField(null=True,blank=True)
     contact = models.CharField(max_length= 10, null=True, blank=True)
-    address = models.JSONField(null=True, blank=True)
+    address = models.CharField(max_length= 450 , null=True, blank=True)
     city = models.CharField(max_length=30,null=True,blank=True)
+    pin_code = models.IntegerField(null=True,blank=True)
     quiz_score = models.IntegerField(default = 0,null= True, blank= True)
 
     user_image = models.ImageField(upload_to='userprofie/',null=True, blank=True)
@@ -129,11 +130,25 @@ class GaredenQuizModel(models.Model):
 
 
 class GardeningProfile(models.Model):
+
+    GENDER_CHOICES = (
+        ("Male","Male"),
+        ("Female","Female"),
+        ("Others","Others")
+    )
+    CASTE_CHOICES = (
+        ("General","General"),
+        ("Others","Others")
+    )
+
     user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)
     garden_area = models.BigIntegerField(default = 0,null= True, blank= True)
     number_of_plants = models.BigIntegerField(default = 0,null= True, blank= True)
     number_of_unique_plants = models.BigIntegerField(default = 0,null= True, blank= True)
     garden_image = models.ImageField(upload_to='garden/',null=True, blank=True)
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES,null=True,blank=True)
+    caste = models.CharField(max_length=20, choices=CASTE_CHOICES,null=True,blank=True)
+
 
 
 class GardeningProfileUpdateRequest(models.Model):
@@ -211,6 +226,16 @@ class SellProduce(models.Model):
             # Set default validity duration as 7 days if not provided by seller
             self.validity_duration_days = 7
             self.validity_end_date = timezone.now() + timezone.timedelta(days=self.validity_duration_days)
+
+        if self.product_quantity and self.SI_units:
+            if self.SI_units == 'Kilogram':
+                self.amount_in_green_points = int(self.product_quantity * 10)  # example conversion rate
+            elif self.SI_units == 'Gram':
+                self.amount_in_green_points = int(self.product_quantity * 0.01)  # conversion rate for gram
+            elif self.SI_units == 'Litre':
+                self.amount_in_green_points = int(self.product_quantity * 8)  # conversion rate for litre
+            elif self.SI_units == 'Units':
+                self.amount_in_green_points = int(self.product_quantity * 5)
         super().save(*args, **kwargs)
 
     def days_left_to_expire(self):

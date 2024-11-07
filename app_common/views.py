@@ -188,12 +188,14 @@ class GardeningDetails(View):
         if form.is_valid():
             try:
                 user_obj = models.User.objects.get(email=u_email)
+                gender = form.cleaned_data['gender']
+                caste = form.cleaned_data['caste']
                 garden_area = form.cleaned_data['garden_area']
                 number_of_plants = form.cleaned_data['number_of_plants']
                 number_of_unique_plants = form.cleaned_data['number_of_unique_plants']
                 garden_image = form.cleaned_data['garden_image']
 
-                gardening_obj = self.model(user=user_obj, garden_area=garden_area, 
+                gardening_obj = self.model(user=user_obj,gender=gender,caste=caste, garden_area=garden_area, 
                                            number_of_plants=number_of_plants, 
                                            number_of_unique_plants=number_of_unique_plants, 
                                            garden_image=garden_image)
