@@ -99,7 +99,7 @@
 }
 .dash-card7{
     background: linear-gradient(45deg, rgba(54, 125, 191, 0.941) 10%, rgba(242, 62, 170, 0.872) 97%), 
-    url(../images/card7.jpeg); 
+    url(../images/card7.jpeg) ; 
     background-size: cover; 
     background-position: center;
     background-repeat: no-repeat; 

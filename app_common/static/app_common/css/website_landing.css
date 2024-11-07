@@ -320,7 +320,7 @@ background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(5,121,23,1) 52%, 
   }
   
   #carousel-item-4 {
-    background-image: url('images/landing12.jpg');
+    background-image: url('images/landing15.jpg');
   }
   
   
@@ -803,6 +803,7 @@ background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(5,121,23,1) 52%, 
   
     .menu ul {
       display: block;
+      
       position: fixed;
       top: 0;
       left: -100%;
