@@ -1,11 +1,9 @@
 {% extends 'user_dashboard/starter.html' %}
 {% load static %}
 
-{% block title %}Service List{% endblock title %}
+{% block title %}Servicedflg h toie List{% endblock title %}
 
 {% block content %}
-
-
 <h2>Service Details - {{ service.service_type }}</h2>
 <div class="row d-flex justify-content-center mt-4">
     <div class="col-lg-8 details_div px-5 py-4">
@@ -13,13 +11,6 @@
         <p><strong>Description:</strong> {{ service.description }}</p>
         <p><strong>Price:</strong> <span id="price-display">Rs. {{ service.price_per_hour }}</span></p>
         
-        {% comment %} <label class="form-check-label">
-            <input class="form-check-input offer-discount-checkbox" type="checkbox" name="offer_discount" value="1">
-            <small class="green_text">
-                Exchange {{ service.green_coins_required }} green coins for a discount of {{ service.discount_percentage_for_greencoins }}%.
-            </small>    
-        </label> {% endcomment %}
-
         {% if service_booked_obj %}
             <a href="" class="btn btn-primary disabled">Already Booked</a>
         {% else %}
@@ -40,27 +31,17 @@
         {% endif %}
     </div>
 </div>
-{% comment %} <head>
-    <link rel="stylesheet" href="{% static '/user_dashboard/css/services.css '%}">
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const checkbox = document.querySelector(".offer-discount-checkbox");
-            const priceDisplay = document.getElementById("price-display");
-            const originalPrice = parseFloat({{ service.price_per_hour }});
-            const discountPercentage = parseFloat({{ service.discount_percentage_for_greencoins }});
-            
-            // Calculate discounted price
-            const discountedPrice = originalPrice - (originalPrice * (discountPercentage / 100));
-            
-            // Update price display when checkbox is toggled
-            checkbox.addEventListener("change", function() {
-                if (checkbox.checked) {
-                    priceDisplay.textContent = `Rs. ${discountedPrice.toFixed(2)}`;
-                } else {
-                    priceDisplay.textContent = `Rs. ${originalPrice.toFixed(2)}`;
-                }
-            });
-        });
-    </script>
-</head> {% endcomment %}
+
+<script>
+// Check if a discounted price is present in the URL and update the displayed price if it is
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const discountedPrice = urlParams.get('discounted_price');
+    
+    if (discountedPrice) {
+        document.getElementById('price-display').textContent = `Rs. ${discountedPrice}`;
+    }
+});
+</script>
+
 {% endblock content %}
