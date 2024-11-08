@@ -226,16 +226,6 @@ class SellProduce(models.Model):
             # Set default validity duration as 7 days if not provided by seller
             self.validity_duration_days = 7
             self.validity_end_date = timezone.now() + timezone.timedelta(days=self.validity_duration_days)
-
-        if self.product_quantity and self.SI_units:
-            if self.SI_units == 'Kilogram':
-                self.amount_in_green_points = int(self.product_quantity * 10)  # example conversion rate
-            elif self.SI_units == 'Gram':
-                self.amount_in_green_points = int(self.product_quantity * 0.01)  # conversion rate for gram
-            elif self.SI_units == 'Litre':
-                self.amount_in_green_points = int(self.product_quantity * 8)  # conversion rate for litre
-            elif self.SI_units == 'Units':
-                self.amount_in_green_points = int(self.product_quantity * 5)
         super().save(*args, **kwargs)
 
     def days_left_to_expire(self):

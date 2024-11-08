@@ -19,7 +19,12 @@
                 
                 <div>
                     {% if i.payment_link == "NotAvailable" %}
-                        <button type="button" class="" id="table_BTN" data-bs-toggle="modal" data-bs-target="#paymentModal{{ i.id }}">Send Payment Link</button>
+                    <button type="button" class="payment_btn" data-bs-toggle="modal"
+                        data-bs-target="#paymentModal{{ i.id }}"
+                        data-quantity="{{ i.quantity_buyer_want }}"
+                        data-price="{{ i.sell_produce.amount_in_green_points }}"
+                        data-unitquantity="{{ i.sell_produce.product_quantity }}">Send Payment Link</button>
+            
                         <button type="button" class="" id="table_BTN2" data-bs-toggle="modal" data-bs-target="#rejectModal{{ i.id }}">Reject this order</button>
                     {% else %}
                         <small class="text-success">Payment Link Sent Successfully.</small>
@@ -31,22 +36,26 @@
         
 
         <!-- Payment Modal -->
-        <div class="modal fade" id="paymentModal{{ i.id }}" tabindex="-1" aria-labelledby="paymentModalLabel{{ i.id }}"
-            aria-hidden="true">
+        <div class="modal fade" id="paymentModal{{ i.id }}" tabindex="-1" aria-labelledby="paymentModalLabel{{ i.id }}" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="paymentModalLabel{{ i.id }}">Send Payment Ammount Based On Quantity</h5>
+                        <h5 class="modal-title" id="paymentModalLabel{{ i.id }}">Send Payment Amount Based on Quantity</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form id="modalForm" method="post" action="{% url 'vendor_dashboard:sendpaymentlink' i.id %}">
-                            {% include 'app_common/snippets/alert.html' %}
                             {% csrf_token %}
-                            {{form.as_p}}
+                            {% include 'app_common/snippets/alert.html' %}
+                            
+                            <div class="mb-3">
+                                <p><strong>Total Amount: </strong><span id="totalAmount{{ i.id }}">Calculating...</span></p>
+                            </div>
 
-                            <div style="text-align: center;margin-top: 2rem;">
-                                <button class="btn btn-block btn-success" type="submit">Send</button>
+                            <input type="hidden" name="ammount_based_on_buyer_quantity" id="hiddenAmountField{{ i.id }}">
+
+                            <div style="text-align: center; margin-top: 2rem;">
+                                <button class="w-100" id="table-BTN" type="submit">Send</button>
                             </div>
                         </form>
                     </div>
@@ -75,5 +84,40 @@
         </div>
 {% endfor %}
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const modals = document.querySelectorAll(".modal.fade");
+    
+        modals.forEach(modal => {
+            modal.addEventListener("show.bs.modal", function(event) {
+                const button = event.relatedTarget;
+                const quantity = parseInt(button.getAttribute("data-quantity"));
+                const unitPriceTotal = parseFloat(button.getAttribute("data-price")); // total price in green points
+                const totalQuantity = parseFloat(button.getAttribute("data-unitquantity")); // total quantity in SellProduce
+                const modalId = modal.getAttribute("id");
+                const totalAmountField = document.getElementById(`totalAmount${modalId.slice(12)}`);
+                const hiddenAmountField = document.getElementById(`hiddenAmountField${modalId.slice(12)}`);
+    
+                totalAmountField.textContent = "Calculating...";
+    
+                // Ensure valid numbers for calculation
+                if (!isNaN(quantity) && !isNaN(unitPriceTotal) && !isNaN(totalQuantity) && totalQuantity > 0) {
+                    // Calculate price per unit based on the total quantity and total price
+                    const pricePerUnit = unitPriceTotal / totalQuantity;
+                    const totalAmount = (pricePerUnit * quantity).toFixed(2);
+    
+                    setTimeout(() => {
+                        totalAmountField.textContent = `₹${totalAmount}`;
+                        hiddenAmountField.value = totalAmount;
+                    }, 300);
+                } else {
+                    totalAmountField.textContent = "Error calculating amount";
+                }
+            });
+        });
+    });
+    
+</script>
 
 {% endblock main_content %}
