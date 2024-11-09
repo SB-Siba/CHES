@@ -19,10 +19,10 @@
         
         
         <div class="container-fluid">
-            <div class="vstack gap-">
+            <div class="vstack gap-2">
                 <div class="d-flex justify-content-between flex-column flex-sm-row gap-">
                     <form method="get" action="{% url 'service_provider:service_list' %}">
-                        <div class="input-group mb-3">
+                        <div class="input-group">
                             <select class="form-control selects" name="search_by" aria-label="Default select example">
                                 <option value="name">Name</option>
                                 <option value="service_type">Service Type</option>
@@ -31,7 +31,7 @@
                             <button class="table_btn" style="height: 35px;" type="submit">Search</button>
                         </div>
                     </form>
-                    <div class=" mb-3 d-flex justify-contnet-end ">
+                    <div class=" ">
                         <a data-bs-toggle="modal" data-bs-target="#create_service" class="" id="table_BTN">
                             <i class="fa-solid fa-plus  border-2 rounded"></i><b class="mx-1">Create New Service</b>
                         </a>

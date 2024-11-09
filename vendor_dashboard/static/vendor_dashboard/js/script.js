@@ -1,8 +1,4 @@
-const hamBurger = document.querySelector(".toggle-btn");
 
-hamBurger.addEventListener("click", function () {
-  document.querySelector("#sidebar").classList.toggle("expand");
-});
 // LEADERBOARD VENDORS
 var tabs = document.querySelectorAll(".lboard_tabs ul li");
 var today = document.querySelector(".today");
@@ -36,3 +32,10 @@ tabs.forEach(function(tab){
 
 	})
 })
+
+
+
+function toggleChevron(element) {
+  const chevronIcon = element.querySelector('.chevron-icon');
+  chevronIcon.classList.toggle('rotate');
+}

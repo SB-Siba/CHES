@@ -8,8 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Service provider Dashboard</title>
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">    
     <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'app_common/css/utilities.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'app_common/css/style.css' %}">
@@ -29,6 +30,12 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+        a {
+            text-decoration: none !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -36,13 +43,16 @@
     <input type="hidden" id="fetchMessagesUrl" value="{% url 'chat:fetch_messages' %}">
     <div class="wrapper" id="MyBase">
         <aside id="sidebar" class="d-none d-lg-block">
-            <div class="d-flex">
+            <div class="d-flex" style="background-color: #fff; height: 70px;">
                 <button class="toggle-btn" type="button">
-                    <i class="fa fa-tree"></i>
                 </button>
-                <div class="sidebar-logo">
-                    <a href="#" id="a_underline">CHES</a>
-                </div>
+                <a class="sidebar-brand d-flex align-items-center justify-content-center"
+                    href="{% url 'vendor_dashboard:vendor_dashboard' %}">
+                    <div class="sidebar-brand-text mx-5">
+                        <img src="{% static 'app_common/css/images/logo_ches 1.png'%}" class="mt-2"
+                            style="height: 50px; width: 50px;" />
+                    </div>
+                </a>
             </div>
             <ul class="sidebar-nav">
                 <li class="sidebar-item">
@@ -71,26 +81,26 @@
                 </li>
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                        data-bs-target="#manage_blogs" aria-expanded="false" aria-controls="manage_blogs" id="a_underline">
-                        <i class="lni lni-pencil-alt"></i>
+                        data-bs-target="#Sellingssss" aria-expanded="false" aria-controls="Sellingssss"
+                        onclick="toggleChevron(this)">
+                        <i class="fa-solid fa-blog"></i>
                         <span>Manage Blogs</span>
+                        <i class="lni lni-chevron-down chevron-icon"></i>
                     </a>
-                    <ul id="manage_blogs" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <ul id="Sellingssss" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
-                            <a href="{% url 'blogs:sp_all_blogs' %}" class="sidebar-link" id="a_underline">
-                                <i class="lni lni-files"></i> 
-                                All Blogs
-                            </a>
-
+                            <a href="{% url 'blogs:sp_all_blogs' %}" class="sidebar-link"><i class="fas fa-rss"></i>
+                                All Blogs</a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{% url 'blogs:sp_blog_list' %}" class="sidebar-link" id="a_underline">
-                                <i class="lni lni-files"></i> 
-                                My Blogs
-                            </a>
+                            <a href="{% url 'blogs:sp_blog_list' %}" class="sidebar-link"> <i
+                                    class="fas fa-pen"></i>
+                                My Blogs</a>
                         </li>
                     </ul>
                 </li>
+
+
                 <li class="sidebar-item">
                     <a href="{% url 'service_provider:sp_contact_page' %}" class="sidebar-link" id="a_underline">
                         <i class="lni lni-envelope"></i>
@@ -169,20 +179,13 @@
         </div>
         <!-- offcanvas -->
         <div class="main" style="padding: 0%; ">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light px-4 py-3">
+            <nav class="navbar navbar-expand-lg navbar-light " style="background-color: rgb(255, 255, 255); height: 70px;">
                 <div class="container-fluid d-flex justify-content-between mx-0">
 
                     <button class="text-dark d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">
                         <i class="fa fa-bars"></i>
                     </button>
-                    <div class="">
-                        <a href="{% url 'service_provider:service_provider_dash' %}">
-                            <div class="">
-                                <img src="{% static 'app_common/css/images/logo_ches 1.png'%}"
-                                    style="height: 50px; width: 50px;" />
-                            </div>
-                        </a>
-                    </div>
+                    
                     <div class="navbar-collapse collapse d-flex justify-content-between d-none d-lg-block">
                         <div class="d-none d-lg-block">
                             <a class=" fs-4  text-dark" id="a_underline"
