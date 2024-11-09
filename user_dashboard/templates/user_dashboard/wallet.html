@@ -6,83 +6,72 @@
 {% block content %}
 <div class="main min_height_div">
   <div class="main-top">
-    <h1>My Wallet</h1>
+    <h1 >My Wallet</h1>
   </div>
-  <div class="row">
-    <!-- Wallet Summary Section -->
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 text-center p-4" id="Wallet-card1">
-        <h5 class="text-primary mb-3">Total Balance</h5>
-        <p><i class="fa-solid fa-coins fa-3x text-primary"></i>
-          <span class="ms-2">{{ request.user.wallet }}</span>
-        </p>
+  <div class="">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center p-4" id="Wallet-card1">
+          <h5 class="text-primary mb-3">Total Balance</h5>
+          <p><i class="fa-solid fa-coins fa-3x text-primary"></i> 
+            <span class="ms-2">{{ request.user.wallet }}</span>
+          </p>
+        </div>
       </div>
-    </div>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 text-center p-4" id="Wallet-card2">
-        <h5 class="text-warning mb-3">Total Purchase</h5>
-        <p><i class="fa-solid fa-coins fa-3x text-warning"></i>
-          <span class="ms-2">{{ request.user.total_invest }}</span>
-        </p>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center p-4" id="Wallet-card2">
+          <h5 class="text-warning mb-3">Total Purchase</h5>
+          <p><i class="fa-solid fa-coins fa-3x text-warning"></i> 
+            <span class="ms-2">{{ request.user.total_invest }}</span>
+          </p>
+        </div>
       </div>
-    </div>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 text-center p-4" id="Wallet-card3">
-        <h5 class="text-danger mb-3">Total Earnings</h5>
-        <p><i class="fa-solid fa-coins fa-3x text-danger"></i>
-          <span class="ms-2">{{ request.user.total_income }}</span>
-        </p>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center p-4" id="Wallet-card3">
+          <h5 class="text-danger mb-3">Total Earnings</h5>
+          <p><i class="fa-solid fa-coins fa-3x text-danger"></i> 
+            <span class="ms-2">{{ request.user.total_income }}</span>
+          </p>
+        </div>
       </div>
     </div>
   </div>
+  
 
-  <div class="main-top">
-    <h1>Transactions</h1>
-  </div>
-
-  <!-- Transactions Table -->
-  <div class="table-responsive">
-    <table class="table table">
+  <div class="main">
+    <div class="main-top">
+      <h1>Transactions</h1>
+    </div>
+   <div class="table-responsive">
+    <table class="table table ">
       <thead>
-        <tr>
+        <tr >
           <th id="t-Head">Product Name</th>
           <th id="t-Head">Quantity</th>
           <th id="t-Head">Amount</th>
-          <th id="t-Head">Coin Exchange</th>
           <th id="t-Head">Date & Time</th>
           <th id="t-Head">Details</th>
         </tr>
       </thead>
+
       <tbody>
-        {% for transaction in combined_transactions %}
-        <tr>
-          <!-- Display product name from ProduceBuy or Order if matched -->
-          <td id="t_data">{{ transaction.producebuy_product_name }}</td>
+        {% for i,j in main_obj %}
+        <tr >
+          <td id="t_daTa">{{i.product_name}}</td>
+          <td id="t_daTa" >{{i.quantity_buyer_want}}&nbsp;{{i.SI_units}}</td>
+          {% if j %}
+          <td id="t_daTa" class="text-danger">- {{i.ammount_based_on_quantity_buyer_want}}</td>
+          {% else %}
+          <td id="t_daTa" class="text-success">+ {{i.ammount_based_on_quantity_buyer_want}}</td>
+          {% endif %}
 
-          <td id="t_data">
-            {{ transaction.producebuy_quantity }}&nbsp;{{ transaction.producebuy.SI_units }}
-          </td>
-
-          <td id="t_data" class="{% if transaction.is_buyer %}text-danger{% else %}text-success{% endif %}">
-            {% if transaction.is_buyer %}- {% endif %}{{ transaction.amount }}
-          </td>
-
-          <td id="t_data">{{ transaction.coin_exchange }}</td>
-
-          <td id="t_data">{{ transaction.producebuy.date_time }}</td>
-
-          
-
-          <!-- View Details Button with Modal -->
-          <td id="t_data">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#transactionModal{{ forloop.counter }}">
-              View
-            </button>
-          </td>
+          <td id="t_daTa">{{i.date_time}}</td>
+          <td  id="t_daTa"><button type="button" class=" " data-toggle="modal"
+              data-target="#transactionModal{{ forloop.counter }}">View</button></td>
         </tr>
-
-        <!-- Modal for Transaction Details -->
-        <div class="modal fade" id="transactionModal{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="transactionModalLabel{{ forloop.counter }}" aria-hidden="true">
+        <!-- Modal -->
+        <div class="modal fade" id="transactionModal{{ forloop.counter }}" tabindex="-1" role="dialog"
+          aria-labelledby="transactionModalLabel{{ forloop.counter }}" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content mainn">
               <div class="row">
@@ -92,8 +81,8 @@
                       <div class="col-xs-6 col-sm-6 col-md-6">
                         <div class="receipt-left">
                           <img class="img-responsive" alt="user-avatar"
-                               src="{% static 'user_dashboard/img/g_logo2.png' %}"
-                               style="width: 100px; border-radius: 100px;">
+                            src="{% static 'user_dashboard/img/g_logo2.png' %}"
+                            style="width: 100px; border-radius: 100px;">
                         </div>
                       </div>
                       <div class="col-xs-6 col-sm-6 col-md-6 text-right">
@@ -112,38 +101,39 @@
                       <div class="col-xs-12 col-sm-12 col-md-12 d-flex justify-content-between">
                         <div class="receipt-right">
                           <h5>Customer Name </h5>
-                          <p><b>Mobile :</b>+91-{{ transaction.producebuy.buyer.contact }}</p>
-                          <p><b>Email :</b> {{ transaction.producebuy.buyer.email }}</p>
-                          <p><b>Address :</b> {{ transaction.producebuy.buyer.city }}</p>
+                          <p><b>Mobile :</b>+91-{{i.buyer.contact}}</p>
+                          <p><b>Email :</b> {{i.buyer.email}}</p>
+                          <p><b>Address :</b> {{i.buyer.city}}</p>
                         </div>
                         <div class="receipt-right">
                           <h5>Seller Name </h5>
-                          <p><b>Mobile :</b>+91-{{ transaction.producebuy.seller.contact }}</p>
-                          <p><b>Email :</b> {{ transaction.producebuy.seller.email }}</p>
-                          <p><b>Address :</b> {{ transaction.producebuy.seller.city }}</p>
+                          <p><b>Mobile :</b>+91-{{i.seller.contact}}</p>
+                          <p><b>Email :</b> {{i.seller.email}}</p>
+                          <p><b>Address :</b> {{i.seller.city}}</p>
                         </div>
                       </div>
                     </div>
                   </div>
-
                   <div class="d-flex justify-content-center">
-                    Order Status : {{ transaction.producebuy.buying_status }}
+                    Order Status : {{i.buying_status}}
                   </div>
-
-                  <div class="invoice-wrapper row">
-                    <div class="col-xs-12 invoice-holder">
-                      <div class="invoice-item" style="padding: 10px 10px">
-                        <div class="d-flex justify-content-between bg-secondary px-2 py-2">
-                          <span class="title fs-4 text-white">Description</span>
-                          <span class="value fs-4 text-white">Amount</span>
-                        </div>
-                        <div class="d-flex justify-content-between border-bottom pb-2 px-3">
-                          <div class="mt-3">
-                            <span class="title">{{ transaction.producebuy_product_name or transaction.order_product_name }}</span>
-                            <span class="title mx-5">{{ transaction.producebuy_quantity or transaction.order_quantity }}&nbsp;{{ transaction.producebuy.SI_units }}</span>
+                  <div>
+                    <!-- Main content -->
+                    <div class="invoice-wrapper row">
+                      <div class="col-xs-12 invoice-holder">
+                        <div class="invoice-item" style="padding: 10px 10px">
+                          <div class="d-flex justify-content-between bg-secondary px-2 py-2">
+                            <span class="title fs-4 text-white">Description</span>
+                            <span class="value fs-4 text-white">Ammount</span>
                           </div>
-                          <div class="mt-3">
-                            <span class="value">{{ transaction.amount }} /-</span>
+                          <div class="d-flex justify-content-between border-bottom pb-2 px-3">
+                            <div class="mt-3">
+                              <span class="title">{{i.product_name}}</span>
+                              <span class="title mx-5">{{i.quantity_buyer_want}}&nbsp;{{i.SI_units}}</span>
+                            </div>
+                            <div class="mt-3">
+                              <span class="value">{{i.ammount_based_on_quantity_buyer_want}} /-</span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -154,24 +144,23 @@
                     <div class="receipt-header receipt-header-mid receipt-footer d-flex justify-content-between">
                       <div class="col-xs-8 col-sm-8 col-md-8 text-left">
                         <div class="receipt-right mt-3">
-                          <p><b>Date :</b> {{ transaction.producebuy.date_time }}</p>
-                          <h5 style="color: rgb(140, 140, 140);" class="mt-1">Thanks for shopping!</h5>
+                          <p><b>Date :</b> {{i.date_time}}</p>
+                          <h5 style="color: rgb(140, 140, 140);" class="mt-1">Thanks for shopping !</h5>
                         </div>
                       </div>
                       <div class="col-xs-4 col-sm-4 col-md-4">
                         <div class="d-flex justify-content-end">
                           <img class="img-responsive" alt="tree-stamp"
-                               src="{% static 'user_dashboard/img/g_logo1.png' %}"
-                               style="width: 100px; border-radius: 100px;">
+                            src="{% static 'user_dashboard/img/g_logo1.png' %}"
+                            style="width: 100px; border-radius: 100px;">
                         </div>
                       </div>
                     </div>
                   </div>
-
                   <div class="content-block" style="box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px 0 20px;border-top:1px solid #dedede;" valign="top">
                     <button class="downloadButton" data-counter="{{ forloop.counter }}">Download Invoice</button>
-                    <p style="margin-bottom: 5px;text-align: center;"><b>NOTE:</b> This is a computer-generated receipt and does not require a physical signature.</p>
-                  </div>
+                    <p style="margin-bottom: 5px;text-align: center;"><b>NOTE :</b> This is computer generated receipt and does not require physical signature.</p>
+                  </div> 
                 </div>
               </div>
             </div>
@@ -181,11 +170,44 @@
         {% endfor %}
       </tbody>
     </table>
+   </div>
   </div>
 </div>
-{% endblock content %}
 
+{% endblock content %}
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
-<script src="{% static 'user_dashboard/js/domscript.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll('.downloadButton').forEach(button => {
+          button.addEventListener('click', function() {
+              const counter = this.getAttribute('data-counter');
+              const modalContent = document.querySelector(`#transactionModal${counter} .modal-content`);
+
+              if (!modalContent) {
+                  console.error('Modal content not found for counter:', counter);
+                  return;
+              }
+
+              this.style.display = 'none';
+
+              domtoimage.toPng(modalContent)
+                  .then(function(dataUrl) {
+                      const { jsPDF } = window.jspdf;
+                      const pdf = new jsPDF();
+
+                      pdf.addImage(dataUrl, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+                      pdf.save('invoice.pdf');
+
+                      button.style.display = 'block';
+                  })
+                  .catch(function(error) {
+                      console.error('Error generating PDF:', error);
+                      button.style.display = 'block';
+                  }.bind(this));
+          });
+      });
+  });
+</script>  
 {% endblock scripts %}

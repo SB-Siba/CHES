@@ -388,72 +388,34 @@ class ActivityList(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-from django.shortcuts import get_object_or_404
-from django.db.models import Q
-
-
-
 @method_decorator(utils.login_required, name='dispatch')
 class WalletView(View):
     template = app + "wallet.html"
     model = app_commonmodels.ProduceBuy
 
-    def get(self, request):
+    def get(self,request):
+        user = request.user
         try:
-            user = request.user
-            # Filter ProduceBuy transactions where the user is either the buyer or seller
-            transactions = self.model.objects.filter(
-                (Q(buyer=user) | Q(seller=user)) & 
-                (Q(buying_status="PaymentDone") | Q(buying_status="BuyCompleted"))
-            ).order_by('-date_time')
-
-            # Prepare a list to hold each transaction with both ProduceBuy and Order data
-            combined_transactions = []
-
-            for transaction in transactions:
-                # Initialize product name and quantity
-                product_name = transaction.product_name
-                quantity = transaction.quantity_buyer_want
-                coin_exchange = "0.00"
-
-                # Fetch associated Order data
-                orders = app_commonmodels.Order.objects.filter(customer_id=user.id)
-
-                if orders:
-                    order = orders.first()  # Take the first order, or adjust logic if needed
-                    products_data = order.order_meta_data.get("products", {})
-
-                    # Get product details from the order meta data
-                    order_product_name = next(iter(products_data.keys()), None)
-                    order_product_details = products_data.get(order_product_name, {})
-                    order_quantity = order_product_details.get("quantity", 0)
-                    coin_exchange = order_product_details.get("coinexchange", "0.00")
-
-                    # Choose the product name and quantity
-                    if order_product_name:
-                        product_name = order_product_name
-                    if order_quantity:
-                        quantity = order_quantity
-
-                # Add the data to the transaction data
-                transaction_data = {
-                    "producebuy": transaction,
-                    "is_buyer": transaction.buyer == user,  # Boolean to check if the user is the buyer
-                    "amount": transaction.ammount_based_on_quantity_buyer_want,
-                    "producebuy_product_name": product_name,  # Set final product name
-                    "producebuy_quantity": quantity,  # Set final quantity
-                    "coin_exchange": coin_exchange,  # Coin exchange from the order
-                }
-
-                combined_transactions.append(transaction_data)
-
-            # Render the data to the template
-            return render(request, self.template, {'combined_transactions': combined_transactions})
-
+            transactions = self.model.objects.filter((Q(buyer=user) | Q(seller=user)) & Q(buying_status="PaymentDone") | Q(buying_status="BuyCompleted")).order_by('-date_time')
+            list_of_transactions = []
+            xyz = []
+            for i in transactions:
+                list_of_transactions.append(i)
+                if i.buyer == user:
+                    x = True
+                    xyz.append(x)
+                else:
+                    x = False
+                    xyz.append(x)
+            main_obj = zip(list_of_transactions,xyz)  
+            return render(request,self.template,locals())
+             
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-          
+
+            
+                     
 @method_decorator(utils.login_required, name='dispatch')
 class SellProduceView(View):
     template = app + "sell_produce.html"
