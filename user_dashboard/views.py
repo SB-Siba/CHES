@@ -414,8 +414,7 @@ class WalletView(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-            
-                     
+
 @method_decorator(utils.login_required, name='dispatch')
 class SellProduceView(View):
     template = app + "sell_produce.html"

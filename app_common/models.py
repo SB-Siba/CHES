@@ -393,12 +393,9 @@ class Order(models.Model):
     razorpay_order_id = models.TextField(null= True, blank=True)
     razorpay_signature = models.TextField(null= True, blank=True)
     payment_status = models.CharField(max_length=255, choices= PaymentStatus, default="Paid")
-
     customer_details = models.JSONField(default=dict, null=True, blank=True)
-
     more_info = models.TextField(null= True, blank=True)
     date = models.DateField(auto_now_add= True, null=True, blank=True)
-
     transaction_id = models.TextField(null= True, blank=True)
     can_edit = models.BooleanField(default=True) # id a order is canceled or refunded, make it non editable
     rating_given = models.BooleanField(default=False,null=True,blank=True)
@@ -423,14 +420,36 @@ class ServiceProviderDetails(models.Model):
         return f"{self.provider.full_name} - {self.service_type}"
 
 class Service(models.Model):
+    basis = (
+        ("Hourly","Hourly"),
+        ("Daily","Daily"),
+        ("Monthly","Monthly"),
+        ("Yearly","Yearly"),
+        ("Monthly","Monthly"),
+        ("Service-based","Service-based"),
+
+    )
     provider = models.ForeignKey(User, on_delete=models.CASCADE)
     produce_category = models.ForeignKey(CategoryForProduces,on_delete=models.CASCADE,null= True, blank= True)
     description = models.TextField()
     service_image = models.ImageField(upload_to='service/',null=True, blank=True)
+    basis = models.CharField(max_length=255, choices= basis, default="Hourly")
     price_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     service_type = models.ForeignKey(CategoryForServices, on_delete=models.CASCADE,null= True, blank= True)
     sp_details = models.ForeignKey(ServiceProviderDetails,on_delete=models.CASCADE,null= True, blank= True)
+    discount_percentage_for_greencoins = models.DecimalField(max_digits=5, decimal_places=2, default=10.00)
+    green_coins_required = models.PositiveIntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        # Calculate green_coins_required based on price_per_hour and discount_percentage_for_greencoins
+        if self.discount_percentage_for_greencoins > 0 and self.price_per_hour > 0:
+            discount_value = (self.discount_percentage_for_greencoins / Decimal('100.00')) * self.price_per_hour
+            # Adjust the calculation as per your coin requirement logic
+            self.green_coins_required = int(discount_value)
+        else:
+            self.green_coins_required = 0
+        super().save(*args, **kwargs)
 
 class Booking(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE)

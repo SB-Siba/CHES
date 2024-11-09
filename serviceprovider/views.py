@@ -1,3 +1,5 @@
+from decimal import Decimal
+from gettext import translation
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
@@ -233,6 +235,7 @@ class ServiceDelete(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+
 @method_decorator(utils.login_required, name='dispatch')
 class MyServiceBookings(View):
     model = common_models.Booking
@@ -241,6 +244,17 @@ class MyServiceBookings(View):
     def get(self, request):
         try:
             bookings = self.model.objects.filter(service__provider=request.user)
+            
+            # Calculate discounted price for each booking if discount applies
+            for booking in bookings:
+                service = booking.service
+                if service.discount_percentage_for_greencoins > 0:
+                    # Calculate the discounted price
+                    discount_amount = service.price_per_hour * (service.discount_percentage_for_greencoins / Decimal('100.00'))
+                    booking.discounted_price = service.price_per_hour - discount_amount
+                else:
+                    booking.discounted_price = service.price_per_hour  # No discount
+
             context = {
                 "bookings": bookings,
             }
@@ -272,17 +286,40 @@ def decline_booking(request, booking_id):
         return render_error_page(request, error_message, status_code=400)
     return redirect('service_provider:my_all_bookings')
 
+from decimal import Decimal
+
 @login_required
 def mark_as_complete_booking(request, booking_id):
     try:
         booking = get_object_or_404(common_models.Booking, id=booking_id)
+        
+        # Check if the user is the service provider for this booking
         if request.user == booking.service.provider:
-            booking.status = 'completed'
-            booking.save()
+            # Calculate discount amount and convert to float
+            service = booking.service
+            discount_amount = float(service.price_per_hour * (Decimal(service.discount_percentage_for_greencoins) / Decimal('100.00')))
+
+            # Ensure provider has enough wallet balance
+            if request.user.wallet >= discount_amount:
+                # Mark booking as completed
+                booking.status = 'completed'
+                booking.save()
+
+                # Deduct discount from provider's wallet
+                request.user.wallet += discount_amount
+                request.user.save()
+
+                return redirect('service_provider:my_all_bookings')
+            else:
+                # Handle insufficient wallet balance (e.g., display error message)
+                error_message = "Insufficient wallet balance to complete the booking."
+                return render_error_page(request, error_message, status_code=400)
+
     except Exception as e:
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
-    return redirect('service_provider:my_all_bookings')
+
+
 
 
 @method_decorator(utils.login_required, name='dispatch')
@@ -332,6 +369,33 @@ class SpContactePage(View):
                     return render_error_page(request, error_message, status_code=400)
             
             return redirect('service_provider:sp_contact_page')
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+        
+
+@method_decorator(utils.login_required, name='dispatch')
+class WalletView(View):
+    template = app + "wallet.html"
+    model = common_models.ProduceBuy
+
+    def get(self,request):
+        user = request.user
+        try:
+            transactions = self.model.objects.filter((Q(buyer=user) | Q(seller=user)) & Q(buying_status="PaymentDone") | Q(buying_status="BuyCompleted")).order_by('-date_time')
+            list_of_transactions = []
+            xyz = []
+            for i in transactions:
+                list_of_transactions.append(i)
+                if i.buyer == user:
+                    x = True
+                    xyz.append(x)
+                else:
+                    x = False
+                    xyz.append(x)
+            main_obj = zip(list_of_transactions,xyz)  
+            return render(request,self.template,locals())
+             
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)

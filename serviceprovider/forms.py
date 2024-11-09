@@ -59,17 +59,18 @@ class ServiceProviderUpdateForm(forms.Form):
         self.fields['service_area'].choices = service_areas
 
 
-    
 class ServiceAddForm(forms.ModelForm):
     class Meta:
         model = models.Service
-        fields = [ 'service_type','description', 'service_image', 'price_per_hour']
-        
+        fields = ['service_type', 'description', 'service_image', 'basis', 'price_per_hour', 'discount_percentage_for_greencoins']  # Added 'discount_percentage'
+
         widgets = {
-            'service_type': forms.Select(attrs={'class': 'form-control'}),  # Dropdown for service type with form-control class
-            'description': forms.Textarea(attrs={'class': 'form-control'}),  # Textarea with form-control class
-            'service_image': forms.FileInput(attrs={'class': 'form-control'}),  # File input for service image
-            'price_per_hour': forms.NumberInput(attrs={'class': 'form-control'}),  # Number input with form-control class
+            'service_type': forms.Select(attrs={'class': 'form-control'}),  # Dropdown for service type
+            'description': forms.Textarea(attrs={'class': 'form-control'}),  # Textarea
+            'service_image': forms.FileInput(attrs={'class': 'form-control'}),  # File input
+            'basis': forms.Select(attrs={'class': 'form-control'}),  # Dropdown for basis
+            'price_per_hour': forms.NumberInput(attrs={'class': 'form-control'}),  # Number input
+            'discount_percentage_for_greencoins': forms.NumberInput(attrs={'class': 'form-control'}),  # Number input for discount percentage
         }
 
     def __init__(self, *args, **kwargs):

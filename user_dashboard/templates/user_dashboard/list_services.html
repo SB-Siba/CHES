@@ -95,8 +95,19 @@
                     </h6>
                     
                     
-                    <p class="card-text"><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
-                    <a href="{% url 'user_dashboard:service_details' service.id %}" class="" id="table_BTN">Book Service</a>
+                    <p class="d-flex check_para">
+                        <label class="form-check-label">
+                            <input class="form-check-input offer-discount-checkbox"
+                                type="checkbox" name="offer_discount"
+                                data-service-id="{{ service.id }}"
+                                data-original-price="{{ service.price_per_hour }}"
+                                data-green-coins="{{ service.green_coins_required }}"
+                                data-discount="{{ service.discount_percentage_for_greencoins }}">
+                            <small class="green_text">Exchange {{ service.green_coins_required }} green coins for a discount of {{ service.discount_percentage_for_greencoins }}%.</small>
+                        </label>
+                    </p>
+                    <p><strong>Price:</strong> Rs. <span id="price-{{ service.id }}">{{ service.price_per_hour }}</span></p>
+                    <a href="{% url 'user_dashboard:service_details' service.id %}" class="btn btn-primary">Book Service</a>
                 </div>
             </div>
         </div>
@@ -110,4 +121,32 @@
     {% endif %}
     
 </div>
+<!-- JavaScript for handling discount calculation -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.offer-discount-checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const serviceId = this.getAttribute('data-service-id');
+                const originalPrice = parseFloat(this.getAttribute('data-original-price'));
+                const discountPercent = parseFloat(this.getAttribute('data-discount'));
+                const priceElement = document.getElementById('price-' + serviceId);
+                const bookServiceButton = document.querySelector(`a[href*="service_details/${serviceId}"]`);
+    
+                let discountedPrice = originalPrice;
+    
+                if (this.checked) {
+                    discountedPrice = originalPrice - (originalPrice * (discountPercent / 100));
+                    priceElement.textContent = `Rs. ${discountedPrice.toFixed(2)}`;
+                } else {
+                    priceElement.textContent = `Rs. ${originalPrice.toFixed(2)}`;
+                }
+    
+                if (bookServiceButton) {
+                    bookServiceButton.href = `${bookServiceButton.href.split('?')[0]}?discounted_price=${discountedPrice.toFixed(2)}`;
+                }
+            });
+        });
+    });
+    
+</script>
 {% endblock content %}
