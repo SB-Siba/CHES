@@ -3,10 +3,32 @@
     color: white;
     vertical-align: top;
     padding: 8px 1px 8px 5px; 
-    text-align: left; 
+    text-align: center; 
     white-space: nowrap;
     
 }
+.tb-body{
+    padding: 0 !important;
+    font-size: 15px;
+    font-weight: 400;
+    font-style: normal;
+    
+  }
+  .tb-body_sub{
+  padding: 18px 10px;
+    text-align: center;
+  }
+  .text-heading{
+     padding-top: 10px;
+  }
+  
+  .tb-body img{
+     margin: 0 auto;
+  }
+  .alert-success{
+      color: green !important;
+      margin-top: 10px;
+  }
 @media (max-width: 768px){
     #t-Head{
       font-size: 12px !important;

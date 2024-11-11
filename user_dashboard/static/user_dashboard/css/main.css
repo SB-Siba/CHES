@@ -100,8 +100,8 @@ button.bg-success:focus {
 }
 
 .dash-card3{
-    background: linear-gradient(60deg, rgba(11, 64, 236, 0.944) 12%, rgba(255, 0, 38, 0.723) 100%), 
-    url(../img/card3.jpeg) ; 
+    background: linear-gradient(60deg, rgba(9, 9, 121, 0.913) 12%, rgba(0, 213, 255, 0.962) 100%), 
+    url(../img/card4.jpg); 
     background-size: cover; 
     background-position: center;
     background-repeat: no-repeat; 
@@ -109,8 +109,9 @@ button.bg-success:focus {
     opacity: 1; 
 }
 .dash-card4{
-    background: linear-gradient(60deg, rgba(9, 9, 121, 0.913) 12%, rgba(0, 213, 255, 0.962) 100%), 
-    url(../img/card4.jpg); 
+ 
+    background: linear-gradient(60deg, rgba(57, 153, 24 ,0.9) 12% ,rgba(6, 208, 1,0.9   ) 100%), 
+    url(../img/card3.jpeg) ; 
     background-size: cover; 
     background-position: center;
     background-repeat: no-repeat; 
