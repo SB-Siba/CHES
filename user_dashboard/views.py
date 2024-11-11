@@ -22,6 +22,8 @@ from django.db.models.functions import Lower
 from app_common.error import render_error_page
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.sites.shortcuts import get_current_site
+from django.db import transaction
+
 
 app = "user_dashboard/"
 
@@ -389,47 +391,29 @@ class ActivityList(View):
 @method_decorator(utils.login_required, name='dispatch')
 class WalletView(View):
     template = app + "wallet.html"
-    produce_buy_model = app_commonmodels.ProduceBuy
-    order_model = app_commonmodels.Order  # Adjust the import if needed
+    model = app_commonmodels.ProduceBuy
 
-    def get(self, request):
+    def get(self,request):
         user = request.user
         try:
-            # Fetch transactions from ProduceBuy where buying_status is PaymentDone or BuyCompleted
-            produce_transactions = self.produce_buy_model.objects.filter(
-                Q(buyer=user) | Q(seller=user),
-                Q(buying_status="PaymentDone") | Q(buying_status="BuyCompleted")
-            ).order_by('-date_time')
-
-            # Fetch transactions from Order where payment_status is Paid or order_status is Delivered
-            order_transactions = self.order_model.objects.filter(
-                Q(customer=user) | Q(vendor=user),
-                Q(payment_status="Paid") | Q(order_status="Delivered")
-            ).order_by('-date')
-
-            # Process transactions to identify if the user is the buyer or seller/customer or vendor
+            transactions = self.model.objects.filter((Q(buyer=user) | Q(seller=user)) & Q(buying_status="PaymentDone") | Q(buying_status="BuyCompleted")).order_by('-date_time')
             list_of_transactions = []
-            transaction_types = []
-
-            # Append ProduceBuy transactions with buyer/seller context
-            for transaction in produce_transactions:
-                list_of_transactions.append(transaction)
-                transaction_types.append('buyer' if transaction.buyer == user else 'seller')
-
-            # Append Order transactions with customer/vendor context
-            for transaction in order_transactions:
-                list_of_transactions.append(transaction)
-                transaction_types.append('customer' if transaction.customer == user else 'vendor')
-
-            # Combine into main object
-            main_obj = zip(list_of_transactions, transaction_types)
-
-            # Render the template with combined transactions
-            return render(request, self.template, {'main_obj': main_obj})
-
+            xyz = []
+            for i in transactions:
+                list_of_transactions.append(i)
+                if i.buyer == user:
+                    x = True
+                    xyz.append(x)
+                else:
+                    x = False
+                    xyz.append(x)
+            main_obj = zip(list_of_transactions,xyz)  
+            return render(request,self.template,locals())
+             
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
 
 @method_decorator(utils.login_required, name='dispatch')
 class SellProduceView(View):
@@ -596,18 +580,18 @@ class BuyingBegins(View):
             buyer = app_commonmodels.User.objects.get(id=user.id)
             sell_prod_obj = self.model.objects.get(id=prod_id)
             seller = sell_prod_obj.user
-            
+
             product_quantity = sell_prod_obj.product_quantity
-            SI_units = sell_prod_obj.SI_units
-            amount_in_green_points = sell_prod_obj.amount_in_green_points
+            base_amount_in_green_points = sell_prod_obj.amount_in_green_points
 
             # Validate product_quantity
-            if product_quantity is None:
+            if product_quantity is None or product_quantity == 0:
                 return render_error_page(request, "Product quantity is not available.", status_code=400)
 
+            # Calculate price per unit
+            price_per_unit = base_amount_in_green_points / product_quantity
+
             form_data = request.POST
-            
-            # Handle potential ValueError from int conversion
             try:
                 quantity = int(form_data['quantity'])
             except (ValueError, KeyError):
@@ -615,19 +599,21 @@ class BuyingBegins(View):
 
             # Check if the requested quantity is available
             if product_quantity >= quantity:
-                # Check for buyer wallet and handle None value
-                buyer_wallet = buyer.wallet if buyer.wallet is not None else 0.0  # Default to 0.0 if None
+                total_amount = round(price_per_unit * quantity, 2)  # Match JS by rounding to 2 decimals
+                print(total_amount)
+                buyer_wallet = buyer.wallet or 0.0
 
                 # Check if buyer has enough green points
-                if buyer_wallet >= amount_in_green_points:
+                if buyer_wallet >= total_amount:
                     buying_obj = app_commonmodels.ProduceBuy(
                         buyer=buyer,
                         seller=seller,
                         sell_produce=sell_prod_obj,
                         product_name=sell_prod_obj.product_name,
-                        SI_units=SI_units,
+                        SI_units=sell_prod_obj.SI_units,
                         buying_status='BuyInProgress',
-                        quantity_buyer_want=quantity
+                        quantity_buyer_want=quantity,
+                        ammount_based_on_quantity_buyer_want=total_amount
                     )
                     buying_obj.save()
 
@@ -639,7 +625,6 @@ class BuyingBegins(View):
                             'full_name': buyer.full_name,
                             'product_name': sell_prod_obj.product_name,
                             'quantity': quantity,
-                            'SI_units': SI_units,
                         },
                         recipient_list=[buyer.email]
                     )
@@ -653,7 +638,6 @@ class BuyingBegins(View):
                             'product_name': sell_prod_obj.product_name,
                             'buyer_name': buyer.full_name,
                             'quantity': quantity,
-                            'SI_units': SI_units,
                         },
                         recipient_list=[seller.email]
                     )
@@ -665,12 +649,11 @@ class BuyingBegins(View):
             else:
                 error_message = "The requested amount is not available."
                 return render_error_page(request, error_message, status_code=400)
+
         except self.model.DoesNotExist:
-            error_message = "The product is not available."
-            return render_error_page(request, error_message, status_code=400)
+            return render_error_page(request, "The product is not available.", status_code=400)
         except app_commonmodels.User.DoesNotExist:
-            error_message = "User does not exist."
-            return render_error_page(request, error_message, status_code=400)
+            return render_error_page(request, "User does not exist.", status_code=400)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
@@ -707,22 +690,39 @@ class BuyBeginsBuyerView(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
         
+
 @login_required
 def send_payment_link(request, buy_id):
     try:
         if request.method == "POST":
+            # Fetch the purchase request
             buy_obj = app_commonmodels.ProduceBuy.objects.get(id=buy_id)
-            form_data = request.POST
-            quantity = buy_obj.quantity_buyer_want  # Quantity buyer wants to purchase
-            amount_per_unit = buy_obj.sell_produce.amount_in_green_points  # Green points per unit
-            
-            # Calculate total amount based on quantity
-            amount_based_on_buyer_quantity = quantity * amount_per_unit
-            buy_obj.payment_link = "Send"
-            buy_obj.ammount_based_on_quantity_buyer_want = amount_based_on_buyer_quantity
-            buy_obj.save()
 
-            # Send email notifications to buyer and seller
+            # Check if payment link has already been sent
+            if buy_obj.payment_link == "Send":
+                return render_error_page(request, "Payment link has already been sent for this purchase.", status_code=400)
+
+            # Calculate the price per unit and the total amount based on the buyer's quantity
+            quantity = buy_obj.quantity_buyer_want
+            sell_prod_obj = buy_obj.sell_produce
+            total_amount_in_green_points = sell_prod_obj.amount_in_green_points
+            total_product_quantity = sell_prod_obj.product_quantity
+
+            # Ensure valid quantities
+            if total_product_quantity is None or total_product_quantity == 0:
+                return render_error_page(request, "Invalid product quantity.", status_code=400)
+
+            # Calculate price per unit and total amount
+            price_per_unit = total_amount_in_green_points / total_product_quantity
+            amount_based_on_buyer_quantity = round(quantity * price_per_unit, 2)
+
+            # Use a transaction to ensure atomic update
+            with transaction.atomic():
+                buy_obj.payment_link = "Send"
+                buy_obj.ammount_based_on_quantity_buyer_want = amount_based_on_buyer_quantity
+                buy_obj.save()
+
+            # Send email notifications to the buyer
             send_template_email(
                 subject='New Payment Link Sent',
                 template_name='mail_template/payment_link.html',
@@ -734,6 +734,7 @@ def send_payment_link(request, buy_id):
                 recipient_list=[buy_obj.buyer.email]
             )
 
+            # Send email notifications to the seller
             send_template_email(
                 subject='New Payment Link Sent',
                 template_name='mail_template/payment_link_seller.html',
@@ -746,7 +747,12 @@ def send_payment_link(request, buy_id):
                 recipient_list=[buy_obj.seller.email]
             )
 
+            # Redirect back with a success message
+            messages.success(request, "Payment link sent successfully.")
             return redirect('user_dashboard:buybeginssellerview')
+
+    except app_commonmodels.ProduceBuy.DoesNotExist:
+        return render_error_page(request, "Purchase request not found.", status_code=404)
     except Exception as e:
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
@@ -1222,8 +1228,7 @@ class CheckoutView(View):
             return render(request, self.template, data)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
-            return render_error_page(request, error_message, status_code=400)
-                    
+            return render_error_page(request, error_message, status_code=400)                    
 @method_decorator(utils.login_required, name='dispatch')
 class AllOrdersFromVendors(View):
     model = app_commonmodels.Order

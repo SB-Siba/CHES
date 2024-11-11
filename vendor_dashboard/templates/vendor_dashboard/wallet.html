@@ -3,34 +3,231 @@
 
 {% block main_content %}
 <style>
-  #box
-{
-  background-color: green;
-}
-</style>
-<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+  #box {
+    background-color: green;
+  }
 
-<dotlottie-player src="https://lottie.host/cda0696d-874e-40b2-935f-da67b9de2d02/JLL8HP0Vaw.json" background="transparent" speed="1" style="width: 100%; height: 300px;" loop autoplay></dotlottie-player>
+  #t-Head {
+    text-align: center;
+  }
+
+  .atm-card {
+    width: 320px;
+    height: 150px;
+    border-radius: 15px;
+    padding: 20px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #4b79a1, #283e51);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    font-family: 'Arial', sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-headers {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bank-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+
+
+
+
+.card-number {
+    margin-top: 15px;
+    font-size: 1.6rem;
+    letter-spacing: 2.5px;
+}
+
+/* General Styles */
+.main {
+    padding: 20px;
+}
+
+.main-top h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.users {
+    gap: 20px;
+}
+
+/* ATM Card Responsive Styles */
+.atm-card {
+    width: 100%;
+    max-width: 320px;
+    padding: 20px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #C02425, #F0CB35);
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    font-family: 'Arial', sans-serif;
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+
+.card-headers h3 {
+    font-size: 1.2rem;
+}
+
+.card-number {
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-number i {
+    color: #ffcc00;
+}
+
+/* Table Styles */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table th, .table td {
+    font-size: 0.9rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.table th#t-Head {
+    font-size: 1rem;
+}
+
+/* Modal Styles */
+.modal .receipt-main {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+
+.modal .receipt-header .receipt-right h5,
+.modal .receipt-header .receipt-right p {
+    font-size: 0.9rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .main-top h3 {
+        font-size: 1.4rem;
+    }
+    .users {
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .atm-card {
+        padding: 15px;
+    }
+
+    .card-headers h3 {
+        font-size: 1.1rem;
+    }
+
+    .card-number {
+        font-size: 1.2rem;
+    }
+
+    .table th, .table td {
+        font-size: 0.8rem;
+    }
+
+    .modal .receipt-main {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 575px) {
+    .main-top h3 {
+        font-size: 1.2rem;
+    }
+
+    .atm-card {
+        padding: 10px;
+        max-width: 100%;
+    }
+
+    .card-headers h3 {
+        font-size: 1rem;
+    }
+
+    .card-number {
+        font-size: 1rem;
+    }
+
+    .table th, .table td {
+        font-size: 0.75rem;
+    }
+
+    .modal .receipt-main {
+        font-size: 0.8rem;
+    }
+
+    /* Adjustments for smaller screens to avoid overflow */
+    .table th, .table td {
+        white-space: normal;
+    }
+}
+
+
+
+
+
+
+</style>
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+
+<dotlottie-player src="https://lottie.host/cda0696d-874e-40b2-935f-da67b9de2d02/JLL8HP0Vaw.json"
+  background="transparent" speed="1" style="width: 100%; height: 300px;" loop autoplay></dotlottie-player>
 
 <section class="main pt-0">
   <div class="main-top ">
     <h3>My Wallet</h3>
   </div>
-  <div class="users row d-flex justify-content-between">
-    <div class="card  col-lg-4 col-12 mb-2" >
-      <h5 class="">Total Balance</h5>
-      <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2"
-          style="font-weight: bold;">{{request.user.wallet}}</span></p>
+
+  <div class="users row d-flex justify-content-around flex-wrap">
+    <div class="atm-card">
+      <div class="card-headers">
+        <h3 class="bank-name">Total Balance</h3>
+        <!-- <img src="{% static 'vendor_dashboard/images/Visa.png' %}" alt="Visa Logo" class="visa-logo"> -->
+      </div>
+      <div class="card-number">
+        <i class="fa-solid fa-coins fa-2x"></i>
+        <span>{{request.user.wallet}}</span>
+      </div>
     </div>
-    <div class="card  col-lg-4 col-12 mb-2" >
-      <h5 class="">Total Purchase</h5>
-      <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2"
-          style="font-weight: bold;">{{request.user.total_invest}}</span></p>
+    <div class="atm-card " style="background: linear-gradient(135deg, #8e9eab, #00dbde);">
+      <div class="card-headers">
+        <h3 class="bank-name">Total Purchase</h3>
+        <!-- <img src="{% static 'vendor_dashboard/images/Visa.png' %}" alt="Visa Logo" class="visa-logo"> -->
+      </div>
+      <div class="card-number">
+        <i class="fa-solid fa-coins fa-2x"></i>
+        <span>{{request.user.total_invest}}</span>
+      </div>
     </div>
-    <div class="card  col-lg-4 col-12 mb-2" >
-      <h5 class="">Total Earnings</h5>
-      <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2"
-          style="font-weight: bold;">{{request.user.total_income}}</span></p>
+    <div class="atm-card" style="background: linear-gradient(135deg, #136a8a, #267871);">
+      <div class="card-headers">
+        <h3 class="bank-name">Total Earnings</h3>
+        <!-- <img src="{% static 'vendor_dashboard/images/Visa.png' %}" alt="Visa Logo" class="visa-logo"> -->
+      </div>
+      <div class="card-number">
+        <i class="fa-solid fa-coins fa-2x"></i>
+        <span>{{request.user.total_income}}</span>
+      </div>
     </div>
   </div>
 
@@ -49,7 +246,7 @@
             <th id="t-Head">Details</th>
           </tr>
         </thead>
-  
+
         <tbody>
           {% for i,j in main_obj %}
           <tr style="color: black;">
@@ -60,10 +257,10 @@
             {% else %}
             <td style="font-size: small;" class="text-success">+ {{i.ammount_based_on_quantity_buyer_want}}</td>
             {% endif %}
-  
+
             <td style="font-size: small;">{{i.date_time}}</td>
-            <td style="font-size: small;"><button type="button" class="btn btn-success text-black" data-bs-toggle="modal"
-                data-bs-target="#transactionModal{{ forloop.counter }}">View</button></td>
+            <td style="font-size: small;"><button type="button" class="btn btn-success text-black"
+                data-bs-toggle="modal" data-bs-target="#transactionModal{{ forloop.counter }}">View</button></td>
           </tr>
           <!-- Modal -->
           <div class="modal fade" id="transactionModal{{ forloop.counter }}" tabindex="-1" role="dialog"
@@ -91,7 +288,7 @@
                         </div>
                       </div>
                     </div>
-  
+
                     <div class="row">
                       <div class="receipt-header receipt-header-mid">
                         <div class="col-xs-12 col-sm-12 col-md-12 d-flex justify-content-between">
@@ -135,7 +332,7 @@
                         </div>
                       </div>
                     </div>
-  
+
                     <div class="row">
                       <div class="receipt-header receipt-header-mid receipt-footer d-flex justify-content-between">
                         <div class="col-xs-8 col-sm-8 col-md-8 text-left">
@@ -153,10 +350,13 @@
                         </div>
                       </div>
                     </div>
-                    <div class="content-block" style="box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px 0 20px;border-top:1px solid #dedede;" valign="top">
+                    <div class="content-block"
+                      style="box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px 0 20px;border-top:1px solid #dedede;"
+                      valign="top">
                       <button class="downloadButton" data-counter="{{ forloop.counter }}">Download Invoice</button>
-                      <p style="margin-bottom: 5px;text-align: center;"><b>NOTE :</b> This is computer generated receipt and does not require physical signature.</p>
-                    </div> 
+                      <p style="margin-bottom: 5px;text-align: center;"><b>NOTE :</b> This is computer generated receipt
+                        and does not require physical signature.</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -176,36 +376,36 @@
 <script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-      document.querySelectorAll('.downloadButton').forEach(button => {
-          button.addEventListener('click', function() {
-              const counter = this.getAttribute('data-counter');
-              console.log(counter)
-              const modalContent = document.querySelector(`#transactionModal${counter} .modal-content`);
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.downloadButton').forEach(button => {
+      button.addEventListener('click', function () {
+        const counter = this.getAttribute('data-counter');
+        console.log(counter)
+        const modalContent = document.querySelector(`#transactionModal${counter} .modal-content`);
 
-              if (!modalContent) {
-                  console.error('Modal content not found for counter:', counter);
-                  return;
-              }
+        if (!modalContent) {
+          console.error('Modal content not found for counter:', counter);
+          return;
+        }
 
-              this.style.display = 'none';
+        this.style.display = 'none';
 
-              domtoimage.toPng(modalContent)
-                  .then(function(dataUrl) {
-                      const { jsPDF } = window.jspdf;
-                      const pdf = new jsPDF();
+        domtoimage.toPng(modalContent)
+          .then(function (dataUrl) {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
 
-                      pdf.addImage(dataUrl, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
-                      pdf.save('invoice.pdf');
+            pdf.addImage(dataUrl, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+            pdf.save('invoice.pdf');
 
-                      button.style.display = 'block';
-                  })
-                  .catch(function(error) {
-                      console.error('Error generating PDF:', error);
-                      button.style.display = 'block';
-                  }.bind(this));
-          });
+            button.style.display = 'block';
+          })
+          .catch(function (error) {
+            console.error('Error generating PDF:', error);
+            button.style.display = 'block';
+          }.bind(this));
       });
+    });
   });
-</script>  
+</script>
 {% endblock script %}

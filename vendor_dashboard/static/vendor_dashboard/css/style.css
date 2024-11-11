@@ -35,22 +35,54 @@ body {
 }
 
 #sidebar {
-    width: 70px;
-    min-width: 70px;
+    width: 260px;
+    min-width: 260px;
     z-index: 1000;
     transition: all .25s ease-in-out;
     background-color: #145D01;
-    display: flex;
-    flex-direction: column;
+
 }
 .sidebar-item{
     background-color: #135d01f4;
+    position: relative;
   }
+  .chevron-icon {
+    transition: transform 0.3s ease-in-out;
+    font-size: 12px !important;
+    margin-left: 200px;
+    position: absolute;
+  } 
+  
+  .chevron-icon.rotate {
+    transform: rotate(-180deg);
+  }
+ .sidebar-dropdown{
+    margin-left: 30px;
+ }
+ .sidebar-dropdown li a i{
+    font-size: 12px;
+    padding-top: 4px;
+ }
 
-#sidebar.expand {
-    width: 260px;
-    min-width: 260px;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .toggle-btn {
     background-color: transparent;
@@ -74,15 +106,7 @@ body {
     font-weight: 600;
 }
 
-#sidebar:not(.expand) .sidebar-logo,
-#sidebar:not(.expand) a.sidebar-link span {
-    display: none;
-}
 
-#sidebar.expand .sidebar-logo,
-#sidebar.expand a.sidebar-link span {
-    animation: fadeIn .25s ease;
-}
 
 @keyframes fadeIn {
     0% {
@@ -102,7 +126,7 @@ body {
 a.sidebar-link {
     padding: .625rem 1.625rem;
     color: #FFF;
-    display: block;
+    display: flex;
     font-size: 0.9rem;
     white-space: nowrap;
     border-left: 3px solid transparent;
@@ -118,28 +142,6 @@ a.sidebar-link:hover {
     background-color: rgba(255, 255, 255, .075);
     border-left: 3px solid #3b7ddd;
 }
-
-.sidebar-item {
-    position: relative;
-}
-
-#sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
-    position: absolute;
-    top: 0;
-    left: 70px;
-    background-color: #0e2238;
-    padding: 0;
-    min-width: 15rem;
-    display: none;
-}
-
-#sidebar:not(.expand) .sidebar-item:hover .has-dropdown+.sidebar-dropdown {
-    display: block;
-    max-height: 15em;
-    width: 100%;
-    opacity: 1;
-}
-
 #sidebar.expand .sidebar-link[data-bs-toggle="collapse"]::after {
     border: solid;
     border-width: 0 .075rem .075rem 0;

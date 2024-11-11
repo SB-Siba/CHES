@@ -23,9 +23,12 @@
                     {% if i.payment_link == "NotAvailable" %}
                         <div class="d-flex align-items-center">
                             <button type="button" class="payment_btn" data-bs-toggle="modal"
-                                    data-bs-target="#paymentModal{{ i.id }}"
-                                    data-quantity="{{ i.quantity_buyer_want }}"
-                                    data-price="{{ i.sell_produce.unit_price }}">Send Payment Link</button>
+                                data-bs-target="#paymentModal{{ i.id }}"
+                                data-quantity="{{ i.quantity_buyer_want }}"
+                                data-price="{{ i.sell_produce.amount_in_green_points }}"
+                                data-unitquantity="{{ i.sell_produce.product_quantity }}">Send Payment Link</button>
+
+
                             <button type="button" class="payment_btn2 ms-2" data-bs-toggle="modal"
                                     data-bs-target="#rejectModal{{ i.id }}">Reject this order</button>
                         </div>
@@ -33,6 +36,7 @@
                         <small class="text-success">Payment Link Sent Successfully.</small>
                     {% endif %}
                 </div>
+                
             </div>
         </div>
 
@@ -96,16 +100,25 @@
         modals.forEach(modal => {
             modal.addEventListener("show.bs.modal", function(event) {
                 const button = event.relatedTarget;
-                const quantity = button.getAttribute("data-quantity");
-                const unitPrice = button.getAttribute("data-price");
-                const modalId = button.getAttribute("data-bs-target");
-                const totalAmountField = document.querySelector(`${modalId} #totalAmount${modalId.slice(12)}`);
-                const hiddenAmountField = document.querySelector(`${modalId} #hiddenAmountField${modalId.slice(12)}`);
-                
-                if (quantity && unitPrice) {
-                    const totalAmount = (quantity * unitPrice).toFixed(2);
-                    totalAmountField.textContent = `₹${totalAmount}`;
-                    hiddenAmountField.value = totalAmount; // Set the calculated amount in the hidden field
+                const quantity = parseInt(button.getAttribute("data-quantity"));
+                const unitPriceTotal = parseFloat(button.getAttribute("data-price")); // total price in green points
+                const totalQuantity = parseFloat(button.getAttribute("data-unitquantity")); // total quantity in SellProduce
+                const modalId = modal.getAttribute("id");
+                const totalAmountField = document.getElementById(`totalAmount${modalId.slice(12)}`);
+                const hiddenAmountField = document.getElementById(`hiddenAmountField${modalId.slice(12)}`);
+    
+                totalAmountField.textContent = "Calculating...";
+    
+                // Ensure valid numbers for calculation
+                if (!isNaN(quantity) && !isNaN(unitPriceTotal) && !isNaN(totalQuantity) && totalQuantity > 0) {
+                    // Calculate price per unit based on the total quantity and total price
+                    const pricePerUnit = unitPriceTotal / totalQuantity;
+                    const totalAmount = (pricePerUnit * quantity).toFixed(2);
+    
+                    setTimeout(() => {
+                        totalAmountField.textContent = `₹${totalAmount}`;
+                        hiddenAmountField.value = totalAmount;
+                    }, 300);
                 } else {
                     totalAmountField.textContent = "Error calculating amount";
                 }
@@ -115,6 +128,9 @@
     
     
 </script>
+
+
+
 
 
 {% endblock content %}

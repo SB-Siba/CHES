@@ -209,7 +209,7 @@
             {% else %}
             <img src="{% static 'pic_2.png' %}" alt="picture_{{ forloop.counter }}">
             {% endif %}
-            <span>{{ vendor.full_name }}</span>
+            <span class="text-capitalize">{{ vendor.full_name }}</span>
           </div>
           <div class="leaderboard-score">{{ amount|floatformat:2 }}</div>
           <div class="leaderboard-bar">
@@ -271,7 +271,7 @@
                     <div class="d-flex justify-content-between align-items-center" id="leaderboardheader">
                         <h4 class="text-white  ">Leader Board</h4>
 
-                        <div class="filter-container">
+                        <!-- <div class="filter-container">
                             <select id="city-filter" class="form-select">
                                 <option value="all">All</option>
                                 <option value="Bhubaneswar">Bhubaneswar</option>
@@ -280,25 +280,28 @@
                                 <option value="Puri">Puri</option>
                                 <option value="Balasore">Balasore</option>
                             </select>
-                        </div>
+                        </div> -->
                     </div>
-                    <div class="w-100 ">
-                        <table  class="" >
-                            {% for leader_user in users_orderby_coins %}
-                            <tr data-rank="" data-city="{{ leader_user.city }}" class="leaderRow ltr">
-                                <td class="number lc" style="font-size: x-large;">
-                                    {{ forloop.counter }}
-                                </td>
-                                <td class="name lc">{{ leader_user.full_name }}</td>
-                                <td class="points lc">
-                                    {{ leader_user.coins }}
-                                    {% if forloop.first %}
-                                    🏅 
-                                    {% endif %} 
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </table>
+            
+
+                     <div class="w-100">
+                      <table class="tableLeader">
+                        {% for leader_user in users_orderby_coins %}
+                        <tr data-rank="" data-city="{{ leader_user.city }}" class="leaderRow ltr {% if forloop.first %}highlight{% endif %}">
+                            <td class="number lc">
+                                {{ forloop.counter }}
+                            </td>
+                            <td class="name lc">{{ leader_user.full_name }}</td>
+                            <td class="points lc">
+                                {{ leader_user.coins }}
+                                {% if forloop.first %}
+                                🏅 
+                                {% endif %} 
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    
                     </div>
                 </main>
             </div>
