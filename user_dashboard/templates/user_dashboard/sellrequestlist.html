@@ -17,8 +17,8 @@
                         <th id="t-Head" scope="col">Request ID</th>
                         <th id="t-Head" scope="col">Name</th>
                         <th id="t-Head" scope="col">Quantity</th>
-                        <th id="t-Head" scope="col">Units</th>
                         <th id="t-Head" scope="col">Image</th>
+                        <th id="t-Head" scope="col">Units</th>
                         <th id="t-Head" scope="col">Amount</th>
                         <th id="t-Head" scope="col">Status</th>
                     </tr>
@@ -26,26 +26,53 @@
                 <tbody>
                     {% for sell_request in sell_objs %}
                     <tr>
-                        <td>{{ sell_request.id }}</td>
-                        <td>{{ sell_request.product_name }}</td>
-                        <td>{{ sell_request.product_quantity }}</td>
-                        <td>{{ sell_request.SI_units }}</td>
-                        <td><img src="{{ sell_request.product_image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class=""></td>
-                        <td>{{ sell_request.amount_in_green_points }}</td>
-                        
-                        <td>
-                          {% if sell_request.is_approved == "approved" %}
-                              <abbr title="Click To See The Reason" style="font-size: 1.5rem;">
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.id }}
+                            </div>
+                        </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.product_name }}
+                            </div>
+                        </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.product_quantity }}
+                            </div>
+                        </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub p-0">
+                                <img src="{{ sell_request.product_image.url }}" alt="Garden Image" style="height: 50px; width: 80px;" class="">
+
+                            </div>
+                        </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.SI_units }}
+                            </div>
+                        </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.amount_in_green_points }}
+                            </div>
+                        </td>
+                        <td class="tb-body">
+                            <div class="text-center align-self-baseline mt-2">
+                                {% if sell_request.is_approved == "approved" %}
+                              <abbr title="Click To See The Reason" >
                                   <span class="text-success btn" data-toggle="modal" data-target="#approvedModal{{ sell_request.id }}">Approved</span>
                               </abbr>
                           {% elif sell_request.is_approved == "rejected" %}
-                              <abbr title="Click To See The Reason" style="font-size: 1.5rem;">
+                              <abbr title="Click To See The Reason" >
                                   <span class="text-danger btn" data-toggle="modal" data-target="#rejectedModal{{ sell_request.id }}">Rejected</span>
                               </abbr>
                           {% else %}
                               <span class="text-warning btn">Pending</span>
                           {% endif %}
-                      </td>
+                            </div>
+                        </td>
+                        
                       
                       <!-- Modal for rejected request -->
                       <div class="modal fade" id="rejectedModal{{ sell_request.id }}" tabindex="-1" aria-labelledby="rejectedModalLabel{{ sell_request.id }}" aria-hidden="true">
