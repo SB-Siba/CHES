@@ -31,13 +31,13 @@
         </div>
         
         <div class="col-md-6 col-12">
-          <div class="d-flex mb-3">
+          <div class="d-flex input-group">
             {% if searchquery %}
-              <input type="text" name="search_query" class="form-control search-input me-2 ps-4" aria-label="Search" value="{{ searchquery }}">
+              <input type="text" name="search_query" class="form-control search-input ps-4" aria-label="Search" value="{{ searchquery }}">
             {% else %}
-              <input type="text" name="search_query" class="form-control search-input me-2 ps-4" placeholder="Search for produces..." aria-label="Search">
+              <input type="text" name="search_query" class="form-control search-input ps-4" placeholder="Search for produces..." aria-label="Search">
             {% endif %}
-            <button class="btn search-btn" type="submit">
+            <button class="btn search-btn input-group-text" type="submit">
               <i class="fa-solid fa-search"></i>
             </button>
           </div>

@@ -4,12 +4,13 @@
 {% block title %}Checkout Page{% endblock title %}
 
 {% block content %}
+
 <head>
     <link rel="stylesheet" href="{% static '/user_dashboard/css/vendor_products.css '%}">
 </head>
 <div class=" mb-4">
     <div class="row">
-        <div class="col-md-4 order-md-2 mb-4" >
+        <div class="col-md-4 order-md-2 mb-4">
             <ul class="list-group mb-3 sticky-top" id="my_col_1">
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
@@ -28,21 +29,24 @@
                     <div>
                         <h6 class="my-0">Our Price</h6>
                     </div>
-                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{our_product_value}}</span>
+                    <span class="text-muted"><i
+                            class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{our_product_value}}</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
-                        <h6 class="my-0">Green Coin Discount</h6>
+                        <h6 class="my-0">Green Coins Discount</h6>
                     </div>
-                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{coin_exchange  }}</span>
+                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{coin_exchange
+                        }}</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
                         <h6 class="my-0">Total Discount</h6>
                     </div>
-                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{discount_ammount}}</span>
+                    <span class="text-muted"><i
+                            class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{discount_ammount}}</span>
                 </li>
-                
+
                 <!--<li class="list-group-item d-flex justify-content-between bg-light">
                     <div class="">
                         <h6 class="my-0">GST</h6>
@@ -51,9 +55,10 @@
                 </li>-->
                 <li class="list-group-item d-flex justify-content-between bg-light">
                     <div class="">
-                        <h6 class="my-0">Delivery Charge</h6>
+                        <h6 class="my-0">Delivery Charges</h6>
                     </div>
-                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{delivery_charge}}</span>
+                    <span class="text-muted"><i
+                            class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{delivery_charge}}</span>
                 </li>
                 <!-- <li class="list-group-item d-flex justify-content-between bg-light">
                     <div class="text-success">
@@ -68,59 +73,54 @@
             </ul>
         </div>
         <div class="col-md-8 order-md-1 py-4 px-3 " id="my_col_1">
-            <h4 class="mb-3">Billing address</h4>
+            <h4 class="mb-3">Billing Address</h4>
             <form method="post" class="needs-validation" novalidate>
                 {% csrf_token %}
                 <input type="hidden" name="offer_discount" value="{{ offer_discount }}">
                 <div class="row">
-                    <div class="col-md-6 mb-2">
-                        <label for="id_first_name">Full name</label>
+                    <div class=" mb-2">
+                        <label for="id_first_name">Enter Full Name</label>
                         {{ form.full_name }}
                         <div class="invalid-feedback"> Valid first name is required. </div>
                     </div>
-                    
+
                 </div>
                 <div class="mb-3">
-                    <label for="id_username">Email</label>
+                    <label for="id_username">Enter Email</label>
                     <div class="input-group ">
-                        
-                            {{ form.email }}
-                        
-                        
-
+                        {{ form.email }}
                         <div class="invalid-feedback" style="width: 100%;"> Your email is required. </div>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="id_contact">Contact Number</label>
+                    <label for="id_contact">Enter Contact Number</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-texT bg-white ">+91 - </span>
+                            <span class="input-group-texT bg-white ">+91- </span>
                         </div>
                         {{ form.contact_number }}
                         <div class="invalid-feedback" style="width: 100%;"> Your contact number is required. </div>
                     </div>
                 </div>
-                
+
                 <div class="mb-3">
-                    <label for="id_address">Address</label>
+                    <label for="id_address">Enter Address</label>
                     {{ form.address }}
                     <div class="invalid-feedback"> Please enter your shipping address. </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 mb-4">
-                        <label for="id_state">City</label>
+                    <div class="col-md-6">
+                        <label for="id_state">Choose City</label>
                         {{ form.city }}
                         <div class="invalid-feedback"> Please provide a valid city. </div>
                     </div>
-                    <div class="col-md-6 mb-4">
-                        <label for="id_zip_code">Pincode</label>
+                    <div class="col-md-6">
+                        <label for="id_zip_code">Enter Pincode</label>
                         {{ form.pin_code }}
                         <div class="invalid-feedback"> Pin code required. </div>
                     </div>
                 </div>
-                <hr class="mb-4">
-                <button class="btn btn-succesS btn-lg w-100" type="submit">Continue to checkout</button>
+                <button class="btn btn-succesS btn w-100" type="submit">Continue to checkout</button>
             </form>
         </div>
     </div>
