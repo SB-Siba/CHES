@@ -8,7 +8,7 @@
     .my-button {
         background-color: #28a745;
         color: white;
-        padding: 0.5rem 1.5rem;
+        padding: 10px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
@@ -18,14 +18,14 @@
 <div class="page-wapper">
     <h3 class="add-new-title text-sm pt-3">Produce / Produce Sell</h3>
     <div class="row d-flex justify-content-center my-5">
-        <div class="col-lg-6 col-md-6 sell_wrapper p-lg-5 p-4">
+        <div class="col-lg-8 col-md-12 sell_wrapper p-lg-4 p-4">
             <form id="sellForm" method="post" action="" enctype="multipart/form-data">
                 {% include 'app_common/snippets/alert.html' %}
                 {% csrf_token %}
                 {{ form.as_p }}
                 
                 <div style="text-align: center; margin-top: 2rem;">
-                    <button class="my-button text-white" id="button" type="submit">Add Product</button>
+                    <button class="my-button text-white w-100"  type="submit">Add Your Product</button>
                 </div>
             </form>
         </div>

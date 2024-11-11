@@ -425,7 +425,6 @@ class Service(models.Model):
         ("Daily","Daily"),
         ("Monthly","Monthly"),
         ("Yearly","Yearly"),
-        ("Monthly","Monthly"),
         ("Service-based","Service-based"),
 
     )

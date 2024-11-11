@@ -6,7 +6,13 @@
 {% block content %}
 
 <style>
-  
+    .tableLeader tbody tr:first-child {
+    color: rgb(21, 14, 14) !important;
+    font-weight: 600;
+    font-size: 18px;
+    background-color: #74f5cc !important;
+    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+  }
 </style>
 <div class=" ">
     <!-- Content Row -->
@@ -136,7 +142,7 @@
                         </div>
                     </div>
                     <div id="leaderboard">
-                        <table  class="" >
+                        <table  class="tableLeader" >
                             {% for leader_user in users_orderby_coins %}
                             <tr data-rank="" data-city="{{ leader_user.city }}" class="leaderRow ltr">
                                 <td class="number lc" style="font-size: x-large;">

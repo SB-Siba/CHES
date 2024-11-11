@@ -254,11 +254,12 @@ class CheckoutForm(forms.Form):
     
     address = forms.CharField(
         max_length=255,
-        widget=forms.TextInput(
+        widget=forms.Textarea(
             attrs={
                 "class": "form-control",
-                "placeholder": "1234 Main St",
+                "placeholder": "Add Your Address Here!",
                 "required": True,
+                'rows': 3
             }
         ),
     )
