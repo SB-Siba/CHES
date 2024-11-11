@@ -8,14 +8,16 @@
         <div class="search_sec">
             <form method="get" action="{% url 'admin_dashboard:search_activity_request' %}">
                 <div class="table_search_box">
-                    <select class="form-control selects" name="search_by" aria-label="Default select example">
+                    <select class="form-control selects ps-4" name="search_by" aria-label="Default select example">
                         <option value="email">Email</option>
                         <option value="activity_title">Title</option>
                     </select>
-                    <input type="text" class="form-control" placeholder="Enter Query" name="query" required />
+                   <div class="input-group">
+                    <input type="text" class="form-control ps-4" placeholder="Enter Query" name="query" required />
                     <button class="btn qry-sub" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
+                   </div>
                 </div>
             </form>
         </div>
@@ -25,8 +27,8 @@
                     <tr>
                         <th scope="col">Request-ID</th>
                         <th scope="col">User</th>
-                        <th scope="col">activity_content</th>
-                        <th scope="col">activity_image</th>
+                        <th scope="col">Activity Content</th>
+                        <th scope="col">Activity Image</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>

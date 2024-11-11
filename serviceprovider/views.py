@@ -295,24 +295,31 @@ def mark_as_complete_booking(request, booking_id):
         
         # Check if the user is the service provider for this booking
         if request.user == booking.service.provider:
-            # Calculate discount amount and convert to float
             service = booking.service
             discount_amount = float(service.price_per_hour * (Decimal(service.discount_percentage_for_greencoins) / Decimal('100.00')))
-
-            # Ensure provider has enough wallet balance
-            if request.user.wallet >= discount_amount:
+            
+            # Ensure booking user has enough wallet balance
+            booking_user = booking.gardener  # Assuming `gardener` is the user who booked the service
+            if booking_user.wallet >= discount_amount:
                 # Mark booking as completed
                 booking.status = 'completed'
                 booking.save()
-
-                # Deduct discount from provider's wallet
+                
+                # Deduct discount from booking user's wallet and update their total investment
+                booking_user.wallet -= discount_amount
+                booking_user.total_invest += discount_amount
+                booking_user.coins += 50  # Assuming 50 coins are rewarded to the booking user
+                booking_user.save()
+                
+                # Add discount amount to provider's wallet and update their total income
                 request.user.wallet += discount_amount
+                request.user.total_income += discount_amount
+                request.user.coins += 50  # Assuming 50 coins are rewarded to the provider
                 request.user.save()
 
                 return redirect('service_provider:my_all_bookings')
             else:
-                # Handle insufficient wallet balance (e.g., display error message)
-                error_message = "Insufficient wallet balance to complete the booking."
+                error_message = "Insufficient wallet balance for the booking user to complete the booking."
                 return render_error_page(request, error_message, status_code=400)
 
     except Exception as e:

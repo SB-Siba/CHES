@@ -261,7 +261,7 @@ button.bg-success:focus {
     font-size: 16px;
 }
 .update-form{
-    display: flex;
+    /* display: flex; */
     flex-wrap: wrap;
 }
 .update-form p {
