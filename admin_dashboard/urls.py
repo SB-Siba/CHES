@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views,api_views
 from .manage_users import users
+from .manage_gallery import media
+
 from admin_dashboard.orders import order
 from .manage_blogs import blogs
 from .registration import rtg_registration,vendor_registration,sp_registration
@@ -102,6 +104,10 @@ urlpatterns = [
     path('users_query/reply/<int:id>/',Query.QueryReply.as_view(), name='query_reply'),
     path('users_query/delete/<int:id>/',Query.DeleteQuery.as_view(), name='query_delete'),
 
+    # media 
+    path('media-gallery/', media.MediaGalleryListView.as_view(), name='media_gallery_list'),
+    path('media-gallery/delete/<int:pk>/', media.MediaGalleryDeleteView.as_view(), name='media_gallery_delete'),
 ]
+
 
 #  admin_dashboard:users_list

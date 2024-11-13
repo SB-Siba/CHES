@@ -462,3 +462,8 @@ class Review(models.Model):
     rating = models.PositiveIntegerField()
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+
+class MediaGallery(models.Model):
+       media_image = models.ImageField(upload_to='service/',null=True, blank=True)

@@ -1,0 +1,21 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h1>Gallery</h1>
+
+    <div class="gallery">
+        {% for media in media_items %}
+            <div class="image-container">
+                <img src="{{ media.media_image.url }}" alt="Image" width="150" height="150">
+            </div>
+        {% empty %}
+            <p>No images available yet.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
