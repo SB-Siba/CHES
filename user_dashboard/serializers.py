@@ -127,3 +127,35 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Order
         fields = '__all__'
+
+
+class DirectServiceSerializer(serializers.ModelSerializer):
+    service_data = serializers.SerializerMethodField()
+
+    def get_service_data(self, obj):
+        gross_value = float(obj.price_per_hour)
+        discount_percentage = float(obj.discount_percentage_for_greencoins)
+        discounted_price = gross_value * (1 - (discount_percentage / 100))
+        green_points_required = obj.green_coins_required
+        coin_exchange = False
+
+        # Apply offer discount if applicable
+        if self.context.get('offer_discount') == "1":
+            coin_exchange = True
+
+        final_value = discounted_price if coin_exchange else gross_value
+        discount_amount = gross_value - final_value
+
+        return {
+            'service_name': obj.provider.full_name,
+            'gross_value': f"{gross_value:.2f}",
+            'final_value': f"{final_value:.2f}",
+            'discount_amount': f"{discount_amount:.2f}",
+            'discount_percentage': f"{discount_percentage:.2f}",
+            'green_points_required': f"{green_points_required:.2f}",
+            'coin_exchange': coin_exchange,
+        }
+
+    class Meta:
+        model = models.Service
+        fields = ['service_data']
