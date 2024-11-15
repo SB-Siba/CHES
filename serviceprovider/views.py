@@ -22,8 +22,13 @@ from app_common.forms import contactForm
 from django.utils.decorators import method_decorator
 from helpers import utils
 from helpers.decorators import login_required
+from django.utils.timezone import now
+from django.db.models import Sum, F
+from datetime import timedelta
 
 app = "service_provider/"
+
+
 
 @method_decorator(utils.login_required, name='dispatch')
 class ServiceProviderDashboard(View):
@@ -32,10 +37,80 @@ class ServiceProviderDashboard(View):
     def get(self, request):
         try:
             user = request.user
-            return render(request, self.template)
+            # Get top 10 service providers
+            providers = common_models.User.objects.filter(is_serviceprovider=True)[:10]
+            valid_statuses = ["confirmed", "completed"]
+
+            # Calculate earnings for each provider in a given date range
+            def calculate_earnings(provider, start_date, end_date):
+                bookings = common_models.Booking.objects.filter(
+                    service__provider=provider,
+                    booking_date__range=(start_date, end_date),
+                    status__in=valid_statuses
+                ).annotate(earnings=F('service__price_per_hour'))
+                return bookings.aggregate(total_earnings=Sum('earnings'))['total_earnings'] or 0
+
+            # Date range for today, this month, and this year
+            today = now().date()
+            start_of_month = today.replace(day=1)
+            start_of_year = today.replace(month=1, day=1)
+            start_of_day = now().replace(hour=0, minute=0, second=0, microsecond=0)
+            end_of_day = now().replace(hour=23, minute=59, second=59, microsecond=999999)
+
+            # Get earnings for each provider for today, this month, and this year
+            provider_earnings_today = [(provider, calculate_earnings(provider, start_of_day, end_of_day)) for provider in providers]
+            provider_earnings_month = [(provider, calculate_earnings(provider, start_of_month, today)) for provider in providers]
+            provider_earnings_year = [(provider, calculate_earnings(provider, start_of_year, today)) for provider in providers]
+
+            # Sort providers by earnings
+            provider_earnings_today.sort(key=lambda x: x[1], reverse=True)
+            provider_earnings_month.sort(key=lambda x: x[1], reverse=True)
+            provider_earnings_year.sort(key=lambda x: x[1], reverse=True)
+
+            # Max earnings for percentage calculation
+            max_earnings_today = max(provider_earnings_today, key=lambda x: x[1])[1] if provider_earnings_today else 0
+            max_earnings_month = max(provider_earnings_month, key=lambda x: x[1])[1] if provider_earnings_month else 0
+            max_earnings_year = max(provider_earnings_year, key=lambda x: x[1])[1] if provider_earnings_year else 0
+
+            # Calculate provider percentages for rankings
+            provider_percentages_today = [(provider, amount, (amount / max_earnings_today * 100) if max_earnings_today else 0) for provider, amount in provider_earnings_today]
+            provider_percentages_month = [(provider, amount, (amount / max_earnings_month * 100) if max_earnings_month else 0) for provider, amount in provider_earnings_month]
+            provider_percentages_year = [(provider, amount, (amount / max_earnings_year * 100) if max_earnings_year else 0) for provider, amount in provider_earnings_year]
+
+            # Calculate the logged-in user's earnings for today, this month, and this year
+            earnings_today = calculate_earnings(user, start_of_day, end_of_day)
+            earnings_month = calculate_earnings(user, start_of_month, today)
+            earnings_year = calculate_earnings(user, start_of_year, today)
+
+            # Get the top service providers by coins for leaderboard
+            users_orderby_coins = common_models.User.objects.filter(
+                Q(is_serviceprovider=True),
+                is_approved=True,
+                is_superuser=False
+            ).order_by('-coins')[:10]
+            users_name = [u.full_name for u in users_orderby_coins]
+            user_coins = [u.coins for u in users_orderby_coins]
+
+            # Prepare the context
+            context = {
+                'provider_percentages_today': provider_percentages_today,
+                'provider_percentages_month': provider_percentages_month,
+                'provider_percentages_year': provider_percentages_year,
+                'max_earnings_today': max_earnings_today,
+                'max_earnings_month': max_earnings_month,
+                'max_earnings_year': max_earnings_year,
+                'earnings_today': earnings_today,
+                'earnings_month': earnings_month,
+                'earnings_year': earnings_year,
+                'users_orderby_coins': users_orderby_coins,
+                'users_name': users_name,
+                'u_coins': user_coins,
+            }
+            return render(request, self.template, context)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
 
 @method_decorator(utils.login_required, name='dispatch')
 class ServiceProviderProfile(View):

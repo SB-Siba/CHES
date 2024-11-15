@@ -23,6 +23,8 @@ from app_common.error import render_error_page
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import transaction
+from datetime import datetime, date, time
+from django.utils import timezone
 
 
 app = "user_dashboard/"
@@ -388,31 +390,77 @@ class ActivityList(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+
+
 @method_decorator(utils.login_required, name='dispatch')
 class WalletView(View):
     template = app + "wallet.html"
     model = app_commonmodels.ProduceBuy
 
-    def get(self,request):
+    def get(self, request):
         user = request.user
         try:
-            transactions = self.model.objects.filter((Q(buyer=user) | Q(seller=user)) & Q(buying_status="PaymentDone") | Q(buying_status="BuyCompleted")).order_by('-date_time')
-            list_of_transactions = []
-            xyz = []
-            for i in transactions:
-                list_of_transactions.append(i)
-                if i.buyer == user:
-                    x = True
-                    xyz.append(x)
-                else:
-                    x = False
-                    xyz.append(x)
-            main_obj = zip(list_of_transactions,xyz)  
-            return render(request,self.template,locals())
-             
+            # Retrieve ProduceBuy transactions
+            produce_transactions = self.model.objects.filter(
+                (Q(buyer=user) | Q(seller=user)) & 
+                Q(buying_status__in=["PaymentDone", "BuyCompleted"])
+            ).order_by('-date_time')
+
+            # Retrieve Order transactions
+            order_transactions = app_commonmodels.Order.objects.filter(
+                Q(customer=user) | Q(vendor=user), 
+                payment_status="Paid"
+            ).order_by('-date')
+
+            # Combine and structure data for rendering
+            transactions = []
+            for transaction in produce_transactions:
+                # Ensure date_time is timezone-aware
+                date_time = timezone.make_aware(transaction.date_time) if timezone.is_naive(transaction.date_time) else transaction.date_time
+                transactions.append({
+                    "type": "ProduceBuy",
+                    "object": transaction,
+                    "is_purchase": transaction.buyer == user,
+                    "date": date_time,
+                })
+
+            for transaction in order_transactions:
+                # Extract the first product name and quantity from order_meta_data
+                first_product = list(transaction.order_meta_data['products'].items())[0]
+                product_name = first_product[0]
+                quantity = first_product[1].get('quantity', 'N/A')
+
+                # Convert Order date to a timezone-aware datetime object
+                transaction_date = datetime.combine(transaction.date, time.min)  # Convert date to datetime
+                transaction_date = timezone.make_aware(transaction_date) if timezone.is_naive(transaction_date) else transaction_date
+
+                coin_exchange = transaction.order_meta_data.get('coin_exchange', 'N/A')
+                
+                if isinstance(coin_exchange, str):
+                    try:
+                        coin_exchange = int(float(coin_exchange))  # Convert to integer if it's a string float
+                    except ValueError:
+                        coin_exchange = 0
+                
+                transactions.append({
+                    "type": "Order",
+                    "object": transaction,
+                    "is_purchase": transaction.customer == user,
+                    "product_name": product_name,
+                    "quantity": quantity,
+                    "amount": coin_exchange,
+                    "date": transaction_date,
+                })
+
+            # Sort transactions by the normalized date field
+            transactions.sort(key=lambda x: x["date"], reverse=True)
+
+            return render(request, self.template, {"transactions": transactions})
+        
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
 
 
 @method_decorator(utils.login_required, name='dispatch')

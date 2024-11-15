@@ -156,7 +156,7 @@ class Logout(View):
     def get(self, request):
         try:
             logout(request)
-            return redirect('app_common:login')
+            return redirect('app_common:index')
 
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
@@ -444,8 +444,9 @@ class Home(View):
     template = app + 'landing.html'
 
     def get(self, request):
-  
-        return render(request,self.template)
+        form = forms.LoginForm()  # Instantiate the LoginForm
+        return render(request, self.template, {'form': form})  # Pass the form to the template context
+
     
 
 class ForgotPasswordView(View):
