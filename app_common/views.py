@@ -156,7 +156,7 @@ class Logout(View):
     def get(self, request):
         try:
             logout(request)
-            return redirect('app_common:login')
+            return redirect('app_common:index')
 
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
