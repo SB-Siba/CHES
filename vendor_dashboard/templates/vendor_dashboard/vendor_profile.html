@@ -3,23 +3,33 @@
 
 {% block main_content %}
 
+<nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Profile</li>
+    </ol>
+  </nav>
 <section class="section about-section gray-bg min_height_div" id="about">
     <div class="container   d-flex justify-content-center ">
         <div class="col-lg-10 profile_Body py-5 px--lg-4 px-2">
             <div class="row align-items-center  mb-4">
-                <div class="col-lg-4 d-flex justify-content-center">
+                <div class="col-lg-4 d-flex justify-content-center align-items-center">
                     <div class=" mb-lg-0">
                         {% if vendor_obj.vendor.user_image %}
-                            <img src="{{vendor_obj.vendor.user_image.url}}" style="height: 170px; width: 180px; border-radius: 50%; object-fit: contain;" alt="...">
+                            <img src="{{vendor_obj.vendor.user_image.url}}" style="height: 170px; width: 180px; border-radius: 50%; object-fit: cover;" alt="...">
                         {% else %}
                             <img src="https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="  style="height: 180px; width: 180px; border-radius: 50%;" alt="...">
                         {% endif %}
+                        <div class="mt-4 d-flex justify-content-center mb-4">
+                            <a href="{% url 'vendor_dashboard:update_vendor_profile' %}" class="" id="table_BTN">Edit Your Profile</a>
+                        </div>
                     </div>
+                    
                 </div>
                 <div class="col-lg-8 fflex">
                     <div class="about-text go-to">
                         <h4 class="dark-color">{{vendor_obj.vendor.full_name}}</h4>
-                        <p> <small class="display-26 text-secondary me-2 font-weight-600">Business Description :</small> {{vendor_obj.business_description}}</p>
+                        <p style="font-size: 14px;"> <span class="display-26 text-secondary me-2 font-weight-600">Business Description :</span> {{vendor_obj.business_description}}</p>
                         <ul class="list-unstyled mb-1-9">
                             <li class="mb-1 mb-xl-1 display-28"><span
                                     class="display-26 text-secondary me-2 font-weight-600">Address : </span> {{vendor_obj.business_address}}</li>
@@ -33,11 +43,6 @@
                                     class="display-26 text-secondary me-2 font-weight-600">Phone : </span> {{vendor_obj.vendor.contact}} </li>
                         </ul>
                     </div>
-                    <ul style="padding-left: 0px;">
-                        <div class="d-flex justify-content-start">
-                            <a href="{% url 'vendor_dashboard:update_vendor_profile' %}" class="" id="table_BTN">Edit</a>
-                        </div>
-                    </ul>
                 </div>
                 
             </div>
@@ -65,7 +70,7 @@
                     <div class="col-6 col-lg-3">
                         <div class="count-data text-center">
                             <h6 class="count " data-to="190" data-speed="190">Category</h6>
-                            <p class="m-0px font-w-600">{{vendor_obj.business_category}}</p>
+                            <p class="m-0px font-w-600 text-capitalize">{{vendor_obj.business_category}}</p>
                         </div>
                     </div>
                 </div>

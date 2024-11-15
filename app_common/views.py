@@ -444,8 +444,9 @@ class Home(View):
     template = app + 'landing.html'
 
     def get(self, request):
-  
-        return render(request,self.template)
+        form = forms.LoginForm()  # Instantiate the LoginForm
+        return render(request, self.template, {'form': form})  # Pass the form to the template context
+
     
 
 class ForgotPasswordView(View):
