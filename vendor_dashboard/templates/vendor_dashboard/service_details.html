@@ -2,31 +2,41 @@
 {% load static %}
 
 {% block main_content %}
+<nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{%  url 'vendor_dashboard:list_services' %}">Services</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Book Services</li>
+    </ol>
+  </nav>
 <div class="" style="min-height: 100vh;">
     <div class="row d-flex justify-content-center py-4">
-        <h4 class="ms-5 mb-4">Service Details - {{ service.name }}</h4>
+        <h3 class="ms-5 mb-4"> {% if service_booked_obj %} 
+            Already Booked for this  {{ service.service_type.service_category }}
+            {% else %}
+            Services Booking for {{ service.service_type.service_category }} 
+            {% endif %}
+        </h3>
         <div class="col-lg-7 col-12 service-carD rounded-1 p-4">
             
             <p><strong>Provider:</strong> {{ service.provider.full_name }}</p>
             <p><strong>Description:</strong> {{ service.description }}</p>
             <p><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
             {% if service_booked_obj %}
-                <a href="" class="btn btn-primary disabled">Already Booked</a>
+                <a href="" class="btn btn-primary disabled w-100">Already Booked</a>
             {% else %}
                 <form method="post" class="form-horizontal">
                     {% csrf_token %}
-                    <div class="form-group ">
-                        <label for="booking_date" class="fw-bold: control-label">Booking Date</label>
-                        <div class="col-sm-12">
+                    <div class="form-group w-100">
+                        <label for="booking_date" class="fw-bold: control-label fw-bold">Booking Date</label>
+                        <div class="col-sm-12 mt-2">
                             {{ form.booking_date }}
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 d-flex justify-content-center col-sm-10">
-                            <button type="submit" class="" id="table_BTN">Book Service</button>
-                        </div>
-                    </div>
-                </form>
+                    <div class=" w-100 my-4 ">
+                        <button type="submit" class="btn w-100" style="background-color: green; color: white;">Book Service</button>
+                    </div> 
+                </form> 
             {% endif %}
     
         </div>

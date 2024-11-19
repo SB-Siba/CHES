@@ -256,6 +256,7 @@ color: #fff;
     color: white;
     background-color: #008000;
     text-decoration: none;
+    width: 100%;
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 #table_BTN:hover{

@@ -25,7 +25,7 @@ class RegisterForm(forms.ModelForm):
         ("Cuttack", "Cuttack"),
         ("Brahmapur", "Brahmapur"),
         ("Sambalpur", "Sambalpur"),
-        ("Jaipur", "Jaipur"),
+        ("Jeypore", "Jeypore"),
         ("Other", "Other"),
     )
 
@@ -228,7 +228,8 @@ class ServiceProviderDetailsForm(forms.ModelForm):
         ("Cuttack", "Cuttack"),
         ("Brahmapur", "Brahmapur"),
         ("Sambalpur", "Sambalpur"),
-        ("Jaipur", "Jaipur"),
+        ("Jeypore", "Jeypore"),
+        ("Others", "Others"),
     )
 
     class Meta:

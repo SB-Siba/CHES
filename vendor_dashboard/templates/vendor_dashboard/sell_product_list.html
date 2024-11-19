@@ -4,92 +4,187 @@
 {% block main_content %}
 <head>
   <style>
-    .form-control {
-      border: none;
-      border-bottom: 2px solid #ccc;
-      border-radius: 7px;
-      padding: 5px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .form-control:focus {
-      border-bottom-color: #37af2c;
-      outline: none;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-   #t-Head{
+    .form-select1{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.tablecard {
+  
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+#tb-head {
+    background-color:green;
+    color:white;
+    font-family: "Poppins",sans-serif;
+    font-size: 14px;
+    padding: 18px 10px;
     text-align: center;
-   }
+    font-weight: 600;
+    font-style: normal;
+    line-height: 23px;
+}
+#test_table_tbody .delete_edit_button{
+  padding: 18px;
+}
+
+.tb-body{
+  padding: 0 !important;
+    font-family: var(--rubik);
+    font-size: 13px;
+    font-weight: 400;
+    font-style: normal;
+  
+}
+.tb-body_sub{
+padding: 18px 10px;
+  text-align: center;
+}
+.text-heading{
+   padding-top: 10px;
+}
+
+.tb-body img{
+   margin: 0 auto;
+}
+.alert-success{
+    color: green !important;
+    margin-top: 10px;
+}
+#test_table_tbody .delete_edit_button{
+  padding: 18px;
+}
+.cat-img2 {
+    height: 50px;
+    width: 120px !important;
+    object-fit: contain;
+    display: block;
+}
   </style>
 </head>
-<div class="mt-2 m-4" style="min-height:100vh ;">
-    {% include 'app_common/snippets/alert.html' %}
-    <div class="search_sec mt-lg-3 mt-2">
-      <form method="get" action="{% url 'vendor_dashboard:vendor_search_sell_products' %}">
-          <div class="table_search_box d-lg-flex justify-content-between">
-              <select class="form-control selects ps-3 " name="search_by" aria-label="Default select example" >
-                  <option value="id">ID</option>
-                  <option value="name">Name</option>
-              </select>
-              <div class="d-flex justify-content-end align-items-baseline w-50">
-                <input type="text" class="form-control ps-3 " placeholder="Enter Query" name="query" required />
-              <button class=""id="table_BTN" type="submit">
-                  <i class="fa-solid fa-magnifying-glass"></i>
+<nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+  <ol class="breadcrumb m-0">
+    <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">My Product-List</li>
+  </ol>
+</nav>
+
+<main class="py-6">
+  <div class="container-fluid">
+      <!-- <h4 class="headings_h4 text-center my-lg-4 p-lg-3">My Product-List</h4> -->
+      <div class="vstack gap-4">
+          <div class="d-flex justify-content-between flex-column flex-sm-row gap-3">
+              <form class="my-3 mx-2" action="{% url 'vendor_dashboard:vendor_search_sell_products' %}" method="get">
+                  {% csrf_token %}
+                  <div class="hstack gap-2">
+                      <select style="width: 6rem;" name="filter_by" class="form-select form-select1" aria-label="Default select example">
+                          <option selected value="pk">All</option>
+                          <option value="id">ID</option>
+                          <option value="name">Name</option>
+                      </select>
+                      <span  class="input-group ">
+                          <input type="text" placeholder="Enter Query" name="query" class="form-control m-0 form-select1" required />
+                          <button type="submit" class="input-group-text form-select1"><i class='bx bx-search-alt-2' ></i></button>
+                      </span>
+                  </div>
+              </form>
+              {% comment %}
+              <button class="btn btn-outline-primary p-0" data-bs-toggle="modal" data-bs-target="#order_filter" id="Filetr_button">
+                <i class="fa-solid fa-filter"></i>
+                Filter
               </button>
+              <div class="btn-group catagory-btn">
+                
+                  <!-- <button data-bs-toggle="modal" data-bs-target="#select_filter" class="btn-sm btn-neutral">
+                      <i class='bx bx-filter-alt' ></i>
+                  </button> -->
+                  <a href="{% url 'product:product_add' %}">
+                      <i class='bx bxs-plus-square'></i> Create New Product
+                  </a>
+                  
+              </div>
+              {% endcomment %}
+          </div>
+
+          <div class="tablecard">
+              <div class="table-responsive">
+                  <table class="table table-hover table-nowrap mt-0">
+                      <thead class="table-light">
+                          <tr>
+                              <th id="tb-head" scope="col">Order ID</th>
+                              <th id="tb-head" scope="col">Name</th>
+                              <th id="tb-head" scope="col">Stock</th>
+                              <th id="tb-head" scope="col">Disc. Price</th>
+                              <th id="tb-head" scope="col">Max Price</th>
+                              <th id="tb-head" scope="col">Image</th>
+                              <th id="tb-head" scope="col">Action</th>
+                          </tr>
+                      </thead>
+                      <tbody id="test_table_tbody">
+                        {% for product in products %}
+                          <tr>
+                              <td class="tb-body">
+                                <div class="tb-body_sub">
+                                  <a target="_blank" href="#">
+                                    {{ product.id }}
+                                  </a>
+                                </div>
+                                
+                              </td>
+                              <td class="tb-body">
+                                  <div class="tb-body_sub">
+                                    {{ product.name }}
+                                  </div>
+                                </td>
+                              <td class=" tb-body">
+                                <div class="tb-body_sub">
+                                  {{ product.stock }}
+                                </div>
+                              </td>
+                              <td class="tb-body">
+                                <div class="tb-body_sub">
+                                  {{ product.discount_price }}
+                                </div>
+                               </td>
+                              <td class="tb-body ">
+                                <div class="tb-body_sub">
+                                  {{ product.max_price }}
+                                </div>
+                                </td>
+                              <td class="tb-body">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="openImageModal('{{ product.image.url }}')">
+                                  <img src="{{ product.image.url }}" alt="Garden Image" class="zoom cat-img2">
+                              </a>
+                                </td>
+                                <td class="d-flex justify-content-evenly delete_edit_button">
+                                  <div class="">
+                                    <a href="{% url 'vendor_dashboard:vendor_sell_product_update' product.id %}" class="btn btn-info">
+                                      <i class="fa-regular fa-pen-to-square "></i>
+                                  </a>
+                                  </div>
+                                  <div>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteUrl({{ product.id }})" class="btn btn-danger">
+                                      <i class="fa fa-trash " aria-hidden="true"></i>
+                                    </a>
+                                  </div>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
+                  {% include 'app_common/snippets/pagination.html' %}
               </div>
           </div>
-      </form>
-    </div>
-    
-    <div class="table-responsive" >
-        <table class="table table-hover table-nowrap">
-            <thead class="table-light">
-                <tr>
-                    <th id="t-Head" scope="col">ID</th>
-                    <th id="t-Head" scope="col">Name</th>
-                    <th id="t-Head" scope="col">Stock</th> 
-                    <th id="t-Head" scope="col">Disc. Price</th>
-                    <th id="t-Head" scope="col">Max Price</th>
-                    <th id="t-Head" scope="col">Image</th>
-                    <th id="t-Head" scope="col" class="text-center">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for product in products %}
-                <tr>
-                    <td>{{ product.id }}</td>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.stock }}</td>
-                    <td>{{ product.discount_price }}</td>
-                    <td>{{ product.max_price }}</td>
-                    <td class="status-column">
-                        <!-- Clickable image to open modal -->
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="openImageModal('{{ product.image.url }}')">
-                            <img src="{{ product.image.url }}" alt="Garden Image" style="height: 50px; width: 50px;" class="zoom">
-                        </a>
-                    </td>
-                    <td>
-                       <div class="d-flex justify-content-center gap-2">
-                        <div class="px-2 py-2">
-                            <a href="{% url 'vendor_dashboard:vendor_sell_product_update' product.id %}" id="table_BTN">
-                                <i class="fa-regular fa-pen-to-square "></i>
-                            </a>
-                        </div>
-                        <div class="px-2 py-2">
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteUrl({{ product.id }})" id="table_BTN2">
-                                <i class="fa fa-trash " aria-hidden="true"></i>
-                              </a>
-                        </div>
-                       </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% include 'app_common/snippets/pagination.html' %}
-    </div>
-</div>
+      </div>
+  </div>
+</main>
+
+
+
+
+
+
+
 
 <!-- Image Modal -->
 <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
@@ -100,7 +195,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center">
-                <img id="modalImage" src="" alt="Product Image" class="img-fluid">
+                <img id="modalImage" src="{{ product.image.url }}" alt="Product Image" class="img-fluid">
             </div>
         </div>
     </div>

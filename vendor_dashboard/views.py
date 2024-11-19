@@ -936,7 +936,7 @@ class BuyingBegins(View):
     def post(self, request, prod_id):
         try:
             user = request.user
-            buyer = app_commonmodels.User.objects.get(id=user.id)
+            buyer =  common_models.User.objects.get(id=user.id)
             sell_prod_obj = self.model.objects.get(id=prod_id)
             seller = sell_prod_obj.user
             
@@ -964,7 +964,7 @@ class BuyingBegins(View):
 
                 # Check if buyer has enough green points
                 if buyer_wallet >= total_amount:
-                    buying_obj = app_commonmodels.ProduceBuy(
+                    buying_obj =  common_models.ProduceBuy(
                         buyer=buyer,
                         seller=seller,
                         sell_produce=sell_prod_obj,
@@ -985,7 +985,7 @@ class BuyingBegins(View):
                                 'full_name': buyer.full_name,
                                 'product_name': sell_prod_obj.product_name,
                                 'quantity': quantity,
-                                'SI_units': SI_units,
+                                # 'SI_units': SI_units,
                             },
                             recipient_list=[buyer.email]
                         )
@@ -1001,7 +1001,7 @@ class BuyingBegins(View):
                                 'product_name': sell_prod_obj.product_name,
                                 'buyer_name': buyer.full_name,
                                 'quantity': quantity,
-                                'SI_units': SI_units,
+                                # 'SI_units': SI_units,
                             },
                             recipient_list=[seller.email]
                         )

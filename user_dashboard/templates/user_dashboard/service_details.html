@@ -3,13 +3,21 @@
 
 {% block title %}Servicedflg h toie List{% endblock title %}
 
+
 {% block content %}
-<h2>Service Details - {{ service.service_type }}</h2>
-<div class="row d-flex justify-content-center mt-4">
-    <div class="col-lg-8 details_div px-5 py-4">
-        <p><strong>Provider:</strong> {{ service.provider.full_name }}</p>
-        <p><strong>Description:</strong> {{ service.description }}</p>
-        <p><strong>Price:</strong> <span id="price-display">Rs. {{ service.price_per_hour }}</span></p>
+<h3>Service Details - {{ service.service_type }}</h3>
+<div class="row mt-4"style="background-color: #e7e7e7; color: rgb(38, 38, 38);">
+    <div class="col-lg-8 col-md-8 col col-12 details_Book p-4"  >
+        <p class=""><b>Provider: </b> {{ service.provider.full_name }}</p>
+        <p class=""><b>Service city: </b> {% if service.sp_details and service.sp_details.service_area %}
+            {% for city in service.sp_details.service_area %}
+                {{ city }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        {% else %}
+            Not available
+        {% endif %}</p>
+        <p class=""> <b>Description: </b> {{ service.description }}</p>
+        <p class=""><b>You have to Pay:  <span id="price-display"> Rs. {{ service.price_per_hour }} per {{service.basis}}.</span></b></p>
         
         {% if service_booked_obj %}
             <a href="" class="btn btn-primary disabled">Already Booked</a>
@@ -17,18 +25,21 @@
             <form method="post" class="form-horizontal">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="booking_date" class="control-label">Booking Date</label>
-                    <div class="">
+                    <label for="booking_date" class="control-label">Booking Date :</label>
+                    <div class="w-50">
                         {{ form.booking_date }}
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="d-flex justify-content-center">
-                        <button type="submit" class="details_btn">Book Service</button>
+                    <div class="d-flex justify-content-start">
+                        <button type="submit" class="details_btn w-50 p-1">Book Service</button>
                     </div>
                 </div>
             </form>
         {% endif %}
+    </div>
+    <div class="col-lg-4 col-md-4 col-12">
+        <img src="" alt="">
     </div>
 </div>
 

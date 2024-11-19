@@ -98,14 +98,14 @@
           <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {% for field in form %}
-            <div class="mb-3">
+            <div class="">
               <label for="recipient-name" class="col-form-label">{{field.label}}:</label>
               {{field}}
             </div>
             {% endfor %}
 
             <center>
-                <button class="btn btn-primary" type="submit"> Create Service </button>
+                <button class="btn btn-primary w-100" type="submit"> Create Service </button>
             </center>
           </form>
         </div>
