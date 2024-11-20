@@ -126,10 +126,10 @@
 <body style="height: 120vh !important; display: flex ; align-items: center;">
     <div class="container  ">
         <div class="row pt-5 justify-content-center">
-            <div class="col-lg-9 col-md-10 col-sm-12 mb-5 form-container p-4">
+            <div class="col-lg-8 col-md-10 col-sm-12 mb-5 form-container p-4">
                 <div class="row">
                     <!-- Left Column -->
-                    <div class="col-lg-7 col-md-6 col-sm-12 py-4 px-5">
+                    <div class="col-lg-6 col-md-6 col-sm-12 p-1">
                         <h2 class="text-center mb-4">Registration</h2>
                         <form id="registration-form" method="post" action="" class="text-black">
                             {% include 'app_common/snippets/alert.html' %}
@@ -180,14 +180,14 @@
                             </div>
 
                             <div class="text-center">
-                                <button class="log_btn" id="submit-btn" type="submit" disabled>Sign Up</button>
+                                <button class="log_btn w-100" id="submit-btn" type="submit" disabled>Sign Up</button>
                             </div>
                         </form>
                         <p class="text-center mt-3">Already have an account? <a href="{% url 'app_common:login' %}" class="text-decoration-none"><b>Login</b></a></p>
                     </div>
 
                     <!-- Right Column -->
-                    <div class="col-lg-4 col-md-5 col-sm-12 lottie-container">
+                    <div class="col-lg-6 col-md-6 col-sm-12 lottie-container">
                         <div id="lottie-animation" style="width: 100%; max-width: 350px; height: 400px;"></div>
                     </div>
                 </div>

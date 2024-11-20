@@ -72,7 +72,7 @@ class ProductFromVendorForm(forms.ModelForm):
         fields = ['name', 'description', 'discount_price', 'max_price', 'image', 'stock', 'category', 'custom_category','discount_percentage', 'gst_rate']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'description': forms.Textarea(attrs={'rows': 4,'class':'form-control'}),
             'discount_price': forms.NumberInput(attrs={'class': 'form-control'}),
             'max_price': forms.NumberInput(attrs={'class': 'form-control'}),
             'image': forms.FileInput(attrs={'class': 'form-control'}),

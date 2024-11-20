@@ -7,9 +7,6 @@
     background-color: green;
   }
 
-  #t-Head {
-    text-align: center;
-  }
 
   .atm-card {
     width: 320px;
@@ -35,10 +32,6 @@
     font-weight: bold;
     letter-spacing: 2px;
 }
-
-
-
-
 
 .card-number {
     margin-top: 15px;
@@ -101,9 +94,7 @@
     white-space: nowrap;
 }
 
-.table th#t-Head {
-    font-size: 1rem;
-}
+
 
 /* Modal Styles */
 .modal .receipt-main {
@@ -113,8 +104,8 @@
     font-size: 0.9rem;
 }
 
-.modal .receipt-header .receipt-right h5,
-.modal .receipt-header .receipt-right p {
+.modal .receiptb-header .receipt-right h5,
+.modal .receiptb-header .receipt-right p {
     font-size: 0.9rem;
 }
 
@@ -181,15 +172,32 @@
         white-space: normal;
     }
 }
-
-
-
-
-
+#tb-head {
+    font-size: 14px;
+    padding: 18px 10px;
+    text-align: center;
+    font-weight: 600;
+    font-style: normal;
+    line-height: 23px;
+}
+.tb-body{
+  padding: 0 !important;
+    font-family: var(--rubik);
+    font-weight: 400;
+    font-style: normal;
+}
+.tb-body_sub{
+    padding:10px;
+  text-align: center;
+}
 
 </style>
-<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
-
+<nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">My Wallet</li>
+    </ol>
+  </nav>
 <dotlottie-player src="https://lottie.host/cda0696d-874e-40b2-935f-da67b9de2d02/JLL8HP0Vaw.json"
   background="transparent" speed="1" style="width: 100%; height: 300px;" loop autoplay></dotlottie-player>
 
@@ -239,11 +247,11 @@
       <table class="table">
         <thead>
           <tr style="color: black;">
-            <th id="t-Head">Product Name</th>
-            <th id="t-Head">Quantity</th>
-            <th id="t-Head">Amount</th>
-            <th id="t-Head">Date & Time</th>
-            <th id="t-Head">Details</th>
+            <th id="tb-head">Product Name</th>
+            <th id="tb-head">Quantity</th>
+            <th id="tb-head">Amount</th>
+            <th id="tb-head">Date & Time</th>
+            <th id="tb-head">Details</th>
           </tr>
         </thead>
  
@@ -251,14 +259,30 @@
           {% for item in transactions %}
           {% if item.type == "ProduceBuy" %}
               <tr>
-                  <td id="t_daTa">{{ item.object.product_name }}</td>
-                  <td id="t_daTa">{{ item.object.quantity_buyer_want }} {{ item.object.SI_units }}</td>
-                  <td id="t_daTa" class="{% if item.is_purchase %}text-danger{% else %}text-success{% endif %}">
-                      {% if item.is_purchase %}- {% else %}+ {% endif %}{{ item.object.ammount_based_on_quantity_buyer_want }}
+                <td class="tb-body">
+                    <div class="tb-body_sub">
+                        {{ item.object.product_name }}
+                    </div>
                   </td>
-                  <td id="t_daTa">{{ item.object.date_time }}</td>
-                  <td id="t_daTa">
-                      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#transactionModal{{ forloop.counter }}">View</button>
+                <td class="tb-body">
+                    <div class="tb-body_sub">
+                        {{ item.object.quantity_buyer_want }} {{ item.object.SI_units }}
+                    </div>
+                  </td>
+                <td class="tb-body">
+                    <div class="tb-body_sub {% if item.is_purchase %}text-danger{% else %}text-success{% endif %}">
+                        {% if item.is_purchase %}- {% else %}+ {% endif %}{{ item.object.ammount_based_on_quantity_buyer_want }}
+                    </div>
+                  </td>
+                  <td class="tb-body">
+                    <div class="tb-body_sub">
+                        {{ item.object.date_time }}
+                    </div>
+                  </td>
+                  <td class="tb-body">
+                    <div class="tb-body_sub">
+                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#transactionModal{{ forloop.counter }}">View</button>
+                    </div>
                   </td>
               </tr>
       
@@ -271,7 +295,7 @@
                               <div class="receipt-main col-xs-12 col-sm-12 col-md-12">
                                   <!-- Header Section -->
                                   <div class="row">
-                                      <div class="receipt-header d-flex justify-content-between">
+                                      <div class="receiptb-header d-flex justify-content-between">
                                           <div class="receipt-left">
                                               <img class="img-responsive" alt="user-avatar"
                                                   src="{% static 'user_dashboard/img/g_logo2.png' %}"
@@ -286,7 +310,7 @@
                                       </div>
                                   </div>
                                   <!-- Customer and Seller Info -->
-                                  <div class="row receipt-header-mid">
+                                  <div class="row receiptb-header-mid">
                                       <div class="d-flex justify-content-between">
                                           <div class="receipt-right">
                                               <h5>Customer Name </h5>
@@ -380,7 +404,7 @@
                               <div class="receipt-main col-xs-12 col-sm-12 col-md-12">
                                   <!-- Header Section -->
                                   <div class="row">
-                                      <div class="receipt-header d-flex justify-content-between">
+                                      <div class="receiptb-header d-flex justify-content-between">
                                           <div class="receipt-left">
                                               <img class="img-responsive" alt="user-avatar"
                                                   src="{% static 'user_dashboard/img/g_logo2.png' %}"
@@ -395,7 +419,7 @@
                                       </div>
                                   </div>
                                   <!-- Customer and Seller Info -->
-                                  <div class="row receipt-header-mid">
+                                  <div class="row receiptb-header-mid">
                                       <div class="d-flex justify-content-between">
                                           <div class="receipt-right">
                                               <h5>Customer Name </h5>
@@ -478,6 +502,7 @@
 
 {% endblock main_content %}
 {% block script %}
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
 <script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script>

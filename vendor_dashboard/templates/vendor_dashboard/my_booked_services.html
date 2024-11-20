@@ -2,28 +2,44 @@
 {% load static %}
 
 {% block main_content %}
+<nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">My Booked Services</li>
+    </ol>
+  </nav>
 <div class="min_height_div px-2 px-lg-0">
-    <div class="row d-felx justify-content-center mt-4">
-        <div class="col-lg-10 col-12 ">
+    <div class="container">
+        <div class="row">
             {% for booking in booked_services %}
-            <ul class="list-group ">
-                
-                <li class="list-group-item pt-1 pb-4 ">
-                    <h3>{{ booking.service.name }}</h3>
-                    <p><strong>Provider:</strong> {{ booking.service.provider.full_name }}</p>
-                    <p><strong>Booking Date:</strong> {{ booking.booking_date }}</p>
-                    <p><strong>Status:</strong> {{ booking.status }}</p>
-                    {% if booking.status == 'confirmed' %}
-                        <a href="{% url 'vendor_dashboard:vendor_decline_booking' booking.id %}" class="" id="table_BTN2">Cancel Booking</a>
-                    {% endif %}
-                    <a href="{% url 'chat:startmessages' booking.service.provider.id 'None' %}" class="" id="table_BTN">Message Provider</a>
-                </li>
-                {% empty %}
-                <li class="list-group-item ">You have not booked any services yet.</li>
-                {% endfor %}
-            </ul>
+            <div class="col-12 col-lg-4 mb-3">
+                <div class="card ">
+                    <div class="card-header">
+                        <p class="text-center m-0">Booked for {{ booking.service.service_type.service_category }}</p>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title"><b>Provider:</b> {{ booking.service.provider.full_name }}</h6>
+                        <h6 class="card-title"><b>Booking Date:</b> {{ booking.booking_date }}</h6>
+                        <h6 class="card-title"><b>Status:</b> {{ booking.status }}</h6>
+                        {% if booking.status == 'confirmed' %}
+                        <a href="{% url 'vendor_dashboard:vendor_decline_booking' booking.id %}"
+                            class="btn btn-danger">Cancel Booking</a>
+                        {% endif %}
+                        <a href="{% url 'chat:startmessages' booking.service.provider.id 'None' %}" class="btn"
+                            style="background-color: green; color: white;">Message Provider</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>You have not booked any services yet.</p>
+            {% endfor %}
         </div>
-
     </div>
 </div>
+
+
+
+
+
+
 {% endblock main_content %}

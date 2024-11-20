@@ -1,7 +1,7 @@
 .auth {
     background-image:url(images/logbg5.jpg) ;
     background-size: cover;
-    height: 190vh;
+    min-height: auto;
     display: flex;
     justify-content: center;
     align-items: start;

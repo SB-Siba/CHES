@@ -189,9 +189,7 @@ color: #fff;
     color: white;
 } */
 
-.table-responsive{
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-}
+
 #input-group-text{
     background-color: #1F782B !important;
     
@@ -220,7 +218,7 @@ color: #fff;
     border-bottom: 2px solid #ccc;
     border-radius: 7px;
     padding: 5px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s, box-shadow 0.3s;
 }
@@ -273,6 +271,7 @@ color: #fff;
     background-color: #008000;
     text-decoration: none;
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    width: 100%;
 }
 #table_BTN:hover{
     text-decoration: none;

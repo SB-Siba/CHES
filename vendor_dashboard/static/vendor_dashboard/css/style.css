@@ -313,7 +313,7 @@ a.sidebar-link:hover {
     border-bottom: 2px solid #ccc;
     border-radius: 7px;
     padding: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s, box-shadow 0.3s;
 }

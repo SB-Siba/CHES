@@ -3,6 +3,12 @@
 
 {% block main_content %}
     {% for i in bbeigins_obj %}
+    <nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+        <ol class="breadcrumb m-0">
+          <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Buying</li>
+        </ol>
+      </nav>
         <div class="row mt-4 d-flex justify-content-center min_height_div">
             <div class="col-md-10 mb-4 mx-2">
                 <div class="col-md-12 p-4 mx-2" style="background-color: #e9f7ef; border: 1px solid #28a745; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
@@ -32,4 +38,4 @@
             </div>
         </div>
     {% endfor %}
-{% endblock main_content %}
+    {% endblock main_content %}
