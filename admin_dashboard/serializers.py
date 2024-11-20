@@ -26,3 +26,13 @@ class QuizAnswersSerializer(serializers.ModelSerializer):
     class Meta:
         model = common_models.GaredenQuizModel
         fields = '__all__'
+
+class NewsActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = common_models.NewsActivity
+        fields = '__all__'
+
+class MediaGallerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = common_models.MediaGallery
+        fields = '__all__'

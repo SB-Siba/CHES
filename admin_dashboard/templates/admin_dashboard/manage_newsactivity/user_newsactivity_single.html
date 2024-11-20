@@ -1,0 +1,32 @@
+{% extends 'app_common/authentication/master.html' %}
+{% block title %}Details{% endblock title %}
+{% load static %}
+
+{% block content %}
+
+    <section class="Blog_detail_Title" >
+        <div class="container my-2">
+            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb" class="d-lg-none d-block">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="{% url 'website_landing:website_landing' %}">Home</a></li>
+                  <li class="breadcrumb-item "><a href="#">Newsactivity-List</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">News and Activity</li>
+                </ol>
+              </nav>
+            <div class="blog_title">
+                <h5 class="text-center my-lg-3 my-2 ">{{ newsactivitydetail.title }}</h5>
+            </div>
+            <div class="Main_Image">
+                <img src="{{ newsactivitydetail.image.url }}" class="img-responsive " alt="Image">  
+            </div>
+            <div class=" blog_title">
+                <h5  class="mt-lg-3 mt-3">{{ newsactivitydetail.title }}</h5>
+                <p>{{ newsactivitydetail.date }}</p>
+                <p ALIGN=CENTER>{{ newsactivitydetail.content| safe }}</p>
+                
+            </div>
+        </div>
+    </section>
+
+    
+{% endblock content %}

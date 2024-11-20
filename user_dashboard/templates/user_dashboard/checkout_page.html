@@ -10,6 +10,7 @@
 </head>
 <div class=" mb-4">
     <div class="row">
+        <!-- Product and Pricing Details -->
         <div class="col-md-4 order-md-2 mb-4">
             <ul class="list-group mb-3 sticky-top" id="my_col_1">
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
@@ -17,7 +18,6 @@
                         <h6 class="my-0">{{vendor_product.name}}</h6>
                         <small class="text-muted"><small>{{vendor_product.description|truncatewords:10}}</small></small>
                     </div>
-                    <!-- <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>{{vendor_product.discount_price}}</span> -->
                 </li>
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
@@ -29,8 +29,7 @@
                     <div>
                         <h6 class="my-0">Our Price</h6>
                     </div>
-                    <span class="text-muted"><i
-                            class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{our_product_value}}</span>
+                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{our_product_value}}</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
@@ -42,38 +41,25 @@
                     <div>
                         <h6 class="my-0">Total Discount</h6>
                     </div>
-                    <span class="text-muted"><i
-                            class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{discount_ammount}}</span>
+                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{discount_ammount}}</span>
                 </li>
-
-                <!--<li class="list-group-item d-flex justify-content-between bg-light">
-                    <div class="">
-                        <h6 class="my-0">GST</h6>
-                    </div>
-                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{gst}}</span>
-                </li>-->
                 <li class="list-group-item d-flex justify-content-between bg-light">
                     <div class="">
                         <h6 class="my-0">Delivery Charges</h6>
                     </div>
-                    <span class="text-muted"><i
-                            class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{delivery_charge}}</span>
+                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{delivery_charge}}</span>
                 </li>
-                <!-- <li class="list-group-item d-flex justify-content-between bg-light">
-                    <div class="text-success">
-                        <h6 class="my-0">Grand Total</h6>
-                    </div>
-                    <span class="text-success">{{total}}</span>
-                </li> -->
                 <li class="list-group-item d-flex justify-content-between">
                     <span class="text-success">Total (INR)</span>
                     <strong class="text-success"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{total}}</strong>
                 </li>
             </ul>
         </div>
+
+        <!-- Billing Address and Payment Details -->
         <div class="col-md-8 order-md-1 py-4 px-3 " id="my_col_1">
             <h4 class="mb-3">Billing Address</h4>
-            <form method="post" class="needs-validation" novalidate>
+            <form method="post" class="needs-validation" novalidate enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="hidden" name="offer_discount" value="{{ offer_discount }}">
                 <div class="row">
@@ -82,7 +68,6 @@
                         {{ form.full_name }}
                         <div class="invalid-feedback"> Valid first name is required. </div>
                     </div>
-
                 </div>
                 <div class="mb-3">
                     <label for="id_username">Enter Email</label>
@@ -119,7 +104,8 @@
                         <div class="invalid-feedback"> Pin code required. </div>
                     </div>
                 </div>
-                <button class="btn btn-succesS btn w-100" type="submit">Proceed to Pay</button>
+
+                <button class="btn btn-success btn w-100" type="submit">Confirm Payment</button>
             </form>
         </div>
     </div>

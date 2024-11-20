@@ -56,4 +56,8 @@ urlpatterns = [
 
     path('vendor/contactpage', views.VendorContactePage.as_view(), name = "vendor_contact_page"),
 
+    path("QRCode_list", views.QRCodeList.as_view(), name="qrcode_list"),
+    path("QRCodeAdd", views.QRCodeAdd.as_view(), name="qrcode_add"),
+    path("QRCodeUpdate/<str:qrcode_id>", views.QRCodeUpdate.as_view(), name="qrcode_update"),
+    path("QRCodeDelete/<str:qrcode_id>", views.QRCodeDelete.as_view(), name="qrcode_delete"),
 ]

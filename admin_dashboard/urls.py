@@ -5,6 +5,8 @@ from .manage_gallery import media
 
 from admin_dashboard.orders import order
 from .manage_blogs import blogs
+from .manage_newsactivity import newsactivity
+
 from .registration import rtg_registration,vendor_registration,sp_registration
 from .user_query import Query
 
@@ -107,6 +109,24 @@ urlpatterns = [
     # media 
     path('media-gallery/', media.MediaGalleryListView.as_view(), name='media_gallery_list'),
     path('media-gallery/delete/<int:pk>/', media.MediaGalleryDeleteView.as_view(), name='media_gallery_delete'),
+
+
+    path("newsactivity_list", newsactivity.NewsActivityList.as_view(), name="newsactivity_list"),
+    path("newsactivitySearch", newsactivity.NewsActivitySearch.as_view(), name="newsactivity_search"),
+    path("newsactivityAdd", newsactivity.NewsActivityAdd.as_view(), name="newsactivity_add"),
+    path("newsactivityUpdate/<str:blog_id>", newsactivity.NewsActivityUpdate.as_view(), name="newsactivity_update"),
+    path("newsactivityDelete/<str:blog_id>", newsactivity.NewsActivityDelete.as_view(), name="newsactivity_delete"),
+
+    #user
+    path('newsactivityList/', newsactivity.NewsActivityCategory.as_view(), name='user_newsactivity_list'),
+    path('newsactivityDetails/<slug:slug>/', newsactivity.NewsActivityDetails.as_view(), name='user_newsactivity_details'),
+
+     #api
+    path('api/newsactivity/', newsactivity.NewsActivityListAPIView.as_view(), name='newsactivity_category'),
+    path('api/newsactivity/<slug:slug>/', newsactivity.NewsActivityDetailsAPIView.as_view(), name='newsactivity_details'),
+    path('api/media-gallery/', media.GalleryAPIView.as_view(), name='gellery_api'),
+
+
 ]
 
 
