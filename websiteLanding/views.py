@@ -1,6 +1,9 @@
 from django.shortcuts import redirect, render
 from django.views import View
 
+from app_common.error import render_error_page
+from app_common.models import MediaGallery
+
 app = "Landing_Template/"
 
 class WebsiteLanding(View):
@@ -40,3 +43,16 @@ class WebsiteLanding(View):
             return redirect('app_common:index')
         
         return render(request, self.template)
+
+class GalleryView(View):
+    template = app + 'gallery_page.html'  
+
+    def get(self, request):
+        try:
+            media_items = MediaGallery.objects.all()
+
+            return render(request, self.template, {'media_items': media_items})
+
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)

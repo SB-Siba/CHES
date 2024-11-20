@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Container for the entire gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Individual image container */
+        .image-container {
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        /* Image styling */
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        /* Hover effects for image and container */
+        .image-container:hover {
+            transform: scale(1.05);
+        }
+        .image-container:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Title styling */
+        h1 {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        /* No images message */
+        .no-images {
+            text-align: center;
+            color: #777;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gallery</h1>
+
+    <div class="gallery">
+        {% for media in media_items %}
+            <div class="image-container">
+                <img src="{{ media.media_image.url }}" alt="Gallery Image">
+            </div>
+        {% empty %}
+            <p class="no-images">No images available yet.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

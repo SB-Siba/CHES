@@ -556,6 +556,70 @@ def delete_expired_sell_produce(request):
     """
     current_date = timezone.now()
     app_commonmodels.SellProduce.objects.filter(validity__lte=current_date).delete()
+
+@method_decorator(utils.login_required, name='dispatch')
+class ProduceListView(View):
+    template = app + "produce_list.html"
+
+    def get(self, request):
+        try:
+            user = request.user
+            produces = app_commonmodels.SellProduce.objects.filter(user=user)
+            return render(request, self.template, {'produces': produces})
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+@method_decorator(utils.login_required, name='dispatch')
+class UpdateProduceView(View):
+    template = app + "update_produce.html"
+    form_class = user_form.SellProduceForm
+    model = app_commonmodels.SellProduce
+
+    def get(self, request, pk):
+        try:
+            produce = self.model.objects.get(pk=pk, user=request.user)
+            form = self.form_class(instance=produce)
+            return render(request, self.template, {'form': form, 'produce': produce})
+        except self.model.DoesNotExist:
+            error_message = "Produce not found or you do not have permission to edit it."
+            return render_error_page(request, error_message, status_code=404)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+    def post(self, request, pk):
+        try:
+            produce = self.model.objects.get(pk=pk, user=request.user)
+            form = self.form_class(request.POST, request.FILES, instance=produce)
+            if form.is_valid():
+                form.save()
+                return redirect('user_dashboard:produce_list')  # Replace with your URL name for listing produces
+            else:
+                return render(request, self.template, {'form': form, 'produce': produce})
+        except self.model.DoesNotExist:
+            error_message = "Produce not found or you do not have permission to edit it."
+            return render_error_page(request, error_message, status_code=404)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+@method_decorator(utils.login_required, name='dispatch')
+class DeleteProduceView(View):
+    model = app_commonmodels.SellProduce
+
+    def post(self, request, pk):
+        try:
+            produce = self.model.objects.get(pk=pk, user=request.user)
+            produce.delete()
+            return redirect('user_dashboard:produce_list')  # Replace with your URL name for listing produces
+        except self.model.DoesNotExist:
+            error_message = "Produce not found or you do not have permission to delete it."
+            return render_error_page(request, error_message, status_code=404)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
    
 @method_decorator(utils.login_required, name='dispatch')
 class AllSellRequests(View):
@@ -1296,7 +1360,8 @@ class CheckoutView(View):
             return render(request, self.template, data)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
-            return render_error_page(request, error_message, status_code=400)                    
+            return render_error_page(request, error_message, status_code=400)
+                                
 @method_decorator(utils.login_required, name='dispatch')
 class AllOrdersFromVendors(View):
     model = app_commonmodels.Order

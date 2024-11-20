@@ -1,0 +1,50 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}My Produce{% endblock title %}
+
+{% block content %}
+<h1>Your Produces</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for produce in produces %}
+            <tr>
+                <td>{{ produce.produce_category.category_name }}</td>
+                <td>{{ produce.product_name }}</td>
+                <td>{{ produce.product_quantity }} {{ produce.SI_units }}</td>
+                <td>
+                    <a href="{% url 'user_dashboard:update_produce' produce.id %}">Edit</a>
+                    <form action="{% url 'user_dashboard:delete_produce' produce.id %}" method="post" style="display:inline;" class="delete-form">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-button">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteForms = document.querySelectorAll('.delete-form');
+        
+        deleteForms.forEach(function (form) {
+            form.addEventListener('submit', function (e) {
+                const confirmation = confirm("Are you sure you want to delete this item?");
+                if (!confirmation) {
+                    e.preventDefault(); // Prevent the form from being submitted
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock content %}

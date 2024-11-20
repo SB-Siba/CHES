@@ -4,7 +4,8 @@ from django.contrib.auth.forms import PasswordChangeForm,PasswordResetForm,SetPa
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from . import models
-
+from .models import NewsActivity, VendorQRcode
+from ckeditor.widgets import CKEditorWidget
 
 class LoginForm(forms.ModelForm):
     class Meta:
@@ -311,3 +312,52 @@ class contactForm(forms.Form):
             }
         )
     )
+
+class MediaGalleryForm(forms.ModelForm):
+    class Meta:
+        model = models.MediaGallery
+        fields = ['media_image']  
+
+        widgets = {
+            'media_image': forms.FileInput(attrs={'class': 'form-control'}), 
+
+        }
+
+
+
+class NewsActivityForm(forms.ModelForm):
+    title = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter title'})
+    )
+    date = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
+    )
+    content = forms.CharField(
+        widget=CKEditorWidget(attrs={'class': 'form-control', 'placeholder': 'Enter content'})
+    )
+    image = forms.ImageField(
+        required=False,
+        widget=forms.FileInput(attrs={'class': 'form-control-file'})
+    )
+    type = forms.ChoiceField(
+        choices=NewsActivity.TYPE_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    date_of_news_or_event = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
+    )
+
+    class Meta:
+        model = NewsActivity
+        fields = ['type', 'title', 'date', 'content', 'image', 'date_of_news_or_event']
+
+class VendorQRForm(forms.ModelForm):
+    class Meta:
+        model = VendorQRcode
+        fields = ['qr_code']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['qr_code'].widget.attrs.update({'class': 'form-control'})

@@ -18,6 +18,9 @@ urlpatterns = [
     path('contactpage', views.ContactePage.as_view(), name = "contactpage"),
 
     path('sellproduce', views.SellProduceView.as_view(), name = "sellproduce"),
+    path('produces/', views.ProduceListView.as_view(), name='produce_list'),
+    path('produces/<int:pk>/edit/', views.UpdateProduceView.as_view(), name='update_produce'),
+    path('produces/<int:pk>/delete/', views.DeleteProduceView.as_view(), name='delete_produce'),
     path('allsellrequests', views.AllSellRequests.as_view(), name = "allsellrequests"),
 
     path('greencommerceproducts', views.GreenCommerceProductCommunity.as_view(), name = "greencommerceproducts"),
@@ -48,6 +51,11 @@ urlpatterns = [
     path('my_booked_services/', views.MyBookedServices.as_view(), name='my_booked_services'),
     path('rtg/decline_booking/<int:booking_id>', views.rtg_decline_booking, name='rtg_decline_booking'),
     path('ExploreGreenCommerce/', views.ExploreGreenCommerce.as_view(), name='ExploreGreenCommerce'),
+    # path('checkout/<int:vprod_id>/<str:vendor_email>/', views.CheckoutView.as_view(), name='checkout'),
+    # path('payment-confirmation/', views.PaymentConfirmationView.as_view(), name='payment_confirmation'),
+
+    # path('payment-page/', views.PaymentPageView.as_view(), name='payment_page'),
+
 ]
 
 #  user_dashboard:user_dashboard

@@ -253,7 +253,7 @@ def gardening_quiz_view(request, u_email):
 
                 if request.user.is_superuser:
                     return redirect('admin_dashboard:pending_rtg')
-                return redirect('app_common:login')
+                return redirect('app_common:index')
 
             except models.User.DoesNotExist:
                 error_message = f"No user data found for the given email."
@@ -335,7 +335,7 @@ class VendorDetails(View):
 
                 if request.user.is_superuser:
                     return redirect('admin_dashboard:pending_vendor')
-                return redirect('app_common:login')
+                return redirect('app_common:index')
 
             except models.User.DoesNotExist:
                 error_message = f"No user data found for the given email."
@@ -424,7 +424,7 @@ class ServiceProviderDetails(View):
 
                 if request.user.is_superuser:
                     return redirect('admin_dashboard:pending_service_provider')
-                return redirect('app_common:login')
+                return redirect('app_common:index')
 
             except models.User.DoesNotExist:
                 error_message = f"No user found for the given email."

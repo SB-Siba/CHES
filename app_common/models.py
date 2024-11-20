@@ -7,7 +7,8 @@ from .manager import MyAccountManager
 from helpers import utils
 from decimal import Decimal
 from django.utils import timezone
- 
+from ckeditor.fields import RichTextField
+from django.template.defaultfilters import slugify
 
 class User(AbstractBaseUser, PermissionsMixin):
     full_name = models.CharField(max_length = 255,null=True,blank=True)
@@ -307,6 +308,8 @@ class ProductFromVendor(models.Model):
     gst_rate = models.DecimalField(max_digits=5, decimal_places=2,default=Decimal('0.00'))
     sgst = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'), editable=False)
     cgst = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'), editable=False)
+    payment_receipt = models.FileField(upload_to='payment_receipts/', null=True, blank=True)
+
 
     def calculate_avg_rating(self):
         """
@@ -461,3 +464,38 @@ class Review(models.Model):
     rating = models.PositiveIntegerField()
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+
+class MediaGallery(models.Model):
+       media_image = models.ImageField(upload_to='service/',null=True, blank=True)
+
+
+class NewsActivity(models.Model):
+    TYPE_CHOICES = [
+        ('News', 'News'),
+        ('Event', 'Event'),
+    ]
+    slug = models.SlugField(max_length=255, null=True, blank=True, unique=True)
+    type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='News')
+    title = models.CharField(max_length=255)
+    date = models.DateField()
+    content = RichTextField()
+    image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
+    date_of_news_or_event = models.DateField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+            if not self.slug:
+                self.slug = slugify(self.title)
+            super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+    
+
+class VendorQRcode(models.Model):
+    vendor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='qr_code', null=True, blank=True)
+    qr_code = models.ImageField(upload_to='vendor_qr_codes/', null=True, blank=True)
+
+    def __str__(self):
+        return self.qr_code

@@ -1,4 +1,5 @@
 import datetime
+import os
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
@@ -9,7 +10,7 @@ from app_common import models as common_models
 from EmailIntigration.views import send_template_email
 from user_dashboard.serializers import OrderSerializer
 from user_dashboard.forms import ActivityAddForm, BuyAmmountForm,SellProduceForm,BuyQuantityForm
-from app_common.forms import GardeningForm
+from app_common.forms import GardeningForm, VendorQRForm
 from . import forms as common_forms
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
@@ -936,35 +937,35 @@ class BuyingBegins(View):
     def post(self, request, prod_id):
         try:
             user = request.user
-            buyer =  common_models.User.objects.get(id=user.id)
+            buyer = common_models.User.objects.get(id=user.id)
             sell_prod_obj = self.model.objects.get(id=prod_id)
             seller = sell_prod_obj.user
-            
+           
             product_quantity = sell_prod_obj.product_quantity
             base_amount_in_green_points = sell_prod_obj.amount_in_green_points
-
+ 
             # Validate product_quantity
             if product_quantity is None or product_quantity == 0:
                 return render_error_page(request, "Product quantity is not available.", status_code=400)
-
+ 
             # Calculate price per unit
             price_per_unit = base_amount_in_green_points / product_quantity
-
+ 
             form_data = request.POST
             try:
                 quantity = int(form_data['quantity'])
             except (ValueError, KeyError):
                 return render_error_page(request, "Invalid quantity input.", status_code=400)
-
+ 
             # Check if the requested quantity is available
             if product_quantity >= quantity:
                 total_amount = price_per_unit * quantity
-
+ 
                 buyer_wallet = buyer.wallet or 0.0
-
+ 
                 # Check if buyer has enough green points
                 if buyer_wallet >= total_amount:
-                    buying_obj =  common_models.ProduceBuy(
+                    buying_obj = common_models.ProduceBuy(
                         buyer=buyer,
                         seller=seller,
                         sell_produce=sell_prod_obj,
@@ -975,9 +976,9 @@ class BuyingBegins(View):
                         ammount_based_on_quantity_buyer_want=total_amount
                     )
                     buying_obj.save()
-
+ 
                     # Send email to the buyer
-
+ 
                     send_template_email(
                             subject='Purchase Request Submitted Successfully',
                             template_name='mail_template/purchase_request_buyer.html',
@@ -989,10 +990,10 @@ class BuyingBegins(View):
                             },
                             recipient_list=[buyer.email]
                         )
-
-
+ 
+ 
                     # Send email to the seller
-
+ 
                     send_template_email(
                             subject='New Purchase Request Received',
                             template_name='mail_template/purchase_request_seller.html',
@@ -1005,7 +1006,7 @@ class BuyingBegins(View):
                             },
                             recipient_list=[seller.email]
                         )
-
+ 
                     return redirect('vendor_dashboard:vendor_dashboard')
                 else:
                     error_message = "You don't have enough green points in your wallet!"
@@ -1013,16 +1014,16 @@ class BuyingBegins(View):
             else:
                 error_message = "The requested amount is not available."
                 return render_error_page(request, error_message, status_code=400)
-
+ 
         except self.model.DoesNotExist:
             return render_error_page(request, "The product is not available.", status_code=400)
-        except app_commonmodels.User.DoesNotExist:
+        except common_models.User.DoesNotExist:
             return render_error_page(request, "User does not exist.", status_code=400)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-
-
+ 
+ 
 @method_decorator(utils.login_required, name='dispatch')
 class BuyBeginsSellerView(View):
     template = app + "buyingprogressseller.html"
@@ -1037,7 +1038,7 @@ class BuyBeginsSellerView(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-        
+       
 @method_decorator(utils.login_required, name='dispatch')
 class BuyBeginsBuyerView(View):
     template = app + "buyingprogressbuyer.html"
@@ -1046,43 +1047,43 @@ class BuyBeginsBuyerView(View):
         try:
             user = request.user
             bbeigins_obj = self.model.objects.filter(buyer=user, buying_status="BuyInProgress")
-            
+           
             return render(request,self.template,locals())
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-        
+       
 @login_required
 def send_payment_link(request, buy_id):
     try:
         if request.method == "POST":
             # Fetch the purchase request
             buy_obj = common_models.ProduceBuy.objects.get(id=buy_id)
-
+ 
             # Check if payment link has already been sent
             if buy_obj.payment_link == "Send":
                 return render_error_page(request, "Payment link has already been sent for this purchase.", status_code=400)
-
+ 
             # Calculate the price per unit and the total amount based on the buyer's quantity
             quantity = buy_obj.quantity_buyer_want
             sell_prod_obj = buy_obj.sell_produce
             total_amount_in_green_points = sell_prod_obj.amount_in_green_points
             total_product_quantity = sell_prod_obj.product_quantity
-
+ 
             # Ensure valid quantities
             if total_product_quantity is None or total_product_quantity == 0:
                 return render_error_page(request, "Invalid product quantity.", status_code=400)
-
+ 
             # Calculate price per unit and total amount
             price_per_unit = total_amount_in_green_points / total_product_quantity
             amount_based_on_buyer_quantity = round(quantity * price_per_unit, 2)
-
+ 
             # Use a transaction to ensure atomic update
             with transaction.atomic():
                 buy_obj.payment_link = "Send"
                 buy_obj.ammount_based_on_quantity_buyer_want = amount_based_on_buyer_quantity
                 buy_obj.save()
-
+ 
             # Send email notifications to the buyer
             send_template_email(
                 subject='New Payment Link Sent',
@@ -1094,7 +1095,7 @@ def send_payment_link(request, buy_id):
                 },
                 recipient_list=[buy_obj.buyer.email]
             )
-
+ 
             # Send email notifications to the seller
             send_template_email(
                 subject='New Payment Link Sent',
@@ -1107,17 +1108,16 @@ def send_payment_link(request, buy_id):
                 },
                 recipient_list=[buy_obj.seller.email]
             )
-
+ 
             # Redirect back with a success message
             messages.success(request, "Payment link sent successfully.")
             return redirect('vendor_dashboard:buybeginssellerview')
-
+ 
     except common_models.ProduceBuy.DoesNotExist:
         return render_error_page(request, "Purchase request not found.", status_code=404)
     except Exception as e:
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_error_page(request, error_message, status_code=400)
-        
 
 @method_decorator(login_required, name='dispatch')
 class ProduceBuyView(View):
@@ -1621,6 +1621,114 @@ class VendorContactePage(View):
                     return render_error_page(request, error_message, status_code=400)
             
             return redirect('vendor_dashboard:vendor_contact_page')
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+@method_decorator(utils.login_required, name='dispatch')
+class QRCodeList(View):
+    model = common_models.VendorQRcode
+    template = app + "qrcode_list.html"
+
+    def get(self, request):
+        try:
+            qrcode_list = self.model.objects.all().order_by('-id')
+
+            context = {
+                "qrcode_list": qrcode_list,
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+@method_decorator(utils.login_required, name='dispatch')
+class QRCodeAdd(View):
+    model = common_models.VendorQRcode
+    form_class = VendorQRForm
+    template = app + "qrcode_add.html"
+
+    def get(self, request):
+        try:
+            context = {
+                "form": self.form_class(),
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+    def post(self, request):
+        try:
+            form = self.form_class(request.POST, request.FILES)
+            if form.is_valid():
+                qr_code_instance = form.save(commit=False)  # Don't save to the database yet
+                qr_code_instance.vendor = request.user  # Assign the logged-in user as the vendor
+                qr_code_instance.save()  # Save to the database
+                messages.success(request, "QR code added successfully.")
+                return redirect("vendor_dashboard:qrcode_list")
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, f'{field}: {error}')
+
+            return render(request, self.template, {"form": form})
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+        
+@method_decorator(utils.login_required, name='dispatch')
+class QRCodeUpdate(View):
+    model = common_models.VendorQRcode
+    form_class = VendorQRForm
+    template = app + "qrcode_update.html"
+
+    def get(self, request, qrcode_id):
+        try:
+            qrcode = get_object_or_404(self.model, id=qrcode_id)
+            context = {
+                "qrcode": qrcode,
+                "form": self.form_class(instance=qrcode),
+            }
+            return render(request, self.template, context)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+    def post(self, request, qrcode_id):
+        try:
+            qrcode = get_object_or_404(self.model, id=qrcode_id)
+            form = self.form_class(request.POST, request.FILES, instance=qrcode)
+
+            if form.is_valid():
+                form.save()
+                messages.success(request, f"QR code ({qrcode_id}) updated successfully.")
+                return redirect("vendor_dashboard:qrcode_list")
+            else:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, f'{field}: {error}')
+
+            return render(request, self.template, {"form": form, "qrcode": qrcode})
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+@method_decorator(utils.login_required, name='dispatch')
+class QRCodeDelete(View):
+    model = common_models.VendorQRcode
+
+    def get(self, request, qrcode_id):
+        try:
+            qrcode = get_object_or_404(self.model, id=qrcode_id)
+
+            if qrcode.qr_code: 
+                image_path = qrcode.qr_code.path
+                os.remove(image_path)
+
+            qrcode.delete()
+            messages.info(request, 'QR code deleted successfully.')
+            return redirect("vendor_dashboard:qrcode_list")
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
