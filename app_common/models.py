@@ -411,9 +411,8 @@ class Order(models.Model):
 
 class ServiceProviderDetails(models.Model):
     provider = models.ForeignKey(User, on_delete=models.CASCADE)
-    service_type = models.JSONField()
+    service_type = models.JSONField(null=True, blank=True)
     service_area = models.JSONField()
-    average_cost_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
     years_experience = models.IntegerField()
 
     def __str__(self):

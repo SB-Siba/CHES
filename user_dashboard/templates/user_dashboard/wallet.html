@@ -234,8 +234,36 @@
                       </div>
                   </div>
               </div>
-            
-            {% endif %}
+              {% elif item.type == "Service" %}
+              <tr>
+                  <td id="t_daTa">{{ item.service_name }}</td>
+                  <td id="t_daTa">-----</td>
+                  <td id="t_daTa" class="{% if item.is_provider %}text-success{% else %}text-danger{% endif %}">
+                      {% if item.is_provider %}+ {% else %}- {% endif %}{{ item.coins_earned }}
+                  </td>
+                  <td id="t_daTa">{{ item.date }}</td>
+                  <td id="t_daTa">
+                      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#serviceModal{{ forloop.counter }}">View</button>
+                  </td>
+              </tr>
+      
+              <!-- Modal for Service Transactions -->
+              <div class="modal fade" id="serviceModal{{ forloop.counter }}" tabindex="-1" role="dialog"
+                   aria-labelledby="serviceModalLabel{{ forloop.counter }}" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                      <div class="modal-content mainn">
+                          <div class="receipt-main">
+                              <div class="receipt-header receipt-header-mid">
+                                  <h5>Service Transaction Details</h5>
+                                  <p><b>Service Name:</b> {{ item.service_name }}</p>
+                                  <p><b>Date:</b> {{ item.date }}</p>
+                                  <p><b>Green Coins Earned:</b> {{ item.coins_earned }}</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          {% endif %}
             
 
           {% endfor %}

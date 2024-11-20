@@ -392,6 +392,8 @@ class ActivityList(View):
 
 
 
+from django.utils.timezone import make_aware, is_naive
+
 @method_decorator(utils.login_required, name='dispatch')
 class WalletView(View):
     template = app + "wallet.html"
@@ -412,11 +414,18 @@ class WalletView(View):
                 payment_status="Paid"
             ).order_by('-date')
 
+            # Retrieve Service provider transactions
+            booking_transactions = app_commonmodels.Booking.objects.filter(
+                Q(gardener=user) | Q(service__provider=user), 
+                status="completed"
+            ).order_by('-booking_date')
+
             # Combine and structure data for rendering
             transactions = []
+            
+            # ProduceBuy Transactions
             for transaction in produce_transactions:
-                # Ensure date_time is timezone-aware
-                date_time = timezone.make_aware(transaction.date_time) if timezone.is_naive(transaction.date_time) else transaction.date_time
+                date_time = make_aware(transaction.date_time) if is_naive(transaction.date_time) else transaction.date_time
                 transactions.append({
                     "type": "ProduceBuy",
                     "object": transaction,
@@ -424,24 +433,22 @@ class WalletView(View):
                     "date": date_time,
                 })
 
+            # Order Transactions
             for transaction in order_transactions:
-                # Extract the first product name and quantity from order_meta_data
                 first_product = list(transaction.order_meta_data['products'].items())[0]
                 product_name = first_product[0]
                 quantity = first_product[1].get('quantity', 'N/A')
 
-                # Convert Order date to a timezone-aware datetime object
-                transaction_date = datetime.combine(transaction.date, time.min)  # Convert date to datetime
-                transaction_date = timezone.make_aware(transaction_date) if timezone.is_naive(transaction_date) else transaction_date
+                transaction_date = datetime.combine(transaction.date, time.min)
+                transaction_date = make_aware(transaction_date) if is_naive(transaction_date) else transaction_date
 
                 coin_exchange = transaction.order_meta_data.get('coin_exchange', 'N/A')
-                
                 if isinstance(coin_exchange, str):
                     try:
-                        coin_exchange = int(float(coin_exchange))  # Convert to integer if it's a string float
+                        coin_exchange = int(float(coin_exchange))
                     except ValueError:
                         coin_exchange = 0
-                
+
                 transactions.append({
                     "type": "Order",
                     "object": transaction,
@@ -452,6 +459,17 @@ class WalletView(View):
                     "date": transaction_date,
                 })
 
+            # Service Provider Transactions
+            for transaction in booking_transactions:
+                transactions.append({
+                    "type": "Service",
+                    "object": transaction,
+                    "is_provider": transaction.service.provider == user,
+                    "service_name": transaction.service.service_type.service_category,
+                    "coins_earned": transaction.service.green_coins_required,
+                    "date": transaction.booking_date,
+                })
+
             # Sort transactions by the normalized date field
             transactions.sort(key=lambda x: x["date"], reverse=True)
 
@@ -460,6 +478,8 @@ class WalletView(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+
+
 
 
 

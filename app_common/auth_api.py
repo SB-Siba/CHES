@@ -252,7 +252,6 @@ class ServiceProviderDetailsAPIView(APIView):
                     defaults={
                         'service_type': service_type,
                         'service_area': service_area,
-                        'average_cost_per_hour': serializer.validated_data['average_cost_per_hour'],
                         'years_experience': serializer.validated_data['years_experience'],
                     }
                 )

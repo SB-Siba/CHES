@@ -457,27 +457,40 @@ class SpContactePage(View):
         
 
 @method_decorator(utils.login_required, name='dispatch')
-class WalletView(View):
+class ServiceProviderWalletView(View):
     template = app + "wallet.html"
-    model = common_models.ProduceBuy
 
-    def get(self,request):
+    def get(self, request):
         user = request.user
         try:
-            transactions = self.model.objects.filter((Q(buyer=user) | Q(seller=user)) & Q(buying_status="PaymentDone") | Q(buying_status="BuyCompleted")).order_by('-date_time')
-            list_of_transactions = []
-            xyz = []
-            for i in transactions:
-                list_of_transactions.append(i)
-                if i.buyer == user:
-                    x = True
-                    xyz.append(x)
-                else:
-                    x = False
-                    xyz.append(x)
-            main_obj = zip(list_of_transactions,xyz)  
-            return render(request,self.template,locals())
-             
+            # Retrieve Booking transactions for the service provider
+            booking_transactions = common_models.Booking.objects.filter(
+                Q(gardener=user) | Q(service__provider=user), 
+                status="completed"
+            ).select_related('service').order_by('-booking_date')
+
+            # Structure data for rendering
+            transactions = []
+
+            for booking in booking_transactions:
+                service = booking.service
+                is_consumer = booking.gardener == user
+                green_coins = service.green_coins_required if is_consumer else service.green_coins_required
+
+                transactions.append({
+                    "type": "Service",
+                    "object": booking,
+                    "is_purchase": is_consumer,
+                    "service_name": service.service_type.service_category,
+                    "amount": green_coins,
+                    "date": booking.booking_date,
+                })
+
+            # Sort transactions by date
+            transactions.sort(key=lambda x: x["date"], reverse=True)
+
+            return render(request, self.template, {"transactions": transactions})
+        
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)

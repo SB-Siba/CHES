@@ -395,7 +395,6 @@ class ServiceProviderDetails(View):
                     additional_service_areas = [a.strip() for a in additional_service_area.split(',')]
                     service_area.extend(additional_service_areas)
 
-                average_cost_per_hour = form.cleaned_data['average_cost_per_hour']
                 years_experience = form.cleaned_data['years_experience']
 
                 # Update or create the service provider details for the user
@@ -404,7 +403,6 @@ class ServiceProviderDetails(View):
                     defaults={
                         'service_type': service_type,
                         'service_area': service_area,
-                        'average_cost_per_hour': average_cost_per_hour,
                         'years_experience': years_experience,
                     }
                 )

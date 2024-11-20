@@ -16,6 +16,6 @@ urlpatterns = [
     path('bookings/mark_as_complete/<int:booking_id>/', views.mark_as_complete_booking, name='mark_as_complete'),
 
     path('sp/contactpage', views.SpContactePage.as_view(), name = "sp_contact_page"),
-    path('walletpage', views.WalletView.as_view(), name = "walletpage"),
+    path('walletpage', views.ServiceProviderWalletView.as_view(), name = "walletpage"),
 
 ]
