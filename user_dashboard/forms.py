@@ -277,3 +277,9 @@ class CheckoutForm(forms.Form):
     )
     
 
+    payment_screenshot = forms.FileField(
+            required=True,
+            widget=forms.ClearableFileInput(
+                attrs={"class": "form-control", "accept": "image/*"}
+            ),
+        )

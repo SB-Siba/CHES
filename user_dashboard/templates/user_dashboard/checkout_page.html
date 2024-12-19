@@ -1,10 +1,10 @@
 {% extends 'user_dashboard/starter.html' %}
 {% load static %}
-
+ 
 {% block title %}Checkout Page{% endblock title %}
-
+ 
 {% block content %}
-
+ 
 <head>
     <link rel="stylesheet" href="{% static '/user_dashboard/css/vendor_products.css '%}">
 </head>
@@ -15,13 +15,13 @@
             <ul class="list-group mb-3 sticky-top" id="my_col_1">
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
-                        <h6 class="font-weight-bold my-0">{{vendor_product.name}}</h6>
+                        <h6 class="my-0">{{vendor_product.name}}</h6>
                         <small class="text-muted"><small>{{vendor_product.description|truncatewords:10}}</small></small>
                     </div>
                 </li>
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
-                        <h6 class="my-0 fw-semibold">Our Price</h6>
+                        <h6 class="my-0">Price</h6>
                     </div>
                     <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{gross_ammount}}</span>
                 </li>
@@ -35,8 +35,7 @@
                     <div>
                         <h6 class="my-0">Green Coins Discount</h6>
                     </div>
-                    <span class="fw-bold fs-5"><i
-                            class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{coin_exchange}}</span>
+                    <span class="text-muted"><i class="fa-solid fa-indian-rupee-sign"></i>&nbsp;{{coin_exchange}}</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
@@ -56,7 +55,7 @@
                 </li>
             </ul>
         </div>
-
+ 
         <!-- Billing Address and Payment Details -->
         <div class="col-md-8 order-md-1 py-4 px-3 " id="my_col_1">
             <h4 class="mb-3">Billing Address</h4>
@@ -87,7 +86,7 @@
                         <div class="invalid-feedback" style="width: 100%;"> Your contact number is required. </div>
                     </div>
                 </div>
-
+ 
                 <div class="mb-3">
                     <label for="id_address">Enter Address</label>
                     {{ form.address }}
@@ -104,8 +103,20 @@
                         {{ form.pin_code }}
                         <div class="invalid-feedback"> Pin code required. </div>
                     </div>
+                    <div class="col-md-6">
+                        <label for="id_zip_code">Upload Screenshot here</label>
+                        {{ form.payment_screenshot }}
+                        <div class="invalid-feedback"> Screenshot required. </div>
+                    </div>
                 </div>
-
+                {% if vendor_qr_code and vendor_qr_code.qr_code %}
+                <p>Scan this QR code:</p>
+                <img src="{{ vendor_qr_code.qr_code.url }}" alt="Vendor QR Code" />
+                {% else %}
+                    <p>No QR code available for this vendor.</p>
+                {% endif %}
+ 
+            
                 <button class="btn btn-success btn w-100" type="submit">Confirm Payment</button>
             </form>
         </div>

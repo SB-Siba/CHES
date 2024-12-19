@@ -188,137 +188,8 @@
 </div>
 
 <!-- Leaderboard Section -->
-<div class="leaderboard-section my-4 mx-2">
-    <div class="leaderboard-tabs">
-        <button class="leaderboard-tab active" data-target="today">Today</button>
-        <button class="leaderboard-tab" data-target="month">This Month</button>
-        <button class="leaderboard-tab" data-target="year">This Year</button>
-    </div>
 
-    <!-- Leaderboard Content -->
-    <div class="leaderboard-content">
-        <!-- Today Tab -->
-        <div class="leaderboard-table active" id="today">
-            {% for provider, amount, percentage in service_provider_and_percentages_today %}
-            <div class="leaderboard-item">
-                <div class="leaderboard-rank">{{ forloop.counter }}</div>
-                <div class="leaderboard-service-provider">
-                    {% if provider.user_image %}
-                    <img src="{{ provider.user_image.url }}" alt="picture_{{ forloop.counter }}">
-                    {% else %}
-                    <img src="{% static 'pic_2.png' %}" alt="picture_{{ forloop.counter }}">
-                    {% endif %}
-                    <span class="text-capitalize">{{ provider.full_name }}</span>
-                </div>
-                <div class="leaderboard-score">{{ amount|floatformat:2 }}</div>
-                <div class="leaderboard-bar">
-                    <div class="leaderboard-progress" style="width: {{ percentage }}%;"></div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
 
-        <!-- Month Tab -->
-        <div class="leaderboard-table" id="month">
-            {% for provider, amount, percentage in service_provider_and_percentages_month %}
-            <div class="leaderboard-item">
-                <div class="leaderboard-rank">{{ forloop.counter }}</div>
-                <div class="leaderboard-service-provider">
-                    {% if provider.user_image %}
-                    <img src="{{ provider.user_image.url }}" alt="picture_{{ forloop.counter }}">
-                    {% else %}
-                    <img src="{% static 'pic_2.png' %}" alt="picture_{{ forloop.counter }}">
-                    {% endif %}
-                    <span>{{ provider.full_name }}</span>
-                </div>
-                <div class="leaderboard-score">{{ amount|floatformat:2 }}</div>
-                <div class="leaderboard-bar">
-                    <div class="leaderboard-progress" style="width: {{ percentage }}%;"></div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
-        <!-- Year Tab -->
-        <div class="leaderboard-table" id="year">
-            {% for provider, amount, percentage in service_provider_and_percentages_year %}
-            <div class="leaderboard-item">
-                <div class="leaderboard-rank">{{ forloop.counter }}</div>
-                <div class="leaderboard-service-provider">
-                    {% if provider.user_image %}
-                    <img src="{{ provider.user_image.url }}" alt="picture_{{ forloop.counter }}">
-                    {% else %}
-                    <img src="{% static 'pic_2.png' %}" alt="picture_{{ forloop.counter }}">
-                    {% endif %}
-                    <span>{{ provider.full_name }}</span>
-                </div>
-                <div class="leaderboard-score">{{ amount|floatformat:2 }}</div>
-                <div class="leaderboard-bar">
-                    <div class="leaderboard-progress" style="width: {{ percentage }}%;"></div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
-    </div>
-</div>
-<div class="mx-2 py-4">
-    <div class="row">
-        <div class="col-12 col-md-4 mb-2">
-            <div class="card shadow py-2 dash-card1">
-                <div class="card-body py-4" style="color: white;">
-                    <h5 class="mb-2 fw-bold">
-                        My Progress
-                    </h5>
-                    <p class="mb-2 fw-bold">
-                        <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{ earnings_today }}
-                    </p>
-                    <div class="mb-0">
-                        <span class="fw-bold">
-                            Income Of Today
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-4 mb-2">
-            <div class="card shadow py-2 dash-card2">
-                <div class="card-body py-4" style="color: white;">
-                    <h5 class="mb-2 fw-bold">
-                        My Progress
-                    </h5>
-                    <p class="mb-2 fw-bold">
-                        <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{ earnings_month }}
-                    </p>
-                    <div class="mb-0">
-                        <span class="fw-bold">
-                            Income Of This Month
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-4">
-            <div class="card shadow py-2 dash-card3">
-                <div class="card-body py-4" style="color: white;">
-                    <h5 class="mb-2 fw-bold">
-                        My Progress
-                    </h5>
-                    <p class="mb-2 fw-bold">
-                        <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{ earnings_year }}
-                    </p>
-                    <div class="mb-0">
-                        <span class="fw-bold">
-                            Income Of This Year
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
     <!-- Leaderboard and Activity Section -->
     <div class="row">
@@ -350,10 +221,10 @@
 
         <!-- My Activity (Chart) -->
         <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
-            <div class="mb-4">
+            <div class="card  mb-4"  id="green-commerce-card">
                 <div class="card card-info">
-                    <div class="card-header d-flex justify-content-between align-items-center py-3">
-                        <h4 class="">My Activity</h4>
+                    <div class="card-header  d-flex justify-content-between align-items-center py-3">
+                        <h3 class="card-title text-white">My Activity</h4>
                     </div>
                     <div class="card-body">
                         <div style="height: 220px;">
@@ -365,6 +236,45 @@
         </div>
     </div>
 {% endblock s_vendor_content %}
+
+{% block script %}
+
+<script>
+
+    const users_name = {{ users_name|safe }};
+    const u_coins = {{ u_coins|safe }};
+    
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: users_name,
+            datasets: [{
+                label: 'Points',
+                data: u_coins,
+                backgroundColor: 'rgba(0,191,131)', // Green color with 20% opacity
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });    
+</script>
+
+{% endblock script %}
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const tabs = document.querySelectorAll(".leaderboard-tab");
