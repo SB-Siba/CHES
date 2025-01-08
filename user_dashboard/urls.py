@@ -54,7 +54,7 @@ urlpatterns = [
     # path('checkout/<int:vprod_id>/<str:vendor_email>/', views.CheckoutView.as_view(), name='checkout'),
     # path('payment-confirmation/', views.PaymentConfirmationView.as_view(), name='payment_confirmation'),
 
-    # path('payment-page/', views.PaymentPageView.as_view(), name='payment_page'),
+    # path('payment/<int:order_id>/', views.PaymentPageView.as_view(), name='payment_page'),
 
 ]
 

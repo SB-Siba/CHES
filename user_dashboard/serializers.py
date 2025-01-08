@@ -61,11 +61,6 @@ class DirectBuySerializer(serializers.ModelSerializer):
                 x["cgst"] = f"{product.cgst:.2f}"
                 x["sgst"] = f"{product.sgst:.2f}"
                 x["product_id"] = f"{product.id}"
-                # Add payment_receipt
-                if product.payment_receipt:  # Check if the image exists
-                    x["payment_receipt"] = product.payment_receipt.url  # Get the URL of the uploaded file
-                else:
-                    x["payment_receipt"] = None  # Handle case when no image is uploaded
                 coin_exchange = product.green_coins_required if product.green_coins_required is not None else 0
             else:
                 product_discounted_price = float(product.discount_price)
@@ -80,11 +75,7 @@ class DirectBuySerializer(serializers.ModelSerializer):
                 x["gst"] = f"{product.gst_rate:.2f}"
                 x["cgst"] = f"{product.cgst:.2f}"
                 x["sgst"] = f"{product.sgst:.2f}"
-                # Add payment_receipt
-                if product.payment_receipt:  # Check if the image exists
-                    x["payment_receipt"] = product.payment_receipt.url  # Get the URL of the uploaded file
-                else:
-                    x["payment_receipt"] = None  # Handle case when no image is uploaded                coin_exchange = 0
+                coin_exchange = 0
 
             products[product.name] = x
 

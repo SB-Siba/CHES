@@ -308,7 +308,6 @@ class ProductFromVendor(models.Model):
     gst_rate = models.DecimalField(max_digits=5, decimal_places=2,default=Decimal('0.00'))
     sgst = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'), editable=False)
     cgst = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'), editable=False)
-    payment_receipt = models.FileField(upload_to='payment_receipts/', null=True, blank=True)
 
 
     def calculate_avg_rating(self):
@@ -403,6 +402,7 @@ class Order(models.Model):
     can_edit = models.BooleanField(default=True) # id a order is canceled or refunded, make it non editable
     rating_given = models.BooleanField(default=False,null=True,blank=True)
     rating = models.FloatField(default=0.0,null=True,blank=True)
+    payment_screenshot = models.ImageField(upload_to='payment_screenshots/', null=True, blank=True)  
 
     def __str__(self):
         return self.uid
@@ -412,6 +412,7 @@ class Order(models.Model):
             self.uid = utils.generate_unique_id(5)
         super().save(*args, **kwargs)
 
+    
 class ServiceProviderDetails(models.Model):
     provider = models.ForeignKey(User, on_delete=models.CASCADE)
     service_type = models.JSONField()

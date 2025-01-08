@@ -103,8 +103,20 @@
                         {{ form.pin_code }}
                         <div class="invalid-feedback"> Pin code required. </div>
                     </div>
+                    <div class="col-md-6">
+                        <label for="id_zip_code">Upload Screenshot here</label>
+                        {{ form.payment_screenshot }}
+                        <div class="invalid-feedback"> Screenshot required. </div>
+                    </div>
                 </div>
+                {% if vendor_qr_code and vendor_qr_code.qr_code %}
+                <p>Scan this QR code:</p>
+                <img src="{{ vendor_qr_code.qr_code.url }}" alt="Vendor QR Code" />
+                {% else %}
+                    <p>No QR code available for this vendor.</p>
+                {% endif %}
 
+            
                 <button class="btn btn-success btn w-100" type="submit">Confirm Payment</button>
             </form>
         </div>

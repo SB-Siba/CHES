@@ -1128,7 +1128,7 @@ class CheckoutView(View):
     form = user_form.CheckoutForm
  
     def get(self,request,vprod_id,vendor_email):
-        try:
+        # try:
             user = request.user
             offer_discount = request.GET.get('offer_discount', None)
             
@@ -1152,6 +1152,10 @@ class CheckoutView(View):
             for i,j in order_details.items():
                 ord_meta_data.update(j)
  
+             # Getting vendor's QR code image
+            vendor = get_object_or_404(app_commonmodels.User, email=vendor_email)
+            vendor_qr_code = app_commonmodels.VendorQRcode.objects.filter(vendor=vendor).first()
+            
             discount_amount = float(ord_meta_data['discount_amount'])
             discount_amount = '{:.2f}'.format(discount_amount)
             delivery_charge = ord_meta_data['charges']["Delivery"]
@@ -1176,15 +1180,16 @@ class CheckoutView(View):
                 "total":t_price,
                 "offer_discount":offer_discount,
                 'coin_exchange': coin_exchange,
-                'delivery_charge':delivery_charge
+                'delivery_charge':delivery_charge,
+                'vendor_qr_code': vendor_qr_code
                 }
             return render(request, self.template, data)
-        except Exception as e:
-            error_message = f"An unexpected error occurred: {str(e)}"
-            return render_error_page(request, error_message, status_code=400)
+        # except Exception as e:
+        #     error_message = f"An unexpected error occurred: {str(e)}"
+        #     return render_error_page(request, error_message, status_code=400)
         
     def post(self,request,vprod_id,vendor_email):
-        try:
+        # try:
             form = self.form(request.POST)
             offer_discount = request.POST.get('offer_discount', None)
             if form.is_valid():
@@ -1195,7 +1200,7 @@ class CheckoutView(View):
                 address = form.cleaned_data['address']
                 city = form.cleaned_data['city']
                 pin_code = form.cleaned_data['pin_code']
-                
+                payment_screenshot = form.cleaned_data['payment_screenshot']
  
                 customer_details = {
                     'full_name': full_name,
@@ -1226,10 +1231,9 @@ class CheckoutView(View):
                         products={prod_obj.name:1},
                         order_value=t_price,
                         customer_details=customer_details,
-                        order_meta_data = ord_meta_data
-                        # razorpay_payment_id = razorpay_payment_id,
-                        # razorpay_order_id= razorpay_order_id,
-                        # razorpay_signature= razorpay_signature,
+                        order_meta_data = ord_meta_data,
+                        payment_screenshot = payment_screenshot,
+                        
                     )
                     # order.order_meta_data = json.loads(ord_meta_data)
             
@@ -1271,12 +1275,12 @@ class CheckoutView(View):
  
             discount_amount = ord_meta_data['discount_amount']
             gst = ord_meta_data['charges']["GST"]
-            delivery_charge = float(ord_meta_data['charges']["Delivary"])
+            delivery_charge = float(ord_meta_data['charges']["Delivery"])
             discount_percentage = ord_meta_data['discount_percentage']
             t_price = ord_meta_data['final_value']
             our_price = ord_meta_data['our_price']
             gross_ammount = ord_meta_data['gross_value']
-
+            
             data = {
                 'form': form,
                 "vendor_product":vendor_product_obj,
@@ -1287,13 +1291,14 @@ class CheckoutView(View):
                 "gst":gst,
                 "total":t_price,
                 "offer_discount":offer_discount,
-                'delivery_charge':delivery_charge
+                'delivery_charge':delivery_charge,
+
                 }
             return render(request, self.template, data)
-        except Exception as e:
-            error_message = f"An unexpected error occurred: {str(e)}"
-            return render_error_page(request, error_message, status_code=400)
-                                
+        # except Exception as e:
+        #     error_message = f"An unexpected error occurred: {str(e)}"
+        #     return render_error_page(request, error_message, status_code=400)
+                              
 @method_decorator(utils.login_required, name='dispatch')
 class AllOrdersFromVendors(View):
     model = app_commonmodels.Order
