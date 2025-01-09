@@ -4,48 +4,60 @@
 {% block main_content %}
 
 <style>
-.profile-container{
+    .profile-container {
 
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    border-radius:10px;
-        min-height: 80vh;
-}
-.img_body{
-    background: rgb(31,120,43);
-background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%, rgba(31,120,43,1) 80%);
-border-radius: 10px;
-display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content:flex-start;
-    padding-top: 3rem;
-}
-.profile-img img{
-    border-radius: 50%;
-    width: 8.5rem;
-    height: 8.5rem;
-}
-.profile-head {
-    text-align: center;
-    margin-top: 2rem;
-}
-.box{
-    border-bottom: 1px solid gray;
-    
-}
-.edit_btn:hover{
-    border: 2px solid white;
-    
-}
-.edit_btn{
-    border: 2px solid white;
-    
-}
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        border-radius: 10px;
+        min-height: 55vh;
+    }
+
+    .img_body {
+        background: rgb(31, 120, 43);
+        background: linear-gradient(349deg, rgba(31, 120, 43, 1) 0%, rgba(29, 181, 50, 1) 48%, rgba(31, 120, 43, 1) 80%);
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 3rem;
+    }
+
+    .profile-img img {
+        border-radius: 50%;
+        width: 8.5rem;
+        height: 8.5rem;
+    }
+
+    .profile-head {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .box {
+        border-bottom: 1px solid gray;
+
+    }
+
+    .edit_btn:hover {
+        border: 2px solid white;
+
+    }
+
+    .edit_btn {
+        border: 1px solid white;
+
+    }
 </style>
+<nav class="p-4 bg-light " style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Garden Details</li>
+    </ol>
+  </nav>
 <div class="container  min_height_div mt-5  ">
     <form method="post" class="mx-lg-5 mx-2">
         <div class="row  profile-container  ">
-            <div class="col-md-5   img_body" >
+            <div class="col-md-5   img_body">
                 {% if garden_profile_obj.user.user_image %}
                 <div class="profile-img ">
                     <img src="{{garden_profile_obj.garden_image.url}}" alt="" />
@@ -64,12 +76,13 @@ display: flex;
                         {{garden_profile_obj.user.email}}
                     </p>
                 </div>
-                <a href="{% url 'vendor_dashboard:vendor_gardeningprofileupdate' %}" class="btn edit_btn  text-white btn-lg mt-3 mb-lg-0 mb-2 ">
+                <a href="{% url 'vendor_dashboard:vendor_gardeningprofileupdate' %}"
+                    class="btn edit_btn  text-white btn mt-3 mb-lg-0 mb-2 ">
                     <i class="fa-solid fa-pen-to-square"></i> Update Garden Details
                 </a>
             </div>
             <div class="col-md-7">
-              
+
                 <div class="tab-content profile-tab mt-5 p-4" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                         <div class="row box mb-3">
@@ -78,9 +91,9 @@ display: flex;
                             </div>
                             <div class="col-md-6">
                                 {% if garden_profile_obj.garden_area %}
-                                    <p>{{garden_profile_obj.garden_area}} sqft</p>
+                                <p>{{garden_profile_obj.garden_area}} sqft</p>
                                 {% else %}
-                                    <p class="text-danger">Not Available</p>
+                                <p class="text-danger">Not Available</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -90,9 +103,9 @@ display: flex;
                             </div>
                             <div class="col-md-6">
                                 {% if garden_profile_obj.number_of_plants %}
-                                    <p>{{garden_profile_obj.number_of_plants}}</p>
+                                <p>{{garden_profile_obj.number_of_plants}}</p>
                                 {% else %}
-                                    <p class="text-danger">Not Available</p>
+                                <p class="text-danger">Not Available</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -102,17 +115,18 @@ display: flex;
                             </div>
                             <div class="col-md-6">
                                 {% if garden_profile_obj.number_of_unique_plants %}
-                                    <p>{{garden_profile_obj.number_of_unique_plants}}</p>
+                                <p>{{garden_profile_obj.number_of_unique_plants}}</p>
                                 {% else %}
-                                    <p class="text-danger">Not Available.</p>
+                                <p class="text-danger">Not Available.</p>
                                 {% endif %}
                             </div>
                         </div>
                         <div class="row mt-5">
                             {% if garden_profile_obj %}
-                                <p>
-                                    * In your <b>{{garden_area}} sq.ft</b> area you can impliment <b>{{trees}} trees</b> and <b>{{pots}} pots</b>.
-                                </p>
+                            <p>
+                                * In your <b>{{garden_area}} sq.ft</b> area you can impliment <b>{{trees}} trees</b> and
+                                <b>{{pots}} pots</b>.
+                            </p>
                             {% endif %}
                         </div>
                     </div>

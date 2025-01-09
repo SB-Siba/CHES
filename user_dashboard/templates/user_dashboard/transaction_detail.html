@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transaction Detail</title>
+</head>
+<body>
+    <h1>Transaction Details</h1>
+    <p><strong>Product Name:</strong> {{ transaction.object.product_name }}</p>
+    <p><strong>Quantity:</strong> {{ transaction.object.quantity_buyer_want }} {{ transaction.object.SI_units }}</p>
+    <p><strong>Amount:</strong> {{ transaction.object.ammount_based_on_quantity_buyer_want }}</p>
+    <p><strong>Date:</strong> {{ transaction.object.date_time }}</p>
+    <h3>Customer Information</h3>
+    <p><strong>Name:</strong> {{ transaction.object.buyer.contact }}</p>
+    <p><strong>Email:</strong> {{ transaction.object.buyer.email }}</p>
+    <p><strong>Address:</strong> {{ transaction.object.buyer.city }}</p>
+    <h3>Seller Information</h3>
+    <p><strong>Name:</strong> {{ transaction.object.seller.contact }}</p>
+    <p><strong>Email:</strong> {{ transaction.object.seller.email }}</p>
+    <p><strong>Address:</strong> {{ transaction.object.seller.city }}</p>
+</body>
+</html>

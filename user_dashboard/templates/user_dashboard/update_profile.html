@@ -72,18 +72,46 @@
   <div class="row d-flex  align-items-center justify-content-center">
     <div class="col-lg-8 edit-body pb-4">
       <form method="post" action="" class="p-4 update-form" enctype="multipart/form-data">
-        {% include 'app_common/snippets/alert.html' %}
+        
         {% csrf_token %}
         {{form.as_p}}
         <div class="d-flex justify-content-end">
-          <button type="submit" class=" text-center " id="table_BTN">
+          <button type="submit" class=" text-center w-100 " id="table_BTN" onclick="showUpdateMessage()">
               Update Profile 
           </button>
         </div>
     </form>
   </div>
 </div>
-</div>
-  
+
+  <script>
+    function showUpdateMessage() {
+    // Create the message element
+    const message = document.createElement("div");
+    message.textContent = "Updated Successfully!";
+    message.style.position = "fixed";
+    message.style.top = "20px";
+    message.style.right = "20px";
+    message.style.backgroundColor = "#4CAF50";
+    message.style.color = "white";
+    message.style.padding = "10px 20px";
+    message.style.borderRadius = "5px";
+    message.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.2)";
+    message.style.fontSize = "16px";
+    message.style.zIndex = "1000";
+
+    // Add the message to the document
+    document.body.appendChild(message);
+
+    // Remove the message after 3 seconds
+    setTimeout(() => {
+        message.remove();
+    }, 1000);
+}
+
+// Call this function wherever you want to show the message
+showUpdateMessage();
+
+  </script>
 </body>
 {% endblock content %}

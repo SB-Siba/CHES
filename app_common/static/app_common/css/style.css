@@ -101,14 +101,7 @@
     padding: 1rem;
 }
 
-#order_filter div{
-    display: flex;
-    padding: 1rem;
-    justify-content: space-between;
-}
-#order_filter select{
-    width: 70%;
-}
+
 
 .file-input-container {
     position: relative;

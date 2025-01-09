@@ -1,10 +1,10 @@
 {% extends 'user_dashboard/starter.html' %}
 {% load static %}
-
+ 
 {% block title %}Checkout Page{% endblock title %}
-
+ 
 {% block content %}
-
+ 
 <head>
     <link rel="stylesheet" href="{% static '/user_dashboard/css/vendor_products.css '%}">
 </head>
@@ -55,7 +55,7 @@
                 </li>
             </ul>
         </div>
-
+ 
         <!-- Billing Address and Payment Details -->
         <div class="col-md-8 order-md-1 py-4 px-3 " id="my_col_1">
             <h4 class="mb-3">Billing Address</h4>
@@ -86,7 +86,7 @@
                         <div class="invalid-feedback" style="width: 100%;"> Your contact number is required. </div>
                     </div>
                 </div>
-
+ 
                 <div class="mb-3">
                     <label for="id_address">Enter Address</label>
                     {{ form.address }}
@@ -115,7 +115,7 @@
                 {% else %}
                     <p>No QR code available for this vendor.</p>
                 {% endif %}
-
+ 
             
                 <button class="btn btn-success btn w-100" type="submit">Confirm Payment</button>
             </form>

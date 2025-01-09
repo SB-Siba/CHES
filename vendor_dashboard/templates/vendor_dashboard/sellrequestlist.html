@@ -3,8 +3,33 @@
 
 {% block main_content %}
 <style>
-   
+   #tb-head {
+    font-size: 14px;
+    padding: 18px 10px;
+    text-align: center;
+    font-weight: 600;
+    font-style: normal;
+    line-height: 23px;
+}
+.tb-body{
+  padding: 0 !important;
+    font-family: var(--rubik);
+    font-size: 13px;
+    font-weight: 400;
+    font-style: normal;
+  
+}
+.tb-body_sub{
+padding: 18px 10px;
+  text-align: center;
+}
 </style>
+<nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Sell Request</li>
+    </ol>
+  </nav>
 <div class="min_height_div">
     <div class="page-wrapper m-4">
         {% include 'app_common/snippets/alert.html' %}
@@ -12,27 +37,47 @@
             <table class="table table-hover table-nowrap">
                 <thead class="table-light">
                     <tr>
-                        <th id="t-Head" scope="col">Request ID</th>
-                        <th id="t-Head" scope="col">Name</th>
-                        <th id="t-Head" scope="col">Quantity</th>
-                        <th id="t-Head" scope="col">Units</th>
-                        <th id="t-Head" scope="col">Image</th>
-                        <th id="t-Head" scope="col">Amount</th>
-                        <th id="t-Head" scope="col">Status</th>
+                        <th id="tb-head" scope="col">Request ID</th>
+                        <th id="tb-head" scope="col">Name</th>
+                        <th id="tb-head" scope="col">Quantity</th>
+                        <th id="tb-head" scope="col">Units</th>
+                        <th id="tb-head" scope="col">Image</th>
+                        <th id="tb-head" scope="col">Amount</th>
+                        <th id="tb-head" scope="col">Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for sell_request in sell_objs %}
                     <tr>
-                        <td >{{ sell_request.id }}</td>
-                        <td>{{ sell_request.product_name }}</td>
-                        <td>{{ sell_request.product_quantity }}</td>
-                        <td>{{ sell_request.SI_units }}</td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.id }}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.product_name }}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.product_quantity }}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.SI_units }}
+                            </div>
+                          </td>
                         <td class="status-column">
                             <img src="{{ sell_request.product_image.url }}" alt="Product Image" style="height: 50px; width: 50px;" class="zoom"
                                 data-bs-toggle="modal" data-bs-target="#imageModal{{ sell_request.id }}">
                         </td>
-                        <td>{{ sell_request.amount_in_green_points }}</td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.amount_in_green_points }}
+                            </div>
+                          </td>
                         <td>
                             {% if sell_request.is_approved == "approved" %}
                             <abbr title="Click To See The Reason" style="font-size: 1.5rem;">

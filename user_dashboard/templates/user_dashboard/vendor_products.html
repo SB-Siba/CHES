@@ -20,7 +20,7 @@
               <img src="{{prod.image.url}}" class="w-100 v_product_img mb-2" />
             </div>
             <div class="send_messages">
-              <a href="{% url 'chat:startmessages' prod.vendor.id prod.name %}" class="btn btn-outline btn-sm mt-2"
+              <a href="{% url 'chat:startmessages' prod.vendor.id prod.name %}" class="btn btn-outline-info btn-sm mt-2"
                 type="button">
                 <img src="{% static 'user_dashboard/img/chat.png' %}" alt="" height="25px" style="">
                 <span class="flicker" style="font-size: 18px;">&nbsp;Message</span>
@@ -55,7 +55,7 @@
               <div class="mb-1 text-muted small">
                 <span style="color: green;"> • </span>
                 <span>Category</span>
-                <span class=""> - </span>
+                <span class=""> - </span>   
                 <span> {{prod.category}}<br /></span>
               </div>
               <p class=" mb-0 small fw-bold">By : {{prod.vendor.full_name}}</p>
@@ -63,7 +63,7 @@
                 <label class="form-check-label">
                   <input class="form-check-input offer-discount-checkbox" type="checkbox" name="offer_discount"
                     value="1" data-product-id="{{ prod.id }}" data-vendor-email="{{ prod.vendor.email }}">
-                <div class="fw-semibold mt-1">Use  {{prod.green_coins_required}} <i class="fas fa-coins" style="font-size: 15px; color: rgb(247, 207, 6);"></i>
+                <div class="fw-bolder fs-5">Use  {{prod.green_coins_required}} <i class="fas fa-coins" style="font-size: 18px; color: rgb(247, 207, 6);"></i>
                   Green Coins</div>
                   
                 </label>

@@ -2,245 +2,321 @@
 {% load static %}
 
 {% block s_vendor_content %}
-<div class="main-panel">
-    <div class="row mx-3 mt-3">
+<style>
+    /* Leaderboard Section */
+.leaderboard-section {
+    background-color: #e4f9ed;
+    border: 1px solid green;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.leaderboard-tab {
+    background-color: #e4f9ed;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    border: 1px solid green;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.leaderboard-tab.active, .leaderboard-tab:hover {
+    background-color: green;
+    color: #fff;
+}
+
+.leaderboard-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.leaderboard-table {
+    display: none;
+}
+
+.leaderboard-table.active {
+    display: block;
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid green;
+}
+
+.leaderboard-rank {
+    width: 10%;
+    font-size: 18px;
+    font-weight: bold;
+    color: #2d3e50;
+}
+
+.leaderboard-service-provider {
+    width: 50%;
+    display: flex;
+    align-items: center;
+}
+
+.leaderboard-service-provider img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.leaderboard-score {
+    width: 20%;
+    text-align: right;
+    font-size: 18px;
+    color: #333;
+}
+
+.leaderboard-bar {
+    width: 20%;
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    position: relative;
+}
+
+.leaderboard-progress {
+    height: 100%;
+    background-color: green;
+    border-radius: 5px;
+}
+.card-header {
+    background-color: #145D01;
+    color: white;
+}
+
+#leaderboardheader {
+    width: 100%;
+    height: auto !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #145D01 !important;
+    padding: 1rem 2rem;
+    border-radius: 4px 4px 0 0;
+}
+
+.card-info {
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+@media (max-width: 768px) {
+    .leaderboard-tabs {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .leaderboard-tab {
+        padding: 10px 15px;
+        font-size: 12px;
+    }
+}
+</style>
+
+<div class="mx-2 py-4">
+    <div class="row">
         <div class="col-12 col-md-4 mb-2">
-            <div class=" dash-card1 h-100 py-2 ">
-                <div class="card-body py-4">
-                    <h5 class="mb-2 ">
+            <div class="card shadow py-2 dash-card1">
+                <div class="card-body py-4" style="color: white;">
+                    <h5 class="mb-2 fw-bold">
                         My Progress
                     </h5>
                     <p class="mb-2 fw-bold">
-                        $72,540
+                        <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{ earnings_today }}
                     </p>
                     <div class="mb-0">
-                        <span class="fw-bold  me-2">
-                            +9.0%
-                        </span>
-                        <span class=" fw-bold">
-                            Since Last Month
+                        <span class="fw-bold">
+                            Income Of Today
                         </span>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="col-12 col-md-4 mb-2">
-            <div class="dash-card2 h-100 py-2 dash-card2">
-                <div class="card-body py-4">
+            <div class="card shadow py-2 dash-card2">
+                <div class="card-body py-4" style="color: white;">
                     <h5 class="mb-2 fw-bold">
                         My Progress
                     </h5>
                     <p class="mb-2 fw-bold">
-                        $72,540
+                        <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{ earnings_month }}
                     </p>
                     <div class="mb-0">
-                        <span class=" fw-bold me-2">
-                            +9.0%
-                        </span>
                         <span class="fw-bold">
-                            Since Last Month
+                            Income Of This Month
                         </span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-4 mb-2">
-            <div class="dash-card1 h-100 py-2 dash-card3">
-                <div class="card-body py-4">
+
+        <div class="col-12 col-md-4">
+            <div class="card shadow py-2 dash-card3">
+                <div class="card-body py-4" style="color: white;">
                     <h5 class="mb-2 fw-bold">
                         My Progress
                     </h5>
                     <p class="mb-2 fw-bold">
-                        $72,540
+                        <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{ earnings_year }}
                     </p>
                     <div class="mb-0">
-                        <span class=" fw-bold  me-2">
-                            +9.0%
-                        </span>
                         <span class="fw-bold">
-                            Since Last Month
+                            Income Of This Year
                         </span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row mt-3  mx-3">
-        <div class="col-md-7 grid-margin stretch-card mb-3">
-            <div class="service_home_card  ">
-                <div class=" ">
-                    <div class="service_home_card_head  p-3">
-                        <h4 class="text-white">Project Status</h4>
+</div>
+
+<!-- Leaderboard Section -->
+
+
+
+    <!-- Leaderboard and Activity Section -->
+    <div class="row">
+        <!-- Leaderboard -->
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+            <div class="card leaderboard mb-4">
+                <main>
+                    <div class="d-flex justify-content-between align-items-center" id="leaderboardheader">
+                        <h4 class="text-white">Leader Board</h4>
                     </div>
-                    <div class="px-3 pb-3">
-                        <table class="table ">
-                            <thead>
-                                <tr>
-                                    <th> Sl </th>
-                                    <th> Name </th>
-                                    <th> Due Date </th>
-                                    <th> Progress </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td> 1 </td>
-                                    <td> Herman Beck </td>
-                                    <td> May 15, 2015 </td>
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-gradient-success" role="progressbar"
-                                                style="width: 25%" aria-valuenow="25" aria-valuemin="0"
-                                                aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> 2 </td>
-                                    <td> Messsy Adam </td>
-                                    <td> Jul 01, 2015 </td>
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-gradient-danger" role="progressbar"
-                                                style="width: 75%" aria-valuenow="75" aria-valuemin="0"
-                                                aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> 3 </td>
-                                    <td> John Richards </td>
-                                    <td> Apr 12, 2015 </td>
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-gradient-warning" role="progressbar"
-                                                style="width: 90%" aria-valuenow="90" aria-valuemin="0"
-                                                aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> 4 </td>
-                                    <td> Peter Meggik </td>
-                                    <td> May 15, 2015 </td>
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-gradient-primary" role="progressbar"
-                                                style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> 5 </td>
-                                    <td> Edward </td>
-                                    <td> May 03, 2015 </td>
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-gradient-danger" role="progressbar"
-                                                style="width: 35%" aria-valuenow="35" aria-valuemin="0"
-                                                aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> 5 </td>
-                                    <td> Ronald </td>
-                                    <td> Jun 05, 2015 </td>
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar bg-gradient-info" role="progressbar"
-                                                style="width: 65%" aria-valuenow="65" aria-valuemin="0"
-                                                aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
+
+                    <div class="w-100">
+                        <table class="tableLeader">
+                            {% for leader_user in users_orderby_coins %}
+                            <tr data-rank="" data-city="{{ leader_user.city }}" class="leaderRow ltr {% if forloop.first %}highlight{% endif %}">
+                                <td class="number lc">{{ forloop.counter }}</td>
+                                <td class="name lc">{{ leader_user.full_name }}</td>
+                                <td class="points lc">
+                                    {{ leader_user.coins }}
+                                    {% if forloop.first %}🏅{% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
                         </table>
                     </div>
-                </div>
+                </main>
             </div>
         </div>
-        <div class="col-md-5 grid-margin stretch-card">
-            <div class="service_home_card">
-                <div class="">
-                    <div class="service_home_card_head  p-3 mb-3">
-                        <h4 class="text-white">Todo List</h4>
+
+        <!-- My Activity (Chart) -->
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+            <div class="card  mb-4"  id="green-commerce-card">
+                <div class="card card-info">
+                    <div class="card-header  d-flex justify-content-between align-items-center py-3">
+                        <h3 class="card-title text-white">My Activity</h4>
                     </div>
-                    <div class="add-items d-flex  justify-content-center align-items-center mx-3">
-                        <input type="text" class="form-control todo-list-input me-3"
-                            placeholder="What do you need to do today?">
-                        <button class=" table_btn mb-3"
-                            id="add-task">Add</button>
-                    </div>
-                    <div class="list-wrapper pb-2">
-                        <ul class="d-flex flex-column-reverse todo-list todo-list-custom">
-                            <li>
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="checkbox" type="checkbox"> Meeting with Alisa
-                                        <span class="custom-checkmark"></span>
-                                    </label>
-                                </div>
-                                <i class="remove mdi mdi-close-circle-outline"></i>
-                            </li>
-                            <li class="completed">
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="checkbox" type="checkbox" checked> Call John
-                                        <span class="custom-checkmark"></span>
-                                    </label>
-                                </div>
-                                <i class="remove mdi mdi-close-circle-outline"></i>
-                            </li>
-                            <li>
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="checkbox" type="checkbox"> Create invoice
-                                        <span class="custom-checkmark"></span>
-                                    </label>
-                                </div>
-                                <i class="remove mdi mdi-close-circle-outline"></i>
-                            </li>
-                            <li>
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="checkbox" type="checkbox"> Print Statements
-                                        <span class="custom-checkmark"></span>
-                                    </label>
-                                </div>
-                                <i class="remove mdi mdi-close-circle-outline"></i>
-                            </li>
-                            <li class="completed">
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="checkbox" type="checkbox" checked> Prepare for presentation
-                                        <span class="custom-checkmark"></span>
-                                    </label>
-                                </div>
-                                <i class="remove mdi mdi-close-circle-outline"></i>
-                            </li>
-                            <li>
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input class="checkbox" type="checkbox"> Pick up kids from school
-                                        <span class="custom-checkmark"></span>
-                                    </label>
-                                </div>
-                                <i class="remove mdi mdi-close-circle-outline"></i>
-                            </li>
-                        </ul>
-                        
+                    <div class="card-body">
+                        <div style="height: 220px;">
+                            <canvas id="myChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- <div class="row d-flex justify-content-center service_anime_row mx-3 my-4">
-        <div class="service_anime_div">
-            <img  src="{% static 'app_common/css/images/anime.gif'%}" alt="">
-
-        </div>
-    </div> -->
-</div>
 {% endblock s_vendor_content %}
+
+{% block script %}
+
+<script>
+
+    const users_name = {{ users_name|safe }};
+    const u_coins = {{ u_coins|safe }};
+    
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: users_name,
+            datasets: [{
+                label: 'Points',
+                data: u_coins,
+                backgroundColor: 'rgba(0,191,131)', // Green color with 20% opacity
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });    
+</script>
+
+{% endblock script %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll(".leaderboard-tab");
+        const tables = document.querySelectorAll(".leaderboard-table");
+
+        tabs.forEach((tab) => {
+            tab.addEventListener("click", function () {
+                tabs.forEach((t) => t.classList.remove("active"));
+                this.classList.add("active");
+
+                const target = this.getAttribute("data-target");
+                tables.forEach((table) => {
+                    if (table.id === target) {
+                        table.classList.add("active");
+                    } else {
+                        table.classList.remove("active");
+                    }
+                });
+            });
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll(".leaderboard-tab");
+        const tables = document.querySelectorAll(".leaderboard-table");
+
+        tabs.forEach((tab) => {
+            tab.addEventListener("click", function () {
+                tabs.forEach((t) => t.classList.remove("active"));
+                this.classList.add("active");
+
+                const target = this.getAttribute("data-target");
+                tables.forEach((table) => {
+                    if (table.id === target) {
+                        table.classList.add("active");
+                    } else {
+                        table.classList.remove("active");
+                    }
+                });
+            });
+        });
+    });
+</script>
+

@@ -33,7 +33,6 @@
                     <th scope="col">E-Mail</th>
                     <th scope="col">Service Type</th>
                     <th scope="col">Service Areas</th>
-                    <th scope="col">Average Cost Per Hour</th>
                     <th scope="col">Years Experience</th>
                     <th scope="col">Action</th>
 
@@ -53,7 +52,6 @@
                             {{ area }}{% if not forloop.last %}, {% endif %}
                         {% endfor %}
                     </td>
-                    <td id="t_daTa">{{ s_provider_detail.average_cost_per_hour }}</td>
                     <td id="t_daTa">{{s_provider_detail.years_experience}}</td>
                     <td id="t_daTa">
                         <div class="d-flex align-items-baseline">

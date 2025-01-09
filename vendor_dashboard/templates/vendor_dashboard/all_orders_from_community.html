@@ -3,6 +3,26 @@
 
 {% block main_content %}
 <style>
+    #tb-head {
+    font-size: 14px;
+    padding: 18px 10px;
+    text-align: center;
+    font-weight: 600;
+    font-style: normal;
+    line-height: 23px;
+}
+.tb-body{
+  padding: 0 !important;
+    font-family: var(--rubik);
+    font-size: 13px;
+    font-weight: 400;
+    font-style: normal;
+  
+}
+.tb-body_sub{
+padding: 18px 10px;
+  text-align: center;
+}
     /* Star Rating Styles */
     #starRating {
         direction: rtl;
@@ -58,52 +78,82 @@
 
 
 </style>
+<nav class="p-4 bg-light"
+style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
+aria-label="breadcrumb">
+<ol class="breadcrumb m-0">
+    <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">My Community-Orders</li>
+</ol>
+</nav>
 <div style="min-height: 100vh;">
     <div class="page-wapper m-4">
         {% include 'app_common/snippets/alert.html' %}
         <div class="table-responsive">
             <table class="table table-hover table-nowrap">
-                <thead class="table-light">
+                <thead class="table-light"> 
                     <tr>
-                        <th id="t-Head" scope="col">Request-ID</th>
-                        <th id="t-Head" scope="col">P_Name</th>
-                        <th id="t-Head" scope="col">Quantity</th>
-                        <th id="t-Head" scope="col">Units</th>
-                        <th id="t-Head" scope="col">Amount</th>
-                        <th id="t-Head" scope="col">Status</th>
-                        <th id="t-Head" scope="col">Rating</th>
+                        <th id="tb-head" scope="col">Request-ID</th>
+                        <th id="tb-head" scope="col">Product Name</th>
+                        <th id="tb-head" scope="col">Quantity</th>
+                        <th id="tb-head" scope="col">Units</th>
+                        <th id="tb-head" scope="col">Amount</th>
+                        <th id="tb-head" scope="col">Status</th>
+                        <th id="tb-head" scope="col">Rating</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="test_table_tbody">
                     {% for order in orders %}
                     <tr>
-                        <td>{{ order.id }}</td>
-                        <td>{{ order.product_name }}</td>
-                        <td>{{ order.quantity_buyer_want }}</td>
-                        <td>{{ order.SI_units }}</td>
-                        <td>{{ order.ammount_based_on_quantity_buyer_want }}</td>
-                        
-                        <td class="status-column">
-                            {% if order.buying_status == "BuyCompleted" %}
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ order.id }}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ order.product_name }}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ order.quantity_buyer_want }}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ order.SI_units }}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ order.ammount_based_on_quantity_buyer_want }}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {% if order.buying_status == "BuyCompleted" %}
                                 <span class="text-success">Completed</span>
                             {% elif order.buying_status == "BuyRejected" %}
                                 <span class="text-danger">Rejected</span>
                             {% else %}
                                 <span class="text-warning">In Progress</span>
                             {% endif %}
-                        </td>
-                        <td class="rating-column">
-                            {% if not order.rating_given and order.buying_status == "BuyCompleted" %}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {% if not order.rating_given and order.buying_status == "BuyCompleted" %}
                                 <a type="button" class="btn btn-primary rate-order-btn text-nowrap" data-bs-toggle="modal" data-bs-target="#rateOrderModal" data-order-id="{{ order.id }}">
                                     Rate This
                                 </a>
                             {% elif order.buying_status == "BuyInProgress" %}
-                                <a class="btn btn-secondary" id="table_BTN" disabled>Not Done Yet</a>
+                                <a class="btn btn-secondary"  disabled>Not Done Yet</a>
                             {% else %}
-                                <a class="btn btn-secondary" id="table_BTN" disabled>Rated</a>
-                            {% endif %}   
-                        </td>
-                        
+                                <a class="btn btn-warning"  disabled>Rated</a>
+                            {% endif %}  
+                            </div>
+                          </td>
                         <!-- <td>
                             {% if not order.rating_given %}
                                 <a type="button" class="btn btn-primary rate-order-btn" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">

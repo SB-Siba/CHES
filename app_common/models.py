@@ -292,7 +292,7 @@ class VendorDetails(models.Model):
 
 class ProductFromVendor(models.Model):
     vendor = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100 , unique=True)
     description = models.TextField()
     taxable_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
@@ -415,9 +415,8 @@ class Order(models.Model):
     
 class ServiceProviderDetails(models.Model):
     provider = models.ForeignKey(User, on_delete=models.CASCADE)
-    service_type = models.JSONField()
+    service_type = models.JSONField(null=True, blank=True)
     service_area = models.JSONField()
-    average_cost_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
     years_experience = models.IntegerField()
 
     def __str__(self):
@@ -496,8 +495,12 @@ class NewsActivity(models.Model):
     
 
 class VendorQRcode(models.Model):
+    CHOICES = [
+        ('Select', 'Select'),
+        ('Deselect', 'Deselect'),
+    ]
     vendor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='qr_code', null=True, blank=True)
     qr_code = models.ImageField(upload_to='vendor_qr_codes/', null=True, blank=True)
-
+    type = models.CharField(max_length=10, choices=CHOICES, default='Deselect')
     def __str__(self):
         return self.qr_code

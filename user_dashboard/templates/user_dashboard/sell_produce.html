@@ -7,7 +7,7 @@
 <style>
     .my-button {
         background-color: #28a745;
-        color: white;
+        color: white; 
         padding: 10px;
         border: none;
         border-radius: 5px;
@@ -16,9 +16,9 @@
 </style>
 
 <div class="page-wapper">
-    <h3 class="add-new-title text-sm pt-3">Produce / Produce Sell</h3>
+    <h3 class="">Produce / Produce Sell</h3>
     <div class="row d-flex justify-content-center my-5">
-        <div class="col-lg-8 col-md-12 sell_wrapper p-lg-4 p-4">
+        <div class="col-lg-8 col-md-8 sell_wrapper p-lg-4 p-4">
             <form id="sellForm" method="post" action="" enctype="multipart/form-data">
                 {% include 'app_common/snippets/alert.html' %}
                 {% csrf_token %}
@@ -33,11 +33,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         

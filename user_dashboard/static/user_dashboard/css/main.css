@@ -183,10 +183,10 @@ button.bg-success:focus {
 }
 
 
-.sell_wrapper form textarea.form-control {
+/* .sell_wrapper form textarea.form-control {
     height: 40px; /* Adjust this value as needed */
     resize: none; /* Optional: Disable resizing by the user */
-}
+} */
 #button {
     padding: 1em 2em;
     border: none;
@@ -414,8 +414,26 @@ background: linear-gradient(349deg, rgb(237, 113, 113) 0%, rgb(241, 184, 191) 48
 box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 3px !important;
 height: 8.2rem!important;
 }
-#table_BTN{
+.Table_BTNs,.details_btn{
+    border-radius: 5px;
+cursor: pointer;
+background: transparent;
+border: 1px solid #008000;
+color: white;
+background-color: #008000;
+text-decoration: none;
+box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+.Table_BTNs:hover,.details_btn:hover{
+    text-decoration: none;
+background: rgb(5,131,47);
+background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(4,99,19,1) 52%, rgba(6,175,27,1) 100%);
+color: #fff !important;
+transition: 0.5rem;
+text-decoration: none;
 
+}
+#table_BTN{
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
@@ -424,6 +442,7 @@ height: 8.2rem!important;
     color: white;
     background-color: #008000;
     text-decoration: none;
+    width: 100%;
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 #table_BTN:hover{
@@ -468,10 +487,7 @@ height: 8.2rem!important;
   #t_daTa{
     font-size: 12px;
 }
-.modal-header{
-    background-color: #008000;
-    color: white;
-}
+
 .loGo_img{
     width: 50px;
     height: 50px;
@@ -540,3 +556,5 @@ height: 8.2rem!important;
     height: 300px;
  }
  /* lottie */
+
+ 

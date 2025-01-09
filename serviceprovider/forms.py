@@ -66,7 +66,7 @@ class ServiceAddForm(forms.ModelForm):
 
         widgets = {
             'service_type': forms.Select(attrs={'class': 'form-control'}),  # Dropdown for service type
-            'description': forms.Textarea(attrs={'class': 'form-control'}),  # Textarea
+            'description': forms.Textarea(attrs={'rows': 4,'class':'form-control', 'placeholder': 'Something write here...'}),  # Textarea
             'service_image': forms.FileInput(attrs={'class': 'form-control'}),  # File input
             'basis': forms.Select(attrs={'class': 'form-control'}),  # Dropdown for basis
             'price_per_hour': forms.NumberInput(attrs={'class': 'form-control'}),  # Number input

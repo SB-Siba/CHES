@@ -25,75 +25,62 @@ label
     margin-bottom: 10px;    
 }
 </style>
-<div class="container my-5 ">
+<nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Add Product</li>
+    </ol>
+  </nav>
+  <h3 class="text-center m-4">Add Product</h3>
+<div>
     <div class="row d-flex align-items-center justify-content-center mx-lg-0 mx-1">
         <div class="col-lg-8 sell_wrapper">
             <form method="post" action="" class="p-lg-4 px-1 py-4 update-form" enctype="multipart/form-data">
                 {% include 'app_common/snippets/alert.html' %}
                 {% csrf_token %}
 
-                <!-- Name Field -->
                 <div class="form-group">
                     {{ form.name.label_tag }}
                     {{ form.name }}
                 </div>
-
-                <!-- Description Field -->
                 <div class="form-group">
                     {{ form.description.label_tag }}
                     {{ form.description }}
                 </div>
-
-                <!-- Discount Price Field -->
                 <div class="form-group">
                     {{ form.discount_price.label_tag }}
                     {{ form.discount_price }}
                 </div>
-
-                <!-- Max Price Field -->
                 <div class="form-group">
                     {{ form.max_price.label_tag }}
                     {{ form.max_price }}
                 </div>
-
-                <!-- Image Field -->
                 <div class="form-group">
                     {{ form.image.label_tag }}
                     {{ form.image }}
                 </div>
-
-                <!-- Stock Field -->
                 <div class="form-group">
                     {{ form.stock.label_tag }}
                     {{ form.stock }}
                 </div>
-
-                <!-- Category Field -->
                 <div class="form-group">
                     {{ form.category.label_tag }}
                     {{ form.category }}
                 </div>
-
-                <!-- Custom Category Field -->
                 <div id="custom-category-container" class="form-group" style="display: none;">
                     {{ form.custom_category.label_tag }}
                     {{ form.custom_category }}
                 </div>
-
-                <!-- Discount Percentage Field -->
                 <div class="form-group">
                     {{ form.discount_percentage.label_tag }}
                     {{ form.discount_percentage }}
                 </div>
-
-                <!-- GST Rate Field -->
                 <div class="form-group">
                     {{ form.gst_rate.label_tag }}
                     {{ form.gst_rate }}
                 </div>
-
                 <button type="submit" class=" mt-2 py-2 w-100" id="table_BTN">
-                    Sell
+                    Sell Now
                 </button>
             </form>
         </div>

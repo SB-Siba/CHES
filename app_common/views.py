@@ -156,7 +156,7 @@ class Logout(View):
     def get(self, request):
         try:
             logout(request)
-            return redirect('app_common:login')
+            return redirect('app_common:index')
 
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
@@ -253,7 +253,7 @@ def gardening_quiz_view(request, u_email):
 
                 if request.user.is_superuser:
                     return redirect('admin_dashboard:pending_rtg')
-                return redirect('app_common:login')
+                return redirect('app_common:index')
 
             except models.User.DoesNotExist:
                 error_message = f"No user data found for the given email."
@@ -335,7 +335,7 @@ class VendorDetails(View):
 
                 if request.user.is_superuser:
                     return redirect('admin_dashboard:pending_vendor')
-                return redirect('app_common:login')
+                return redirect('app_common:index')
 
             except models.User.DoesNotExist:
                 error_message = f"No user data found for the given email."
@@ -395,7 +395,6 @@ class ServiceProviderDetails(View):
                     additional_service_areas = [a.strip() for a in additional_service_area.split(',')]
                     service_area.extend(additional_service_areas)
 
-                average_cost_per_hour = form.cleaned_data['average_cost_per_hour']
                 years_experience = form.cleaned_data['years_experience']
 
                 # Update or create the service provider details for the user
@@ -404,7 +403,6 @@ class ServiceProviderDetails(View):
                     defaults={
                         'service_type': service_type,
                         'service_area': service_area,
-                        'average_cost_per_hour': average_cost_per_hour,
                         'years_experience': years_experience,
                     }
                 )
@@ -426,7 +424,7 @@ class ServiceProviderDetails(View):
 
                 if request.user.is_superuser:
                     return redirect('admin_dashboard:pending_service_provider')
-                return redirect('app_common:login')
+                return redirect('app_common:index')
 
             except models.User.DoesNotExist:
                 error_message = f"No user found for the given email."
@@ -444,8 +442,9 @@ class Home(View):
     template = app + 'landing.html'
 
     def get(self, request):
-  
-        return render(request,self.template)
+        form = forms.LoginForm()  # Instantiate the LoginForm
+        return render(request, self.template, {'form': form})  # Pass the form to the template context
+
     
 
 class ForgotPasswordView(View):
