@@ -1070,23 +1070,25 @@ def minus_like(request):
 def give_comment(request):
     try:
         if request.method == "POST":
-            commenter=request.user.full_name
-            comment=request.POST["comment"]
-            post=request.POST["post"]
-            post_obj = app_commonmodels.UserActivity.objects.get(id = int(post)) 
+            commenter = request.user.full_name
+            comment = request.POST["comment"]
+            post_id = request.POST["post"]
+            post_obj = get_object_or_404(app_commonmodels.UserActivity, id=int(post_id))
         
             comment_data = {
-                "id": str(datetime.datetime.now().timestamp()),  # unique ID for the comment
+                "id": str(datetime.now().timestamp()),  # unique ID for the comment
                 "commenter": commenter,
                 "comment": comment,
-                'commenter_id':request.user.id
+                "commenter_id": request.user.id
             }
+            if not isinstance(post_obj.comments, list):
+                post_obj.comments = []  # Ensure comments is a list if not initialized
             post_obj.comments.append(comment_data)
             post_obj.save()
             return redirect('user_dashboard:allposts')
     except Exception as e:
-            error_message = f"An unexpected error occurred: {str(e)}"
-            return render_error_page(request, error_message, status_code=400)
+        error_message = f"An unexpected error occurred: {str(e)}"
+        return render_error_page(request, error_message, status_code=400)
     
 @login_required
 def delete_comment(request, post_id, comment_id):
@@ -1186,6 +1188,7 @@ class VendorsProduct(View):
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
+        
 @method_decorator(utils.login_required, name='dispatch')
 class CheckoutView(View):
     template = app + "checkout_page.html"

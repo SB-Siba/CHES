@@ -93,29 +93,41 @@
 
 {% block scripts %}
 <script>
+  document.querySelectorAll('.offer-discount-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', function () {
+      // Uncheck all other checkboxes
+      document.querySelectorAll('.offer-discount-checkbox').forEach(otherCheckbox => {
+        if (otherCheckbox !== this) {
+          otherCheckbox.checked = false;
+        }
+      });
+    });
+  });
+  
   document.querySelectorAll('.buy-now-button').forEach(button => {
     button.addEventListener('click', function (event) {
       event.preventDefault(); // Prevent default behavior of anchor tag
-
+  
       const productId = this.getAttribute('data-product-id');
       const vendorEmail = this.getAttribute('data-vendor-email');
-
-      // Get the corresponding checkbox for this product
-      const offerDiscountCheckbox = this.closest('.row').querySelector('.offer-discount-checkbox');
+  
+      // Get the corresponding checkbox for this specific product card
+      const offerDiscountCheckbox = this.closest('.card').querySelector('.offer-discount-checkbox');
       const offerDiscountValue = offerDiscountCheckbox.checked ? "1" : "0";
-
+  
       // Define the URL pattern in JavaScript
       const urlPattern = "{% url 'user_dashboard:checkout_vendor_products' 0 0 %}";
-
+  
       // Replace placeholders in URL pattern with actual data
       const urlWithParams = urlPattern.replace('0', productId).replace('0', vendorEmail);
-
+  
       // Append offer discount value as query parameter
       const urlWithDiscount = `${urlWithParams}?offer_discount=${offerDiscountValue}`;
-
+  
       // Redirect to the checkout URL with checkbox value included
       window.location.href = urlWithDiscount;
     });
   });
+  
 </script>
 {% endblock scripts %}

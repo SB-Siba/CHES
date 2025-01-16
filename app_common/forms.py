@@ -4,7 +4,7 @@ from django.contrib.auth.forms import PasswordChangeForm,PasswordResetForm,SetPa
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from . import models
-from .models import NewsActivity, VendorQRcode
+from .models import GardeningProfile, NewsActivity, VendorQRcode
 from ckeditor.widgets import CKEditorWidget
 
 class LoginForm(forms.ModelForm):
@@ -155,26 +155,17 @@ class CustomSetPasswordForm(SetPasswordForm):
 
 class GardeningForm(forms.ModelForm):
     class Meta:
-        model = models.GardeningProfile
-        fields = ['gender', 'caste','garden_area','number_of_plants','number_of_unique_plants','garden_image']
+        model = GardeningProfile
+        fields = ['gender', 'caste', 'garden_area', 'number_of_plants', 'number_of_unique_plants', 'garden_image']
+        widgets = {
+            'gender': forms.Select(attrs={'class': 'form-control', 'required': 'required'}),
+            'caste': forms.Select(attrs={'class': 'form-control', 'required': 'required'}),
+            'garden_area': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Area In Sqr.ft', 'required': 'required'}),
+            'number_of_plants': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Total No. of Plants', 'required': 'required'}),
+            'number_of_unique_plants': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Unique No. of Plants', 'required': 'required'}),
+            'garden_image': forms.FileInput(attrs={'class': 'form-control'}),
+        }
 
-    gender = forms.ChoiceField(choices=models.GardeningProfile.GENDER_CHOICES)
-    gender.widget.attrs.update({'class': 'form-control','required': 'required'})
-
-    caste = forms.ChoiceField(choices=models.GardeningProfile.CASTE_CHOICES)
-    caste.widget.attrs.update({'class': 'form-control','required': 'required'})
-
-    garden_area = forms.IntegerField()
-    garden_area.widget.attrs.update({'class': 'form-control','type':'number','placeholder':'Area In Sqr.ft',"required":"required"})
-    
-    number_of_plants = forms.IntegerField()
-    number_of_plants.widget.attrs.update({'class': 'form-control','type':'number','placeholder':'Total No. of Plants',"required":"required"})
-
-    number_of_unique_plants = forms.IntegerField()
-    number_of_unique_plants.widget.attrs.update({'class': 'form-control','type':'number','placeholder':'Unique No. of Plants',"required":"required"})
-
-    garden_image = forms.FileField(required= True)
-    garden_image.widget.attrs.update({'class': 'form-control','type':'file'})
 
 class GardeningQuizForm(forms.Form):
 
