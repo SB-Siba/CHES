@@ -4,129 +4,73 @@
 {% block s_vendor_content %}
 <style>
     /* Leaderboard Section */
-.leaderboard-section {
-    background-color: #e4f9ed;
-    border: 1px solid green;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+    .leaderboard-section {
+        background-color: #e4f9ed;
+        border: 1px solid green;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
-.leaderboard-tabs {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.leaderboard-tab {
-    background-color: #e4f9ed;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    border: 1px solid green;
-    margin: 0 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.leaderboard-tab.active, .leaderboard-tab:hover {
-    background-color: green;
-    color: #fff;
-}
-
-.leaderboard-content {
-    display: flex;
-    flex-direction: column;
-}
-
-.leaderboard-table {
-    display: none;
-}
-
-.leaderboard-table.active {
-    display: block;
-}
-
-.leaderboard-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 0;
-    border-bottom: 1px solid green;
-}
-
-.leaderboard-rank {
-    width: 10%;
-    font-size: 18px;
-    font-weight: bold;
-    color: #2d3e50;
-}
-
-.leaderboard-service-provider {
-    width: 50%;
-    display: flex;
-    align-items: center;
-}
-
-.leaderboard-service-provider img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.leaderboard-score {
-    width: 20%;
-    text-align: right;
-    font-size: 18px;
-    color: #333;
-}
-
-.leaderboard-bar {
-    width: 20%;
-    height: 8px;
-    background-color: #e0e0e0;
-    border-radius: 5px;
-    position: relative;
-}
-
-.leaderboard-progress {
-    height: 100%;
-    background-color: green;
-    border-radius: 5px;
-}
-.card-header {
-    background-color: #145D01;
-    color: white;
-}
-
-#leaderboardheader {
-    width: 100%;
-    height: auto !important;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #145D01 !important;
-    padding: 1rem 2rem;
-    border-radius: 4px 4px 0 0;
-}
-
-.card-info {
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-}
-
-@media (max-width: 768px) {
-    .leaderboard-tabs {
+    #leaderboardheader {
         display: flex;
+        align-items: center;
         justify-content: space-between;
-        margin-bottom: 20px;
+        background-color: #145D01 !important;
+        padding: 1rem 2rem;
+        border-radius: 4px 4px 0 0;
     }
 
-    .leaderboard-tab {
-        padding: 10px 15px;
-        font-size: 12px;
+    .tableLeader {
+        width: 100%;
+        text-align: left;
+        border-collapse: collapse;
     }
-}
+
+    .tableLeader tr {
+        border-bottom: 1px solid green;
+    }
+
+    .tableLeader td {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .tableLeader .number {
+        width: 10%;
+        font-weight: bold;
+    }
+
+    .tableLeader .name {
+        width: 50%;
+    }
+
+    .tableLeader .points {
+        width: 20%;
+        text-align: right;
+    }
+
+    /* Chart Section */
+    .card-header {
+        background-color: #145D01;
+        color: white;
+    }
+
+    .card-info {
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    }
+
+    .card-body canvas {
+        display: block;
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    @media (max-width: 768px) {
+        .tableLeader td {
+            font-size: 12px;
+        }
+    }
 </style>
 
 <div class="mx-2 py-4">
@@ -188,64 +132,54 @@
 </div>
 
 <!-- Leaderboard Section -->
-
-
-
-    <!-- Leaderboard and Activity Section -->
-    <div class="row">
-        <!-- Leaderboard -->
-        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
-            <div class="card leaderboard mb-4">
-                <main>
-                    <div class="d-flex justify-content-between align-items-center" id="leaderboardheader">
-                        <h4 class="text-white">Leader Board</h4>
-                    </div>
-
-                    <div class="w-100">
-                        <table class="tableLeader">
-                            {% for leader_user in users_orderby_coins %}
-                            <tr data-rank="" data-city="{{ leader_user.city }}" class="leaderRow ltr {% if forloop.first %}highlight{% endif %}">
-                                <td class="number lc">{{ forloop.counter }}</td>
-                                <td class="name lc">{{ leader_user.full_name }}</td>
-                                <td class="points lc">
-                                    {{ leader_user.coins }}
-                                    {% if forloop.first %}🏅{% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
-                </main>
-            </div>
-        </div>
-
-        <!-- My Activity (Chart) -->
-        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
-            <div class="card  mb-4"  id="green-commerce-card">
-                <div class="card card-info">
-                    <div class="card-header  d-flex justify-content-between align-items-center py-3">
-                        <h3 class="card-title text-white">My Activity</h4>
-                    </div>
-                    <div class="card-body">
-                        <div style="height: 220px;">
-                            <canvas id="myChart"></canvas>
-                        </div>
-                    </div>
+<div class="row">
+    <!-- Leaderboard -->
+    <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+        <div class="card leaderboard">
+            <main>
+                <div id="leaderboardheader">
+                    <h4 class="text-white">Leader Board</h4>
                 </div>
+                <div class="w-100">
+                    <table class="tableLeader">
+                        {% for leader_user in users_orderby_coins %}
+                        <tr class="{% if forloop.first %}highlight{% endif %}">
+                            <td class="number">{{ forloop.counter }}</td>
+                            <td class="name">{{ leader_user.full_name }}</td>
+                            <td class="points">
+                                {{ leader_user.coins }}
+                                {% if forloop.first %}🏅{% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- My Activity (Chart) -->
+    <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+        <div class="card card-info">
+            <div class="card-header d-flex justify-content-between align-items-center py-3">
+                <h3 class="card-title text-white">My Activity</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="myChart"></canvas>
             </div>
         </div>
     </div>
+</div>
 {% endblock s_vendor_content %}
 
 {% block script %}
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-
+    // Chart Data
     const users_name = {{ users_name|safe }};
     const u_coins = {{ u_coins|safe }};
     
-    const ctx = document.getElementById('myChart');
-
+    const ctx = document.getElementById('myChart').getContext('2d');
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -253,70 +187,50 @@
             datasets: [{
                 label: 'Points',
                 data: u_coins,
-                backgroundColor: 'rgba(0,191,131)', // Green color with 20% opacity
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 2
+                backgroundColor: 'rgba(0,191,131,0.6)',
+                borderColor: 'rgba(0,191,131,1)',
+                borderWidth: 1
             }]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 x: {
-                    ticks: {
-                        display: false
-                    }
+                    ticks: { autoSkip: false }
                 },
                 y: {
                     beginAtZero: true
                 }
+            },
+            plugins: {
+                legend: { display: false }
             }
         }
-    });    
+    });
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll(".leaderboard-tab");
+        const tables = document.querySelectorAll(".leaderboard-table");
+
+        tabs.forEach((tab) => {
+            tab.addEventListener("click", function () {
+                tabs.forEach((t) => t.classList.remove("active"));
+                this.classList.add("active");
+
+                const target = this.getAttribute("data-target");
+                tables.forEach((table) => {
+                    if (table.id === target) {
+                        table.classList.add("active");
+                    } else {
+                        table.classList.remove("active");
+                    }
+                });
+            });
+        });
+    });
+</script>
 {% endblock script %}
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const tabs = document.querySelectorAll(".leaderboard-tab");
-        const tables = document.querySelectorAll(".leaderboard-table");
-
-        tabs.forEach((tab) => {
-            tab.addEventListener("click", function () {
-                tabs.forEach((t) => t.classList.remove("active"));
-                this.classList.add("active");
-
-                const target = this.getAttribute("data-target");
-                tables.forEach((table) => {
-                    if (table.id === target) {
-                        table.classList.add("active");
-                    } else {
-                        table.classList.remove("active");
-                    }
-                });
-            });
-        });
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const tabs = document.querySelectorAll(".leaderboard-tab");
-        const tables = document.querySelectorAll(".leaderboard-table");
-
-        tabs.forEach((tab) => {
-            tab.addEventListener("click", function () {
-                tabs.forEach((t) => t.classList.remove("active"));
-                this.classList.add("active");
-
-                const target = this.getAttribute("data-target");
-                tables.forEach((table) => {
-                    if (table.id === target) {
-                        table.classList.add("active");
-                    } else {
-                        table.classList.remove("active");
-                    }
-                });
-            });
-        });
-    });
-</script>
-

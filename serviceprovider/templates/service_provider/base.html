@@ -79,8 +79,11 @@
                     <a href="{% url 'service_provider:my_all_bookings' %}" class="sidebar-link" id="a_underline">
                         <i class="lni lni-book"></i>
                         <span>All Bookings</span>
+                        {% if total_bookings_count > 0 %}
+                            <span class="badge badge-danger badge-counter">{{ total_bookings_count }}</span>
+                        {% endif %}
                     </a>
-                </li>
+                </li>                
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="{% url 'service_provider:walletpage' %}">
                       <i class="fa-solid fa-credit-card"></i>

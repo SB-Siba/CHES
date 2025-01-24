@@ -141,7 +141,8 @@ class GardeningProfile(models.Model):
         ("General","General"),
         ("Others","Others")
     )
-
+    latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
     user = models.ForeignKey(User, on_delete= models.CASCADE, null= True, blank= True)
     garden_area = models.BigIntegerField(default = 0,null= True, blank= True)
     number_of_plants = models.BigIntegerField(default = 0,null= True, blank= True)
@@ -149,7 +150,6 @@ class GardeningProfile(models.Model):
     garden_image = models.ImageField(upload_to='garden/',null=True, blank=True)
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES,null=True,blank=True)
     caste = models.CharField(max_length=20, choices=CASTE_CHOICES,null=True,blank=True)
-
 
 
 class GardeningProfileUpdateRequest(models.Model):

@@ -394,7 +394,7 @@ class ActivityList(View):
 
 from django.utils.timezone import make_aware, is_naive
 
-@method_decorator(utils.login_required, name='dispatch')
+@method_decorator(utils.login_required, name="dispatch")
 class WalletView(View):
     template = app + "wallet.html"
     model = app_commonmodels.ProduceBuy
@@ -402,42 +402,43 @@ class WalletView(View):
     def get(self, request):
         user = request.user
         try:
-            # Retrieve ProduceBuy transactions
             produce_transactions = self.model.objects.filter(
-                (Q(buyer=user) | Q(seller=user)) & 
+                (Q(buyer=user) | Q(seller=user)) &
                 Q(buying_status__in=["PaymentDone", "BuyCompleted"])
-            ).order_by('-date_time')
+            ).order_by("-date_time")
 
-            # Retrieve Order transactions
             order_transactions = app_commonmodels.Order.objects.filter(
-                Q(customer=user) | Q(vendor=user), 
+                Q(customer=user) | Q(vendor=user),
                 payment_status="Paid"
-            ).order_by('-date')
+            ).order_by("-date")
 
-            # Retrieve Service provider transactions
             booking_transactions = app_commonmodels.Booking.objects.filter(
-                Q(gardener=user) | Q(service__provider=user), 
+                Q(gardener=user) | Q(service__provider=user),
                 status="completed"
-            ).order_by('-booking_date')
+            ).order_by("-booking_date")
 
-            # Combine and structure data for rendering
             transactions = []
+            total_green_coin_purchase = 0.0  # Ensure this is a float
 
             for transaction in produce_transactions:
                 date_time = make_aware(transaction.date_time) if is_naive(transaction.date_time) else transaction.date_time
+                is_purchase = transaction.buyer == user
+                if is_purchase:
+                    total_green_coin_purchase += float(transaction.ammount_based_on_quantity_buyer_want)
+
                 transactions.append({
                     "type": "ProduceBuy",
                     "object": transaction,
-                    "is_purchase": transaction.buyer == user,
+                    "is_purchase": is_purchase,
                     "date": date_time,
                 })
 
             for transaction in order_transactions:
-                products = transaction.order_meta_data.get('products', {})
-                if products:  # Ensure products is not empty
+                products = transaction.order_meta_data.get("products", {})
+                if products:
                     first_product = list(products.items())[0]
                     product_name = first_product[0]
-                    quantity = first_product[1].get('quantity', 'N/A')
+                    quantity = first_product[1].get("quantity", "N/A")
                 else:
                     product_name = "Unknown"
                     quantity = "N/A"
@@ -445,17 +446,21 @@ class WalletView(View):
                 transaction_date = datetime.combine(transaction.date, time.min)
                 transaction_date = make_aware(transaction_date) if is_naive(transaction_date) else transaction_date
 
-                coin_exchange = transaction.order_meta_data.get('coin_exchange', 'N/A')
+                coin_exchange = transaction.order_meta_data.get("coin_exchange", "N/A")
                 if isinstance(coin_exchange, str):
                     try:
-                        coin_exchange = int(float(coin_exchange))
+                        coin_exchange = float(coin_exchange)  # Ensure float conversion
                     except ValueError:
-                        coin_exchange = 0
+                        coin_exchange = 0.0
+
+                is_purchase = transaction.customer == user
+                if is_purchase:
+                    total_green_coin_purchase += coin_exchange
 
                 transactions.append({
                     "type": "Order",
                     "object": transaction,
-                    "is_purchase": transaction.customer == user,
+                    "is_purchase": is_purchase,
                     "product_name": product_name,
                     "quantity": quantity,
                     "amount": coin_exchange,
@@ -463,17 +468,28 @@ class WalletView(View):
                 })
 
             for transaction in booking_transactions:
+                is_provider = transaction.service.provider == user
+                if not is_provider:
+                    total_green_coin_purchase += float(transaction.service.green_coins_required)
+
                 transactions.append({
                     "type": "Service",
                     "object": transaction,
-                    "is_provider": transaction.service.provider == user,
+                    "is_provider": is_provider,
                     "service_name": transaction.service.service_type.service_category,
                     "coins_earned": transaction.service.green_coins_required,
                     "date": transaction.booking_date,
                 })
 
             transactions.sort(key=lambda x: x["date"], reverse=True)
-            return render(request, self.template, {"transactions": transactions})
+
+            # Format the total as a decimal with one digit after the decimal point
+            total_green_coin_purchase = f"{total_green_coin_purchase:.1f}"
+
+            return render(request, self.template, {
+                "transactions": transactions,
+                "total_green_coin_purchase": total_green_coin_purchase,
+            })
 
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"

@@ -231,7 +231,7 @@
         </div>
         <div class="card-number">
           <i class="fa-solid fa-coins fa-2x"></i>
-          <span>{{ request.user.total_income }}</span>
+          <span>{{ total_income }}</span>
         </div>
       </div>
     </div>
@@ -283,7 +283,7 @@
                   </div>
                 </td>
                 <td class="tb-body">
-                  <div class="tb-body_sub">{{ item.date }}</div>
+                  <div class="tb-body_sub">{{ item.date|date:"F j, Y, g:i A" }}</div>
                 </td>
                 <td class="tb-body">
                   <div class="tb-body_sub">
@@ -337,14 +337,13 @@
                             {% if item.type == "ProduceBuy" %}
                               <p><b>Mobile:</b> +91-{{ item.object.seller.contact|default:"N/A" }}</p>
                               <p><b>Email:</b> {{ item.object.seller.email|default:"N/A" }}</p>
-                              <p><b>Address:</b> {{ item.object.seller.profile.address|default:"N/A" }}</p>
+                              <p><b>Address:</b> {{ item.object.seller.address|default:"N/A" }}</p>
                             {% else %}
                               <p><b>Mobile:</b> +91-{{ item.object.vendor.contact|default:"N/A" }}</p>
                               <p><b>Email:</b> {{ item.object.vendor.email|default:"N/A" }}</p>
-                              <p><b>Address:</b> {{ item.object.vendor.profile.address|default:"N/A" }}</p>
+                              <p><b>Address:</b> {{ item.object.vendor.address|default:"N/A" }}</p>
                             {% endif %}
-                        </div>
-                        
+                          </div>                        
                         </div>
                       </div>
 
@@ -431,9 +430,6 @@
       </div>
     </section>
   </section>
-  
-  
-
 {% endblock main_content %}
 {% block script %}
 <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>

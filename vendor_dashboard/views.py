@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 import os
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -728,16 +729,35 @@ class WalletView(View):
         try:
             # Retrieve ProduceBuy transactions
             produce_transactions = self.model.objects.filter(
-                (Q(buyer=user) | Q(seller=user)) & 
+                (Q(buyer=user) | Q(seller=user)) &
                 Q(buying_status__in=["PaymentDone", "BuyCompleted"])
             ).order_by('-date_time')
 
             # Retrieve Order transactions
             order_transactions = common_models.Order.objects.filter(
-                Q(customer=user) | Q(vendor=user), 
+                Q(customer=user) | Q(vendor=user),
                 payment_status="Paid"
             ).order_by('-date')
 
+            # Calculate total earnings
+            total_income = Decimal("0.00")
+            for transaction in produce_transactions:
+                if transaction.seller == user:
+                    total_income += Decimal(transaction.amount)
+
+            for transaction in order_transactions:
+                coin_exchange = transaction.order_meta_data.get('coin_exchange', 0)
+                if isinstance(coin_exchange, str):
+                    try:
+                        coin_exchange = Decimal(coin_exchange)
+                    except ValueError:
+                        coin_exchange = Decimal("0.00")
+                if transaction.vendor == user:
+                    total_income += coin_exchange
+
+            total_income = f"{total_income:.1f}"
+
+            # Prepare transactions list for display
             transactions = []
             for transaction in produce_transactions:
                 date_time = timezone.make_aware(transaction.date_time) if timezone.is_naive(transaction.date_time) else transaction.date_time
@@ -746,13 +766,14 @@ class WalletView(View):
                     "object": transaction,
                     "is_purchase": transaction.buyer == user,
                     "date": date_time,
+                    "seller_address": transaction.seller.address,  # Add seller address
+                    "buyer_address": transaction.buyer.address,    # Add buyer address
                 })
 
             for transaction in order_transactions:
-                # Check if 'products' key exists and has items
                 products = transaction.order_meta_data.get('products', {})
                 if products:
-                    first_product = list(products.items())[0]  # Safely access the first product
+                    first_product = list(products.items())[0]
                     product_name = first_product[0]
                     quantity = first_product[1].get('quantity', 'N/A')
                 else:
@@ -765,9 +786,9 @@ class WalletView(View):
                 coin_exchange = transaction.order_meta_data.get('coin_exchange', 'N/A')
                 if isinstance(coin_exchange, str):
                     try:
-                        coin_exchange = int(float(coin_exchange))
+                        coin_exchange = Decimal(coin_exchange)
                     except ValueError:
-                        coin_exchange = 0
+                        coin_exchange = Decimal("0.00")
 
                 transactions.append({
                     "type": "Order",
@@ -777,11 +798,18 @@ class WalletView(View):
                     "quantity": quantity,
                     "amount": coin_exchange,
                     "date": transaction_date,
+                    "customer_address": transaction.customer.address,  # Add customer address
+                    "vendor_address": transaction.vendor.address,      # Add vendor address
                 })
 
+            # Sort transactions by date
             transactions.sort(key=lambda x: x["date"], reverse=True)
-            return render(request, self.template, {"transactions": transactions})
-        
+
+            return render(request, self.template, {
+                "transactions": transactions,
+                "total_income": total_income
+            })
+
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)

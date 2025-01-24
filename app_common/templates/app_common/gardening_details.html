@@ -9,15 +9,39 @@
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: url('{% static "user_dashboard/images/background-image.jpg" %}'); /* Update with your image */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Fix the background */
+            overflow: hidden; /* Hide the scrollbar for the body */
         }
-        .ganrning-body{
+
+        .ganrning-body {
             background: #ffffffb3;
             border-radius: 10px;
+            padding: 2rem;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh; /* Set the max height */
+            overflow-y: scroll; /* Allow scrolling */
+            -webkit-overflow-scrolling: touch; /* For smooth scrolling on mobile */
+            scrollbar-width: none; /* Hide scrollbar in Firefox */
         }
-         h2 {
-        color: #009f10 !important;
-        
-    }
+
+        /* For Chrome, Safari, and Edge */
+        .ganrning-body::-webkit-scrollbar {
+            display: none;
+        }
+
+        h2 {
+            color: #009f10 !important;
+        }
+
         .form-control {
             width: 100%;
             padding: 6px;
@@ -27,42 +51,50 @@
             border-radius: 5px !important;
             transition: border-color 0.3s ease-in-out;
         }
+
         .form-control:focus {
             border-color: #009f10;
             box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
             outline: none;
         }
-        .form-group label{
+
+        .form-group label {
             font-family:'Arial', sans-serif;
         }
-        img{
+
+        img {
             width: 7rem;
         }
-    
-        
     </style>
 </head>
 
-<body style="height: 120vh !important; display: flex ; align-items: center;">
-    
-
-    <div class="container" >
+<body>
+    <div class="container">
         <div class="row d-flex align-items-center justify-content-center my-5">
             <div class="col-lg-7 d-flex justify-content-center ganrning-body">
                 <div class="login">
-                    <div
-                        class="d-flex justify-space-between py-5"
-                        style="align-items: center;justify-content:center;">
+                    <div class="d-flex justify-space-between py-5" style="align-items: center; justify-content:center;">
                         <div class="auth_reg_logo mx-3">
-                            <img  src="{% static 'user_dashboard/images/green-logo.png' %}"/>
+                            <img src="{% static 'user_dashboard/images/green-logo.png' %}"/>
                         </div>
                         <div>
                             <h2>Gardening Data</h2>
                         </div>
                     </div>
-                   
+
                     <form class="px-2" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
+                        <h5>Garden Location:</h5>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                {{ form.latitude.label_tag }}
+                                {{ form.latitude }}
+                            </div>
+                            <div class="col-md-6 form-group">
+                                {{ form.longitude.label_tag }}
+                                {{ form.longitude }}
+                            </div>
+                        </div>
                         <div class="form-group">
                             {{ form.gender.label_tag }}
                             {{ form.gender }}
@@ -96,4 +128,5 @@
         </div>
     </div>
 </body>
+
 {% endblock content %}

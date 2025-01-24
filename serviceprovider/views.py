@@ -1,6 +1,6 @@
 from decimal import Decimal
 from gettext import translation
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
@@ -138,18 +138,21 @@ class ServiceProviderUpdateProfileView(View):
     def get(self, request):
         try:
             service_provider_details = self.model.objects.filter(provider=request.user).first()
-            # Convert string representation of lists to actual lists
+            
+            if not service_provider_details:
+                raise Exception("ServiceProviderDetails object not found for the current user.")
+            
+            # Handle missing fields with default values
             existing_service_types = service_provider_details.service_type
             existing_service_areas = service_provider_details.service_area
             initial_data = {
                 'service_type': existing_service_types,
                 'service_area': existing_service_areas,
-                'average_cost_per_hour': service_provider_details.average_cost_per_hour,
-                'years_experience': service_provider_details.years_experience,
+                'years_experience': getattr(service_provider_details, 'years_experience', 0),  # Default to 0
             }
             form = self.form_class(initial=initial_data, 
-                                   existing_service_types=existing_service_types, 
-                                   existing_service_areas=existing_service_areas)
+                                existing_service_types=existing_service_types, 
+                                existing_service_areas=existing_service_areas)
             return render(request, self.template_name, {'form': form})
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
@@ -177,12 +180,10 @@ class ServiceProviderUpdateProfileView(View):
                     additional_service_areas = [a.strip() for a in additional_service_area.split(',')]
                     service_area.extend(additional_service_areas)
 
-                average_cost_per_hour = form.cleaned_data['average_cost_per_hour']
                 years_experience = form.cleaned_data['years_experience']
                 
                 service_provider_details.service_type = service_type
                 service_provider_details.service_area = service_area
-                service_provider_details.average_cost_per_hour = average_cost_per_hour
                 service_provider_details.years_experience = years_experience
                 
                 # Update user object if needed

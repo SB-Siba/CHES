@@ -156,8 +156,10 @@ class CustomSetPasswordForm(SetPasswordForm):
 class GardeningForm(forms.ModelForm):
     class Meta:
         model = GardeningProfile
-        fields = ['gender', 'caste', 'garden_area', 'number_of_plants', 'number_of_unique_plants', 'garden_image']
+        fields = ['latitude', 'longitude', 'gender', 'caste', 'garden_area', 'number_of_plants', 'number_of_unique_plants', 'garden_image']
         widgets = {
+            'latitude': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '(e.g., 37.7749)', 'required': 'required'}),
+            'longitude': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '(e.g., -122.4194)', 'required': 'required'}),
             'gender': forms.Select(attrs={'class': 'form-control', 'required': 'required'}),
             'caste': forms.Select(attrs={'class': 'form-control', 'required': 'required'}),
             'garden_area': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Area In Sqr.ft', 'required': 'required'}),
