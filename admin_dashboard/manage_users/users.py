@@ -10,9 +10,11 @@ from .import forms
 from app_common.forms import RegisterForm
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
+from django.db.models import Q
 from helpers import utils
 from helpers.utils import login_required
 app = "admin_dashboard/manage_users/"
+
 
 @method_decorator(utils.super_admin_only, name='dispatch')
 class PendingRtgs(View):
@@ -21,10 +23,29 @@ class PendingRtgs(View):
     
     def get(self, request):
         try:
-            not_approvedlist = self.model.objects.filter(is_approved=False, is_rtg=True).order_by('-id')
-            rtgardener_list = []  
-            rtgarden_details_list = []
+            # Get search parameters from the URL
+            search_query = request.GET.get('search', '').strip()
 
+            # Check if a search query exists
+            if search_query:
+                # Filter based on the search query, excluding rejected users
+                not_approvedlist = self.model.objects.filter(
+                    is_approved=False, 
+                    is_rtg=True
+                ).exclude(is_rejected=True).filter(
+                    Q(full_name__icontains=search_query) | 
+                    Q(email__icontains=search_query)
+                ).order_by('-id')
+            else:
+                # If no search query, show all pending RTGs excluding rejected ones
+                not_approvedlist = self.model.objects.filter(
+                    is_approved=False, 
+                    is_rtg=True
+                ).exclude(is_rejected=True).order_by('-id')
+
+            # Prepare gardener and garden details
+            rtgardener_list = []
+            rtgarden_details_list = []
             for i in not_approvedlist:
                 rtgardener_list.append(i)
                 garden_details = models.GardeningProfile.objects.get(user=i)
@@ -35,8 +56,14 @@ class PendingRtgs(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-        context = {'rtgardener_data': rtgardener_data}
+        # Context to pass to the template
+        context = {
+            'rtgardener_data': rtgardener_data,
+            'search_query': search_query  # Retain the search query in the template
+        }
         return render(request, self.template, context)
+
+
 
 @method_decorator(utils.super_admin_only, name='dispatch')   
 class PendingVendors(View):
@@ -45,10 +72,30 @@ class PendingVendors(View):
     
     def get(self, request):
         try:
-            not_approvedlist = self.model.objects.filter(is_approved=False, is_vendor=True).order_by('-id')
+            # Get search parameters from the URL
+            search_query = request.GET.get('search', '').strip()
+
+            # Check if a search query exists
+            if search_query:
+                # Filter based on search query for email, business name, and business address
+                not_approvedlist = self.model.objects.filter(
+                    is_approved=False, 
+                    is_vendor=True
+                ).filter(
+                    Q(email__icontains=search_query) | 
+                    Q(vendor_details__business_name__icontains=search_query) | 
+                    Q(vendor_details__business_address__icontains=search_query)
+                ).order_by('-id')
+            else:
+                # If no search query, show all pending vendors
+                not_approvedlist = self.model.objects.filter(
+                    is_approved=False, 
+                    is_vendor=True
+                ).order_by('-id')
+
+            # Prepare vendor and vendor details
             vendor_list = []
             vendor_details_list = []
-
             for i in not_approvedlist:
                 vendor_list.append(i)
                 vendor_details = models.VendorDetails.objects.get(vendor=i)
@@ -59,9 +106,12 @@ class PendingVendors(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-        context = {'vendor_data': vendor_data}
+        # Context to pass to the template
+        context = {
+            'vendor_data': vendor_data,
+            'search_query': search_query  # Retain the search query in the template
+        }
         return render(request, self.template, context)
-
     
 @method_decorator(utils.super_admin_only, name='dispatch')
 class PendingServiceProviders(View):
@@ -70,10 +120,31 @@ class PendingServiceProviders(View):
     
     def get(self, request):
         try:
-            not_approvedlist = self.model.objects.filter(is_approved=False, is_serviceprovider=True).order_by('-id')
+            # Get search parameters from the URL
+            search_query = request.GET.get('search', '').strip()
+
+            # Check if a search query exists
+            if search_query:
+                # Filter based on the search query for email, service type, service area, and years of experience
+                not_approvedlist = self.model.objects.filter(
+                    is_approved=False, 
+                    is_serviceprovider=True
+                ).filter(
+                    Q(email__icontains=search_query) | 
+                    Q(serviceproviderdetails__service_type__icontains=search_query) |
+                    Q(serviceproviderdetails__service_area__icontains=search_query) |
+                    Q(serviceproviderdetails__years_experience__icontains=search_query)  # Corrected field name
+                ).order_by('-id')
+            else:
+                # If no search query, show all pending service providers
+                not_approvedlist = self.model.objects.filter(
+                    is_approved=False, 
+                    is_serviceprovider=True
+                ).order_by('-id')
+
+            # Prepare service provider and service provider details
             service_provider_list = []
             service_provider_details_list = []
-
             for i in not_approvedlist:
                 service_provider_list.append(i)
                 s_provider_details = models.ServiceProviderDetails.objects.filter(provider=i).first()
@@ -84,8 +155,13 @@ class PendingServiceProviders(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
-        context = {'service_provider_data': service_provider_data}
+        # Context to pass to the template
+        context = {
+            'service_provider_data': service_provider_data,
+            'search_query': search_query  # Retain the search query in the template
+        }
         return render(request, self.template, context)
+
 
 @method_decorator(utils.super_admin_only, name='dispatch')
 class PendingRtgSearch(View):
@@ -209,6 +285,93 @@ class PendingVendorSearch(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+class RejectedRtgs(View):
+    model = models.User
+    template = app + "rejected_rtgs.html"
+    
+    def get(self, request):
+        try:
+            # Get all rejected RTGs
+            rejected_rtgs = self.model.objects.filter(is_approved=False, is_rtg=True, is_rejected=True).order_by('-id')
+
+            # Prepare gardener and garden details
+            rtgardener_list = []
+            rtgarden_details_list = []
+            for i in rejected_rtgs:
+                rtgardener_list.append(i)
+                garden_details = models.GardeningProfile.objects.get(user=i)
+                rtgarden_details_list.append(garden_details)
+
+            rtgardener_data = zip(rtgardener_list, rtgarden_details_list)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+        # Context to pass to the template
+        context = {
+            'rtgardener_data': rtgardener_data,
+        }
+        return render(request, self.template, context)
+
+
+class RejectedVendors(View):
+    model = models.User
+    template = app + "rejected_vendors.html"
+    
+    def get(self, request):
+        try:
+            # Get all rejected vendors
+            rejected_vendors = self.model.objects.filter(is_approved=False, is_vendor=True, is_rejected=True).order_by('-id')
+
+            # Prepare vendor and vendor details
+            vendor_list = []
+            vendor_details_list = []
+            for i in rejected_vendors:
+                vendor_list.append(i)
+                vendor_details = models.VendorDetails.objects.get(vendor=i)
+                vendor_details_list.append(vendor_details)
+
+            vendor_data = zip(vendor_list, vendor_details_list)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+        # Context to pass to the template
+        context = {
+            'vendor_data': vendor_data,
+        }
+        return render(request, self.template, context)
+
+class RejectedServiceProviders(View):
+    model = models.User
+    template = app + "rejected_serviceproviders.html"
+    
+    def get(self, request):
+        try:
+            # Get all rejected service providers
+            rejected_sp = self.model.objects.filter(is_approved=False, is_serviceprovider=True, is_rejected=True).order_by('-id')
+
+            # Prepare service provider and service provider details
+            service_provider_list = []
+            service_provider_details_list = []
+            for i in rejected_sp:
+                service_provider_list.append(i)
+                s_provider_details = models.ServiceProviderDetails.objects.filter(provider=i).first()
+                service_provider_details_list.append(s_provider_details)
+
+            service_provider_data = zip(service_provider_list, service_provider_details_list)
+        except Exception as e:
+            error_message = f"An unexpected error occurred: {str(e)}"
+            return render_error_page(request, error_message, status_code=400)
+
+        # Context to pass to the template
+        context = {
+            'service_provider_data': service_provider_data,
+        }
+        return render(request, self.template, context)
+
+
+
 @login_required       
 def ApproveUser(request, pk):
     try:
@@ -241,26 +404,34 @@ def ApproveUser(request, pk):
 
 @login_required
 def RejectUser(request, pk):
-    try:
-        user = get_object_or_404(models.User, id=pk)
+    user = get_object_or_404(models.User, id=pk)
 
-        # Sending rejection email
-        send_template_email(
-            subject="Profile Rejected",
-            template_name="mail_template/account_rejected_mail.html",
-            context={'full_name': user.full_name, "email": user.email},
-            recipient_list=[user.email]
-        )
+    if request.method == "POST":
+        form = forms.RejectionReasonForm(request.POST)
+        if form.is_valid():
+            reason = form.cleaned_data["reason"]
 
-        # Delete the user
-        user.delete()
+            # Send rejection email
+            send_template_email(
+                subject="Profile Rejected",
+                template_name="mail_template/account_rejected_mail.html",
+                context={
+                    "full_name": user.full_name,
+                    "email": user.email,
+                    "reason": reason  # Pass the rejection reason to the email template
+                },
+                recipient_list=[user.email]
+            )
 
-    except Exception as e:
-        error_message = f"An unexpected error occurred: {str(e)}"
-        return render_error_page(request, error_message, status_code=400)
+            # Delete the user
+            user.is_rejected = True
+            user.save()
 
-    return redirect("admin_dashboard:admin_dashboard")
+            return redirect("admin_dashboard:admin_dashboard")
+    else:
+        form = forms.RejectionReasonForm()
 
+    return render(request, "admin/reject_user.html", {"form": form, "user": user})
 
 @method_decorator(utils.super_admin_only, name='dispatch')
 class ServiceProvidersList(View):

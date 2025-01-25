@@ -87,3 +87,13 @@ class UserAddForm(forms.ModelForm):
             raise forms.ValidationError("Enter a ten digit contact number....")
         
         return cleaned_data
+
+
+
+
+class RejectionReasonForm(forms.Form):
+    reason = forms.CharField(
+        label="Rejection Reason",
+        widget=forms.Textarea(attrs={"rows": 3, "placeholder": "Enter reason for rejection..."}),
+        required=True
+    )

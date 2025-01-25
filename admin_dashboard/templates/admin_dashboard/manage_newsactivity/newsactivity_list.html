@@ -34,7 +34,6 @@
                     <table class="table table-hover table-nowrap">
                         <thead class="table-light">
                             <tr>
-                                <th class="" id="tb-head" scope="col">Newsactivity ID</th>
                                 <th class="" id="tb-head" scope="col">Newsactivity Title</th>
                                 <th class="" id="tb-head" scope="col">Type</th>
                                 <th class="" id="tb-head" scope="col">Action</th>
@@ -45,14 +44,7 @@
                         <tbody id="test_table_tbody">
                             {% for newsactivity in newsactivity_list %}
                             <tr>
-                                <td class="tb-body">
-                                    <div class="tb-body_sub">
-                                        <a class="text-heading text-primary-hover fw-bold"
-                                            href="{% url 'admin_dashboard:newsactivity_update' newsactivity.id %}">
-                                            {{ newsactivity.id }}
-                                        </a>
-                                    </div>
-                                </td>
+                                
                                 <td class="tb-body">
                                     <div class="tb-body_sub text-capitalize">
                                         {{ newsactivity.title |truncatewords:8 }}                                  
