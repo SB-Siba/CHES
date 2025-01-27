@@ -22,14 +22,19 @@ class PendingRtgs(View):
     def get(self, request):
         try:
             not_approvedlist = self.model.objects.filter(is_approved=False, is_rtg=True).order_by('-id')
-            rtgardener_list = []  
+            rtgardener_list = []
             rtgarden_details_list = []
 
-            for i in not_approvedlist:
-                rtgardener_list.append(i)
-                garden_details = models.GardeningProfile.objects.get(user=i)
-                rtgarden_details_list.append(garden_details)
+            for user in not_approvedlist:
+                rtgardener_list.append(user)
+                # Check if GardeningProfile exists
+                garden_details = models.GardeningProfile.objects.filter(user=user).first()
+                if garden_details:  # Add only if the profile exists
+                    rtgarden_details_list.append(garden_details)
+                else:
+                    rtgarden_details_list.append(None)  # Add None if no profile exists
 
+            # Zip the data
             rtgardener_data = zip(rtgardener_list, rtgarden_details_list)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"

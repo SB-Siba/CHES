@@ -54,7 +54,7 @@ class RegisterForm(forms.ModelForm):
         label='Enter Contact Number', 
         widget=forms.TextInput(attrs={
             'class': 'form-control', 
-            'placeholder': 'Contact Number', 
+            'placeholder': 'Whatsapp Number', 
             'required': 'required'
         })
     )

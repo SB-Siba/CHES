@@ -47,9 +47,9 @@
                     <li><a class="logo_an" href="{% url 'website_landing:gallery' %}">Gallery</a></li>
                     <li><a class="logo_an" href="{% url 'admin_dashboard:user_newsactivity_list' %}">News and Activities</a></li>
 
-                    <li><a class="logo_an" href="">About Us</a></li>
+                    <!-- <li><a class="logo_an" href="">About Us</a></li>
                     <li><a class="logo_an" href="">Contact Us</a></li>
-                    <li><a class="logo_an" href="">Privacy Policy</a></li>
+                    <li><a class="logo_an" href="">Privacy Policy</a></li> -->
                 </ul>
             </div>
         </div>
@@ -128,27 +128,51 @@
 
 <!-- Modal structure -->
 <div class="modal fade" id="disclaimerModal" tabindex="-1" aria-labelledby="disclaimerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="disclaimerModalLabel">Important Disclaimer</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <!-- Modal Header -->
+            <div class="modal-header bg-primary text-white">
+                <h2 class="modal-title mx-auto" id="disclaimerModalLabel">Important Disclaimer</h2>
             </div>
+
+            <!-- Modal Body -->
             <div class="modal-body">
-                <div class="alert alert-info">
-                    <p><strong>Disclaimer:</strong> The transactions conducted on this platform are solely between the service provides/vendors and the buyers. The platform adminstrators do not assume any libality or responsibility for the qulity, saftey, legality or any other aspect of the products and services offered. All dealings are at the sole risk of the parties involved.</p>
+                <!-- Disclaimer Message -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger"><strong>Disclaimer</strong></h5>
+                        <p class="card-text">
+                            The transactions conducted on this platform are solely between the service providers/vendors and the buyers. 
+                            The platform administrators do not assume any liability or responsibility for the quality, safety, legality, 
+                            or any other aspect of the products and services offered. All dealings are at the sole risk of the parties involved.
+                        </p>
+                    </div>
                 </div>
+
+                <!-- Agreement Form -->
                 <form id="disclaimerForm" method="post">
                     {% csrf_token %}
-                    <div class="form-check ms-2">
-                        <input class="form-check-input" type="checkbox" id="disclaimerCheckbox" name="disclaimer_agreed">
+                    <div class="d-flex align-items-start mb-3">
+                        <input
+                            class="form-check-input me-2"
+                            type="checkbox"
+                            id="disclaimerCheckbox"
+                            name="disclaimer_agreed"
+                        />
                         <label class="form-check-label" for="disclaimerCheckbox">
                             I have read and agree to the disclaimer.
                         </label>
                     </div>
-                    <div class="text-center mt-3">
-                        <button id="proceedButton" type="submit" class="btn btn-success" disabled>Proceed</button>
-                        <div id="alertMessage" class="alert alert-warning text-center mt-2">
+
+                    <!-- Buttons and Alert -->
+                    <div class="text-center">
+                        <button id="proceedButton" type="submit" class="btn btn-primary px-4" disabled>
+                            Proceed
+                        </button>
+                        <div
+                            id="alertMessage"
+                            class="alert alert-warning mt-3 d-none"
+                        >
                             Please read and agree to the disclaimer before proceeding.
                         </div>
                     </div>
