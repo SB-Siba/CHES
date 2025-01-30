@@ -1,53 +1,140 @@
 {% extends 'app_common/authentication/master.html' %}
 {% block title %}News and Activities{% endblock title %}
 {% load static %}
-
 {% block content %}
+<style>
+  body {
+    background: url('{% static "path_to_your_background_image.jpg" %}')
+      no-repeat center center fixed;
+    background-size: cover;
+  }
 
+  .news-section {
+    padding-top: 20px;
+  }
 
-<section class="">
-    <div class="container my-lg-3 my-2">
-        <h3 class="py-lg-3 py-2 text-center">News and Activity</h3>
-        <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb" class="d-lg-none d-block">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item active " aria-current="page">Newsactivity</li>
-            </ol>
-          </nav>
-        <div class="row NewsactivityLists">
+  .news-section h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .news-container {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 95%;
+    max-width: 1400px;
+    margin: 20px auto;
+    overflow: hidden;
+    height: 600px; /* Increased container height */
+  }
+
+  .news-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    table-layout: fixed;
+  }
+
+  .news-table th,
+  .news-table td {
+    padding: 10px;
+    vertical-align: top;
+    font-size: 1rem;
+    word-wrap: break-word;
+  }
+
+  .news-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 9;
+  }
+
+  .news-table td {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .blog-image img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+  }
+
+  .btn-read-more {
+    font-size: 1rem;
+    padding: 7px 15px;
+    white-space: nowrap;
+  }
+
+  .news-table-wrapper {
+    max-height: 600px; /* Increased scrollable area height */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .news-table-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<section class="news-section">
+  <div class="container my-lg-3 my-2">
+    <h3 class="py-lg-3 py-2 text-center">News and Activities</h3>
+    <div class="news-container">
+      <div class="news-table-wrapper">
+        <table class="news-table">
+          <thead>
+            <tr>
+              <th style="width: 15%">Image</th>
+              <th style="width: 25%">Title</th>
+              <th style="width: 15%">Date</th>
+              <th style="width: 35%">Description</th>
+              <th style="width: 10%">Action</th>
+            </tr>
+          </thead>
+          <tbody>
             {% for news in newsactivity %}
-            <div class="col col-12 col-lg-6 col-md-6 my-lg-3 my-md-3 my-2">
-            <a href="{% url 'admin_dashboard:user_newsactivity_details' slug=news.slug %}">
-                <div class="BlogImage">
-                    <img src="{{ news.image.url }}" alt="news_img">
-                </div>
-            </a>
-                <div class=" news_title">
-                    <h5 class="mt-lg-3 mt-3">{{ news.title }}</h5>
-                    <p>{{ news.date }}</p>
-                    <p>
-                        {{ news.content|truncatechars:200| safe }}
-                    </p>
-                    <a href="{% url 'admin_dashboard:user_newsactivity_details' slug=news.slug %}">
-                    <button class="learn-more mt-3 mb-3 m-lg-0">
-                        <span class="circle" aria-hidden="true">
-                        <span class="icon arrow"></span>
-                        </span>
-                        <span class="button-text">Read More</span>
-                      </button>
-                    </a>
-                </div>
-            </div>
-
+            <tr>
+              <td>
+                <a href="{% url 'admin_dashboard:user_newsactivity_details' slug=news.slug %}">
+                  <div class="blog-image">
+                    <img src="{{ news.image.url }}" alt="news_img" />
+                  </div>
+                </a>
+              </td>
+              <td>{{ news.title }}</td>
+              <td>{{ news.date }}</td>
+              <td>{{ news.content|truncatechars:200|safe }}</td>
+              <td>
+                <a href="{% url 'admin_dashboard:user_newsactivity_details' slug=news.slug %}"
+                  class="btn btn-primary btn-sm btn-read-more">
+                  Read More
+                </a>
+              </td>
+            </tr>
             {% endfor %}
-           
-        </div>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 </section>
-
-
-
-
-
-
 
 {% endblock content %}

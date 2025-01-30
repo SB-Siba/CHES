@@ -50,6 +50,7 @@ class PendingRtgs(View):
                 garden_details = models.GardeningProfile.objects.get(user=i)
                 rtgarden_details_list.append(garden_details)
 
+            # Zip the data
             rtgardener_data = zip(rtgardener_list, rtgarden_details_list)
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"

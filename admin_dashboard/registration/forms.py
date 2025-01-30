@@ -35,10 +35,10 @@ class RtgRegistrationForm(forms.Form):
 
     contact = forms.CharField(
         max_length=10,
-        label='Enter Contact Number',
+        label='Enter Whatsapp Number',
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Contact Number',
+            'placeholder': 'Whatsapp Number',
             'required': 'required'
         })
     )

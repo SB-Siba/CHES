@@ -6,5 +6,7 @@ app_name = 'website_landing'
 urlpatterns = [
     path('', views.WebsiteLanding.as_view(), name = "website_landing"),
     path('gallery/', views.GalleryView.as_view(), name='gallery'),  
+    path('contact-us/', views.ContactUsView.as_view(), name='contact_us'),  
+    
 
 ]

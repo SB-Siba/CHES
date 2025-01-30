@@ -10,20 +10,18 @@
         <h3>All Categories</h3>
         <div class="vstack gap-4">
             <div class="d-flex justify-content-between align-items-baseline gap-3">
-                <form class="my-3 mx-2" action="{% url 'admin_dashboard:produces_category_search' %}" method="post">
+                <form method="POST" action="{% url 'admin_dashboard:produces_category_search' %}">
                     {% csrf_token %}
-                    <div class="hstack gap-2 d-flex align-items-baseline">
-                        <select style="width: 6rem;" name="filter_by" class="form-select form-select1 form-control" aria-label="Default select example">
-                            <option value="all">All</option>
-                            <option value="id">ID</option>
-                            <option value="name">Name</option>
-                        </select>
-                        <span class="input-group">
-                            <input type="text" name="query" placeholder="Search Here" class="form-control form-select1" required />
-                            <button type="submit" class="" id="table_BTN"><i class='fa fa-search'></i></button>
-                        </span>
+                    <div class="input-group">
+                        <!-- Search Input -->
+                        <input type="text" name="query" class="form-control" placeholder="Search by Category" value="{{ search_query }}" required />
+                
+                        <!-- Search Button -->
+                        <button class="btn btn-deep-green" id="table_BTN" type="submit">
+                            Search
+                        </button>
                     </div>
-                </form>
+                </form>                              
                 <div class="" >
                     <a href="{% url 'admin_dashboard:produces_category_add' %}" class=" text-decoration-none" id="table_BTN" style="color: white;">
                         <i class='fa fa-plus-square'></i> Create a category For Produces

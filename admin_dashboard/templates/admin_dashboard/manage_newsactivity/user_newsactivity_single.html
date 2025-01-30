@@ -3,30 +3,148 @@
 {% load static %}
 
 {% block content %}
+<style>
+  body {
+    background-color: #f4f7fab0;
+    font-family: Arial, sans-serif;
+  }
 
-    <section class="Blog_detail_Title" >
-        <div class="container my-2">
-            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb" class="d-lg-none d-block">
-                <ol class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="{% url 'website_landing:website_landing' %}">Home</a></li>
-                  <li class="breadcrumb-item "><a href="#">Newsactivity-List</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">News and Activity</li>
-                </ol>
-              </nav>
-            <div class="blog_title">
-                <h5 class="text-center my-lg-3 my-2 ">{{ newsactivitydetail.title }}</h5>
-            </div>
-            <div class="Main_Image">
-                <img src="{{ newsactivitydetail.image.url }}" class="img-responsive " alt="Image">  
-            </div>
-            <div class=" blog_title">
-                <h5  class="mt-lg-3 mt-3">{{ newsactivitydetail.title }}</h5>
-                <p>{{ newsactivitydetail.date }}</p>
-                <p ALIGN=CENTER>{{ newsactivitydetail.content| safe }}</p>
-                
-            </div>
+  .Blog_detail_Title {
+    background: #f4f7fa;
+    padding-top: 20px;
+    margin-top: 30px;
+  }
+
+  .breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 15px;
+    font-size: 1rem;
+  }
+
+  .breadcrumb-item a {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .breadcrumb-item a:hover {
+    text-decoration: underline;
+  }
+
+  .Main_Image {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    max-height: 350px;
+  }
+
+  .Main_Image img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0;
+    max-width: 100%;
+  }
+
+  .blog_title {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 0;
+    text-align: left;
+    padding-left: 30px;
+  }
+
+  .blog_title p,
+  .blog_title h6,
+  .blog_title .center-text {
+    margin-bottom: 0;
+  }
+
+  .blog_title p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  .blog_title h6 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .event-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: #4B0082;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .details-heading {
+    font-weight: 500;
+    font-size: 1.3rem;
+    color: #333;
+    margin-top: 20px;
+  }
+
+  .center-text {
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #777;
+  }
+
+  @media (max-width: 768px) {
+    .blog_title h6 {
+      font-size: 1.4rem;
+    }
+
+    .breadcrumb-item {
+      font-size: 0.9rem;
+    }
+
+    .event-title {
+      font-size: 2rem;
+    }
+
+    .Main_Image img {
+      height: 250px;
+    }
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: auto;
+    padding-bottom: 30px;
+  }
+</style>
+
+<section class="Blog_detail_Title">
+    <div class="container my-2">
+        <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb" class="d-lg-none d-block">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'website_landing:website_landing' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Newsactivity-List</a></li>
+                <li class="breadcrumb-item active" aria-current="page">News and Activity</li>
+            </ol>
+        </nav>
+        <h1 class="event-title">{{ newsactivitydetail.title }}</h1>
+        <div class="Main_Image">
+            <img src="{{ newsactivitydetail.image.url }}" class="img-responsive" alt="Image">
         </div>
-    </section>
+        <div class="blog_title">
+            <p><strong>Posted on:</strong> {{ newsactivitydetail.date }}</p>
+            <h6 class="details-heading">Details:</h6>
+            <p class="center-text">{{ newsactivitydetail.content|safe }}</p>
+        </div>
+    </div>
+</section>
 
-    
 {% endblock content %}
