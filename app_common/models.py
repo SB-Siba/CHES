@@ -23,6 +23,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     user_image = models.ImageField(upload_to='userprofie/',null=True, blank=True)
 
     is_approved = models.BooleanField(default=False)
+    is_rejected = models.BooleanField(default=False)
 
     is_rtg = models.BooleanField(default=False)
     is_vendor = models.BooleanField(default=False)
@@ -192,6 +193,7 @@ class User_Query(models.Model):
     reply = models.TextField(null=True, blank= True)
     date_sent = models.DateTimeField(auto_now_add=True)
     is_solve = models.BooleanField(default = False)
+
 
 
 class SellProduce(models.Model):
@@ -469,13 +471,14 @@ class Review(models.Model):
 
 
 class MediaGallery(models.Model):
-       media_image = models.ImageField(upload_to='service/',null=True, blank=True)
+    media_image = models.ImageField(upload_to='service/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True, null=True, blank=True)  # Add index
 
 
 class NewsActivity(models.Model):
     TYPE_CHOICES = [
         ('News', 'News'),
-        ('Event', 'Event'),
+        ('Activity', 'Activity'),
     ]
     slug = models.SlugField(max_length=255, null=True, blank=True, unique=True)
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='News')

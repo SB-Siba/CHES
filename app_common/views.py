@@ -13,7 +13,6 @@ from app_common.error import render_error_page
 
 app = "app_common/"
 
-
 class Register(View):
     model = models.User
     template = app + "authentication/register.html"
@@ -53,6 +52,20 @@ class Register(View):
                 if city == "Other":
                     city = form.cleaned_data['other_city']
 
+                # Check if the user already exists in the database (either approved or rejected)
+                existing_user = models.User.objects.filter(email=email).first()
+                if existing_user:
+                    if existing_user.is_rejected:
+                        # Reset rejection status for rejected users
+                        existing_user.is_rejected = False
+                        existing_user.is_approved = False  # Reset other fields if necessary
+                        existing_user.save()
+                    else:
+                        # If the user already exists and is not rejected, prevent registration
+                        messages.error(request, "A user with this email already exists.")
+                        return redirect('app_common:index')
+
+                # Proceed with user registration
                 user_obj = models.User(full_name=full_name, email=email, contact=contact, city=city)
                 user_obj.set_password(password)
 
@@ -89,7 +102,6 @@ class Register(View):
         except ValidationError as e:
             error_message = f"Validation error: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-
 
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"

@@ -18,10 +18,10 @@ class AdminDashboard(View):
     template = app + "index.html"
 
     def get(self, request):
-        not_approvedlist = common_models.User.objects.filter(is_approved=False).order_by('-id')
-        not_approvedlist_rtg = common_models.User.objects.filter(is_approved=False,is_rtg = True).order_by('-id')
-        not_approvedlist_vendor = common_models.User.objects.filter(is_approved=False,is_vendor = True).order_by('-id')
-        not_approvedlist_service_provider = common_models.User.objects.filter(is_approved=False,is_serviceprovider = True).order_by('-id')
+        not_approvedlist = common_models.User.objects.filter(is_approved=False).exclude(is_rejected=True).order_by('-id')
+        not_approvedlist_rtg = common_models.User.objects.filter(is_approved=False,is_rtg = True).exclude(is_rejected=True).order_by('-id')
+        not_approvedlist_vendor = common_models.User.objects.filter(is_approved=False,is_vendor = True).exclude(is_rejected=True).order_by('-id')
+        not_approvedlist_service_provider = common_models.User.objects.filter(is_approved=False,is_serviceprovider = True).exclude(is_rejected=True).order_by('-id')
 
         profile_update_obj = common_models.GardeningProfileUpdateRequest.objects.all()
         activity_request_obj = common_models.UserActivity.objects.filter(is_accepted='pending').order_by('-date_time')

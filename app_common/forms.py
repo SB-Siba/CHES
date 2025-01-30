@@ -306,15 +306,15 @@ class contactForm(forms.Form):
         )
     )
 
-class MediaGalleryForm(forms.ModelForm):
-    class Meta:
-        model = models.MediaGallery
-        fields = ['media_image']  
+class MediaGalleryForm(forms.Form):
+    media_images = forms.FileField(
+        widget=forms.FileInput(attrs={
+            'class': 'form-control'
+        }),
+        required=True
+    )
 
-        widgets = {
-            'media_image': forms.FileInput(attrs={'class': 'form-control'}), 
 
-        }
 
 
 

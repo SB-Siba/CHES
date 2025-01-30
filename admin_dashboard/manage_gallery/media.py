@@ -22,9 +22,9 @@ class MediaGalleryListView(View):
     def post(self, request):
         form = MediaGalleryForm(request.POST, request.FILES)
         if form.is_valid():
-            images = request.FILES.getlist('media_image')  # Retrieve list of files
+            images = request.FILES.getlist('media_images')  # Retrieve multiple files
             for image in images:
-                MediaGallery.objects.create(media_image=image)  # Save each file as a new instance
+                MediaGallery.objects.create(media_image=image)  # Save each file to the database
             messages.success(request, "Images added successfully.")
         else:
             messages.error(request, "Error adding images.")

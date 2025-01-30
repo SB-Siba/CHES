@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Form</title>
+    <style>
+      /* Define the zoom-in animation */
+      @keyframes zoomIn {
+        0% {
+          transform: scale(0.8); /* Starts smaller */
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.05); /* Slightly zoom in */
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1); /* Full size */
+          opacity: 1;
+        }
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #e6f7ff;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .contact-container {
+        display: flex;
+        max-width: 800px;
+        width: 100%;
+        margin: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        background-color: white;
+        animation: zoomIn 1s ease-out; /* Apply zoom effect */
+      }
+
+      .contact-info {
+        flex: 1;
+        background-color: #003566;
+        color: white;
+        padding: 20px;
+        border-radius: 8px 0 0 8px;
+      }
+
+      .contact-info h2 {
+        margin-bottom: 20px;
+      }
+
+      .contact-info p {
+        margin: 10px 0;
+      }
+
+      .contact-info a {
+        color: #00aaff;
+        text-decoration: none;
+      }
+
+      .social-media {
+        margin-top: 20px;
+      }
+
+      .social-media a {
+        margin-right: 10px;
+        color: white;
+        font-size: 24px; /* Adjusted icon size */
+        text-decoration: none;
+      }
+
+      .contact-form {
+        flex: 2;
+        padding: 20px;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .contact-form h2 {
+        margin-bottom: 10px;
+      }
+
+      .contact-form p {
+        margin-bottom: 20px;
+        color: #666;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .contact-form label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .contact-form input,
+      .contact-form textarea {
+        width: 90%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      .contact-form textarea {
+        height: 80px;
+      }
+
+      .contact-form button {
+        display: inline-block;
+        background-color: #00aaff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-size: 16px;
+      }
+
+      .contact-form button:hover {
+        background-color: #0088cc;
+      }
+    </style>
+    <!-- Link to Font Awesome for social media icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="contact-container">
+      <div class="contact-info">
+        <h2>Contact Us</h2>
+        <p><span class="icon">📍</span> 23, Avenue de Paris, 75012 Paris</p>
+        <p>
+          <span class="icon">✉️</span>
+          <a href="mailto:hello@mikechemardin.com">hello@mikechemardin.com</a>
+        </p>
+        <p><span class="icon">📞</span> +33 6 19 53 01 44</p>
+        <div class="social-media">
+          <!-- Facebook and Instagram Icons -->
+          <a href="https://facebook.com" target="_blank" class="fab fa-facebook-f"></a>
+          <a href="https://instagram.com" target="_blank" class="fab fa-instagram"></a>
+        </div>
+      </div>
+      <div class="contact-form">
+        <h2>Get in Touch</h2>
+        <p>Feel free to drop us a line below!</p>
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="full_name">Full Name</label>
+            <input
+              type="text"
+              id="full_name"
+              name="full_name"
+              placeholder="Enter your full name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+            />
+          </div>
+          <div class="form-group">
+            <label for="contact">Contact Number</label>
+            <input
+              type="tel"
+              id="contact"
+              name="contact"
+              placeholder="Enter your contact number"
+            />
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea
+              id="message"
+              name="message"
+              placeholder="Write your message"
+            ></textarea>
+          </div>
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

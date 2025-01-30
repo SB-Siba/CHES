@@ -13,6 +13,24 @@
     background-color: #74f5cc !important;
     box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
   }
+
+  .feed-container {
+    height: 300px; /* Adjust the height as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+    scrollbar-width: thin; /* Optional: style the scrollbar */
+    scrollbar-color: #28a745 #f1f1f1; /* Custom scrollbar color */
+}
+.feed-container::-webkit-scrollbar {
+    width: 6px; /* Width of the scrollbar */
+}
+.feed-container::-webkit-scrollbar-thumb {
+    background: #28a745; /* Color of the scrollbar thumb */
+    border-radius: 10px;
+}
+.feed-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the scrollbar track */
+}
+
 </style>
 <div class=" ">
     <!-- Content Row -->
@@ -169,13 +187,13 @@
     <!-- /.row -->
 
     <!-- activity -->
-     <div class="row">
+    <div class="row">
         <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
             <!-- Project Card Example -->
-            <div class="card  mb-4"  id="green-commerce-card">
+            <div class="card mb-4" id="green-commerce-card">
                 <div class="card card-info">
-                    <div class="card-header  d-flex justify-content-between align-items-center py-3">
-                        <h3 class="card-title text-white">My Activity</h4>
+                    <div class="card-header d-flex justify-content-between align-items-center py-3">
+                        <h3 class="card-title text-white">My Activity</h3>
                     </div>
                     <div class="card-body">
                         <div style="height: 220px;">
@@ -185,7 +203,34 @@
                 </div>
             </div>
         </div>
-     </div>
+    
+        <!-- Feed Section -->
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5>Feed</h5>
+                </div>
+                <div class="card-body feed-container">
+                    <!-- Feed items (dynamic or static) -->
+                    <div class="feed-item">
+                        <h6>New Plant Added</h6>
+                        <p>John just added a new plant to his garden!</p>
+                        <small class="text-muted">2 hours ago</small>
+                    </div>
+                    <div class="feed-item">
+                        <h6>Challenge Completed</h6>
+                        <p>Sarah completed the "Grow 5 Herbs" challenge and earned 50 green coins!</p>
+                        <small class="text-muted">5 hours ago</small>
+                    </div>
+                    <div class="feed-item">
+                        <h6>Leaderboard Update</h6>
+                        <p>Michael climbed to the #1 spot on the leaderboard!</p>
+                        <small class="text-muted">1 day ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
     <!-- activity -->
 </div>
 {% endblock content %}
@@ -247,4 +292,20 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const feedContainer = document.querySelector('.feed-container');
+    
+        setInterval(() => {
+            // Check if the user isn't scrolling manually
+            if (feedContainer.scrollTop + feedContainer.clientHeight < feedContainer.scrollHeight) {
+                // Auto-scroll down by 1 pixel every 50ms
+                feedContainer.scrollTop += 1;
+            } else {
+                // Reset to the top when reaching the bottom
+                feedContainer.scrollTop = 0;
+            }
+        }, 50); // Adjust the interval speed for smoother scrolling
+    });
+    </script>    
 {% endblock scripts %}

@@ -24,6 +24,10 @@ urlpatterns = [
     path('quiz_answers/<int:user_id>',users.QuizAnswers.as_view(), name='quizanswers'),
     path('approve_user/<int:pk>',users.ApproveUser, name='approve_user'),
     path('reject_user/<int:pk>',users.RejectUser, name='reject_user'),
+    path('rejected_rtgs/', users.RejectedRtgs.as_view(), name='rejected_rtgs'),
+    path('rejected_vendors/', users.RejectedVendors.as_view(), name='rejected_vendors'),
+    path('rejected_serviceproviders/', users.RejectedServiceProviders.as_view(), name='rejected_serviceproviders'),
+    
     path('manage_users/serviceproviders_list',users.ServiceProvidersList.as_view(), name= 'serviceproviders_list'),
     path('manage_users/RTgardeners_list',users.RTGList.as_view(), name= 'RTgardeners_list'),
     path('manage_users/vendors_list',users.VendorList.as_view(), name= 'vendors_list'),
@@ -114,8 +118,8 @@ urlpatterns = [
     path("newsactivity_list", newsactivity.NewsActivityList.as_view(), name="newsactivity_list"),
     path("newsactivitySearch", newsactivity.NewsActivitySearch.as_view(), name="newsactivity_search"),
     path("newsactivityAdd", newsactivity.NewsActivityAdd.as_view(), name="newsactivity_add"),
-    path("newsactivityUpdate/<str:blog_id>", newsactivity.NewsActivityUpdate.as_view(), name="newsactivity_update"),
-    path("newsactivityDelete/<str:blog_id>", newsactivity.NewsActivityDelete.as_view(), name="newsactivity_delete"),
+    path("newsactivityUpdate/<str:newsactivity_id>", newsactivity.NewsActivityUpdate.as_view(), name="newsactivity_update"),
+    path("newsactivityDelete/<str:newsactivity_id>", newsactivity.NewsActivityDelete.as_view(), name="newsactivity_delete"),
 
     #user
     path('newsactivityList/', newsactivity.NewsActivityCategory.as_view(), name='user_newsactivity_list'),

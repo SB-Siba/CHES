@@ -1,0 +1,36 @@
+{% extends 'admin_dashboard/starter.html' %}
+
+{% block title %}Rejected RTG List{% endblock title %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="table-responsive">
+        <table class="table table-hover table-nowrap">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">E-Mail</th>
+                    <th scope="col">Area</th>
+                    <th scope="col">Total Plants</th>
+                    <th scope="col">Unique Plants</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rtg_user, rtgarden_user in rtgardener_data %}
+                <tr>
+                    <td>{{ rtg_user.full_name }}</td>
+                    <td>{{ rtg_user.email }}</td>
+                    <td>{{ rtgarden_user.garden_area }}</td>
+                    <td>{{ rtgarden_user.number_of_plants }}</td>
+                    <td>{{ rtgarden_user.number_of_unique_plants }}</td>
+                    <td>
+                        <span>Rejected</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

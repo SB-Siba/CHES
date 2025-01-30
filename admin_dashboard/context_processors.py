@@ -1,10 +1,10 @@
 from app_common import models as common_models
 from Blogs.models import Blogs
 def all_nessasery_data(request):
-    not_approvedlist = common_models.User.objects.filter(is_approved=False).count()
-    not_approvedlist_rtg = common_models.User.objects.filter(is_approved=False,is_rtg = True).count()
-    not_approvedlist_vendor = common_models.User.objects.filter(is_approved=False,is_vendor = True).count()
-    not_approvedlist_service_provider = common_models.User.objects.filter(is_approved=False,is_serviceprovider = True).count()
+    not_approvedlist = common_models.User.objects.filter(is_approved=False).exclude(is_rejected=True).count()
+    not_approvedlist_rtg = common_models.User.objects.filter(is_approved=False,is_rtg = True).exclude(is_rejected=True).count()
+    not_approvedlist_vendor = common_models.User.objects.filter(is_approved=False,is_vendor = True).exclude(is_rejected=True).count()
+    not_approvedlist_service_provider = common_models.User.objects.filter(is_approved=False,is_serviceprovider = True).exclude(is_rejected=True).count()
     
     gardening_profile_update_obj_request = common_models.GardeningProfileUpdateRequest.objects.all().count()
     activity_request_obj = common_models.UserActivity.objects.filter(is_accepted='pending').count()

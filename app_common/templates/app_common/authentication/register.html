@@ -12,8 +12,7 @@
     body {
         font-family: 'Arial', sans-serif !important;
         background-color: #f8f9fa; /* Optional: light background */
-        height: 100vh; /* Set to viewport height */
-        overflow: hidden; /* Prevent scrolling */
+        height: 120vh;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -117,20 +116,20 @@
     
     /* Checkbox Input Styling */
     .form-check-input:checked {
-        background-color: green !important;
-        border-color: green !important;
-    }
-    .form-check-input:focus {
-        box-shadow: 0 0 0 0.2rem rgba(0, 128, 0, 0.25) !important;
-    }
+  background-color: green !important;
+  border-color: green !important;      
+}
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 128, 0, 0.25) !important;
+}
+ 
 </style>
 
 <body style="height: 120vh !important; display: flex ; align-items: center;">
-    <div class="container  ">
+    <div class="container">
         <div class="row pt-5 justify-content-center">
             <div class="col-lg-8 col-md-10 col-sm-12 mb-5 form-container p-4">
                 <div class="row">
-                    <!-- Left Column -->
                     <div class="col-lg-6 col-md-6 col-sm-12 p-1">
                         <h2 class="text-center mb-4">Registration</h2>
                         <form id="registration-form" method="post" action="" class="text-black">
@@ -166,7 +165,6 @@
                             </div>
 
                             <div class="form-group mb-3">
-                            
                                 <div class="password-wrapper">
                                     {{ form.password }}
                                     <i class="fas fa-eye" id="password-eye"></i>
@@ -174,7 +172,6 @@
                             </div>
 
                             <div class="form-group mb-3">
-      
                                 <div class="password-wrapper">
                                     {{ form.confirm_password }}
                                     <i class="fas fa-eye" id="confirm-password-eye"></i>
@@ -188,7 +185,6 @@
                         <p class="text-center mt-3">Already have an account? <a href="{% url 'app_common:login' %}" class="text-decoration-none"><b>Login</b></a></p>
                     </div>
 
-                    <!-- Right Column -->
                     <div class="col-lg-6 col-md-6 col-sm-12 lottie-container">
                         <div id="lottie-animation" style="width: 100%; max-width: 350px; height: 400px;"></div>
                     </div>
@@ -197,152 +193,155 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var animation = lottie.loadAnimation({
-                container: document.getElementById("lottie-animation"),
-                renderer: "svg",
-                loop: true,
-                autoplay: true,
-                path: "{% static 'app_common/css/images/anim2.json' %}",
-            });
-
-            animation.addEventListener("DOMLoaded", function () {
-                console.log("Lottie animation loaded successfully.");
-            });
-
-            animation.addEventListener("data_failed", function () {
-                console.error("Failed to load Lottie animation.");
-            });
-
-            const cityField = document.getElementById("id_city");
-            const otherCityDiv = document.getElementById("other_city_div");
-            const otpContainer = document.getElementById("otp-container");
-            const sendOtpBtn = document.getElementById("send-otp-btn");
-            const verifyOtpBtn = document.getElementById("verify-otp-btn");
-            const otpInput = document.getElementById("otp-input");
-            let resendAllowed = false;
-
-            cityField.addEventListener("change", function () {
-                if (cityField.value === "Other") {
-                    otherCityDiv.style.display = "block";
-                } else {
-                    otherCityDiv.style.display = "none";
-                }
-            });
-
-            sendOtpBtn.addEventListener("click", function () {
-                const email = document.getElementById("id_email").value;
-                if (email) {
-                    fetch("{% url 'email_otp:send_otp' %}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': '{{ csrf_token }}'
-                        },
-                        body: JSON.stringify({ email: email })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            otpContainer.style.display = 'flex';
-                            // sendOtpBtn.textContent = 'OTP Sent';
-                            sendOtpBtn.disabled = true; // Disable the button
-                            verifyOtpBtn.style.display = 'inline-block';
-
-                            // Change text back to "ReSend" and re-enable button after 1 minute
-                            let remainingTime = 60; // 60 seconds
-                            resendAllowed = false;
-                            const interval = setInterval(() => {
-                                remainingTime--;
-                                sendOtpBtn.textContent = `OTP Sent (${remainingTime}s)`;
-                                
-                                if (remainingTime <= 0) {
-                                    clearInterval(interval);
-                                    sendOtpBtn.textContent = 'ReSend';
-                                    sendOtpBtn.disabled = false;
-                                    resendAllowed = true;
-
-                                    // Hide the OTP input section and Verify button
-                                    otpContainer.style.display = 'none';
-                                    verifyOtpBtn.style.display = 'none';
-                                }
-                            }, 1000); // Update every 1 second
-                        } else {
-                            sendOtpBtn.textContent = 'OTP Not Sent';
-                        }
-                    });
-                } else {
-                    sendOtpBtn.textContent = 'Please enter a valid email.';
-                }
-            });
-
-            verifyOtpBtn.addEventListener("click", function () {
-                const email = document.getElementById("id_email").value;
-                const otpCode = otpInput.value;
-                if (email && otpCode) {
-                    fetch("{% url 'email_otp:verify_otp' %}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': '{{ csrf_token }}'
-                        },
-                        body: JSON.stringify({ email: email, otp: otpCode })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            verifyOtpBtn.textContent = 'Verified';
-                            verifyOtpBtn.disabled = true;
-                            document.getElementById("submit-btn").disabled = false;
-
-                            // If OTP is verified before the timer ends, clear the timer and update UI
-                            if (!resendAllowed) {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var animation = lottie.loadAnimation({
+            container: document.getElementById("lottie-animation"),
+            renderer: "svg",
+            loop: true,
+            autoplay: true,
+            path: "{% static 'app_common/css/images/anim2.json' %}",
+        });
+    
+        animation.addEventListener("DOMLoaded", function () {
+            console.log("Lottie animation loaded successfully.");
+        });
+    
+        animation.addEventListener("data_failed", function () {
+            console.error("Failed to load Lottie animation.");
+        });
+    
+        const cityField = document.getElementById("id_city");
+        const otherCityDiv = document.getElementById("other_city_div");
+        const otpContainer = document.getElementById("otp-container");
+        const sendOtpBtn = document.getElementById("send-otp-btn");
+        const verifyOtpBtn = document.getElementById("verify-otp-btn");
+        const otpInput = document.getElementById("otp-input");
+        const submitBtn = document.getElementById("submit-btn");
+    
+        let interval; // Declare the interval variable outside the function to manage it later
+        let resendAllowed = false;
+    
+        cityField.addEventListener("change", function () {
+            if (cityField.value === "Other") {
+                otherCityDiv.style.display = "block";
+            } else {
+                otherCityDiv.style.display = "none";
+            }
+        });
+    
+        sendOtpBtn.addEventListener("click", function () {
+            const email = document.getElementById("id_email").value;
+            if (email) {
+                fetch("{% url 'email_otp:send_otp' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ email: email })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        otpContainer.style.display = 'flex';
+                        sendOtpBtn.disabled = true; // Disable the button
+                        verifyOtpBtn.style.display = 'inline-block';
+    
+                        let remainingTime = 60; // 60 seconds
+                        resendAllowed = false;
+                        interval = setInterval(() => {
+                            remainingTime--;
+                            sendOtpBtn.textContent = `OTP Sent (${remainingTime}s)`;
+    
+                            if (remainingTime <= 0) {
+                                clearInterval(interval);
                                 sendOtpBtn.textContent = 'ReSend';
                                 sendOtpBtn.disabled = false;
-                                otpContainer.style.display = 'none';
-                                verifyOtpBtn.style.display = 'none';
+                                resendAllowed = true;
                             }
-                        } else {
-                            verifyOtpBtn.textContent = 'Verify Again';
-                            verifyOtpBtn.disabled = false;
-                        }
-                    });
-                } else {
-                    verifyOtpBtn.textContent = 'Please enter OTP.';
-                }
-            });
-
-            // Trigger change event to handle page reloads
-            cityField.dispatchEvent(new Event('change'));
-
-            // Toggle password visibility
-            const passwordInput = document.getElementById("id_password");
-            const confirmPasswordInput = document.getElementById("id_confirm_password");
-            const passwordEye = document.getElementById("password-eye");
-            const confirmPasswordEye = document.getElementById("confirm-password-eye");
-
-            function togglePasswordVisibility(input, icon) {
-                if (input.type === "password") {
-                    input.type = "text";
-                    icon.classList.remove("fa-eye");
-                    icon.classList.add("fa-eye-slash");
-                } else {
-                    input.type = "password";
-                    icon.classList.remove("fa-eye-slash");
-                    icon.classList.add("fa-eye");
-                }
+                        }, 1000); // Update every 1 second
+                    } else {
+                        sendOtpBtn.textContent = 'OTP Not Sent';
+                    }
+                });
+            } else {
+                sendOtpBtn.textContent = 'Please enter a valid email.';
             }
-
-            passwordEye.addEventListener("click", function () {
-                togglePasswordVisibility(passwordInput, passwordEye);
-            });
-
-            confirmPasswordEye.addEventListener("click", function () {
-                togglePasswordVisibility(confirmPasswordInput, confirmPasswordEye);
-            });
         });
-    </script>
-</body>
+    
+        verifyOtpBtn.addEventListener("click", function () {
+            const email = document.getElementById("id_email").value;
+            const otpCode = otpInput.value;
+            if (email && otpCode) {
+                fetch("{% url 'email_otp:verify_otp' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ email: email, otp: otpCode })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Stop the countdown
+                        clearInterval(interval);
+    
+                        // Disable the send OTP button and change its text to "Verified"
+                        sendOtpBtn.disabled = true;
+                        sendOtpBtn.textContent = "Verified";
+    
+                        // Optionally hide the OTP input section
+                        otpContainer.style.display = "none";
+                        verifyOtpBtn.style.display = "none"; // Hide the verify button after successful verification
+    
+                        // Display success message (optional)
+                        alert("OTP verified successfully!");
+                        submitBtn.disabled = false;
+                    } else {
+                        // Show an error message if OTP verification fails
+                        alert("OTP verification failed. Please try again.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error verifying OTP:", error);
+                });
+            } else {
+                alert("Please enter the OTP.");
+            }
+        });
+    
+        // Trigger change event to handle page reloads
+        cityField.dispatchEvent(new Event('change'));
+    
+        // Toggle password visibility
+        const passwordInput = document.getElementById("id_password");
+        const confirmPasswordInput = document.getElementById("id_confirm_password");
+        const passwordEye = document.getElementById("password-eye");
+        const confirmPasswordEye = document.getElementById("confirm-password-eye");
+    
+        function togglePasswordVisibility(input, icon) {
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+    
+        passwordEye.addEventListener("click", function () {
+            togglePasswordVisibility(passwordInput, passwordEye);
+        });
+    
+        confirmPasswordEye.addEventListener("click", function () {
+            togglePasswordVisibility(confirmPasswordInput, confirmPasswordEye);
+        });
+    });
+    
+</script>
 
-{% endblock content %}
+{% endblock %}
