@@ -28,6 +28,10 @@
                         <span>Rejected</span>
                     </td>
                 </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No rejected RTGs found.</td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>

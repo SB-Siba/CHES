@@ -24,7 +24,6 @@
             <table class="table table-hover table-nowrap">
                 <thead class="table-light">
                     <tr>
-                        <th scope="col">Request-ID</th>
                         <th scope="col">User</th>
                         <th scope="col">P_Name</th>
                         <th scope="col">P_Category</th>
@@ -39,7 +38,6 @@
                 <tbody>
                     {% for sell_request in produce_sell_request_obj %}
                     <tr>
-                        <td id="t_daTa">{{ sell_request.id }}</td>
                         <td id="t_daTa">{{ sell_request.user }}</td>
                         <td id="t_daTa">{{ sell_request.product_name }}</td>
                         <td id="t_daTa">{{ sell_request.produce_category.category_name }}</td>

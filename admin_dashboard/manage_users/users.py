@@ -15,7 +15,6 @@ from helpers import utils
 from helpers.utils import login_required
 app = "admin_dashboard/manage_users/"
 
-
 @method_decorator(utils.super_admin_only, name='dispatch')
 class PendingRtgs(View):
     model = models.User
@@ -285,6 +284,69 @@ class PendingVendorSearch(View):
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
 
+
+
+@login_required       
+def ApproveUser(request, pk):
+    try:
+        user = get_object_or_404(models.User, id=pk)
+        coins = request.GET.get('coins', None)
+        
+        user.is_approved = True
+        if coins:
+            user.wallet = 500 + int(coins)
+        else:
+            user.wallet = 500 + user.quiz_score
+        user.coins = 100
+
+        # Sending approval email
+        send_template_email(
+            subject="Successful Approval",
+            template_name="mail_template/successfull_approval_mail.html",
+            context={'full_name': user.full_name, "email": user.email},
+            recipient_list=[user.email]
+        )
+
+        # Save the changes to the user
+        user.save()
+
+    except Exception as e:
+        error_message = f"An unexpected error occurred: {str(e)}"
+        return render_error_page(request, error_message, status_code=400)
+
+    return redirect("admin_dashboard:admin_dashboard")
+
+@login_required
+def RejectUser(request, pk):
+    user = get_object_or_404(models.User, id=pk)
+
+    if request.method == "POST":
+        form = forms.RejectionReasonForm(request.POST)
+        if form.is_valid():
+            reason = form.cleaned_data["reason"]
+
+            # Send rejection email
+            send_template_email(
+                subject="Profile Rejected",
+                template_name="mail_template/account_rejected_mail.html",
+                context={
+                    "full_name": user.full_name,
+                    "email": user.email,
+                    "reason": reason  # Pass the rejection reason to the email template
+                },
+                recipient_list=[user.email]
+            )
+
+            # Delete the user
+            user.is_rejected = True
+            user.save()
+
+            return redirect("admin_dashboard:admin_dashboard")
+    else:
+        form = forms.RejectionReasonForm()
+
+    return render(request, "admin/reject_user.html", {"form": form, "user": user})
+
 class RejectedRtgs(View):
     model = models.User
     template = app + "rejected_rtgs.html"
@@ -371,68 +433,6 @@ class RejectedServiceProviders(View):
         return render(request, self.template, context)
 
 
-
-@login_required       
-def ApproveUser(request, pk):
-    try:
-        user = get_object_or_404(models.User, id=pk)
-        coins = request.GET.get('coins', None)
-        
-        user.is_approved = True
-        if coins:
-            user.wallet = 500 + int(coins)
-        else:
-            user.wallet = 500 + user.quiz_score
-        user.coins = 100
-
-        # Sending approval email
-        send_template_email(
-            subject="Successful Approval",
-            template_name="mail_template/successfull_approval_mail.html",
-            context={'full_name': user.full_name, "email": user.email},
-            recipient_list=[user.email]
-        )
-
-        # Save the changes to the user
-        user.save()
-
-    except Exception as e:
-        error_message = f"An unexpected error occurred: {str(e)}"
-        return render_error_page(request, error_message, status_code=400)
-
-    return redirect("admin_dashboard:admin_dashboard")
-
-@login_required
-def RejectUser(request, pk):
-    user = get_object_or_404(models.User, id=pk)
-
-    if request.method == "POST":
-        form = forms.RejectionReasonForm(request.POST)
-        if form.is_valid():
-            reason = form.cleaned_data["reason"]
-
-            # Send rejection email
-            send_template_email(
-                subject="Profile Rejected",
-                template_name="mail_template/account_rejected_mail.html",
-                context={
-                    "full_name": user.full_name,
-                    "email": user.email,
-                    "reason": reason  # Pass the rejection reason to the email template
-                },
-                recipient_list=[user.email]
-            )
-
-            # Delete the user
-            user.is_rejected = True
-            user.save()
-
-            return redirect("admin_dashboard:admin_dashboard")
-    else:
-        form = forms.RejectionReasonForm()
-
-    return render(request, "admin/reject_user.html", {"form": form, "user": user})
-
 @method_decorator(utils.super_admin_only, name='dispatch')
 class ServiceProvidersList(View):
     template = app + "serviceprovider_list.html"
@@ -441,18 +441,43 @@ class ServiceProvidersList(View):
 
     def get(self, request):
         try:
-            user_list = self.model.objects.filter(is_approved=True, is_superuser=False, is_serviceprovider=True).order_by("-id")
+            # Get search parameter from the URL
+            search_query = request.GET.get('search', '').strip()
 
+            # Check if a search query exists
+            if search_query:
+                # Filter users based on search query for email, service type, service area, or years of experience
+                user_list = self.model.objects.filter(
+                    is_approved=True,
+                    is_superuser=False,
+                    is_serviceprovider=True
+                ).filter(
+                    Q(email__icontains=search_query) |
+                    Q(serviceproviderdetails__service_type__icontains=search_query) |
+                    Q(serviceproviderdetails__service_area__icontains=search_query) |
+                    Q(serviceproviderdetails__years_experience__icontains=search_query)  # Ensure correct field name
+                ).order_by("-id")
+            else:
+                # If no search query, show all approved service providers
+                user_list = self.model.objects.filter(
+                    is_approved=True,
+                    is_superuser=False,
+                    is_serviceprovider=True
+                ).order_by("-id")
+
+            # Context to pass to the template
             context = {
                 "user_list": user_list,
-                'form': self.form_class,
+                "form": self.form_class,
+                "search_query": search_query,  # Retain the search query in the template
             }
             return render(request, self.template, context)
 
         except Exception as e:
             error_message = f"An unexpected error occurred: {str(e)}"
             return render_error_page(request, error_message, status_code=400)
-    
+            
+                
 @method_decorator(utils.super_admin_only, name='dispatch')
 class RTGList(View):
     template = app + "rtg_list.html"
@@ -461,11 +486,33 @@ class RTGList(View):
 
     def get(self, request):
         try:
-            user_list = self.model.objects.filter(is_approved=True, is_superuser=False, is_rtg=True).order_by("-id")
+            # Get the search parameter from the URL
+            search_query = request.GET.get('search', '').strip()
 
+            # Check if a search query exists
+            if search_query:
+                # Filter based on the search query for email, full name, etc.
+                user_list = self.model.objects.filter(
+                    is_approved=True,
+                    is_superuser=False,
+                    is_rtg=True
+                ).filter(
+                    Q(full_name__icontains=search_query) | 
+                    Q(email__icontains=search_query)
+                ).order_by("-id")
+            else:
+                # If no search query, show all approved RTGs
+                user_list = self.model.objects.filter(
+                    is_approved=True,
+                    is_superuser=False,
+                    is_rtg=True
+                ).order_by("-id")
+
+            # Context to pass to the template
             context = {
                 "user_list": user_list,
-                'form': self.form_class,
+                "form": self.form_class,
+                "search_query": search_query,  # Retain the search query in the template
             }
             return render(request, self.template, context)
 
@@ -481,11 +528,34 @@ class VendorList(View):
 
     def get(self, request):
         try:
-            user_list = self.model.objects.filter(is_approved=True, is_superuser=False, is_vendor=True).order_by("-id")
+            # Get search parameters from the URL
+            search_query = request.GET.get('search', '').strip()
 
+            # Check if a search query exists
+            if search_query:
+                # Filter based on search query for email, name, or any other vendor-related fields
+                user_list = self.model.objects.filter(
+                    is_approved=True,
+                    is_superuser=False,
+                    is_vendor=True
+                ).filter(
+                    Q(email__icontains=search_query) |
+                    Q(full_name__icontains=search_query) |
+                    Q(vendor_details__business_name__icontains=search_query)
+                ).order_by("-id")
+            else:
+                # If no search query, show all approved vendors
+                user_list = self.model.objects.filter(
+                    is_approved=True,
+                    is_superuser=False,
+                    is_vendor=True
+                ).order_by("-id")
+
+            # Prepare context for the template
             context = {
                 "user_list": user_list,
-                'form': self.form_class,
+                "form": self.form_class,
+                "search_query": search_query,  # Retain the search query in the template
             }
             return render(request, self.template, context)
 

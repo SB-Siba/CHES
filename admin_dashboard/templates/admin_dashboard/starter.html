@@ -92,8 +92,38 @@
                     </a>
                 </li>
             </ul>
-        </li>
-
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link collapsed has-dropdown" data-bs-toggle="collapse"
+                    data-bs-target="#Rejected_List" aria-expanded="false" aria-controls="Rejected_List">
+                    <i class="fa-solid fa-wallet text-white"></i>
+                    <span>Rejected Users</span>
+                    {% if not_approvedlist_count > 0 %}
+                    <span class="badge badge-danger badge-counter">{{not_approvedlist_count}}</span>
+                    {% endif %}
+                </a>
+                <ul id="Rejected_List" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <li class="sidebar-item">
+                        <a href="{% url 'admin_dashboard:rejected_rtgs' %}" class="nav-link">
+                            <i class="fa-solid fa-seedling text-white"></i>
+                            <span>Rejected Rtgs</span>
+                        </a>
+                        
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="{% url 'admin_dashboard:rejected_vendors' %}" class="nav-link">
+                            <i class="fa-solid fa-user-tag text-white"></i>
+                            <span>Rejected Vendors</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="{% url 'admin_dashboard:rejected_serviceproviders' %}" class="nav-link">
+                            <i class="fa-solid fa-wrench text-white"></i>
+                            <span>Rejected Service Providers</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
         <!-- Add_user -->
         <li class="nav-item">
             <a href="#" class="nav-link collapsed has-dropdown" data-bs-toggle="collapse"
