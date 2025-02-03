@@ -46,13 +46,7 @@ class Register(View):
             existing_user = models.User.objects.filter(email=email).first()
 
             if existing_user and existing_user.is_rejected:
-                print(f"Updating rejected user: {email}")
-                existing_user.full_name = request.POST.get('full_name')
-                existing_user.contact = request.POST.get('contact')
-                existing_user.city = request.POST.get('city')
-                existing_user.set_password(request.POST.get('password'))
-                existing_user.is_rejected = False  # Allow them to register again
-                existing_user.save()
+                existing_user.delete()
                 
             form = self.form_class(request.POST)
             if form.is_valid():
