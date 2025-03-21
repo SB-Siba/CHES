@@ -1,0 +1,129 @@
+{% extends 'vendor_dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Selling</li>
+    </ol>
+  </nav>
+<div class="row m-lg-4 mx-1 mt-3 d-flex justify-content-center" style="min-height: 100vh;">
+{% for i in bbeigins_obj %}
+     <div class="col-md-10 mb-4 ">
+        <div class="col-md-12 p-4" style="background-color: #e9f7ef; border: 1px solid #28a745; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <div class="">
+                <h4 class="card-title">Hey {{i.seller.full_name}},</h4>
+                <p class="card-text">{{i.buyer.full_name}} wants to buy your product.</p>
+                
+                <h5 class="card-subtitle mb-2 text-muted">Product Details</h5> 
+                <p class="card-text">
+                    <small><strong>Name:</strong> {{i.sell_produce.product_name}}</small><br>
+                    <small><strong>Quantity:</strong> {{i.quantity_buyer_want}}</small><br>
+                    <small><strong>Units:</strong> {{i.SI_units}}</small>
+                </p>
+                
+                <div>
+                    {% if i.payment_link == "NotAvailable" %}
+                    <button type="button" class="payment_btn" data-bs-toggle="modal"
+                        data-bs-target="#paymentModal{{ i.id }}"
+                        data-quantity="{{ i.quantity_buyer_want }}"
+                        data-price="{{ i.sell_produce.amount_in_green_points }}"
+                        data-unitquantity="{{ i.sell_produce.product_quantity }}">Send Payment Link</button>
+            
+                        <button type="button" class="" id="table_BTN2" data-bs-toggle="modal" data-bs-target="#rejectModal{{ i.id }}">Reject this order</button>
+                    {% else %}
+                        <small class="text-success">Payment Link Sent Successfully.</small>
+                    {% endif %}
+                </div>
+            </div>
+ </div>
+     </div>
+        
+
+        <!-- Payment Modal -->
+        <div class="modal fade" id="paymentModal{{ i.id }}" tabindex="-1" aria-labelledby="paymentModalLabel{{ i.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="paymentModalLabel{{ i.id }}">Send Payment Amount Based on Quantity</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="modalForm" method="post" action="{% url 'vendor_dashboard:sendpaymentlink' i.id %}">
+                            {% csrf_token %}
+                            {% include 'app_common/snippets/alert.html' %}
+                            
+                            <div class="mb-3">
+                                <p><strong>Total Amount: </strong><span id="totalAmount{{ i.id }}">Calculating...</span></p>
+                            </div>
+
+                            <input type="hidden" name="ammount_based_on_buyer_quantity" id="hiddenAmountField{{ i.id }}">
+
+                            <div style="text-align: center; margin-top: 2rem;">
+                                <button class="w-100" id="table-BTN" type="submit">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reject Modal -->
+        <div class="modal fade" id="rejectModal{{ i.id }}" tabindex="-1" aria-labelledby="rejectModalLabel{{ i.id }}"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rejectModalLabel{{ i.id }}">Reject Order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to reject this order?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <a href="{% url 'vendor_dashboard:buyreject' i.id %}" class="btn btn-danger">Reject Order</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endfor %}
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const modals = document.querySelectorAll(".modal.fade");
+    
+        modals.forEach(modal => {
+            modal.addEventListener("show.bs.modal", function(event) {
+                const button = event.relatedTarget;
+                const quantity = parseInt(button.getAttribute("data-quantity"));
+                const unitPriceTotal = parseFloat(button.getAttribute("data-price")); // total price in green points
+                const totalQuantity = parseFloat(button.getAttribute("data-unitquantity")); // total quantity in SellProduce
+                const modalId = modal.getAttribute("id");
+                const totalAmountField = document.getElementById(`totalAmount${modalId.slice(12)}`);
+                const hiddenAmountField = document.getElementById(`hiddenAmountField${modalId.slice(12)}`);
+    
+                totalAmountField.textContent = "Calculating...";
+    
+                // Ensure valid numbers for calculation
+                if (!isNaN(quantity) && !isNaN(unitPriceTotal) && !isNaN(totalQuantity) && totalQuantity > 0) {
+                    // Calculate price per unit based on the total quantity and total price
+                    const pricePerUnit = unitPriceTotal / totalQuantity;
+                    const totalAmount = (pricePerUnit * quantity).toFixed(2);
+    
+                    setTimeout(() => {
+                        totalAmountField.textContent = `₹${totalAmount}`;
+                        hiddenAmountField.value = totalAmount;
+                    }, 300);
+                } else {
+                    totalAmountField.textContent = "Error calculating amount";
+                }
+            });
+        });
+    });
+    
+</script>
+
+{% endblock main_content %}

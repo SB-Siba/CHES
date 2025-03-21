@@ -1,0 +1,521 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Dashboard - {{ city_name }}{% endblock title %}
+
+{% block content %}
+<style>
+    /* Leaderboard Container */
+    .leaderboard-container {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .leaderboard-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #343a40;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Leaderboard Rows */
+    .leaderboard-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    .leaderboard-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .leaderboard-item:hover {
+        transform: translateY(-5px);
+    }
+
+    /* User Image */
+    .user-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        object-fit: cover;
+    }
+
+    /* User Info */
+    .user-info {
+        text-align: center;
+    }
+
+    .user-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 5px;
+    }
+
+    .user-coins {
+        font-size: 16px;
+        color: #6c757d;
+    }
+
+    /* Winner Styling */
+    .winner {
+        background-color: #ffd700;
+        border: 2px solid #ffc107;
+    }
+
+    .winner .user-name {
+        color: #343a40;
+    }
+
+    .winner .user-coins {
+        color: #343a40;
+    }
+    #city_cards{
+        height: 18rem;
+        overflow-y: auto;
+    }
+    #city_header{
+        color: black;
+    }
+    ol li{
+        
+        font-size: 12px;
+    }
+</style>
+<div class="container-fluid">
+    <h2 class="my-4" id="city_header" >{{ city_name }} - Detailed Information</h2>
+    
+    <!-- Card Section -->
+    <div class="row mb-5">
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card  city_cards shadow " id="city_cards">
+                <div class="card-header ">
+                    <h5 class="">RTG's</h5>
+                </div>
+                <div class="card-body ">
+                   
+                    <ol class="list-group">
+                        {% for rtg in rtgs %}
+                        <li class="">
+                            <strong>{{ rtg.username }}</strong>  {{ rtg.email }}
+                        </li>
+                        {% empty %}
+                        <li class="">No RTG users found.</li>
+                        {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card  city_cards shadow " id="city_cards">
+                <div class="card-header ">
+                    <h5 class="">Vendor's</h5>
+                </div>
+                <div class="card-body ">
+                   
+                    <ol class="list-group">
+                        {% for vendor in vendors %}
+                        <li class="">
+                            <strong>{{ vendor.username }}</strong> - {{ vendor.email }}
+                        </li>
+                        {% empty %}
+                        <li class="">No vendors found.</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card  city_cards shadow " id="city_cards">
+                <div class="card-header ">
+                    <h5 class="">Service Provider's</h5>
+                </div>
+                <div class="card-body ">
+                   
+                    <ol class="list-group">
+                        {% for service_provider in service_providers %}
+                        <li class="">
+                            <strong>{{ service_provider.username }}</strong> - {{ service_provider.email }}
+                        </li>
+                        {% empty %}
+                        <li class="">No service providers found.</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Charts Section -->
+    <div class="row">
+        <!-- <div class="col-lg-6 mb-4">
+            <div class="card shadow h-100 py-2">
+                <div class="card-body">
+                    <h4 class="card-title">Users of {{ city_name }}</h4>
+                    <canvas id="usersChart"></canvas>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-lg-6 mb-5">
+            <div class="card shadow py-2">
+                <div class="card-body">
+                    <canvas id="myUsersChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-5">
+            <div class="card shadow h-100 ">
+                <div class="card-header">
+                    <h5 class="card-title">Activity Chart</h5>
+                </div>
+                <div class="card-body">
+                    
+                    <canvas id="activityChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-5">
+            <div class="card shadow h-100 ">
+                <div class="card-header">
+                    <h5 class="card-title">RTG & Vendor Community Sales Chart</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="rtgvendorSalesChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-5">
+            <div class="card shadow h-100 ">
+                <div class="card-header">
+                    <h5 class="card-title">Vendor Sales Chart</h5>
+                </div>
+                <div class="card-body">
+                    
+                    <canvas id="vendorSalesChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4 ">
+            <div class="leaderboard-container">
+                <div class="leaderboard-title">Leaderboard</div>
+            
+                <!-- Winner -->
+                <div class="leaderboard-row">
+                    <div class="leaderboard-item winner text-center">
+                        <div class="position-title">Winner</div>
+                        {% if leaderboard.winner %}
+                            {% if leaderboard.winner.user_image %}
+                                <img src="{{ leaderboard.winner.user_image.url }}" alt="{{ leaderboard.winner.full_name }}" class="user-image">
+                            {% else %}
+                                <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                            {% endif %}
+                            <div class="user-info">
+                                <p class="user-name">{{ leaderboard.winner.full_name }}</p>
+                                <p class="user-coins">{{ leaderboard.winner.coins }} points</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            
+                <!-- 1st Runner Up and 2nd Runner Up -->
+                <div class="leaderboard-row">
+                    <div class="leaderboard-item">
+                        <div class="position-title">1st Runner Up</div>
+                        {% if leaderboard.first_runner_up %}
+                            {% if leaderboard.first_runner_up.user_image %}
+                                <img src="{{ leaderboard.first_runner_up.user_image.url }}" alt="{{ leaderboard.first_runner_up.full_name }}" class="user-image">
+                            {% else %}
+                                <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                            {% endif %}
+                            <div class="user-info">
+                                <p class="user-name">{{ leaderboard.first_runner_up.full_name }}</p>
+                                <p class="user-coins">{{ leaderboard.first_runner_up.coins }} points</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="position-title">2nd Runner Up</div>
+                        {% if leaderboard.second_runner_up %}
+                            {% if leaderboard.second_runner_up.user_image %}
+                                <img src="{{ leaderboard.second_runner_up.user_image.url }}" alt="{{ leaderboard.second_runner_up.full_name }}" class="user-image">
+                            {% else %}
+                                <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                            {% endif %}
+                            <div class="user-info">
+                                <p class="user-name">{{ leaderboard.second_runner_up.full_name }}</p>
+                                <p class="user-coins">{{ leaderboard.second_runner_up.coins }} points</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            
+                <!-- 3rd and 4th -->
+                <div class="leaderboard-row">
+                    <div class="leaderboard-item">
+                        <div class="position-title">4th</div>
+                        {% if leaderboard.fourth %}
+                            {% if leaderboard.fourth.user_image %}
+                                <img src="{{ leaderboard.fourth.user_image.url }}" alt="{{ leaderboard.fourth.full_name }}" class="user-image">
+                            {% else %}
+                                <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                            {% endif %}
+                            <div class="user-info">
+                                <p class="user-name">{{ leaderboard.fourth.full_name }}</p>
+                                <p class="user-coins">{{ leaderboard.fourth.coins }} points</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="position-title">5th</div>
+                        {% if leaderboard.fifth %}
+                            {% if leaderboard.fifth.user_image %}
+                                <img src="{{ leaderboard.fifth.user_image.url }}" alt="{{ leaderboard.fifth.full_name }}" class="user-image">
+                            {% else %}
+                                <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                            {% endif %}
+                            <div class="user-info">
+                                <p class="user-name">{{ leaderboard.fifth.full_name }}</p>
+                                <p class="user-coins">{{ leaderboard.fifth.coins }} points</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            
+                <!-- 5th and 6th -->
+                <div class="leaderboard-row">
+                    <div class="leaderboard-item">
+                        <div class="position-title">6th</div>
+                        {% if leaderboard.sixth %}
+                            {% if leaderboard.sixth.user_image %}
+                                <img src="{{ leaderboard.sixth.user_image.url }}" alt="{{ leaderboard.sixth.full_name }}" class="user-image">
+                            {% else %}
+                                <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                            {% endif %}
+                            <div class="user-info">
+                                <p class="user-name">{{ leaderboard.sixth.full_name }}</p>
+                                <p class="user-coins">{{ leaderboard.sixth.coins }} points</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="position-title">7th</div>
+                        {% if leaderboard.seventh %}
+                            {% if leaderboard.seventh.user_image %}
+                                <img src="{{ leaderboard.seventh.user_image.url }}" alt="{{ leaderboard.seventh.full_name }}" class="user-image">
+                            {% else %}
+                                <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                            {% endif %}
+                            <div class="user-info">
+                                <p class="user-name">{{ leaderboard.seventh.full_name }}</p>
+                                <p class="user-coins">{{ leaderboard.seventh.coins }} points</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            
+                <!-- 7th and 8th -->
+                <div class="leaderboard-row">
+                    <div class="leaderboard-item">
+                        <div class="position-title">8th</div>
+                        {% if leaderboard.eighth %}
+                            {% if leaderboard.eighth.user_image %}
+                                <img src="{{ leaderboard.eighth.user_image.url }}" alt="{{ leaderboard.eighth.full_name }}" class="user-image">
+                            {% else %}
+                                <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                            {% endif %}
+                            <div class="user-info">
+                                <p class="user-name">{{ leaderboard.eighth.full_name }}</p>
+                                <p class="user-coins">{{ leaderboard.eighth.coins }} points</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="leaderboard-item">
+                        <div class="position-title">9th</div>
+                        {% if leaderboard.ninth %}
+                            {% if leaderboard.ninth.user_image %}
+                                <img src="{{ leaderboard.ninth.user_image.url }}" alt="{{ leaderboard.ninth.full_name }}" class="user-image">
+                            {% else %}
+                                <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                            {% endif %}
+                            <div class="user-info">
+                                <p class="user-name">{{ leaderboard.ninth.full_name }}</p>
+                                <p class="user-coins">{{ leaderboard.ninth.coins }} points</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            
+                <!-- 9th -->
+                <div class="leaderboard-row">
+                    <div class="leaderboard-item">
+                        <div class="position-title">10th</div>
+                        {% if leaderboard.tenth %}
+                            {% if leaderboard.tenth.user_image %}
+                                <img src="{{ leaderboard.tenth.user_image.url }}" alt="{{ leaderboard.tenth.full_name }}" class="user-image">
+                            {% else %}
+                                <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                            {% endif %}
+                            <div class="user-info">
+                                <p class="user-name">{{ leaderboard.tenth.full_name }}</p>
+                                <p class="user-coins">{{ leaderboard.tenth.coins }} points</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Data from context
+    var graphData = {{ graph_data|safe }};
+    
+    // Activity Chart
+    var ctxActivity = document.getElementById('activityChart').getContext('2d');
+    var activityChart = new Chart(ctxActivity, {
+        type: 'line',
+        data: {
+            labels: graphData.activity_label, // Dynamic labels
+            datasets: [{
+                label: 'User Activity',
+                data: graphData.activity_data, // Dynamic data
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: { display: true, text: 'Users' },
+                    beginAtZero: true
+                },
+                y: {
+                    title: { display: true, text: 'Activity Count' },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // RTG Sales Chart
+    var ctxRtgSales = document.getElementById('rtgvendorSalesChart').getContext('2d');
+    var rtgSalesChart = new Chart(ctxRtgSales, {
+        type: 'bar',
+        data: {
+            labels: graphData.rtg_vendor_sales_label, // Dynamic labels
+            datasets: [{
+                label: 'RTG and Vendor Community Sales',
+                data: graphData.rtg_vendor_sales_data, // Dynamic data
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: { display: true, text: 'RTG & VENDOR' },
+                    beginAtZero: true
+                },
+                y: {
+                    title: { display: true, text: 'Sales Amount' },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Vendor Sales Chart
+    var ctxVendorSales = document.getElementById('vendorSalesChart').getContext('2d');
+    var vendorSalesChart = new Chart(ctxVendorSales, {
+        type: 'bar',
+        data: {
+            labels: graphData.vendor_sales_label, // Dynamic labels
+            datasets: [{
+                label: 'Vendor Sales',
+                data: graphData.vendor_sales_data, // Dynamic data
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: { display: true, text: 'Vendor' },
+                    beginAtZero: true
+                },
+                y: {
+                    title: { display: true, text: 'Sales Amount' },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+<script>
+    // Users Count Chart
+    var labels = {{ labels|safe }};
+    var data = {{ chart_data|safe }};
+
+    // Create the pie chart
+    var ctx = document.getElementById("myUsersChart");
+    var myUsersChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796'],
+                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#dda20a', '#d93d3b', '#636363'],
+                hoverBorderColor: "rgba(234, 236, 244, 1)",
+            }],
+        },
+        options: {
+            maintainAspectRatio: false,
+            tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                borderColor: '#dddfeb',
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                caretPadding: 10,
+            },
+            legend: {
+                display: false
+            },
+            cutoutPercentage: 80,
+        },
+    });
+</script>
+{% endblock js %}

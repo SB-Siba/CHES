@@ -1,0 +1,256 @@
+.container {
+    background: #fff;
+    padding: 0;
+    border-radius: 7px;
+  }
+
+  .profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 40px;
+    object-fit: cover;
+  }
+
+  .settings-tray {
+    background: #21312e;
+    padding: 10px 15px;
+    height: 65px;
+    border-bottom: 1px solid gainsboro;
+  }
+
+  .settings-tray .no-gutters {
+    padding: 0;
+  }
+
+  .settings-tray--right {
+    float: right;
+  }
+
+  .settings-tray--right i {
+    margin-top: 10px;
+    font-size: 25px;
+    color: grey;
+    margin-left: 14px;
+    transition: 0.3s;
+  }
+
+  .settings-tray--right i:hover {
+    color: #74b9ff;
+    cursor: pointer;
+  }
+
+  .search-box {
+    background-color: #21312e;
+    padding: 10px 13px;
+  }
+
+  .search-box .input-wrapper {
+    background: #585353;
+    border-radius: 40px;
+  }
+
+  .search-box .input-wrapper i {
+    color: grey;
+    margin-left: 7px;
+    vertical-align: middle;
+  }
+
+  input {
+    border: none;
+    border-radius: 30px;
+    width: 80%;
+  }
+
+  input::placeholder {
+    color: #e3e3e3;
+    font-weight: 300;
+    margin-left: 20px;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  .friend-drawer {
+    padding: 10px 15px;
+    display: flex;
+    vertical-align: baseline;
+    background-color: #374644;
+    transition: 0.3s ease;
+  }
+
+  .text h6 {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .active {
+    background-color: 14453B;
+  }
+
+  .friend-drawer--grey {
+    background: #21312e;
+  }
+
+  .friend-drawer .text {
+    margin-left: 12px;
+    width: 70%;
+  }
+
+  .friend-drawer .text p {
+    margin: 0;
+  }
+
+  .friend-drawer .time {
+    color: grey;
+  }
+
+  .friend-drawer--onhover:hover {
+    background: #374644;
+    cursor: pointer;
+  }
+
+  .friend-drawer--onhover:hover p,
+  .friend-drawer--onhover:hover h6,
+  .friend-drawer--onhover:hover .time {
+    color: #fefcfc !important;
+  }
+
+  hr {
+    margin: 5px auto;
+    width: 60%;
+  }
+
+  .chat-bubble {
+    padding: 7px 14px;
+    background: #038035;
+    color: white;
+    margin: 10px 30px;
+    border-radius: 10px;
+    position: relative;
+    animation: fadeIn 1s ease-in;
+    width: 80%;
+  }
+
+  .chat-bubble.chat-bubble--right {
+    margin-left: auto;
+  }
+
+  .chat-bubble:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-bottom: 0;
+    margin-top: -10px;
+  }
+
+  .chat-bubble--left:after {
+    left: 0;
+    border-right-color: #038035;
+    border-left: 0;
+    margin-left: -20px;
+  }
+
+  .chat-bubble--right:after {
+    right: 0;
+    border-left-color: #038035;
+    border-right: 0;
+    margin-right: -20px;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .offset-md-9 .chat-bubble {
+    background: #008134;
+    color: #fff;
+  }
+
+  .chat-box-tray {
+    background: #21312e;
+    display: flex;
+    align-items: baseline;
+    padding: 10px 15px;
+    align-items: center;
+    margin-top: 19px;
+    bottom: 0;
+  }
+
+  .chat-box-tray input {
+    margin: 0 10px;
+    padding: 6px 2px;
+  }
+
+  .chat-box-tray i {
+    color: grey;
+    font-size: 30px;
+    vertical-align: middle;
+  }
+
+  .chat-box-tray i:hover {
+    color: #74b9ff;
+    cursor: pointer;
+  }
+
+  .chat-box-tray i:last-of-type {
+    margin-left: 25px;
+  }
+
+  .top-bar {
+    background-color: #14453B;
+    height: 100px;
+  }
+
+  /* Custom scrollbar styles for chat panel */
+  .chat-panel{
+    max-height: 100.8vh; 
+    height: 100.8vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  #chat-panel::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  #chat-panel::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  #chat-panel::-webkit-scrollbar-thumb {
+    background-color: #038035;
+    border-radius: 10px;
+    border: 3px solid #f1f1f1;
+  }
+
+  #chat-panel::-webkit-scrollbar-thumb:hover {
+    background-color: #038035;
+  }
+
+  /* For Firefox */
+  #chat-panel {
+    scrollbar-width: thin;
+    scrollbar-color: #038035 #f1f1f1;
+  }
+
+
+  .col-4-bg{
+    background-color:#21312e ;
+  }
+  .message-text{
+    background-color: #585353;
+    padding-left: 20px;
+  }
+  .text_p{
+    color: grey;
+  }

@@ -1,0 +1,116 @@
+{% extends 'app_common/authentication/master.html' %}
+{% block title %}SignUp{% endblock title %}
+{% load static %}
+
+{% block content %}
+
+<head>
+    <style>
+        body{
+            font-family:'Arial', sans-serif;
+        }
+        .form-control {
+                width: 100%;
+                padding: 6px;
+                padding-left: 10px;
+                margin-bottom: 1.3em;
+                border: none;
+                border-bottom: 2px solid #ced4da;
+                border-radius: 5px !important;
+                transition: border-color 0.3s ease-in-out;
+                font-family:'Arial', sans-serif;
+            }
+            .form-control:focus {
+                border-color: #009f10;
+                box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
+                outline: none;
+            }
+            h2 {
+        color: #009f10 !important;
+        
+    }
+            img{
+                width: 7rem;
+            }
+        .gardning-body{
+                background: #ffffffb3;
+                border-radius: 10px;
+            }
+            
+    </style>
+</head>
+<body style="height: 160vh !important; display: flex ; align-items: center;">
+
+    <div class="container">
+        <div class="row d-flex align-items-center justify-content-center my-5">
+            <div class="col-lg-6 gardning-body d-flex justify-content-center ">
+                <div class="login">
+                    <div
+                        class="d-flex justify-space-between py-3 mt-4"
+                        style="align-items: center;justify-content: center;">
+                        <div class="auth_reg_logo mx-3">
+                            <img src="{% static 'user_dashboard/images/green-logo.png' %}"/>
+                        </div>
+                        <div>
+                            <h2>Vendor Details</h2>
+                        </div>
+                    </div>
+                   
+                    <form method="post" action="" class="px-4" enctype="multipart/form-data">
+                        {% include 'app_common/snippets/alert.html' %}
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ form.business_name }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.business_address }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.business_description }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.business_license_number }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.business_category }}
+                        </div>
+                        <div class="form-group" id="custom-category-field" style="display: none;">
+                            {{ form.custom_business_category }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.establishment_year }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.website }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.established_by }}
+                        </div>
+                        <div style="text-align:center;">
+                            <button class="log_btn" type="submit">
+                                Add Data
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const categoryField = document.getElementById('id_business_category');
+        const customCategoryField = document.getElementById('custom-category-field');
+        
+        categoryField.addEventListener('change', function() {
+            if (this.value === 'other') {
+                customCategoryField.style.display = 'block';
+            } else {
+                customCategoryField.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock content %}

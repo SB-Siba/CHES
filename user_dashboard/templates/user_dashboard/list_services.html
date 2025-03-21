@@ -1,0 +1,167 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+{% block title %}Service List{% endblock title %}
+
+{% block content %}
+<!-- Custom CSS -->
+<head>
+    <link rel="stylesheet" href="{% static '/user_dashboard/css/vendor_products.css '%}">
+ 
+<style>
+    .search-input {
+        border-radius: 25px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-btn {
+        border-radius: 25px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .category-card, .service-card {
+        border: none;
+        border-radius: 5px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        text-align: center;
+        padding: 10px;
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+
+    .category-card:hover, .service-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .category-image {
+        height: 200px;
+        object-fit: cover;
+        margin-bottom: 15px;
+        width:100%;
+        border-radius:  8px 8px 0 0;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+
+    }
+    .service-image{
+        height: 150px;
+        width:100%;
+        object-fit: cover;
+        margin-bottom: 15px;
+        border-radius:  8px 8px 0 0;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+    }
+    
+
+    
+</style>
+</head>
+<div class=" my-4">
+
+    <!-- If no category is selected, show the categories -->
+    {% if categories %}
+    <h3 class="mb-4">Available Services</h3>
+
+    <h4>Select a Category:</h4>
+    <div class="row mb-4">
+        {% for category in categories %}
+        <div class="col-md-4 mb-4">
+            <a href="?category_id={{ category.id }}" class="text-decoration-none">
+                <div class="category-card shadow-sm">
+                    <!-- Category Image -->
+                    {% if category.image %}
+                    <img src="{{ category.image.url }}" class="category-image" alt="{{ category.service_category }}">
+                    {% else %}
+                    <img src="{% static 'default-category-image.jpg' %}" class="category-image" alt="No Image Available">
+                    {% endif %}
+                    <h5 class="text-black text-decoration-none">{{ category.service_category }}</h5>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- If a category is selected, show the services in that category -->
+    {% elif services %}
+    <h3>Services in  {{ selected_category.service_category }}:</h3>
+    <div class="row">
+        {% for service in services %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm service-card">
+                <!-- Service Image -->
+                {% if service.service_image %}
+                <img src="{{ service.service_image.url }}" class="card-img-top service-image" alt="{{ service.name }}">
+                {% else %}
+                <img src="{% static 'default-service-image.jpg' %}" class="card-img-top service-image" alt="No Image Available">
+                {% endif %}
+                
+                <div class="text-left ">
+                    <h6 class="card-title"><b>Provider Name:</b> {{ service.provider.full_name }}</h6>
+                    <h6 class="card-title"><b>Service city: </b>
+                        {% if service.sp_details and service.sp_details.service_area %}
+                            {% for city in service.sp_details.service_area %}
+                                {{ city }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Not available
+                        {% endif %}
+                    </h6>
+                    <div class=" check_para">
+                        <label class="form-check-label">
+                          <input class="form-check-input offer-discount-checkbox" type="checkbox" name="offer_discount"
+                          data-service-id="{{ service.id }}"
+                          data-original-price="{{ service.price_per_hour }}"
+                          data-green-coins="{{ service.green_coins_required }}"
+                          data-discount="{{ service.discount_percentage_for_greencoins }}">
+                        <div class="fw-bolder fs-5">Use  {{ service.green_coins_required }} <i class="fas fa-coins" style="font-size: 18px; color: rgb(247, 207, 6);"></i>
+                          Green Coins</div>
+                          
+                        </label>
+                        <p class="green_text small">( Exchange {{prod.green_coins_required}} green coins for discount of
+                            {{ service.discount_percentage_for_greencoins }}% )</p>
+                      </div>
+                    
+                
+                    <p class="fw-bold"><span>Price: </span> Rs. <span id="price-{{ service.id }}">{{ service.price_per_hour }}</span></p>
+                    <a href="{% url 'user_dashboard:service_details' service.id %}" class="btn w-100 Table_BTNs" >Book Service</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- <a href="{% url 'user_dashboard:list_services' %}" class="btn btn-secondary mt-4">Back to Categories</a> -->
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        No services available for this category.
+    </div>
+    {% endif %}
+    
+</div>
+<!-- JavaScript for handling discount calculation -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.offer-discount-checkbox').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const serviceId = this.getAttribute('data-service-id');
+                const originalPrice = parseFloat(this.getAttribute('data-original-price'));
+                const discountPercent = parseFloat(this.getAttribute('data-discount'));
+                const priceElement = document.getElementById('price-' + serviceId);
+                const bookServiceButton = document.querySelector(`a[href*="service_details/${serviceId}"]`);
+    
+                let discountedPrice = originalPrice;
+    
+                if (this.checked) {
+                    discountedPrice = originalPrice - (originalPrice * (discountPercent / 100));
+                    priceElement.textContent = `${discountedPrice.toFixed(2)}`;
+                } else {
+                    priceElement.textContent = `${originalPrice.toFixed(2)}`;
+                }
+    
+                if (bookServiceButton) {
+                    bookServiceButton.href = `${bookServiceButton.href.split('?')[0]}?discounted_price=${discountedPrice.toFixed(2)}`;
+                }
+            });
+        });
+    });
+    
+</script>
+{% endblock content %}

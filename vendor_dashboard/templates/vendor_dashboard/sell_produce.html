@@ -1,0 +1,38 @@
+{% extends 'vendor_dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<style>
+
+.my-button {
+        background-color: #0da731;
+        color: white; 
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+<nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Sell Produce</li>
+    </ol>
+  </nav>
+  <div class="page-wapper " >
+        <h3 class="mx-4 text-center"> Sell Produce</h3>
+        <div class="row d-flex justify-content-center my-5">
+            <div class="col-lg-8 col-md-8 sell_wrapper p-lg-4 p-1">
+                <form method="post" action="" enctype="multipart/form-data" class="px-4">
+                    {% include 'app_common/snippets/alert.html' %}
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    
+                    <div class="d-flex justify-content-center" >
+                        <button class="my-button text-white w-100"  type="submit">Sell Now</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

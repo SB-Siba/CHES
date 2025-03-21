@@ -1,0 +1,120 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Sell Request List{% endblock title %}
+{% block content %}
+
+<head>
+  <link rel="stylesheet" href="{% static '/user_dashboard/css/tables.css '%}">
+</head>
+    <div class="page-wapper min_height_div">
+        <h3 class="mb-3"> My Sell Request</h3>
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th id="t-Head" scope="col">Request ID</th>
+                        <th id="t-Head" scope="col">Name</th>
+                        <th id="t-Head" scope="col">Quantity</th>
+                        <th id="t-Head" scope="col">Image</th>
+                        <th id="t-Head" scope="col">Units</th>
+                        <th id="t-Head" scope="col">Amount</th>
+                        <th id="t-Head" scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sell_request in sell_objs %}
+                    <tr>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.id }}
+                            </div>
+                        </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.product_name }}
+                            </div>
+                        </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.product_quantity }}
+                            </div>
+                        </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub p-0">
+                                <img src="{{ sell_request.product_image.url }}" alt="Garden Image" style="height: 50px; width: 80px;" class="">
+
+                            </div>
+                        </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.SI_units }}
+                            </div>
+                        </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ sell_request.amount_in_green_points }}
+                            </div>
+                        </td>
+                        <td class="tb-body">
+                            <div class="text-center align-self-baseline mt-2">
+                                {% if sell_request.is_approved == "approved" %}
+                              <abbr title="Click To See The Reason" >
+                                  <span class="text-success btn" data-toggle="modal" data-target="#approvedModal{{ sell_request.id }}">Approved</span>
+                              </abbr>
+                          {% elif sell_request.is_approved == "rejected" %}
+                              <abbr title="Click To See The Reason" >
+                                  <span class="text-danger btn" data-toggle="modal" data-target="#rejectedModal{{ sell_request.id }}">Rejected</span>
+                              </abbr>
+                          {% else %}
+                              <span class="text-warning btn">Pending</span>
+                          {% endif %}
+                            </div>
+                        </td>
+                        
+                      
+                      <!-- Modal for rejected request -->
+                      <div class="modal fade" id="rejectedModal{{ sell_request.id }}" tabindex="-1" aria-labelledby="rejectedModalLabel{{ sell_request.id }}" aria-hidden="true">
+                          <div class="modal-dialog">
+                              <div class="modal-content">
+                                  <div class="modal-header" id="t-Head">
+                                      <h5 class="modal-title" id="rejectedModalLabel{{ sell_request.id }}">Reject Reason</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body text-center text-danger" style="font-size: larger;">
+                                      {{ sell_request.reason }}
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      <!-- Modal for approved request -->
+                      <div class="modal fade" id="approvedModal{{ sell_request.id }}" tabindex="-1" aria-labelledby="approvedModalLabel{{ sell_request.id }}" aria-hidden="true">
+                          <div class="modal-dialog">
+                              <div class="modal-content">
+                                  <div class="modal-header" id="t-Head">
+                                      <h5 class="modal-title" id="approvedModalLabel{{ sell_request.id }}">Approve Reason</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body text-center text-success" style="font-size: larger;">
+                                      {{ sell_request.reason }}
+                                  </div>
+                              </div>
+                          </div>
+                      </div>                      
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+<script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
+{% endblock js %}

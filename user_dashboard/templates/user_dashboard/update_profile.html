@@ -1,0 +1,117 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}User Profile{% endblock title %}
+
+{% block content %}
+
+<head>
+    <style>
+        body{
+        font-family:'Arial', sans-serif;
+    }
+        .form-control {
+            width: 100%;
+            padding: 6px;
+            padding-left: 10px;
+            border: none;
+            border-bottom: 2px solid #ced4da;
+            border-radius: 5px !important;
+            transition: border-color 0.3s ease-in-out;
+        }
+        label{
+          font-weight: 600;
+        }
+        .form-control:focus {
+            border-color: #009f10;
+            box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
+            outline: none;
+        }
+        .edit-body {
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          background-color: #dfe1e455;
+        }
+        .address-textarea {
+            height: 50px; /* Adjust this value to set the desired height */
+        }
+        .form-controL {
+            width: 100%;
+            padding: 6px;
+            padding-left: 10px;
+            border: none;
+            height: 2.6rem;
+            border-bottom: 2px solid #ced4da;
+            border-radius: 5px !important;
+            transition: border-color 0.3s ease-in-out;
+        }
+        .form-controL:focus {
+            border-color: #009f10;
+            box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
+            outline: none;
+        }
+        .edit-btn {
+            background-color: #14453b;
+            color: #fff;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+            margin: 0 auto;
+        }
+        .edit-btn:hover{
+          background-color: #017c36;
+            color: #fff;
+            box-shadow: 2px 2px 2px #3b3e3c;
+        }
+    </style>
+</head>
+<body>
+<div class="container my-4">
+  <div class="row d-flex  align-items-center justify-content-center">
+    <div class="col-lg-8 edit-body pb-4">
+      <form method="post" action="" class="p-4 update-form" enctype="multipart/form-data">
+        
+        {% csrf_token %}
+        {{form.as_p}}
+        <div class="d-flex justify-content-end">
+          <button type="submit" class=" text-center w-100 " id="table_BTN" onclick="showUpdateMessage()">
+              Update Profile 
+          </button>
+        </div>
+    </form>
+  </div>
+</div>
+
+  <script>
+    function showUpdateMessage() {
+    // Create the message element
+    const message = document.createElement("div");
+    message.textContent = "Updated Successfully!";
+    message.style.position = "fixed";
+    message.style.top = "20px";
+    message.style.right = "20px";
+    message.style.backgroundColor = "#4CAF50";
+    message.style.color = "white";
+    message.style.padding = "10px 20px";
+    message.style.borderRadius = "5px";
+    message.style.boxShadow = "0px 4px 6px rgba(0, 0, 0, 0.2)";
+    message.style.fontSize = "16px";
+    message.style.zIndex = "1000";
+
+    // Add the message to the document
+    document.body.appendChild(message);
+
+    // Remove the message after 3 seconds
+    setTimeout(() => {
+        message.remove();
+    }, 1000);
+}
+
+// Call this function wherever you want to show the message
+showUpdateMessage();
+
+  </script>
+</body>
+{% endblock content %}

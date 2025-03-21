@@ -1,0 +1,58 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Servicedflg h toie List{% endblock title %}
+
+
+{% block content %}
+<h3>Service Details - {{ service.service_type }}</h3>
+<div class="row mt-4"style="background-color: #e7e7e7; color: rgb(38, 38, 38);">
+    <div class="col-lg-8 col-md-8 col col-12 details_Book p-4"  >
+        <p class=""><b>Provider: </b> {{ service.provider.full_name }}</p>
+        <p class=""><b>Service city: </b> {% if service.sp_details and service.sp_details.service_area %}
+            {% for city in service.sp_details.service_area %}
+                {{ city }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        {% else %}
+            Not available
+        {% endif %}</p>
+        <p class=""> <b>Description: </b> {{ service.description }}</p>
+        <p class=""><b>You have to Pay:  <span id="price-display"> Rs. {{ service.price_per_hour }} per {{service.basis}}.</span></b></p>
+        
+        {% if service_booked_obj %}
+            <a href="" class="btn btn-primary disabled">Already Booked</a>
+        {% else %}
+            <form method="post" class="form-horizontal">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="booking_date" class="control-label">Booking Date :</label>
+                    <div class="w-50">
+                        {{ form.booking_date }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="d-flex justify-content-start">
+                        <button type="submit" class="details_btn w-50 p-1">Book Service</button>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+    <div class="col-lg-4 col-md-4 col-12">
+        <img src="" alt="">
+    </div>
+</div>
+
+<script>
+// Check if a discounted price is present in the URL and update the displayed price if it is
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const discountedPrice = urlParams.get('discounted_price');
+    
+    if (discountedPrice) {
+        document.getElementById('price-display').textContent = `Rs. ${discountedPrice}`;
+    }
+});
+</script>
+
+{% endblock content %}

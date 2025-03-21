@@ -1,0 +1,147 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Users Query{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">User Queries</h2>
+    {% if message_list %}
+    {% for query in message_list %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="card-title">{{ query.full_name }} - <span class="text-muted">{{ query.subject }}</span>
+                    </h5>
+                    <p class="card-text">{{ query.message|truncatewords:20 }}</p>
+                    {% if query.reply %}
+                    <p class="card-text"><strong>Reply :</strong> {{ query.reply }}</p>
+                    {% endif %}
+                    <small class="text-muted">Status:
+                        <span class="badge {{ query.is_solve|yesno:'badge-success,badge-danger' }}">
+                            {{ query.is_solve|yesno:"Solved,Not Solved" }}
+                        </span>
+                    </small>
+                    <br>
+                    <small class="text-muted">Sent on: {{ query.date_sent|date:"M d, Y H:i" }}</small>
+                </div>
+                <div>
+                    <button type="button" class="" id="table_BTN" data-toggle="modal"
+                        data-target="#replyModal{{ query.id }}">
+                        <i class="fas fa-reply"></i> View & Reply
+                    </button>
+                    <!-- Delete Button -->
+                    <button type="button" class=""  id="table_BTN2"  data-toggle="modal"
+                        data-target="#deleteModal{{ query.id }}">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for viewing query details and replying -->
+    <div class="modal fade" id="replyModal{{ query.id }}" tabindex="-1" role="dialog"
+        aria-labelledby="replyModalLabel{{ query.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="replyModalLabel{{ query.id }}">Query Details for {{ query.full_name }}
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Display query details -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Full Name:</strong> {{ query.full_name }}</p>
+                            <p><strong>Email:</strong> {{ query.email }}</p>
+                            <p><strong>Subject:</strong> {{ query.subject }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Message:</strong> {{ query.message }}</p>
+                            <p><strong>Sent on:</strong> {{ query.date_sent|date:"M d, Y H:i" }}</p>
+                            <p><strong>Status:</strong>
+                                <span class="badge {{ query.is_solve|yesno:'badge-success,badge-danger' }}">
+                                    {{ query.is_solve|yesno:"Solved,Not Solved" }}
+                                </span>
+                            </p>
+                            {% if query.reply %}
+                            <p><strong>Reply :</strong> {{ query.reply }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Form for admin reply and status update -->
+                    <form method="POST" action="{% url 'admin_dashboard:query_reply' query.id %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ form.reply.label_tag }}
+                            {{ form.reply }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.is_solve.label_tag }}
+                            {{ form.is_solve }}
+                        </div>
+
+                        <button type="submit" class=""  id="table_BTN" ><i class="fas fa-paper-plane"></i> Send
+                            Reply</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal for deleting the query -->
+    <div class="modal fade" id="deleteModal{{ query.id }}" tabindex="-1" role="dialog"
+        aria-labelledby="deleteModalLabel{{ query.id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel{{ query.id }}">Delete Query</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete the query from {{ query.full_name }}?</p>
+                    <p><strong>Subject:</strong> {{ query.subject }}</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="{% url 'admin_dashboard:query_delete' query.id %}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <h4>No Queries Available.</h4>
+    {% endif %}
+    <!-- Pagination links -->
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if message_list.has_previous %}
+            <li class="page-item ">
+                <a class="page-link" href="?page={{ message_list.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            {% for page_num in message_list.paginator.page_range %}
+            <li class="page-item {% if page_num == message_list.number %}active{% endif %}">
+                <a class=""  id="table_BTN"  href="?page={{ page_num }}">{{ page_num }}</a>
+            </li>
+            {% endfor %}
+            {% if message_list.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ message_list.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock content %}

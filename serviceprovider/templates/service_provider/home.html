@@ -1,0 +1,236 @@
+{% extends 'service_provider/base.html' %}
+{% load static %}
+
+{% block s_vendor_content %}
+<style>
+    /* Leaderboard Section */
+    .leaderboard-section {
+        background-color: #e4f9ed;
+        border: 1px solid green;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    #leaderboardheader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #145D01 !important;
+        padding: 1rem 2rem;
+        border-radius: 4px 4px 0 0;
+    }
+
+    .tableLeader {
+        width: 100%;
+        text-align: left;
+        border-collapse: collapse;
+    }
+
+    .tableLeader tr {
+        border-bottom: 1px solid green;
+    }
+
+    .tableLeader td {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .tableLeader .number {
+        width: 10%;
+        font-weight: bold;
+    }
+
+    .tableLeader .name {
+        width: 50%;
+    }
+
+    .tableLeader .points {
+        width: 20%;
+        text-align: right;
+    }
+
+    /* Chart Section */
+    .card-header {
+        background-color: #145D01;
+        color: white;
+    }
+
+    .card-info {
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    }
+
+    .card-body canvas {
+        display: block;
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    @media (max-width: 768px) {
+        .tableLeader td {
+            font-size: 12px;
+        }
+    }
+</style>
+
+<div class="mx-2 py-4">
+    <div class="row">
+        <div class="col-12 col-md-4 mb-2">
+            <div class="card shadow py-2 dash-card1">
+                <div class="card-body py-4" style="color: white;">
+                    <h5 class="mb-2 fw-bold">
+                        My Progress
+                    </h5>
+                    <p class="mb-2 fw-bold">
+                        <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{ earnings_today }}
+                    </p>
+                    <div class="mb-0">
+                        <span class="fw-bold">
+                            Income Of Today
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4 mb-2">
+            <div class="card shadow py-2 dash-card2">
+                <div class="card-body py-4" style="color: white;">
+                    <h5 class="mb-2 fw-bold">
+                        My Progress
+                    </h5>
+                    <p class="mb-2 fw-bold">
+                        <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{ earnings_month }}
+                    </p>
+                    <div class="mb-0">
+                        <span class="fw-bold">
+                            Income Of This Month
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="card shadow py-2 dash-card3">
+                <div class="card-body py-4" style="color: white;">
+                    <h5 class="mb-2 fw-bold">
+                        My Progress
+                    </h5>
+                    <p class="mb-2 fw-bold">
+                        <i class="fas fa-rupee-sign"></i>&nbsp;&nbsp;{{ earnings_year }}
+                    </p>
+                    <div class="mb-0">
+                        <span class="fw-bold">
+                            Income Of This Year
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Leaderboard Section -->
+<div class="row">
+    <!-- Leaderboard -->
+    <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+        <div class="card leaderboard">
+            <main>
+                <div id="leaderboardheader">
+                    <h4 class="text-white">Leader Board</h4>
+                </div>
+                <div class="w-100">
+                    <table class="tableLeader">
+                        {% for leader_user in users_orderby_coins %}
+                        <tr class="{% if forloop.first %}highlight{% endif %}">
+                            <td class="number">{{ forloop.counter }}</td>
+                            <td class="name">{{ leader_user.full_name }}</td>
+                            <td class="points">
+                                {{ leader_user.coins }}
+                                {% if forloop.first %}🏅{% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- My Activity (Chart) -->
+    <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+        <div class="card card-info">
+            <div class="card-header d-flex justify-content-between align-items-center py-3">
+                <h3 class="card-title text-white">My Activity</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock s_vendor_content %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Chart Data
+    const users_name = {{ users_name|safe }};
+    const u_coins = {{ u_coins|safe }};
+    
+    const ctx = document.getElementById('myChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: users_name,
+            datasets: [{
+                label: 'Points',
+                data: u_coins,
+                backgroundColor: 'rgba(0,191,131,0.6)',
+                borderColor: 'rgba(0,191,131,1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    ticks: { autoSkip: false }
+                },
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll(".leaderboard-tab");
+        const tables = document.querySelectorAll(".leaderboard-table");
+
+        tabs.forEach((tab) => {
+            tab.addEventListener("click", function () {
+                tabs.forEach((t) => t.classList.remove("active"));
+                this.classList.add("active");
+
+                const target = this.getAttribute("data-target");
+                tables.forEach((table) => {
+                    if (table.id === target) {
+                        table.classList.add("active");
+                    } else {
+                        table.classList.remove("active");
+                    }
+                });
+            });
+        });
+    });
+</script>
+{% endblock script %}

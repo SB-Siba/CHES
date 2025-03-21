@@ -1,0 +1,100 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Category For Produces{% endblock title %}
+
+{% block content %}
+
+<main class="py-6">
+    <div class="container">
+        <h3>All Categories</h3>
+        <div class="vstack gap-4">
+            <div class="d-flex justify-content-between align-items-baseline gap-3">
+                <form method="POST" action="{% url 'admin_dashboard:produces_category_search' %}">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <!-- Search Input -->
+                        <input type="text" name="query" class="form-control" placeholder="Search by Category" value="{{ search_query }}" required />
+                
+                        <!-- Search Button -->
+                        <button class="btn btn-deep-green" id="table_BTN" type="submit">
+                            Search
+                        </button>
+                    </div>
+                </form>                              
+                <div class="" >
+                    <a href="{% url 'admin_dashboard:produces_category_add' %}" class=" text-decoration-none" id="table_BTN" style="color: white;">
+                        <i class='fa fa-plus-square'></i> Create a category For Produces
+                    </a>
+                </div>
+            </div>
+
+            <div class="tablecard">
+                <div class="table-responsive">
+                    <table class="table table-hover table-nowrap">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="" id="tb-head" scope="col">Category ID</th>
+                                <th class="" id="tb-head" scope="col">Category Name</th>
+                                <th class="" id="tb-head" scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        {% if categories_of_produces %}
+                            <tbody id="test_table_tbody">
+                                {% for category in categories_of_produces %}
+                                <tr>
+                                    <td class="tb-body">
+                                        <a class="text-heading text-primary-hover font-semibold"
+                                            href="{% url 'admin_dashboard:produces_category_update' category.id %}">
+                                            {{ category.id }}
+                                        </a>
+                                    </td>
+                                    <td class="tb-body">{{ category.category_name }}</td>
+                                    <td class="tb-body">
+                                        <a href="{% url 'admin_dashboard:produces_category_update' category.id %}"
+                                            class="me-2" id="table_BTN">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </a>
+                                        <button class="" id="table_BTN2" data-bs-toggle="modal" data-bs-target="#deleteModal{{ category.id }}">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+
+                                        <!-- Delete Modal -->
+                                        <div class="modal fade" id="deleteModal{{ category.id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteModalLabel">Delete Confirmation</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete the category "{{ category.category_name }}"?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="table_BTN">Cancel</button>
+                                                        <a href="{% url 'admin_dashboard:produces_category_delete' category.id %}" class="" id="table_BTN2">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        {% else %}
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="text-center fw-bold text-secondary">
+                                        No Category For Produces Available.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}

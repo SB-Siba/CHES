@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Landing</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="{%  static 'app_common/css/website_landing.css' %}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="icon" sizes="16x16" href="{% static 'app_common/css/images/logo_ches 1.png'%}" type="image/jpeg">
+
+
+</head>
+<body>
+    <div class="py-3 d-lg-flex justify-content-lg-center d-flex justify-content-between gap-lg-5 My_containeR">
+        <a href="#">
+            <img class="loGo_img" src="{% static 'app_common/css/images/logo3.png'%}" alt="">
+        </a>
+        <a href="#">
+            <img class="loGo_img" src="{% static 'app_common/css/images/logo_ches 1.png'%}" alt="">
+        </a>
+        <a href="#">
+            <img class="loGo_img" src="{% static 'app_common/css/images/logo5.png'%}" alt="">
+        </a>
+        <a href="#">
+            <img class="" style="width: 100px; height: 50px;" src="{% static 'app_common/css/images/logo4.jpeg'%}" alt="">
+        </a>
+        <a href="#">
+            <img class="loGo_img" src="{% static 'app_common/css/images/logo1.png'%}" alt="">
+        </a>
+    </div>
+    
+    <nav  id="second-menu" class="py-2" >
+        <div class="My_containeR" >
+            <div class="menu" >
+                <div class="logo">
+                    <!-- <a href="#">
+                        <img class="loGo_img" src="{% static 'app_common/css/images/logo_ches 1.png'%}" alt="">
+                    </a> -->
+                </div>
+                <input type="checkbox" id="check">
+                <label class="btn bars text-black" for="check"><i class="fas fa-bars "></i></label>
+                <ul class="menu">
+                    <label class="btn cancel" for="check"><i class="fas fa-times text-black"></i></label>
+                    <li><a class="logo_an" href="{% url 'website_landing:gallery' %}">Gallery</a></li>
+                    <li><a class="logo_an" href="{% url 'admin_dashboard:user_newsactivity_list' %}">News and Activities</a></li>
+
+                    <!-- <li><a class="logo_an" href="">About Us</a></li> -->
+                    <li><a class="logo_an" href="{% url 'website_landing:contact_us' %}">Contact Us</a></li>
+                    <!-- <li><a class="logo_an" href="">Privacy Policy</a></li> -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+<!-- HEro Section -->
+
+<div id="heroCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+<div class="carousel-inner">
+<div class="carousel-item active" id="carousel-item-1">
+    <div class="carousel-caption text-start">
+    <h1 class="service_hd_2">Inovation Project on Rooftop <br>
+        and Home Gardening in Odisha</h1>
+    <p class="">Discover the best tips and tools for a flourishing garden.</p>  
+    </div>
+</div>
+<div class="carousel-item" id="carousel-item-2">
+    <div class="carousel-caption text-start">
+    <h1 class="service_hd_2"> Home Gardeners Of Odisha</h1>
+    <p class="">Transforming Urban Spaces with Rooftop 
+        and Home Gardens Across Odisha</p>
+    </div>
+</div>
+<div class="carousel-item" id="carousel-item-3">
+    <div class="carousel-caption text-start">
+    <h1 class="service_hd_2">Sustainable Gardening</h1>
+    <p class="">Adopt eco-friendly practices for a greener future.</p>
+    
+    </div>
+</div>
+<div class="carousel-item" id="carousel-item-4">
+    <div class="carousel-caption text-start">
+    <h1 class="service_hd_2">Bring Nature Closer with Home Gardening</h1>
+    <p class="">Transform your space into a lush, sustainable sanctuary.</p>
+    </div>
+</div>
+</div>
+<button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+<span class="visually-hidden">Previous</span>
+</button>
+<button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+<span class="carousel-control-next-icon" aria-hidden="true"></span>
+<span class="visually-hidden">Next</span>
+</button>
+</div>
+
+<!-- HEro Section -->
+
+<!-- main Content  -->
+<div class="My_containeR">
+    <div class="row  mx-lg-0 mx-2 mb-5 hidden-section">
+        <!-- Left side: Image -->
+        <div class="col-lg-6 ">
+            <img class="main_content_img" src="{% static 'app_common/css/images/welcome3.jpg'%}" alt="">
+        </div>
+        
+        <!-- Right side: Heading, Description, and Button -->
+        <div class="col-lg-6 d-flex flex-column justify-content-center position-relative bg_imG">
+            <h1 class="display-5 mb-3">Welcome to <br><span class="display-5a">CHES</span></h1>
+    
+            <p class="lead1 mb-4">
+                The Central Horticulture Experimental Station (CHES) is committed to enhancing the quality of horticultural research and development across the region. We provide expert services and solutions exclusively in the state of Odisha. Before proceeding, please make sure to read the important disclaimer regarding our service availability.
+            </p>
+            <!-- Button to trigger modal -->
+            <div class="mt-3">  
+                <button class="btn btn-succeSS d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#disclaimerModal">
+                    Read Disclaimer &nbsp; <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal structure remains the same as before -->
+
+
+<!-- Modal structure -->
+<div class="modal fade" id="disclaimerModal" tabindex="-1" aria-labelledby="disclaimerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header bg-success text-white">
+                <h2 class="modal-title mx-auto" id="disclaimerModalLabel">Important Disclaimer</h2>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <!-- Disclaimer Message -->
+                <div class="card shadow-sm mb-4 border-success">
+                    <div class="card-body">
+                        <h5 class="card-title text-success"><strong>Disclaimer</strong></h5>
+                        <p class="card-text text-dark">
+                            The transactions conducted on this platform are solely between the service providers/vendors and the buyers. 
+                            The platform administrators do not assume any liability or responsibility for the quality, safety, legality, 
+                            or any other aspect of the products and services offered. All dealings are at the sole risk of the parties involved.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Agreement Form -->
+                <form id="disclaimerForm" method="post">
+                    {% csrf_token %}
+                    <div class="d-flex align-items-start mb-3">
+                        <input
+                            class="form-check-input me-2"
+                            type="checkbox"
+                            id="disclaimerCheckbox"
+                            name="disclaimer_agreed"
+                        />
+                        <label class="form-check-label text-dark" for="disclaimerCheckbox">
+                            I have read and agree to the disclaimer.
+                        </label>
+                    </div>
+
+                    <!-- Buttons and Alert -->
+                    <div class="text-center">
+                        <button id="proceedButton" type="submit" class="btn btn-success px-4" disabled>
+                            Proceed
+                        </button>
+                        <div
+                            id="alertMessage"
+                            class="alert alert-warning mt-3 d-none"
+                        >
+                            Please read and agree to the disclaimer before proceeding.
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- main Content  --> 
+
+<!-- =========== About ========== -->
+<div class="about_row mb-5" id="aboutSection">
+    <div class="My_containeR">
+        <div class="row my-5 mx-lg-0  px-2">
+            <div class="col-lg-8 column-left">
+                <div class="lading_body2">
+                    <h3 class="mb-3">About CHES</h3>
+                    <div class="ms-lg-5 ps-lg-4">
+                        <h1 class="mb-3">
+                            Our Roots in Agricultural Excellence
+                        </h1>
+                        <p class="">
+                            At CHES, we are dedicated to advancing the field of horticulture through innovative solutions and sustainable practices. Our mission is to provide top-quality resources and support to gardeners, landscapers, and horticulturists across the globe.
+                        </p>
+                        <p class="">
+                            With a team of experienced professionals and a passion for plants, we offer a wide range of services, from expert advice to cutting-edge horticultural technologies. Our goal is to foster growth, both in the garden and in our community.
+                        </p>
+                        <p class="">
+                            We believe in the power of collaboration and strive to build strong partnerships with local and international horticultural organizations. By sharing knowledge and resources, we aim to drive progress and enhance the quality of horticultural practices worldwide.
+                        </p>
+                        <p class="">
+                            Join us at CHES to explore the future of horticulture and cultivate a greener, more vibrant world together.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mt-5 column-right">
+                <img class="about-img" src="{% static 'app_common/css/images/about6.jpg'%}" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- =========== About ========== -->
+
+
+<!-- ==========service========= -->
+<div class="My_containeR">
+    <div class="row mx-lg-0 mx-2 mb-5 justify-content-center">
+        <!-- Service 1 -->
+        <div class="col-md-4 mb-4 service-left">
+            <div class="service-box">
+                <img src="{% static 'app_common/css/images/serv1.png' %}" alt="Flower Garden">
+                <h5 class="service-title">Flower Garden</h5>
+                <p class="service-description">Create a vibrant, colorful garden with beautiful flowers for a relaxing outdoor space.</p>
+                
+            </div>
+        </div>
+        <!-- Service 2 -->
+        <div class="col-md-4 mb-4 service-middle">
+            <div class="service-box">
+                <img src="{% static 'app_common/css/images/serv2.png' %}" alt="Planting">
+                <h5 class="service-title">Planting</h5>
+                <p class="service-description">Start your garden with expert planting techniques for healthy, thriving plants year-round.</p>
+                
+            </div>
+        </div>
+        <!-- Service 3 -->
+        <div class="col-md-4 mb-4 service-right">
+            <div class="service-box">
+                <img src="{% static 'app_common/css/images/serv3.png' %}" alt="Care Of Garden">
+                <h5 class="service-title">Care Of Garden</h5>
+                <p class="service-description">Learn essential tips for watering, pruning, and maintaining your garden's health.</p>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- ======== service ========== -->
+
+<!-- ========== Gallery ========= -->
+<div class="row mx-0 my-5 bg_row_service px-2 px-lg-0 gallery-container">
+    <h2 class="gallery-heading text-white">Our Gallery</h2>
+    <div class="My_containeR">
+        <div class="gallery">
+            <div class="gallery-item">
+              <img src="https://images.pexels.com/photos/14106714/pexels-photo-14106714.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Gallery Image 1">
+            </div>
+            <div class="gallery-item">
+              <img src="https://images.pexels.com/photos/11417318/pexels-photo-11417318.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Gallery Image 2">
+            </div>
+            <div class="gallery-item">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoRN42-kF1qG7obYjDv6xrF0hWOkv6NeDYyQ&s" alt="Gallery Image 3">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery7.jpg'%}" alt="Gallery Image 4">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery4.jpg'%}" alt="Gallery Image 5">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery2.jpg'%}" alt="Gallery Image 6">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery9.jpg'%}" alt="Gallery Image 7">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery10.jpg'%}" alt="Gallery Image 8">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery6.jpg'%}" alt="Gallery Image 9">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery11.webp'%}" alt="Gallery Image 10">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery16.jpg'%}" alt="Gallery Image 11">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery13.jpg'%}" alt="Gallery Image 12">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery12.webp'%}" alt="Gallery Image 13">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery14.jpg'%}" alt="Gallery Image 14">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery15.jpg'%}" alt="Gallery Image 15">
+            </div>
+            <div class="gallery-item">
+              <img src="{% static 'app_common/css/images/gallery17.webp'%}" alt="Gallery Image 16">
+            </div>
+          </div>
+    </div>
+</div>
+
+
+<!-- ========== Gallery ========= -->
+
+<!-- ======= Counter ========= -->
+<div class="My_containeR">
+    <div class="row mx-lg-0 mx-2 counter-section">
+        <div class="row">
+            <div class="col-md-3 col-sm-6 counter-box">
+                <div class="icon">🍓</div>
+                <div class="number" data-target="4900">0 <span>+</span></div>
+                <p>Organic Food</p>
+            </div>
+            <div class="col-md-3 col-sm-6 counter-box">
+                <div class="icon">⭐</div>
+                <div class="number" data-target="6003">0</div>
+                <p>Happy Customers</p>
+            </div>
+            <div class="col-md-3 col-sm-6 counter-box">
+                <div class="icon">👨‍👩‍👧</div>
+                <div class="number" data-target="900">0</div>
+                <p>Experience Team</p>
+            </div>
+            <div class="col-md-3 col-sm-6 counter-box">
+                <div class="icon">🍽️</div>
+                <div class="number" data-target="1500">0</div>
+                <p>Monthly Food Order</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--============= Counter========== -->
+
+<!-- faq -->
+<div class="My_containeR">
+    <div class="row mx-lg-0 mx-2  mb-5">
+        <div class="px-0 mt-5">
+        <h2 class="text-center mb-4 fq_head">Frequently Asked Questions</h2>
+        <div class="accordion" id="faqsAccordion">
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        What is the National Horticulture Program?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqsAccordion">
+                    <div class="accordion-body">
+                        The National Horticulture Program is an initiative aimed at promoting sustainable horticulture practices, supporting farmers, and enhancing the production and quality of fruits, vegetables, and other horticultural crops in the country.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        How can I participate in the program?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqsAccordion">
+                    <div class="accordion-body">
+                        You can participate in the National Horticulture Program by registering through the official website, attending workshops and training sessions, and applying for grants and subsidies available for horticultural projects.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        What types of crops are supported under the program?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqsAccordion">
+                    <div class="accordion-body">
+                        The program supports a wide range of horticultural crops including fruits, vegetables, spices, medicinal plants, floriculture, and plantation crops like tea and coffee.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        Are there any financial aids available?
+                   </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqsAccordion">
+                    <div class="accordion-body">
+                        Yes, the National Horticulture Program offers various financial aids including subsidies, grants, and loans to support farmers and entrepreneurs in the horticulture sector.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        How can I get access to training and resources?
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqsAccordion">
+                    <div class="accordion-body">
+                        Training and resources are provided through various channels including online courses, workshops, and agricultural extension services. You can also access educational materials and guides from the program's official website.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="headingSix">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        Who can I contact for more information?
+                    </button>
+                </h2>
+                <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqsAccordion">
+                    <div class="accordion-body">
+                        You can contact the National Horticulture Program's customer service through the official website or reach out to your local agricultural extension office for more personalized assistance.
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+        
+        </div>
+</div>
+<!-- faq -->
+<!-- footer -->
+
+<footer class="footer ">
+<div class="My_containeR mt-5">
+    <div class="row mx-lg-0 mx-5">
+            <div class="col-md-5">
+            <div class="row">
+    <!-- Logo and Newsletter Column -->
+        <div class="col-md-7">
+            <h3 class="mb-5">CHES </h3>
+            <p class="mb-4">Makes a fantastic textural info contrast to steel planters filled with asparagus.</p>
+            <h5 class="mb-4">Newsletter</h5>
+            <div class=" position-relative">
+            <input type="email" class="form-control" placeholder="Your Email" style="padding-right: 50px;">
+            <button style="position: absolute; top: 0; right: 0; height: 100%; border: none; background-color: #5e7d0e; color: white; padding: 0 15px;">
+                <i class="fas fa-envelope"></i>
+            </button>
+        </div>
+        
+        </div>
+        
+        <!-- Quick Links Column -->
+        <div class="col-md-5">
+            <h5 class="mb-5">Quick Links</h5>
+            <ul class="list-unstyled quick-links">
+                <a href="#getStarted">
+                    <li class="mb-4"><i class="fas fa-seedling"></i> Get Started</li>
+                </a>
+                <a href="#aboutSection">
+                    <li class="mb-4"><i class="fas fa-seedling"></i> About Us</li>
+                </a>
+                <a href="#ourTeam">
+                    <li class="mb-4"><i class="fas fa-seedling"></i> Our Team</li>
+                </a>
+                <a href="#help">
+                    <li class="mb-4"><i class="fas fa-seedling"></i> Need Help</li>
+                </a>
+                <a href="{% url 'website_landing:contact_us' %}">
+                    <li class="mb-4"><i class="fas fa-seedling"></i> Contact Us</li>
+                </a>
+            </ul>
+        </div>
+
+            </div>
+        
+
+            </div>
+            
+            <div class="col-md-7">
+            <div class="row">
+                                <!-- Event News Column -->
+        <div class="col-md-6">
+            <h5 class="mb-5">Event News</h5>
+            <ul class="list-unstyled event-news">
+                <li class="d-flex mb-3">
+                    <img class="foot_img1" src="{% static 'app_common/css/images/footer1.webp' %}" alt="Event 1" class="img-fluid">
+                    <div class="ms-3">
+                    <p>An attractive side-yard garden. For the best effect, match<br> <br><i class="fas fa-calendar-alt"></i> Nov 20, 2024</p>
+                    </div>
+                </li>
+                <li class="d-flex">
+                    <img class="foot_img1" src="{% static 'app_common/css/images/footer2.jpg' %}" alt="Event 2" class="img-fluid">
+                    <div class="ms-3">
+                        <p>Creates a beautiful screen and casts lovely filtered shade<br> <br><i class="fas fa-calendar-alt"></i> Nov 20, 2024</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Our Gallery Column -->
+        <div class="col-md-6">
+            <h5 class="mb-5">Our Gallery</h5>
+            <div class="gallery-grid">
+            <img src="{% static 'app_common/css/images/footer3.jpeg' %}" alt="Gallery 1" class="img-fluid">
+            <img src="{% static 'app_common/css/images/footer6.webp' %}" alt="Gallery 2" class="img-fluid">
+            <img src="{% static 'app_common/css/images/footer4.jpeg' %}" alt="Gallery 3" class="img-fluid">
+            <img src="{% static 'app_common/css/images/footer8.jpeg' %}" alt="Gallery 4" class="img-fluid">
+            <img src="{% static 'app_common/css/images/footer7.png' %}" alt="Gallery 5" class="img-fluid">
+            <img src="{% static 'app_common/css/images/footer9.jpg' %}" alt="Gallery 6" class="img-fluid">
+        </div>
+        
+        </div>
+
+            </div>
+
+            </div>
+
+            <div class="row pt-4 pb-2 mt-5 px-lg-5 rounded" style="background-color: #5E9E02;">
+            <div class="col-12 col-md-6 d-flex justify-content-md-start justify-content-center footer_2div">
+                <p class="text-center text-md-start">©Copyright - All Right Reserved. Designed ❤️ by 
+                    <a href="https://techaviait.com/" style="color: white;" target="_blank">Techavia IT Solutions</a>
+                </p>
+            </div>
+            <div class="col-12 col-md-6 d-flex justify-content-md-end justify-content-center footer_2div">
+                <p class="heder_para1 mb-0">
+                    <a class="social_icon" href="">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a class="social_icon mx-lg-2" href="">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a class="social_icon mx-lg-2" href="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
+                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
+                        </svg>
+                    </a>
+                    <a class="social_icon mx-lg-2" href="">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+        
+</div>
+</footer>
+<!-- footer -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkbox = document.getElementById('disclaimerCheckbox');
+    const proceedButton = document.getElementById('proceedButton');
+    const alertMessage = document.getElementById('alertMessage');
+    
+    // Reset the checkbox and proceed button states on page load
+    checkbox.checked = false;
+    proceedButton.disabled = true;
+    alertMessage.style.display = 'none'; // Hide alert on page load
+
+    checkbox.addEventListener('change', function() {
+        proceedButton.disabled = !checkbox.checked;
+        alertMessage.style.display = 'none'; // Hide alert when checkbox is checked
+    });
+    
+    document.getElementById('disclaimerForm').addEventListener('submit', function(event) {
+        if (!checkbox.checked) {
+            event.preventDefault(); // Prevent form submission
+            alertMessage.style.display = 'block'; // Show alert if checkbox is not checked
+        }
+    });
+});
+
+
+//main content
+document.addEventListener("DOMContentLoaded", function() {
+    const section = document.querySelector('.row'); // Replace '.row' with a more specific selector if necessary
+    
+    function handleScroll() {
+        const sectionPosition = section.getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.3;
+
+        if (sectionPosition < screenPosition) {
+            section.classList.add('visible-section');
+        }
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Run on page load in case the section is already in view
+});
+
+//main content
+
+    // service animation
+    document.addEventListener('DOMContentLoaded', function () {
+    const leftCard = document.querySelector('.service-left');
+    const middleCard = document.querySelector('.service-middle');
+    const rightCard = document.querySelector('.service-right');
+
+    const observerOptions = {
+        root: null, // viewport
+        rootMargin: '0px',
+        threshold: 0.5 // 50% of the element should be visible to trigger
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (entry.target === leftCard) {
+                    leftCard.classList.add('animate-left');
+                } else if (entry.target === rightCard) {
+                    rightCard.classList.add('animate-right');
+                } else if (entry.target === middleCard) {
+                    middleCard.classList.add('animate-middle');
+                }
+                // Once the animation is triggered, unobserve the element
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    observer.observe(leftCard);
+    observer.observe(middleCard);
+    observer.observe(rightCard);
+});
+
+    // service animation
+
+    //about animation
+    document.addEventListener('DOMContentLoaded', function() {
+    function onScroll() {
+        var aboutSection = document.querySelector('.about_row');
+        var leftColumn = document.querySelector('.column-left');
+        var rightColumn = document.querySelector('.column-right');
+        var sectionPosition = aboutSection.getBoundingClientRect().top;
+        var screenPosition = window.innerHeight / 1.2;
+
+        if (sectionPosition < screenPosition) {
+            leftColumn.classList.add('animated');
+            rightColumn.classList.add('animated');
+        }
+    }
+
+    window.addEventListener('scroll', onScroll);
+});
+
+    //about animation
+
+    // counter
+    document.addEventListener('DOMContentLoaded', function () {
+    const counters = document.querySelectorAll('.number');
+
+    const startCountUp = (counter) => {
+        const target = +counter.getAttribute('data-target');
+        let count = 500;
+
+        const updateCounter = () => {
+            const increment = target / 200;  // Adjust speed here
+            count += increment;
+            if (count < target) {
+                counter.innerText = Math.ceil(count) + "+";  // Add "+" during the counting
+                requestAnimationFrame(updateCounter);
+            } else {
+                counter.innerText = target + "+";  // Ensure "+" remains after finishing
+            }
+        };
+
+        updateCounter();
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const counters = entry.target.querySelectorAll('.number');
+                counters.forEach(counter => startCountUp(counter));
+                observer.unobserve(entry.target);  // Stop observing once counting starts
+            }
+        });
+    }, { threshold: 0.5 });
+
+    const counterSection = document.querySelector('.counter-section');
+    observer.observe(counterSection);
+});
+
+
+window.addEventListener("scroll", function() {
+    var navbar = document.getElementById("second-menu");
+    var sticky = navbar.offsetTop;
+
+    if (window.pageYOffset > sticky) {
+        navbar.classList.add("fixed"); // Add the fixed class to navbar when scrolling past it
+    } else {
+        navbar.classList.remove("fixed"); // Remove the fixed class when scrolling back up
+    }
+});
+
+
+    // counter
+</script>
+</body>
+</html>

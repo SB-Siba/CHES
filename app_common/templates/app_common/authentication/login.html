@@ -1,0 +1,111 @@
+{% extends 'app_common/authentication/master.html' %}
+{% block title %}Login{% endblock title %}
+{% load static %}
+
+{% block content %}
+<style>
+   body {
+        font-family: 'Arial', sans-serif !important;
+        background-color: #f8f9fa; /* Optional: light background */
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-body{
+        background: #dfeddfdb;
+    }
+    .form-group label {
+        font-weight: 500;
+        color: #495057;
+    }
+     #h3 {
+        color: #009f10;
+        
+    }
+    .form-control {
+      width: 100%;
+  padding: 4px;
+  margin-bottom: 10px;
+  border: none;
+  border-bottom: 2px solid #ced4da;
+  border-radius: 5px !important;
+  transition: border-color 0.3s ease-in-out;
+  font-family: 'Arial', sans-serif;
+    }
+    .form-control:focus {
+      border-color: #009f10;
+  box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
+  outline: none;
+    }
+    .form-control::placeholder{
+        font-size: 13px;
+        padding-left: 5px;
+    }
+
+
+    .forget_para{
+        font-size: 12px;
+    }
+</style>
+
+
+<body style="height: 100vh !important; display: flex ; align-items: center;" >
+    
+
+<div class="container my_container ">
+    <div class="row d-flex align-items-center justify-content-center  mb-3">
+        <div class="col-lg-8 col-md-8  col-sm-12">
+            <div class="row login-body rounded mt-3 p-2">
+                <div class="col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
+                    <!-- Lottie animation container -->
+                    <div id="lottie-animation" style="width: 100%; max-width: 300px; height: 300px;"></div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 my-4">
+                    <h2 class="text-center mt-3 mb-3" id="h3">Login</h2>
+                    <div class="login px-4 ">
+                        
+                        <form method="post" action="" class=" m-0 p-o form-group">
+                            {% include 'app_common/snippets/alert.html' %}
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <p class="forget_para  mb-0" >Forgot Password <a href="{% url 'app_common:forgot_password' %}" style="text-decoration: none;"><b>Forgot ??</b></a></p>
+                            <div class="text-center mt-0 ">
+                                <button class="log_btn" type="submit">Login</button>
+                            </div>
+                            <div>
+                                <p class="text-center mt-3">Back to <a href="{% url 'website_landing:website_landing' %}" class="text-decoration-none "><b class="text-primary">Home</b></a></p>
+                            </div>
+                         
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Load Lottie animation
+        var animation = lottie.loadAnimation({
+            container: document.getElementById('lottie-animation'), // the DOM element that will contain the animation
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: "{% static 'app_common/css/images/anim1.json' %}" // the path to the animation json
+        });
+
+        // Check if the animation is loaded correctly
+        animation.addEventListener('DOMLoaded', function() {
+            console.log('Lottie animation loaded successfully.');
+        });
+
+        animation.addEventListener('data_failed', function() {
+            console.error('Failed to load Lottie animation.');
+        });
+    });
+</script>
+</body>
+{% endblock content %}

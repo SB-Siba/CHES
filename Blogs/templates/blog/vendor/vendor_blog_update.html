@@ -1,0 +1,44 @@
+{% extends 'vendor_dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<section class="py-lg-2">
+    <div class="conatiner">
+        <h3 class=" text-center mt-lg-4 p-lg-3">Update Your Blogs</h3>
+      
+        <div class="row d-flex justify-content-center mx-1">
+            <div class="col-lg-8 col-12">
+                <div class="product-form-container px-2 px-lg-4">
+                    <form action="" method="post" enctype="multipart/form-data" class="">
+                        {% csrf_token %}
+                        {{ form.media }}
+                        <div class="row ">
+                            {% for field in form %}
+                                <div class="col-12 mx-0">
+                                    <div class="form-group">
+                                        {{ field.label_tag }}
+                                        
+                                        {% if field.name == 'image' and blog.image %}
+                                            <!-- Display the current image if it exists -->
+                                            <div class="mb-3">
+                                                <img src="{{ blog.image.url }}" alt="Blog Image" class="img-thumbnail" style="max-height: 200px;">
+                                                <p>Current image: {{ blog.image.name }}</p>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        {{ field }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <br>
+                        <button type="submit" class=" w-100" id="table_BTN">Update Blog</button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock main_content %}

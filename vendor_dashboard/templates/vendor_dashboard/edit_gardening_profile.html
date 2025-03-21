@@ -1,0 +1,31 @@
+{% extends 'vendor_dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_gardeningprofile' %}">Garden Details</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Update Garden Details</li>
+    </ol>
+  </nav>
+  <h3 class="text-center m-4">Update Garden Details </h3>
+<div class="container mt-3 min_height_div " >
+    <div class="row d-flex align-items-center justify-content-center mx-lg-0 mx-1">
+        <div class="col-lg-8 sell_wrapper">
+            <form method="post" action="" class="p-lg-4 px-2 py-4" enctype="multipart/form-data">
+                <div class=" w-100">
+                    {% include 'app_common/snippets/alert.html' %}
+                    {% csrf_token %}
+                    {{form.as_p}}
+                </div>
+                <div class="d-flex justify-content-center ">
+                    <button class="btn-block sell_btn update w-100 my-3" type="submit">
+                        Update Data
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

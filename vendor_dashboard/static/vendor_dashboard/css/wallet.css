@@ -1,0 +1,127 @@
+.main{
+    position: relative;
+    padding: 20px;
+    width: 100%;
+  }
+  .main-top{
+    display: flex;
+    width: 100%;
+  }
+  .main-top i{
+    position: absolute;
+    right: 0;
+    margin: 10px 30px;
+    color: rgb(110, 109, 109);
+    cursor: pointer;
+  }
+ 
+  .users .card{
+    width: 25%;
+    margin: 10px;
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #02920efd; /* Fallback background color */
+    background-image: url(../../../../admin_dashboard/static/admin_dashboard/images/card1.jpeg); /* Replace with your image URL */
+    background-size: cover; /* Ensures the image covers the entire area */
+    background-position: center; /* Centers the image */
+    background-blend-mode: multiply; /* Blends the color with the image */
+    color: white;
+ 
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  }
+  .users .card h4{
+    text-transform: uppercase;
+  }
+  .users .card p{
+    font-size: 12px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+
+
+ 
+  
+  /*Attendance List serction  */
+  .attendance{
+    margin-top: 20px;
+    text-transform: capitalize;
+  }
+  .table{
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 15px;
+    min-width: 100%;
+    border-radius: 5px 5px 0 0;
+  }
+  table thead tr{
+    color: #fff;
+    background: #34AF6D;
+    text-align: left;
+    font-weight: bold;
+  }
+ 
+  .table tbody tr{
+    border-bottom: 1px solid #ddd;
+  }
+  .table tbody tr:nth-of-type(odd){
+    background: #f3f3f3;
+  }
+  .table tbody tr.active{
+    font-weight: bold;
+    color: #4AD489;
+  }
+  .table tbody tr:last-of-type{
+    border-bottom: 2px solid #4AD489;
+  }
+  .table button{
+    padding: 6px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #4AD489;
+  }
+  .table button:hover{
+    background: #4AD489;
+    color: #fff;
+    transition: 0.5rem;
+  }
+  .downloadButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999; /* Ensure it's above other elements */
+}
+.dash-carD1 {
+  background-color: #25cf449a; /* Fallback background color */
+  background-image: url(../../../../admin_dashboard/static/admin_dashboard/images/card1.jpeg); /* Replace with your image URL */
+  background-size: cover; /* Ensures the image covers the entire area */
+  background-position: center; /* Centers the image */
+  background-blend-mode: multiply; /* Blends the color with the image */
+  color: white;
+  width: 100%;
+}
+
+.dash-carD2{
+  background-color: #15a08483;
+  background-image: url(../../../../admin_dashboard/static/admin_dashboard/images/card2.jpg);
+  background-size: cover; 
+  background-position: center;
+  background-blend-mode: multiply; 
+  color: white;
+  width: 100%;
+}
+
+.dash-carD3{
+  background-color: #f39d1368;
+  background-image: url(../../../../admin_dashboard/static/admin_dashboard/images/card3.jpeg);
+  background-size: cover; 
+  background-position: center;
+  background-blend-mode: multiply; 
+  color: white;
+  width: 100%;
+}

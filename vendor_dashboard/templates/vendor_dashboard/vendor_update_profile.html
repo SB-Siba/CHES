@@ -1,0 +1,124 @@
+{% extends 'vendor_dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<style>
+
+.sell_wrapper form .form-control {
+  border: none;
+  border-bottom: 2px solid #ccc;
+  border-radius: 7px;
+  padding: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.sell_wrapper form .form-control:focus {
+  border-bottom-color: #37af2c;
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+label
+{  
+    margin-bottom: 10px;    
+}
+</style>
+<div class="">
+  <nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_profile' %}">Profile</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Update Profile</li>
+    </ol>
+  </nav>
+  <h3 class="text-center m-4">Update Profile Details </h3>
+  <div class="row d-flex align-items-center justify-content-center mx-1">
+    <div class="col-lg-8 sell_wrapper">
+      <div class="login">
+        <form method="post" action="" class="p-lg-4 px-lg-4 py-4 update-form" enctype="multipart/form-data">
+          {% include 'app_common/snippets/alert.html' %}
+          {% csrf_token %}
+
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="id_business_name">Business Name:</label>
+                {{ form.business_name }}
+            </div>
+
+            <div class="form-group">
+              <label for="id_business_description">Business Description:</label>
+              {{ form.business_description }}
+          </div>
+
+          <div class="form-group">
+            <label for="id_business_category">Business Category:</label>
+            {{ form.business_category }}
+        </div>
+        <div class="form-group" id="additional-category" style="display: none;">
+            {{ form.custom_business_category.label_tag }}
+            {{ form.custom_business_category }}
+        </div>
+        <div class="form-group">
+            <label for="id_establishment_year">Establishment Year:</label>
+            {{ form.establishment_year }}
+        </div>
+        <div class="form-group">
+          <label for="id_established_by">Established By:</label>
+          {{ form.established_by }}
+      </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="id_business_address">Business Address:</label>
+                {{ form.business_address }}
+            </div>
+
+            <div class="form-group">
+              <label for="id_business_license_number">Business Licence Number:</label>
+              {{ form.business_license_number }}
+          </div>
+
+          <div class="form-group">
+            <label for="id_website">Website:</label>
+            {{ form.website }}
+        </div>
+
+        <div class="form-group">
+          <label for="id_image">Profile Image:</label>
+          {{ form.image }}
+      </div>
+            </div>
+
+          </div>
+  
+          <button type="submit" class="btn py-2 w-100" id="table_BTN">Update Profile</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const categoryField = document.getElementById('id_business_category');
+  const customCategoryField = document.getElementById('additional-category');
+  
+  categoryField.addEventListener('change', function() {
+    if (this.value === 'other') {
+      customCategoryField.style.display = 'block';
+    } else {
+      customCategoryField.style.display = 'none';
+    }
+  });
+
+  // Initialize visibility based on current value
+  if (categoryField.value === 'other') {
+    customCategoryField.style.display = 'block';
+  } else {
+    customCategoryField.style.display = 'none';
+  }
+});
+</script>
+{% endblock main_content %}

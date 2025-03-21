@@ -1,0 +1,289 @@
+
+
+/* -------------------------------User_blog List CSS  Page----------------------- */
+
+.BlogImage{
+    height: 300px;
+    overflow: hidden;
+    width: auto;
+    object-fit: cover;
+}
+.BlogImage img{
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s ease-in-out;
+    transform: scale(1);
+}
+.BlogImage img:hover{
+    transform: scale(1.04);
+}
+.blog_title h5 a{
+    font-size: 20px;
+    font-family: "Inter",sans-serif;
+    color: var(--para);
+    font-weight: 400;
+    line-height: 23px;
+}
+.blog_title p{
+    font-size: 14px;
+    font-family: "Inter",sans-serif;
+    color: var(--para);
+    font-weight: 300;
+    line-height: 23px;
+}
+.blog_title h4{
+    font-size: 22px;
+    font-family: "Inter",sans-serif;
+    color: var(--para);
+    font-weight: 300;
+    line-height: 23px;
+}
+.blog_title h3{
+    font-size: 24px;
+    font-family: "Inter",sans-serif;
+    color: var(--para);
+    font-weight: 400;
+    line-height: 23px;
+}
+.blog_title h2{
+    font-size: 24px;
+    font-family: "Inter",sans-serif;
+    color: var(--para);
+    font-weight: 300;
+    line-height: 23px;
+}
+.blog_title h1{
+    font-size: 24px;
+    font-family: "Inter",sans-serif;
+    color: var(--para);
+    font-weight: 300;
+    line-height: 23px;
+}
+
+button {
+position: relative;
+display: inline-block;
+cursor: pointer;
+outline: none;
+border: 0;
+vertical-align: middle;
+text-decoration: none;
+background: transparent;
+padding: 0;
+font-size: inherit;
+font-family: inherit;
+}
+
+button.learn-more {
+width: 12rem;
+height: auto;
+}
+
+button.learn-more .circle {
+transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+position: relative;
+display: block;
+margin: 0;
+width: 3rem;
+height: 3rem;
+background: green;
+border-radius: 1.625rem;
+}
+
+button.learn-more .circle .icon {
+transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+position: absolute;
+top: 0;
+bottom: 0;
+margin: auto;
+background: #fff;
+}
+
+button.learn-more .circle .icon.arrow {
+transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+left: 0.625rem;
+width: 1.125rem;
+height: 0.125rem;
+background: none;
+}
+
+button.learn-more .circle .icon.arrow::before {
+position: absolute;
+content: "";
+top: -0.29rem;
+right: 0.0625rem;
+width: 0.625rem;
+height: 0.625rem;
+border-top: 0.125rem solid #fff;
+border-right: 0.125rem solid #fff;
+transform: rotate(45deg);
+}
+
+button.learn-more .button-text {
+transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+padding: 0.75rem 0;
+margin: 0 0 0 1.85rem;
+color: #282936;
+font-weight: 700;
+line-height: 1.6;
+text-align: center;
+text-transform: uppercase;
+}
+
+button:hover .circle {
+width: 100%;
+}
+
+button:hover .circle .icon.arrow {
+background: #fff;
+transform: translate(1rem, 0);
+}
+
+button:hover .button-text {
+color: #fff;
+}
+
+/* -------------------------------User_blog_Single  List CSS  Page----------------------- */
+.Blog_detail_Title{
+    background-color: var(--third3);
+}
+.Blog_detail_Title h3{
+    font-size: 24px;
+    font-family: "Inter",sans-serif;
+    color: var(--para);
+    font-weight: 500;
+    line-height: 23px;
+}
+.Main_Image{
+   
+    overflow: hidden;
+    width: auto;
+    object-fit: cover;
+}
+.Main_Image img{
+    height: 100%;
+    width: 100%;
+}
+
+
+@media ( max-width:1000px) {
+   
+    .Main_Image{
+        height: 350px;
+        overflow: hidden;
+        width: auto;
+        object-fit: cover;
+    }
+    .Main_Image img{
+        height: 100%;
+        width: 100%;
+    }
+}
+#t-Head{
+    background-color: green;
+    color: white;
+}
+
+.table-responsive{
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+#input-group-text{
+    background-color: #1F782B !important;
+    
+}
+.add_blog_btn{
+    background-color: #1F782B;
+    color: white;
+    padding: 5px 10px;   
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+ .add_blog_btn:hover{
+    background: rgb(5,131,47);
+    background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(4,99,19,1) 52%, rgba(6,175,27,1) 100%);
+    color: #fff !important;
+    transition: 0.5rem;
+    text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+}
+.add_blog_btn a{
+    color: white;
+    text-decoration: none;
+}
+.form-control {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 7px;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-control:focus {
+    border-bottom-color: #37af2c;
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px; /* Adjust as needed */
+}
+
+.button-group .learn-more {
+    margin-right: auto; /* Ensure it stays on the left */
+}
+
+.button-group .btn-secondary {
+    margin-left: auto; /* Ensure it stays on the right */
+}
+#t_daTa{
+    font-size: 12px;
+}
+#table_BTN{
+
+    padding: 5px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #008000;
+    color: white;
+    background-color: #008000;
+    text-decoration: none;
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+#table_BTN:hover{
+    text-decoration: none;
+    background: rgb(5,131,47);
+    background: linear-gradient(344deg, rgba(5,131,47,1) 14%, rgba(4,99,19,1) 52%, rgba(6,175,27,1) 100%);
+    color: #fff !important;
+    transition: 0.5rem;
+    text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+}
+#table_BTN2{
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #e42918;
+    color: white;
+    background-color: #e42918;
+    text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  }
+  #table_BTN2:hover{
+    background: rgb(215, 6, 26);
+    background: linear-gradient(344deg, rgb(215, 6, 26) 14%, rgb(166, 8, 6) 52%, rgb(224, 15, 8) 100%);
+    color: #fff !important;
+    transition: 0.5rem;
+    text-decoration: none;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+  }

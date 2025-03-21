@@ -1,0 +1,39 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Activity List{% endblock title %}
+
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{% static '/user_dashboard/css/tables.css '%}">
+</head>
+<div class="page-wapper min_height_div">
+    {% include 'app_common/snippets/alert.html' %}
+    
+    <div class="table-responsive">
+        <table class="table table-hover table-nowrap">
+            <thead class="table-light">
+                <tr>
+                    <th id="t-Head" scope="col">Activity ID</th>
+                    <th id="t-Head" scope="col">Activity Content</th>
+                    <th id="t-Head" scope="col">Activity Image</th>
+                    <th id="t-Head" scope="col">Date And Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in activities %}
+                <tr>
+                    <td>{{ activity.id }}</td>
+                    <td 
+                        id="content_td"
+                    >{{ activity.activity_content }}</td>
+                    <td><img src="{{ activity.activity_image.url }}" alt="Garden Image" style="height: 50px; width: 50px;"></td>
+                    <td>{{ activity.date_time }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% include 'app_common/snippets/pagination.html' %}
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,115 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Compose Message{% endblock title %}
+
+{% block content %}
+
+<head>
+  <link rel="stylesheet" href="{% static 'css/messages.css' %}">
+</head>
+<style>
+ 
+
+  .background-image {
+    background-image: url("{% static 'images/message2.jpg' %}");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+</style>
+
+<section style="background:#e1e0dd; ">
+  <div class="top-bar mt-3" style="height: 3.7rem;"></div>
+  <div class="container  ">
+    <div class="row no-gutters" >
+      <div class="col-md-4 border-right" style="overflow-y: auto; background-color: #21312e;">
+        <div class="settings-tray" style="background-color: #21312e; border-bottom: 1px solid gray;">
+          {% if request.user.user_image %}
+            <img class="profile-image" src="{{request.user.user_image.url}}" alt="Profile img">
+          {% else %}
+            <img class="profile-image" src="{% static 'user_dashboard/img/profile8.jpg' %}" alt="">
+          {% endif %}
+          <span class="settings-tray--right">
+            <i onclick="refreshPage()" class="fa-solid fa-arrows-rotate "></i>
+          </span>
+        </div>
+        <div class="search-box">
+          <div class="input-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input style="background-color:  #585353; color: white;" placeholder="Search here" type="text">
+          </div>
+        </div>
+        {% for i, l_message in zipped_messages %}
+          {% if i.receiver == request.user %}
+            <div class="friend-drawer friend-drawer--onhover {% if forloop.first %}active{% endif %}" onclick="loadMessages('{{ i.sender.id }}')">
+              {% if i.sender.user_image %}
+                <img class="profile-image" src="{{i.sender.user_image.url}}" alt="">
+              {% else %}
+                <img class="profile-image" src="{% static 'user_dashboard/img/profile2.jpg' %}" alt="">
+              {% endif %}
+              <div class="text">
+                <h6>{{i.sender.full_name}}</h6>
+                <p class="text-muted">{{ l_message.0 }}</p>
+              </div>
+              <span class="time text-muted small">{{ l_message.1 }}</span>
+            </div>
+            <hr>
+          {% else %}
+            <div class="friend-drawer friend-drawer--onhover {% if forloop.first %}active{% endif %}" onclick="loadMessages('{{ i.receiver.id }}')">
+              {% if i.receiver.user_image %}
+                <img class="profile-image" src="{{i.receiver.user_image.url}}" alt="">
+              {% else %}
+                <img class="profile-image" src="{% static 'user_dashboard/img/profile2.jpg' %}" alt="">
+              {% endif %}
+              <div class="text">
+                <h6>{{i.receiver.full_name}}</h6>
+                <p class="text-muted">{{ l_message.0 }}</p>
+              </div>
+              <span class="time text-muted small">{{ l_message.1 }}</span>
+            </div>
+            <hr>
+          {% endif %}
+        {% endfor %}
+      </div>
+      
+      <div class="col-md-8 background-image">
+        <div class="settings-tray " style="background-color:#21312e ;"> 
+          <div class="friend-drawer no-gutters friend-drawer--grey " style="background-color:#21312e ;">
+            <img class="profile-image" id="chatpartner-profile-image" src="{% static 'user_dashboard/img/profile8.jpg' %}" alt="">
+            <div class="text">
+              <h6 id="chatpartner_name"></h6>
+              <p class="text-muted">Layin' down the law since like before Christ...</p>
+            </div>
+            <span class="settings-tray--right">
+              <i onclick="refreshPage()" class="fa-solid fa-arrows-rotate "></i>
+            </span>
+          </div>
+        </div>
+
+        <div class="chat-panel" id="chat-panel" style="">
+          <!-- Chat messages will be loaded here -->
+        </div>
+        <div class="row" >
+          <div class="col-12" >
+            <div class="chat-box-tray" style="background-color: #21312e;">
+              <form id="messageForm" action="{% url 'chat:send_message' %}" method="post" class="w-100">
+                {% csrf_token %}
+                <div class="row" >
+                  <div class="col-lg-10 col-md-10 col-xl-10 col-sm-10 col-10"  >
+                    <input type="hidden" id="receiverIdInput" name="receiver_id" value="" style="background-color:#585353;">
+                    <input type="text" name="message" placeholder="Type your message here..." class="w-100" style="background-color:#585353; color: white; padding-left: 20px;">
+                  </div>
+                  <div class="col-lg-2 col-md-2 col-xl-2 col-sm-2 col-2">
+                    <i id="submitMessage" class="fa-solid fa-paper-plane" ></i>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

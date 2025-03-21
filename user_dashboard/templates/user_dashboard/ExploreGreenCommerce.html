@@ -1,0 +1,207 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Service Page{% endblock title %}
+
+{% block content %}
+
+<head>
+    <style>
+        @media (max-width:1199px){
+            .green_header{
+                font-size: 18px !important;
+            }
+        }
+    </style>
+</head>
+<div class="row my-4  ">
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 col-lg-3 mb-lg-0 mb-3">
+        <div class="card index-card shadow py-2 dash-card1" style="height: 9rem;">
+            <a
+            class="text-decoration-none"
+            href="{% url 'user_dashboard:sellproduce' %}">
+            <div class="card-body">
+                <div class="row d-flex justiify-content-between align-items-center mt-3">
+                    <div class="col-md-9 col-9">
+                           <h4 class="text-white green_header"> Sell Produce</h4>
+                    </div>
+                    <div class="col-md-3 col-3">
+                        <i class="fas fa-fw fa-box fa-2x text-white"></i>
+                    </div>
+
+                </div>
+            </div>
+          </a>
+
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 col-lg-3 mb-lg-0 mb-3">
+        <div class="card index-card shadow py-2 dash-card7" style="height: 9rem;">
+            <a
+            class="text-decoration-none"
+            href="{% url 'user_dashboard:greencommerceproducts' %}">
+            <div class="card-body">
+                <div class="row d-flex justiify-content-between align-items-center mt-3">
+                    <div class="col-md-9 col-9">
+                        <h4 class="text-white green_header">  Buy From Community</h4>
+                    </div>
+                    <div class="col-md-3 col-3">
+                        <i class="fas fa-fw fa-shopping-basket fa-2x text-white"></i>
+                    </div>
+                </div>
+            </div>
+          </a>
+
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 col-lg-3 mb-lg-0 mb-3">
+        <div class="card index-card shadow py-2 dash-card3 " style="height: 9rem;">
+            <a
+            class="text-decoration-none"
+            href="{% url 'user_dashboard:vendorproducts' %}">
+            <div class="card-body">
+                <div class="row d-flex justiify-content-between align-items-center mt-3">
+                    <div class="col-md-9 col-9">
+                           <h4 class="text-white green_header"> Buy From Vendors </h4>
+                    </div>
+                    <div class="col-md-3 col-3">
+                        <i class="fas fa-fw fa-store fa-2x text-white"></i>
+                    </div>
+
+                </div>
+            </div>
+          </a>
+
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 col-lg-3 mb-lg-0 mb-3">
+        <div class="card index-card shadow py-2 dash-card4" style="height: 9rem;">
+            <a
+            class="text-decoration-none"
+            href="{% url 'user_dashboard:allorders' %}">
+            <div class="card-body">
+                <div class="row d-flex justiify-content-between align-items-center mt-3">
+                    <div class="col-md-9 col-9">
+                           <h4 class="text-white green_header"> My Community Orders</h4>
+                    </div>
+                    <div class="col-md-3 col-3">
+                        <i class="fas fa-fw fa-clipboard-list fa-2x text-white"></i>
+                    </div>
+                </div>
+            </div>
+          </a>
+
+        </div>
+    </div>
+</div>
+<div class="row  ">
+    <div class="col-xl-3 col-md-6 col-lg-3 mb-lg-0 mb-3">
+        <div class="card index-card shadow py-2 dash-card5" style="height: 9rem;">
+            <a
+            class="text-decoration-none"
+            href="{% url 'user_dashboard:allordersfromvendor' %}">
+            <div class="card-body">
+                <div class="row d-flex justiify-content-between align-items-center mt-3">
+                    <div class="col-md-9 col-9">
+                           <h4 class="text-white green_header"> My Orders From Vendors</h4>
+                    </div>
+                    <div class="col-md-3 col-3">
+                        <i class="fas fa-fw fa-shopping-cart  fa-2x text-white"></i>
+                    </div>
+                </div>
+            </div>
+          </a>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 col-lg-3 mb-lg-0 mb-3">
+        <div class="card index-card shadow py-2 dash-card6" style="height: 9rem;">
+            <a
+            class="text-decoration-none"
+            href="{% url 'user_dashboard:allsellrequests' %}">
+            <div class="card-body">
+                <div class="row d-flex justiify-content-between align-items-center mt-3">
+                    <div class="col-md-9 col-9">
+                           <h4 class="text-white green_header"> Request For Sell </h4>
+                    </div>
+                    <div class="col-md-3 col-3">
+                        <i class="fas fa-fw fa-handshake  fa-2x text-white"></i>
+                    </div>
+                </div>
+            </div>
+          </a>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 col-lg-3 mb-lg-0 mb-3">
+        <div class="card index-card shadow py-2 dash-card2" style="height: 9rem;">
+            <a
+            class="text-decoration-none"
+            href="{% url 'user_dashboard:buybeginsbuyerview' %}">
+            <div class="card-body">
+                <div class="row d-flex justiify-content-between align-items-center mt-3">
+                    <div class="col-md-9 col-9">
+                           <h4 class="text-white green_header"> Buying Progress </h4>
+                    </div>
+                    <div class="col-md-3 col-3">
+                        <i class="fa-solid fa-tachometer-alt  fa-2x text-white"></i>
+                    </div>
+                </div>
+            </div>
+          </a>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 col-lg-3 mb-lg-0 mb-3">
+        <div class="card index-card shadow py-2 dash-card8" style="height: 9rem;">
+            <a
+            class="text-decoration-none"
+            href="{% url 'user_dashboard:buybeginssellerview' %}">
+            <div class="card-body">
+                <div class="row d-flex justiify-content-between align-items-center mt-3">
+                    <div class="col-md-9 col-9">
+                           <h4 class="text-white green_header"> Selling Progress </h4>
+                    </div>
+                    <div class="col-md-3 col-3">
+                        <i class="fa-solid fa-indian-rupee-sign  fa-2x text-white"></i>
+                    </div>
+                </div>
+            </div>
+          </a>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="row ">
+    <div class="d-flex justify-content-center lottie_DiV align-items-center">
+        <div id="lottie-animation" class="lottie_animation"></div>
+    </div>
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        var animation = lottie.loadAnimation({
+            container: document.getElementById('lottie-animation'),
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: "{% static 'app_common/css/images/anim4.json' %}" 
+        });
+
+        
+        animation.addEventListener('DOMLoaded', function() {
+            console.log('Lottie animation loaded successfully.');
+        });
+
+        animation.addEventListener('data_failed', function() {
+            console.error('Failed to load Lottie animation.');
+        });
+    });
+</script>
+{% endblock content %}

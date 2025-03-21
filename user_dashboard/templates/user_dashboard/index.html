@@ -1,0 +1,311 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block content %}
+
+<style>
+    .tableLeader tbody tr:first-child {
+    color: rgb(21, 14, 14) !important;
+    font-weight: 600;
+    font-size: 18px;
+    background-color: #74f5cc !important;
+    box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+  }
+
+  .feed-container {
+    height: 300px; /* Adjust the height as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+    scrollbar-width: thin; /* Optional: style the scrollbar */
+    scrollbar-color: #28a745 #f1f1f1; /* Custom scrollbar color */
+}
+.feed-container::-webkit-scrollbar {
+    width: 6px; /* Width of the scrollbar */
+}
+.feed-container::-webkit-scrollbar-thumb {
+    background: #28a745; /* Color of the scrollbar thumb */
+    border-radius: 10px;
+}
+.feed-container::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color of the scrollbar track */
+}
+
+</style>
+<div class=" ">
+    <!-- Content Row -->
+    <div class="row my-4  ">
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 col-lg-3">
+            <div class="card index-card shadow py-2 dash-card1" style="height: 9rem;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-md-8">
+                            <div class="h5 mb-0 font-weight-bold text-white">{{ garden_obj.number_of_plants }}</div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                Total plants
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            <i class="fa-solid fa-tree fa-2x text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 col-lg-3">
+            <div class="card index-card shadow  py-2 dash-card2" style="height: 9rem;" >
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col-md-8">
+                            <div class="h5 mb-0 font-weight-bold text-white">{{garden_obj.garden_area}} sqr.ft.</div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                Total Gardening area
+                            </div>
+
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            <img src="{% static 'user_dashboard\img\n.png' %}" class="text-info" alt=""
+                                style="height: 40px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 col-lg-3">
+            <div class="card index-card  shadow  py-2 dash-card3" style="height: 9rem;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 mr-3 font-weight-bold text-white">
+                                <i class="fas fa-donate fa-trophy"></i>
+                                {{rank}}
+                            </div>
+                            <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">My Ranking
+                            </div>
+
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-trophy fa-2x text-white"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6  col-lg-3">
+            <div class="card index-card  shadow  py-2 dash-card4" style="height: 9rem;">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="h5 mb-0 font-weight-bold text-white">My Green Coins</div>
+                            <div class=" font-weight-bold text-white text-uppercase mb-1 mt-3">
+                            ₹ {{request.user.wallet}}
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fa-solid fa-coins fa-2x " style="color:rgb(250, 220, 51);"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <hr style="border: 2px solid gray;" >
+
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+            <div class="card " id="green-commerce-card">
+                <main>
+                    <div class="card-header bg-success" id="leaderboardheader">
+                        <h3 class="d-flex justify-content-center align-items-center text-white">
+                            Green Commerce 
+                        </h3>
+                    </div> 
+                    <div class="d-flex justify-content-center">
+                        <div id="lottie-animation" style="width: 100%; max-width: 300px; height: 300px;"></div>
+                    </div>
+    
+                    <div class="d-flex justify-content-end mb-3 me-3">
+                        <a href="{% url 'user_dashboard:ExploreGreenCommerce' %}" class="" id="table_BTN">
+                            Explore More
+                        </a>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+            <div class="card leaderbaord mb-4">
+                <main>
+                    <div class="d-flex align-items-center" id="leaderboardheader">
+                        <h3 class=" text-white   " >Leader Board</h3>
+
+                        <div class="filter-container">
+                            <select id="city-filter" class="form-select">
+                                <option value="all">All</option>
+                                <option value="Bhubaneswar">Bhubaneswar</option>
+                                <option value="Cuttack">Cuttack</option>
+                                <option value="Brahmapur">Brahmapur</option>
+                                <option value="Puri">Puri</option>
+                                <option value="Balasore">Balasore</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="leaderboard">
+                        <table  class="tableLeader" >
+                            {% for leader_user in users_orderby_coins %}
+                            <tr data-rank="" data-city="{{ leader_user.city }}" class="leaderRow ltr">
+                                <td class="number lc" style="font-size: x-large;">
+                                    {{ forloop.counter }}
+                                </td>
+                                <td class="name lc">{{ leader_user.full_name }}</td>
+                                <td class="points lc">
+                                    {{ leader_user.coins }}
+                                    {% if forloop.first %}
+                                    🏅 
+                                    {% endif %} 
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </main>
+            </div>
+        </div>
+      
+        <!-- Content Column -->
+        
+    </div>
+    <!-- /.row -->
+
+    <!-- activity -->
+    <div class="row">
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+            <!-- Project Card Example -->
+            <div class="card mb-4" id="green-commerce-card">
+                <div class="card card-info">
+                    <div class="card-header d-flex justify-content-between align-items-center py-3">
+                        <h3 class="card-title text-white">My Activity</h3>
+                    </div>
+                    <div class="card-body">
+                        <div style="height: 220px;">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Feed Section -->
+        <div class="col-lg-6 mb-4 col-md-12 col-sm-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5>Feed</h5>
+                </div>
+                <div class="card-body feed-container">
+                    <!-- Feed items (dynamic or static) -->
+                    <div class="feed-item">
+                        <h6>New Plant Added</h6>
+                        <p>John just added a new plant to his garden!</p>
+                        <small class="text-muted">2 hours ago</small>
+                    </div>
+                    <div class="feed-item">
+                        <h6>Challenge Completed</h6>
+                        <p>Sarah completed the "Grow 5 Herbs" challenge and earned 50 green coins!</p>
+                        <small class="text-muted">5 hours ago</small>
+                    </div>
+                    <div class="feed-item">
+                        <h6>Leaderboard Update</h6>
+                        <p>Michael climbed to the #1 spot on the leaderboard!</p>
+                        <small class="text-muted">1 day ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <!-- activity -->
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+<script>
+
+    const users_name = {{ users_name|safe }};
+    const u_coins = {{ u_coins|safe }};
+    
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: users_name,
+            datasets: [{
+                label: 'Points',
+                data: u_coins,
+                backgroundColor: 'rgba(0,191,131)', // Green color with 20% opacity
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    ticks: {
+                        display: false
+                    }
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });    
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        var animation = lottie.loadAnimation({
+            container: document.getElementById('lottie-animation'),
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: "{% static 'app_common/css/images/anim3.json' %}" 
+        });
+
+        
+        animation.addEventListener('DOMLoaded', function() {
+            console.log('Lottie animation loaded successfully.');
+        });
+
+        animation.addEventListener('data_failed', function() {
+            console.error('Failed to load Lottie animation.');
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const feedContainer = document.querySelector('.feed-container');
+    
+        setInterval(() => {
+            // Check if the user isn't scrolling manually
+            if (feedContainer.scrollTop + feedContainer.clientHeight < feedContainer.scrollHeight) {
+                // Auto-scroll down by 1 pixel every 50ms
+                feedContainer.scrollTop += 1;
+            } else {
+                // Reset to the top when reaching the bottom
+                feedContainer.scrollTop = 0;
+            }
+        }, 50); // Adjust the interval speed for smoother scrolling
+    });
+    </script>    
+{% endblock scripts %}

@@ -1,0 +1,22 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block title %}Add Produces Category{% endblock title %}
+{% block content %}
+
+<div class="page-wapper" >
+ <h4 class="add-new-title"><span>Add Produces Category</span></h4>
+ <div class="row d-flex justify-content-center mt-5">
+    <div class="col-lg-6 col-md-6 Adm_das_card rounded-1 px-4 py-5 ">
+        <form method="post" action="" enctype="multipart/form-data" id="service_category_add_form" class="py-4">
+                {% csrf_token %}
+                {{form.as_p}}
+                
+                <div style="text-align: center;margin-top: 2rem;">
+                    <button class="" id="table_BTN" type="submit">Add Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

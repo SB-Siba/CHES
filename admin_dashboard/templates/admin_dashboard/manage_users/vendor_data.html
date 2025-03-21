@@ -1,0 +1,55 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block title %}Gardening Details{% endblock title %}
+{% block content %}
+    <div class="page-wapper">
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Business Name</th>
+                        <th scope="col">Business Address</th>
+                        <th scope="col">Business Licence Number</th>
+                        <th scope="col">Business Category</th>
+                        <th scope="col">Establishment Year</th>
+                        <th scope="col">Website</th>
+                        <th scope="col">Established By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="t_daTa">{{ vendor_data.business_name }}</td>
+                        <td id="t_daTa">{{ vendor_data.business_address }}</td>
+                        <td id="t_daTa">
+                            {{ vendor_data.business_license_number }}
+                        </td>
+                        <td id="t_daTa">
+                            {{ vendor_data.business_category }}
+                        </td>
+                        <td id="t_daTa">
+                            {{ vendor_data.establishment_year }}
+                        </td>
+                        <td id="t_daTa">
+                            <a href="{{vendor_data.website}}">{{vendor_data.website}}</a>
+                        </td>
+                        <td id="t_daTa" >
+                            {{vendor_data.established_by}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
+    </div>
+
+
+
+
+<!-- wallet balance add modal -->
+
+
+{% endblock content %}
+{% block js %}
+<script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
+{% endblock js %}

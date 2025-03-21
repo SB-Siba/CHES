@@ -1,0 +1,120 @@
+{% extends 'service_provider/base.html' %}
+{% load static %}
+
+{% block s_vendor_content %}
+<style>
+  #box {
+    background-color: green;
+  }
+</style>
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+<dotlottie-player src="https://lottie.host/cda0696d-874e-40b2-935f-da67b9de2d02/JLL8HP0Vaw.json" background="transparent" speed="1" style="width: 100%; height: 300px;" loop autoplay></dotlottie-player>
+
+<section class="main pt-0">
+  <div class="main-top mx-4">
+    <h1>My Wallet</h1>
+  </div>
+  <div class="users d-flex justify-content-between">
+    <div class="card text-white" id="box">
+      <h4 class="text-white">Total Balance</h4>
+      <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2" style="font-weight: bold;">{{ request.user.wallet }}</span></p>
+    </div>
+    <div class="card text-white" id="box">
+      <h4 class="text-white">Total Purchase</h4>
+      <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2" style="font-weight: bold;">{{ request.user.total_invest }}</span></p>
+    </div>
+    <div class="card text-white" id="box">
+      <h4 class="text-white">Total Earnings</h4>
+      <p><i class="fa-solid fa-coins fa-2x"></i> <span class="mx-2" style="font-weight: bold;">{{ request.user.total_income }}</span></p>
+    </div>
+  </div>
+
+  <section class="main">
+    <div class="main-top">
+      <h1>Transactions</h1>
+    </div>
+    <table class="table">
+      <thead>
+        <tr style="color: black;">
+          <th id="t-Head">Service Name</th>
+          <th id="t-Head">Amount</th>
+          <th id="t-Head">Date & Time</th>
+          <th id="t-Head">Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for transaction in transactions %}
+        <tr style="color: black;">
+          <td style="font-size: small;">{{ transaction.service_name }}</td>
+          {% if transaction.is_purchase %}
+          <td style="font-size: small;" class="text-danger">- {{ transaction.amount }}</td>
+          {% else %}
+          <td style="font-size: small;" class="text-success">+ {{ transaction.amount }}</td>
+          {% endif %}
+          <td style="font-size: small;">{{ transaction.date|date:"M d, Y H:i" }}</td>
+          <td style="font-size: small;">
+            <button type="button" class="btn btn-success text-black" data-bs-toggle="modal" data-bs-target="#transactionModal{{ forloop.counter }}">View</button>
+          </td>
+        </tr>
+        <!-- Modal -->
+        <div class="modal fade" id="transactionModal{{ forloop.counter }}" tabindex="-1" role="dialog"
+          aria-labelledby="transactionModalLabel{{ forloop.counter }}" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Transaction Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p><strong>Service Name:</strong> {{ transaction.service_name }}</p>
+                <p><strong>Amount:</strong> {{ transaction.amount }}</p>
+                <p><strong>Date:</strong> {{ transaction.date|date:"M d, Y H:i" }}</p>
+                <p><strong>Transaction Type:</strong> {{ transaction.is_purchase|yesno:"Purchase, Earnings" }}</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</section>
+{% endblock s_vendor_content %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll('.downloadButton').forEach(button => {
+          button.addEventListener('click', function() {
+              const counter = this.getAttribute('data-counter');
+              const modalContent = document.querySelector(`#transactionModal${counter} .modal-content`);
+
+              if (!modalContent) return;
+
+              this.style.display = 'none';
+
+              domtoimage.toPng(modalContent)
+                  .then(function(dataUrl) {
+                      const { jsPDF } = window.jspdf;
+                      const pdf = new jsPDF();
+
+                      pdf.addImage(dataUrl, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+                      pdf.save('invoice.pdf');
+
+                      button.style.display = 'block';
+                  })
+                  .catch(function(error) {
+                      console.error('Error generating PDF:', error);
+                      button.style.display = 'block';
+                  });
+          });
+      });
+  });
+</script>
+{% endblock script %}

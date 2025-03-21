@@ -1,0 +1,30 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Payment Page{% endblock title %}
+
+{% block content %}
+<div class="container py-4">
+    <h3 class="mb-3">Complete Your Payment</h3>
+    <p>Scan the QR code below to make your payment:</p>
+
+    {% if vendor_qr_code %}
+        <img src="{{ vendor_qr_code.qr_code.url }}" alt="QR Code" class="img-fluid mb-3">
+    {% else %}
+        <p>No QR code available for this vendor.</p>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="payment_screenshot">Upload Payment Screenshot:</label>
+            <input type="file" name="payment_screenshot" id="payment_screenshot" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success mt-3">Confirm Payment</button>
+    </form>
+
+    {% if error %}
+        <p class="text-danger mt-2">{{ error }}</p>
+    {% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,124 @@
+.auth {
+    background-image:url(images/logbg5.jpg) ;
+    background-size: cover;
+    min-height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    background-position: center center; 
+    background-repeat: no-repeat; 
+}
+
+
+.login {
+    width: 100%;
+    max-width: 450px; 
+    border-radius: 8px;
+}
+.login h3 {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.garden_btn{
+    background:#027d10;      
+    border: 2px solid rgb(125, 187, 125);
+    margin-bottom: 20px;
+    color: rgb(255, 255, 255);
+    border-radius: 50px;
+    padding: 10px 30px;
+    font-weight: 700;
+    width: 50%;
+    margin-top: 1rem;
+}
+.garden_btn:hover{
+    background: rgb(31,120,43);
+    background: linear-gradient(349deg, rgb(36, 138, 50) 0%, rgb(5, 103, 18) 48%, rgb(39, 154, 54) 80%);
+    color: #fff!important;
+}
+.login p {
+    font-family: "Inter", sans-serif;
+}
+.auth_reg_logo {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 50%;
+    background-color:white;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.form-group input{
+    border: none;
+    border-bottom: 2px solid rgb(162, 182, 162);
+    border-radius: 0;
+    outline: none;
+}
+.form-group2{
+    border: none;
+    border-bottom: 2px solid rgb(162, 182, 162);
+    border-radius: 0;
+    outline: none;
+    
+}
+.log_btn,#log_btn {
+    background:#d5f7d9;      
+    border: 2px solid rgb(4, 196, 4);
+    margin-bottom: 20px;
+    color: green;
+    border-radius: 10px;
+    padding: 7px 30px;
+    font-weight: 700;
+    width: 100%;
+    margin-top: 1rem;
+    font-family: "Inter", sans-serif;
+}
+.log_btn:hover{
+ background: rgb(31,120,43);
+ border: 2px solid rgb(4, 196, 4);
+    background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%, rgba(31,120,43,1) 80%);
+    color: #fff!important;
+    
+}
+.log_btn2:hover{
+ background: rgb(31,120,43);
+    background: linear-gradient(349deg, rgba(31,120,43,1) 0%, rgba(29,181,50,1) 48%, rgba(31,120,43,1) 80%);
+    color: #fff!important;
+        
+}
+.log_btn2 {
+    background:#fff;      
+    border: 2px solid;
+    margin-bottom: 20px;
+    color: green;
+    border-radius: 50px;
+    padding: 10px 30px;
+    font-weight: 700;
+    width: 50%;
+    margin-top: 1rem;
+    font-family: "Inter", sans-serif;
+}
+label {
+    margin-left: 10px;
+    font-size: 19px;
+    text-transform: capitalize;
+    font-weight: 500;
+    font-family: auto;
+    padding-bottom: 8px;
+}
+form p {
+    text-align: center;
+}
+form p label {
+    display: none;
+}
+form p b {
+    color: #f50400;
+}
+.lottie-img{
+    background-color: rgb(223, 229, 228);
+}
+
+/*Registration Form*/
+

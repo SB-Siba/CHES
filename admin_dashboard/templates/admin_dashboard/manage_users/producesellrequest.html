@@ -1,0 +1,154 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block title %}Produce Sell Request List{% endblock title %}
+
+{% block content %}
+    <div class="page-wrapper">
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="search_sec">
+            <form method="get" action="{% url 'admin_dashboard:search_produce_sell_request' %}">
+                <div class="table_search_box">
+                    <select class="form-control selects" name="search_by" aria-label="Default select example">
+                        <option value="email">Email</option>
+                        <option value="product_name">Produce Name</option>
+                    </select>
+                    <input type="text" class="form-control" placeholder="Enter Query" name="query" required />
+                    <button class="btn qry-sub" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">User</th>
+                        <th scope="col">P_Name</th>
+                        <th scope="col">P_Category</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Units</th>
+                        <th scope="col">For Days</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sell_request in produce_sell_request_obj %}
+                    <tr>
+                        <td id="t_daTa">{{ sell_request.user }}</td>
+                        <td id="t_daTa">{{ sell_request.product_name }}</td>
+                        <td id="t_daTa">{{ sell_request.produce_category.category_name }}</td>
+                        <td id="t_daTa">{{ sell_request.product_quantity }}</td>
+                        <td id="t_daTa">{{ sell_request.SI_units }}</td>
+                        <td id="t_daTa">{{ sell_request.validity_duration_days }}</td>
+                        <td id="t_daTa">
+                            <!-- Product image with a click event to trigger modal -->
+                            <img src="{{ sell_request.product_image.url }}" alt="Product Image"
+                                style="height: 50px; width: 50px; cursor: pointer;" class="img-thumbnail"
+                                data-toggle="modal" data-target="#imageModal"
+                                onclick="showImageModal('{{ sell_request.product_image.url }}')">
+                        </td>
+                        <td id="t_daTa">{{ sell_request.amount_in_green_points }}</td>
+                        <td id="t_daTa">
+                            <div class="d-flex justify-content-around">
+                                <span id="table_BTN" class="" data-toggle="modal" data-target="#approveModal{{ sell_request.id }}">
+                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                </span>
+                                <span id="table_BTN2" class="mx-1" data-toggle="modal" data-target="#rejectModal{{ sell_request.id }}">
+                                    <i class="fa fa-ban" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </td>
+                        
+                        <!-- Modal for rejecting the request -->
+                        <div class="modal fade" id="rejectModal{{ sell_request.id }}" tabindex="-1" aria-labelledby="rejectModalLabel{{ sell_request.id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="rejectModalLabel{{ sell_request.id }}">Give Reason</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{% url 'admin_dashboard:rejectpsellrequest' %}" method="post">
+                                            {% csrf_token %}
+                                            <input name="sell_id" value="{{ sell_request.id }}" type="number" class="form-control" hidden />
+                                            <input name="reason" type="text" class="form-control" />
+                                            <div style="text-align: center;">
+                                                <button id="table_BTN" class="mt-5" type="submit">Add Reason</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Modal for approving the request -->
+                        <div class="modal fade" id="approveModal{{ sell_request.id }}" tabindex="-1" aria-labelledby="approveModalLabel{{ sell_request.id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="approveModalLabel{{ sell_request.id }}">Give Reason</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{% url 'admin_dashboard:approvesellrequest' %}" method="post">
+                                            {% csrf_token %}
+                                            <input name="sell_id" value="{{ sell_request.id }}" type="number" class="form-control" hidden />
+                                            <input name="reason" type="text" class="form-control" />
+                                            <div style="text-align: center;">
+                                                <button class="btn btn-outline-success mt-2" type="submit">Say Something</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
+
+        <!-- Modal for displaying the product image -->
+        <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                <div class="modal-content">
+                    <!-- Modal Header with title and close button -->
+                    <div class="modal-header">
+                        <h5 class="modal-title">Product Image</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <!-- Modal Body with the image -->
+                    <div class="modal-body d-flex justify-content-center">
+                        <img id="modalImage" src="" class="img-fluid" alt="Product Image" />
+                    </div>
+                    <!-- Modal Footer with Close button -->
+  
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block js %}
+<script src="{% static 'admin_dashboard/js/user_list.js' %}"></script>
+<script>
+    // JavaScript function to update the modal with the clicked image
+    function showImageModal(imageUrl) {
+        // Get the image element in the modal
+        var modalImage = document.getElementById('modalImage');
+        // Set the source of the image
+        modalImage.src = imageUrl;
+    }
+</script>
+{% endblock js %}

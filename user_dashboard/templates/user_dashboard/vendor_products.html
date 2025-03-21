@@ -1,0 +1,133 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Available Products{% endblock title %}
+
+{% block content %}
+
+<head>
+  <link rel="stylesheet" href="{% static '/user_dashboard/css/vendor_products.css '%}">
+</head>
+<section>
+  <div class=" py-0 min_height_div">
+    <div class="row">
+      <h3 class="mb-3">Vendor Products</h3>
+      {% for prod,m_status,p_rating in zipped_value %}
+      <div class="col-12 col-md-6  col-lg-4 col-xl-4 my-2">
+        <div class="card shadow-0 border rounded-3 h-100 py-2">
+          <div class="card-body p-1">
+            <div class="bg-image v_product_img-container">
+              <img src="{{prod.image.url}}" class="w-100 v_product_img mb-2" />
+            </div>
+            <div class="send_messages">
+              <a href="{% url 'chat:startmessages' prod.vendor.id prod.name %}" class="btn btn-outline-info btn-sm mt-2"
+                type="button">
+                <img src="{% static 'user_dashboard/img/chat.png' %}" alt="" height="25px" style="">
+                <span class="flicker" style="font-size: 18px;">&nbsp;Message</span>
+              </a>
+            </div>
+
+            <div class="px-2 pt-2">
+              <div class="fs-4 fw-bolder">
+                <p class="mb-0">{{prod.name|truncatechars:30 }}</p>
+              </div>
+              <div class="lh-lg">
+                Ratings:
+                <span class=" rating-container">
+                  <i class="fa fa-star"></i> &nbsp;{{p_rating}}
+                </span>
+              </div>
+              <p class=" small mb-2" style="min-height: 36px;max-height: 36px;overflow: hidden;">
+                {{ prod.description|truncatechars:120 }}
+              </p>
+
+              <div class="d-flex">
+                <p class="mb-1 me-1 fs-5 fw-semibold"><i class="fa fa-inr"></i>{{prod.discount_price}}</p>
+                <span class="text-secondary disc_price"><s><i class="fa fa-inr"></i>{{prod.max_price}}</s></span>
+              </div>
+
+              <div class="mb-1 text-muted small">
+                <span style="color: green;"> • </span>
+                <span>Available</span>
+                <span class=""> - </span>
+                <span> {{prod.stock}} Kg<br /></span>
+              </div>
+              <div class="mb-1 text-muted small">
+                <span style="color: green;"> • </span>
+                <span>Category</span>
+                <span class=""> - </span>   
+                <span> {{prod.category}}<br /></span>
+              </div>
+              <p class=" mb-0 small fw-bold">By : {{prod.vendor.full_name}}</p>
+              <div class=" check_para">
+                <label class="form-check-label">
+                  <input class="form-check-input offer-discount-checkbox" type="checkbox" name="offer_discount"
+                    value="1" data-product-id="{{ prod.id }}" data-vendor-email="{{ prod.vendor.email }}">
+                <div class="fw-bolder fs-5">Use  {{prod.green_coins_required}} <i class="fas fa-coins" style="font-size: 18px; color: rgb(247, 207, 6);"></i>
+                  Green Coins</div>
+                  
+                </label>
+                <p class="green_text small">( Exchange {{prod.green_coins_required}} green coins for discount of
+                  {{prod.discount_percentage}}% )</p>
+              </div>
+
+
+              <div class="d-flex flex-column  mb-2">
+                <a href="#" class="btn btn-outline btn-sm  buy-now-button" data-product-id="{{ prod.id }}"
+                  data-vendor-email="{{ prod.vendor.email }}" type="button">
+                  Buy Now
+                </a>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
+
+{% block scripts %}
+<script>
+  document.querySelectorAll('.offer-discount-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('change', function () {
+      // Uncheck all other checkboxes
+      document.querySelectorAll('.offer-discount-checkbox').forEach(otherCheckbox => {
+        if (otherCheckbox !== this) {
+          otherCheckbox.checked = false;
+        }
+      });
+    });
+  });
+  
+  document.querySelectorAll('.buy-now-button').forEach(button => {
+    button.addEventListener('click', function (event) {
+      event.preventDefault(); // Prevent default behavior of anchor tag
+  
+      const productId = this.getAttribute('data-product-id');
+      const vendorEmail = this.getAttribute('data-vendor-email');
+  
+      // Get the corresponding checkbox for this specific product card
+      const offerDiscountCheckbox = this.closest('.card').querySelector('.offer-discount-checkbox');
+      const offerDiscountValue = offerDiscountCheckbox.checked ? "1" : "0";
+  
+      // Define the URL pattern in JavaScript
+      const urlPattern = "{% url 'user_dashboard:checkout_vendor_products' 0 0 %}";
+  
+      // Replace placeholders in URL pattern with actual data
+      const urlWithParams = urlPattern.replace('0', productId).replace('0', vendorEmail);
+  
+      // Append offer discount value as query parameter
+      const urlWithDiscount = `${urlWithParams}?offer_discount=${offerDiscountValue}`;
+  
+      // Redirect to the checkout URL with checkbox value included
+      window.location.href = urlWithDiscount;
+    });
+  });
+  
+</script>
+{% endblock scripts %}

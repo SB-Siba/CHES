@@ -1,0 +1,51 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block title %}Gardening Details{% endblock title %}
+{% block content %}
+    <div class="page-wapper">
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Available For</th>
+                        <th scope="col">Available In</th>
+                        <th scope="col">Avg. Price Per Hour</th>
+                        <th scope="col">Experience In Years</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="t_daTa">
+                            {% for type in serviceprovider_data.service_type %}
+                                <p>{{ type  }}</p>
+                            {% endfor %}
+                        </td>
+                        <td id="t_daTa">
+                            {% for area in serviceprovider_data.service_area %}
+                                <p>{{ area  }}</p>
+                            {% endfor %}
+                        </td>
+                        <td id="t_daTa">
+                            {{ serviceprovider_data.average_cost_per_hour }}
+                        </td>
+                        <td id="t_daTa">
+                            {{ serviceprovider_data.years_experience }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
+    </div>
+
+
+
+
+<!-- wallet balance add modal -->
+
+
+{% endblock content %}
+{% block js %}
+<script src="{% static 'admin_dashboard/js/user_list.js'%}"></script>
+{% endblock js %}

@@ -1,0 +1,313 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Wallet Page{% endblock title %}
+
+{% block content %}
+<div class="main min_height_div">
+  <div class="main-top">
+    <h1 >My Wallet</h1>
+  </div>
+  <div class="">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center p-4" id="Wallet-card1">
+          <h5 class="text-primary mb-3">Total Green Coin Balance</h5>
+          <p><i class="fa-solid fa-coins fa-3x text-primary"></i> 
+            <span class="ms-2">{{ request.user.wallet }}</span>
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center p-4" id="Wallet-card2">
+            <h5 class="text-warning mb-3">Total Green Coin Purchase</h5>
+            <p><i class="fa-solid fa-coins fa-3x text-warning"></i> 
+                <span class="ms-2">{{ total_green_coin_purchase }}</span>
+            </p>
+        </div>
+    </div>    
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center p-4" id="Wallet-card3">
+          <h5 class="text-danger mb-3">Total Green Coin Earnings</h5>
+          <p><i class="fa-solid fa-coins fa-3x text-danger"></i> 
+            <span class="ms-2">{{ request.user.total_income }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <div class="main">
+    <div class="main-top">
+      <h1>Transactions</h1>
+    </div>
+    <div class="table-responsive">
+      <table class="table table">
+        <thead>
+          <tr>
+            <th id="t-Head">Product Name</th>
+            <th id="t-Head">Quantity</th>
+            <th id="t-Head">Green Coin</th>
+            <th id="t-Head">Date & Time</th>
+            <th id="t-Head">Details</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          {% for item in transactions %}
+          {% if item.type == "ProduceBuy" %}
+              <tr>
+                  <td id="t_daTa">{{ item.object.product_name }}</td>
+                  <td id="t_daTa">{{ item.object.quantity_buyer_want }} {{ item.object.SI_units }}</td>
+                  <td id="t_daTa" class="{% if item.is_purchase %}text-danger{% else %}text-success{% endif %}">
+                      {% if item.is_purchase %}- {% else %}+ {% endif %}{{ item.object.ammount_based_on_quantity_buyer_want }}
+                  </td>
+                  <td id="t_daTa">{{ item.object.date_time }}</td>
+                  <td id="t_daTa">
+                      <button type="button" class=" " data-toggle="modal" data-target="#transactionModal{{ forloop.counter }}">View</button>
+                  </td>
+              </tr>
+              <!-- Modal for ProduceBuy -->
+              <div class="modal fade" id="transactionModal{{ forloop.counter }}" tabindex="-1" role="dialog"
+                   aria-labelledby="transactionModalLabel{{ forloop.counter }}" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                      <div class="modal-content mainn">
+                          <div class="row">
+                              <div class="receipt-main col-xs-12 col-sm-12 col-md-12">
+                                  <div class="row">
+                                      <div class="receipt-header receipt-header-mid">
+                                          <div class="col-xs-12 col-sm-12 col-md-12 d-flex justify-content-between">
+                                              <div class="receipt-right">
+                                                  <h5>Customer Name </h5>
+                                                  <p><b>Mobile :</b>+91-{{ item.object.buyer.contact }}</p>
+                                                  <p><b>Email :</b> {{ item.object.buyer.email }}</p>
+                                                  <p><b>Address :</b> {{ item.object.buyer.city }}</p>
+                                              </div>
+                                              <div class="receipt-right">
+                                                  <h5>Seller Name </h5>
+                                                  <p><b>Mobile :</b>+91-{{ item.object.seller.contact }}</p>
+                                                  <p><b>Email :</b> {{ item.object.seller.email }}</p>
+                                                  <p><b>Address :</b> {{ item.object.seller.city }}</p>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+  
+                                  <div class="d-flex justify-content-center">
+                                      Order Status : {{ item.object.buying_status }}
+                                  </div>
+                                  
+                                  <div class="invoice-wrapper row">
+                                      <div class="col-xs-12 invoice-holder">
+                                          <div class="invoice-item" style="padding: 10px 10px">
+                                              <div class="d-flex justify-content-between bg-secondary px-2 py-2">
+                                                  <span class="title fs-4 text-white">Description</span>
+                                                  <span class="value fs-4 text-white">Green Coin</span>
+                                              </div>
+                                              <div class="d-flex justify-content-between border-bottom pb-2 px-3">
+                                                  <div class="mt-3">
+                                                      <span class="title">{{ item.object.product_name }}</span>
+                                                      <span class="title mx-5">{{ item.object.quantity_buyer_want }}&nbsp;{{ item.object.SI_units }}</span>
+                                                  </div>
+                                                  <div class="mt-3">
+                                                      <span class="value">{{ item.object.ammount_based_on_quantity_buyer_want }} /-</span>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+  
+                                  <div class="row">
+                                      <div class="receipt-header receipt-header-mid receipt-footer d-flex justify-content-between">
+                                          <div class="col-xs-8 col-sm-8 col-md-8 text-left">
+                                              <div class="receipt-right mt-3">
+                                                  <p><b>Date :</b> {{ item.object.date_time }}</p>
+                                                  <h5 style="color: rgb(140, 140, 140);" class="mt-1">Thanks for shopping!</h5>
+                                              </div>
+                                          </div>
+                                          <div class="col-xs-4 col-sm-4 col-md-4">
+                                              <div class="d-flex justify-content-end">
+                                                  <img class="img-responsive" alt="tree-stamp"
+                                                      src="{% static 'user_dashboard/img/g_logo1.png' %}"
+                                                      style="width: 100px; border-radius: 100px;">
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+  
+                                  <div class="content-block" style="box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px 0 20px;border-top:1px solid #dedede;">
+                                      <button class="downloadButton" data-counter="{{ forloop.counter }}">Download Invoice</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              {% elif item.type == "Order" %}
+              <tr>
+                  <td id="t_daTa">{{ item.product_name }}</td>
+                  <td id="t_daTa">{{ item.quantity }} Units</td>
+                  <td id="t_daTa" class="{% if item.is_purchase %}text-danger{% else %}text-success{% endif %}">
+                      {% if item.is_purchase %}- {% else %}+ {% endif %}{{ item.amount }}
+                  </td>
+                
+                  <td id="t_daTa">{{ item.object.date }}</td>
+                  <td id="t_daTa">
+                      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#orderModal{{ forloop.counter }}">View</button>
+                  </td>
+              </tr>
+            
+              <!-- Modal for Order transactions -->
+              <div class="modal fade" id="orderModal{{ forloop.counter }}" tabindex="-1" role="dialog"
+                  aria-labelledby="orderModalLabel{{ forloop.counter }}" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                      <div class="modal-content mainn">
+                          <div class="row">
+                              <div class="receipt-main col-xs-12 col-sm-12 col-md-12">
+                                  <div class="row">
+                                      <div class="receipt-header receipt-header-mid">
+                                          <div class="col-xs-12 col-sm-12 col-md-12 d-flex justify-content-between">
+                                              <div class="receipt-right">
+                                                  <h5>Customer Name</h5>
+                                                  <p><b>Mobile :</b>+91-{{ item.object.customer.contact }}</p>
+                                                  <p><b>Email :</b> {{ item.object.customer.email }}</p>
+                                                  <p><b>Address :</b> {{ item.object.customer.city }}</p>
+                                              </div>
+                                              <div class="receipt-right">
+                                                  <h5>Seller Name</h5>
+                                                  <p><b>Mobile :</b>+91-{{ item.object.vendor.contact }}</p>
+                                                  <p><b>Email :</b> {{ item.object.vendor.email }}</p>
+                                                  <p><b>Address :</b> {{ item.object.vendor.city }}</p>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+            
+                                  <div class="d-flex justify-content-center">
+                                      Order Status : {{ item.object.payment_status }}
+                                  </div>
+            
+                                  <div class="invoice-wrapper row">
+                                      <div class="col-xs-12 invoice-holder">
+                                          <div class="invoice-item" style="padding: 10px 10px">
+                                              <div class="d-flex justify-content-between bg-secondary px-2 py-2">
+                                                  <span class="title fs-4 text-white">Description</span>
+                                                  <span class="value fs-4 text-white">Green Coin</span>
+                                              </div>
+                                              <div class="d-flex justify-content-between border-bottom pb-2 px-3">
+                                                  <div class="mt-3">
+                                                      <span class="title">{{ item.product_name }}</span>
+                                                      <span class="title mx-5">{{ item.quantity }}&nbsp;{{ item.object.order_meta_data.products.rose_plant.SI_units }}</span>
+                                                  </div>
+                                                  <div class="mt-3">
+                                                      <span class="value">{{ item.amount }} /-</span>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+            
+                                  <div class="row">
+                                      <div class="receipt-header receipt-header-mid receipt-footer d-flex justify-content-between">
+                                          <div class="col-xs-8 col-sm-8 col-md-8 text-left">
+                                              <div class="receipt-right mt-3">
+                                                  <p><b>Date :</b> {{ item.object.date }}</p>
+                                                  <h5 style="color: rgb(140, 140, 140);" class="mt-1">Thanks for shopping!</h5>
+                                              </div>
+                                          </div>
+                                          <div class="col-xs-4 col-sm-4 col-md-4">
+                                              <div class="d-flex justify-content-end">
+                                                  <img class="img-responsive" alt="tree-stamp"
+                                                      src="{% static 'user_dashboard/img/g_logo1.png' %}"
+                                                      style="width: 100px; border-radius: 100px;">
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+            
+                                  <div class="content-block" style="box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px 0 20px; border-top:1px solid #dedede;">
+                                      <button class="downloadButton" data-counter="{{ forloop.counter }}">Download Invoice</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              {% elif item.type == "Service" %}
+              <tr>
+                  <td id="t_daTa">{{ item.service_name }}</td>
+                  <td id="t_daTa">-----</td>
+                  <td id="t_daTa" class="{% if item.is_provider %}text-success{% else %}text-danger{% endif %}">
+                      {% if item.is_provider %}+ {% else %}- {% endif %}{{ item.coins_earned }}
+                  </td>
+                  <td id="t_daTa">{{ item.date }}</td>
+                  <td id="t_daTa">
+                      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#serviceModal{{ forloop.counter }}">View</button>
+                  </td>
+              </tr>
+      
+              <!-- Modal for Service Transactions -->
+              <div class="modal fade" id="serviceModal{{ forloop.counter }}" tabindex="-1" role="dialog"
+                   aria-labelledby="serviceModalLabel{{ forloop.counter }}" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                      <div class="modal-content mainn">
+                          <div class="receipt-main">
+                              <div class="receipt-header receipt-header-mid">
+                                  <h5>Service Transaction Details</h5>
+                                  <p><b>Service Name:</b> {{ item.service_name }}</p>
+                                  <p><b>Date:</b> {{ item.date }}</p>
+                                  <p><b>Green Coins Earned:</b> {{ item.coins_earned }}</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          {% endif %}
+            
+
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+</div>
+
+{% endblock content %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll('.downloadButton').forEach(button => {
+          button.addEventListener('click', function() {
+              const counter = this.getAttribute('data-counter');
+              const modalContent = document.querySelector(`#transactionModal${counter} .modal-content`);
+
+              if (!modalContent) {
+                  console.error('Modal content not found for counter:', counter);
+                  return;
+              }
+
+              this.style.display = 'none';
+
+              domtoimage.toPng(modalContent)
+                  .then(function(dataUrl) {
+                      const { jsPDF } = window.jspdf;
+                      const pdf = new jsPDF();
+
+                      pdf.addImage(dataUrl, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+                      pdf.save('invoice.pdf');
+
+                      button.style.display = 'block';
+                  })
+                  .catch(function(error) {
+                      console.error('Error generating PDF:', error);
+                      button.style.display = 'block';
+                  }.bind(this));
+          });
+      });
+  });
+</script>  
+{% endblock scripts %}

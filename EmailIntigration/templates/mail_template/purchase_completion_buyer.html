@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Completed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            line-height: 1.6;
+            color: #555;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Hi {{ full_name }},</h2>
+        <p>Your purchase of <strong>{{ product_name }}</strong> has been completed successfully.</p>
+        <p>Quantity: <strong>{{ quantity }}</strong></p>
+        <p>Amount: <strong>{{ amount }}</strong> Green Points</p>
+        <p>Thank you for your order!</p>
+        <div class="footer">
+            Best regards,<br>Your Company Name
+        </div>
+    </div>
+</body>
+</html>

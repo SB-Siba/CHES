@@ -1,0 +1,115 @@
+{% extends 'vendor_dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">All Blogs</li>
+    </ol>
+  </nav>
+
+<section class="min_height_div" >
+    <div class="container my-lg-3 my-2">
+        <div class="row">
+            {% for blog in blogs %}
+            <div class="col-md-6 col-12 mb-4 px-lg-5">
+                <div class="">
+                    <div class="card1">
+                      <div class="card-header">
+                        <a href="{% url 'blogs:vendor_blog_details' slug=blog.slug %}">
+                            <img src="{{ blog.image.url }}" alt="blog_img">
+                        </a>
+                      </div>
+                      <div class="card-body">
+                    
+                        <h4 class="mt-2">
+                            <a href="{% url 'blogs:vendor_blog_details' slug=blog.slug %}" class="text-dark">{{ blog.title }}</a>
+                        </h4>
+                        <p class="m-0">{{ blog.date }}</p>
+                        <p class="m-0 pt-1">
+                            {{ blog.content|truncatechars:150| safe }}
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'blogs:vendor_blog_details' slug=blog.slug %}">
+                                <button class="learn-more mt-3 mb-3 m-lg-0">
+                                    <span class="circle" aria-hidden="true">
+                                        <span class="icon arrow"></span>
+                                    </span>
+                                    <span class="button-text">Read More</span>
+                                </button>
+                            </a>
+                            <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#shareModal{{ blog.id }}">
+                                <i class="fa-solid fa-share"></i> Share
+                            </button>
+                        </div>
+                      </div>
+                    </div>
+                
+                <div>
+                    <!-- <div class="BlogImage">
+                        <a href="{% url 'blogs:vendor_blog_details' slug=blog.slug %}">
+                            <img src="{{ blog.image.url }}" alt="blog_img">
+                        </a>
+                    </div>
+                    <div class=" blog_title">
+                        <h5 class="mt-lg-3 mt-3">
+                            <a href="{% url 'blogs:vendor_blog_details' slug=blog.slug %}">{{ blog.title }}</a>
+                        </h5>
+                        <p>{{ blog.date }}</p>
+                        <p>
+                            {{ blog.content|truncatechars:200| safe }}
+                        </p>
+                        <a href="{% url 'blogs:vendor_blog_details' slug=blog.slug %}">
+                            <button class="learn-more mt-3 mb-3 m-lg-0">
+                                <span class="circle" aria-hidden="true">
+                                    <span class="icon arrow"></span>
+                                </span>
+                                <span class="button-text">Read More</span>
+                            </button>
+                        </a>
+                       
+                        <button class="btn btn-sm btn-secondary mt-3" data-bs-toggle="modal" data-bs-target="#shareModal{{ blog.id }}">
+                            <i class="fa-solid fa-share"></i> Share
+                        </button> -->
+                </div>
+
+                 
+                    <div class="modal fade" id="shareModal{{ blog.id }}" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="shareModalLabel">Share this Blog</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Share this blog on:</p>
+                                    <div class="share-buttons">
+                                       
+                                        <a href="https://www.facebook.com/dialog/share?app_id=YOUR_APP_ID&display=popup&href={{ request.build_absolute_uri|urlencode }}&quote={{ blog.title|urlencode }} - {{ blog.content|truncatechars:200|urlencode }}" 
+                                           target="_blank" class="btn btn-sm btn-primary">
+                                            <i class="fa-brands fa-facebook-f"></i> Share on Facebook
+                                        </a>
+
+                                        
+                                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri|urlencode }}&text={{ blog.title|urlencode }} - {{ blog.content|truncatechars:200|urlencode }}" 
+                                            target="_blank" class="btn btn-sm btn-info">
+                                                <i class="fa-brands fa-twitter"></i> Share on Twitter
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+    </div> 
+</section>
+{% endblock main_content %}

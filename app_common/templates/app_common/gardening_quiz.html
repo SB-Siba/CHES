@@ -1,0 +1,85 @@
+{% extends 'app_common/authentication/master.html' %}
+{% block title %}SignUp{% endblock title %}
+{% load static %}
+
+{% block content %}
+<style>
+     body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+    .login form p {
+        text-align: left;
+    }
+    .login form .form-control {
+        margin-bottom:2rem;
+    }
+     .form-control {
+            width: 100%;
+            padding: 6px;
+            padding-left: 10px;
+            margin-bottom: 1.3em;
+            border: none;
+            border-bottom: 2px solid #ced4da;
+            border-radius: 5px !important;
+            transition: border-color 0.3s ease-in-out;
+        }
+        .form-control:focus {
+            border-color: #009f10;
+            box-shadow: 0 0 8px rgba(128, 255, 149, 0.5);
+            outline: none;
+        }
+        h2 {
+        color: #009f10 !important;
+       
+    }
+    .submit-data form p label {
+        display:block;
+        font-size: 15px;
+        font-weight: 600;
+    }
+    .form-group label{
+            font-family:'Arial', sans-serif;
+        }
+        img{
+            width: 7rem;
+        }
+    .ganrning-body{
+            background: #ffffffb3;
+            border-radius: 10px;
+        }
+</style>
+<body>
+    
+
+   <div class="container">
+    <div class="row d-flex align-items-center justify-content-center my-5">
+        <div class="col-lg-7 ganrning-body d-flex justify-content-center">
+            <div class="login submit-data">
+                <div
+                    class="d-flex justify-space-between py-4 mt-4" 
+                    style="align-items: center;justify-content: center;">
+                    <div class="auth_reg_logo mx-3">
+                        <img src="{% static 'user_dashboard/images/green-logo.png' %}"/>
+                    </div>
+                    <div>
+                        <h3>Answer Below Quiz's</h3>
+                    </div>
+                </div>
+               
+                <form method="post" action="" class="p-4 form-group" enctype="multipart/form-data">
+                    {% include 'app_common/snippets/alert.html' %}
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <div style="text-align:center;">
+                        <button class="garden_btn" type="submit">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+   </div>
+</body>
+{% endblock content %}

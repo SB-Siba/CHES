@@ -1,0 +1,82 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block title %}Pending Vendor List{% endblock title %}
+{% block content %}
+<div class="page-wapper">
+    {% include 'app_common/snippets/alert.html' %}
+    <div class="search_sec mb-3">
+        <form method="GET" action="">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Search by Email, Business Name, or Address..." value="{{ search_query }}">
+                <button class="btn btn-primary" id="table_BTN" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-nowrap">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">E-Mail</th>
+                    <th scope="col">Business Name</th>
+                    <th scope="col">Business Address</th>
+                    <th scope="col">Business Licence Number</th>
+                    <th scope="col">Business Category</th>
+                    <th scope="col">Establishment Year</th>
+                    <th scope="col">Website</th>
+                    <th scope="col">Give Points</th>
+                    <th scope="col">Action</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for v_user, vendor_detail in vendor_data %}
+                <tr>
+                    <td id="t_daTa" >{{ v_user.email }}</td>
+                    <td id="t_daTa">{{ vendor_detail.business_name }}</td>
+                    <td id="t_daTa">{{ vendor_detail.business_address }}</td>
+                    <td id="t_daTa">{{ vendor_detail.business_license_number }}</td>
+                    <td id="t_daTa">{{ vendor_detail.business_category }}</td>
+                    <td id="t_daTa">{{ vendor_detail.establishment_year }}</td>
+                    <td id="t_daTa">{{ vendor_detail.website }}</td>
+                    <td id="t_daTa">
+                        <select id="points-{{ v_user.id }}" class="form-control" style="width: 70px; height: 35px;">
+                            <option value="0">0</option>
+                            <option value="100">100</option>
+                            <option value="200">200</option>
+                            <option value="300">300</option>
+                            <option value="400">400</option>
+                            <option value="500">500</option>
+                        </select>
+                    </td>
+                    <td id="t_daTa">
+                        <div class="d-flex align-items-baseline">
+                            <a href="#" class="" id="table_BTN" onclick="approveVendor({{ v_user.id }})">
+                                <span>Approve</span>
+                            </a>
+                            <a href="{% url 'admin_dashboard:reject_user' v_user.id %}">
+                                <span class="  mx-1" id="table_BTN2">Reject</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock content %}
+{% block js %}
+<script>
+    function approveVendor(userId) {
+        var points = document.getElementById('points-' + userId).value;
+        if (points !== "") {
+            var url = "{% url 'admin_dashboard:approve_user' 0 %}".replace("0", userId) + "?coins=" + points;
+            window.location.href = url;
+        } else {
+            alert("Please select points from the dropdown.");
+        }
+    }
+</script>
+{% endblock js %}

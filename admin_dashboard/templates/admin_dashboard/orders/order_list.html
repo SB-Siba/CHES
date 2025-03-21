@@ -1,0 +1,113 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+{% block content %}
+
+
+<header>
+  <div class="container-fluid">
+    <div class="border-bottom pt-6">
+      <div class="row align-items-center">
+        <div class="col-sm col-12">
+          <h2 class=" ">Order List</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="py-6 bg-surface-secondary">
+
+
+  <div class="container-fluid">
+    <div class="vstack ">
+      <div class="d-flex justify-content-end mb-5">
+        <button id="table_BTN" class=" me-2 py-0" data-bs-toggle="modal" data-bs-target="#order_filter">
+          <i class="fa-solid fa-filter" ></i>
+          filter
+        </button>
+
+        <form class="d-flex align-items-center" method="get" action="{% url 'admin_dashboard:produce_order_search' %}">
+          {% csrf_token %}
+          <div class="input-group">
+            <input class="form-control" type="text" name="query" placeholder="SEARCH ID" required />
+            <button id="table_BTN3" class="" type="submit">
+              <i class="fa-solid fa-magnifying-glass fa-shake"></i>
+            </button>
+          </div>
+        </form>
+        
+      </div>
+
+      <div class="card mt-4">
+        <div class="table-responsive">
+          <table class="table table-hover table-nowrap">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">Order ID</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Status</th>
+                <th scope="col">Time</th>
+              </tr>
+            </thead>
+            <tbody id="test_table_tbody">
+              {% for order in order_list %}
+              <tr>
+                <td id="t_daTa">
+                  <a target="_blank" href="{% url 'admin_dashboard:produce_order_detail' order.id %}">
+                    {{order.id}}
+                  </a>
+                  
+                </td>
+                <td id="t_daTa">
+                  {{order.ammount_based_on_quantity_buyer_want}}
+                </td>
+                <td id="t_daTa">{{order.quantity_buyer_want}}</td>
+                <td id="t_daTa">{{order.buying_status}}</td>
+                <td id="t_daTa">{{order.date_time}}</td>
+              </tr>
+              {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<!-- filter -->
+<div class="modal fade" id="order_filter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Filter By Order Status</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="order_filter" class="d-flex justify-content-center">
+
+        <form id="" method="get" action="{% url 'admin_dashboard:produce_order_status_search' %}">
+          {% csrf_token %}
+          <div >
+            <select class="form-select" aria-label="Default select example" name="filter_by">
+              {% for status in order_status_options %}
+                <option value="{{status.1}}">{{status.1}}</option>
+              {% endfor %}
+            </select>
+
+            <button class="ms-2" id="table_BTN" type="submit">
+              search
+            </button>
+          </div>
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+{% block js %}
+{% endblock js %}

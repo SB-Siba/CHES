@@ -1,0 +1,40 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Blog Add{% endblock title %}
+{% block content %}
+<style>
+
+</style>
+<section class="min_height_div bg-surface-secondary">
+   <div class=" pb-4  ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-10 col-12">
+                <div class="text-center my-lg-4 text-secondary">
+                    <h4>Add Your Blogs</h4>
+                   </div>
+                    <div class="card table-responsive px-lg-0 px-2 ">
+                        <form action="" method="post" enctype="multipart/form-data" class="p-lg-4 lh-lg">
+                                {% csrf_token %}
+                                {{ form.media }}
+                                <div class="row">
+                                    {% for field in form %}
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                {{ field.label_tag }}
+                                                {{ field }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <br>
+                            <button type="submit" class="add_blog_btn w-100">Add Your Blog</button>
+                        </form>
+                    </div>
+
+            </div>
+
+        </div>
+   </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,472 @@
+{% extends 'vendor_dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+
+<style>
+  #box {
+    background-color: green;
+  }
+
+
+  .atm-card {
+    width: 320px;
+    height: 150px;
+    border-radius: 15px;
+    padding: 20px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #4b79a1, #283e51);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    font-family: 'Arial', sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-headers {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bank-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.card-number {
+    margin-top: 15px;
+    font-size: 1.6rem;
+    letter-spacing: 2.5px;
+}
+
+/* General Styles */
+.main {
+    padding: 20px;
+}
+
+.main-top h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.users {
+    gap: 20px;
+}
+
+/* ATM Card Responsive Styles */
+.atm-card {
+    width: 100%;
+    max-width: 320px;
+    padding: 20px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #C02425, #F0CB35);
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    font-family: 'Arial', sans-serif;
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+
+.card-headers h3 {
+    font-size: 1.2rem;
+}
+
+.card-number {
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-number i {
+    color: #ffcc00;
+}
+
+/* Table Styles */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table th, .table td {
+    font-size: 0.9rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+
+/* Modal Styles */
+.modal .receipt-main {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+
+.modal .receiptb-header .receipt-right h5,
+.modal .receiptb-header .receipt-right p {
+    font-size: 0.9rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .main-top h3 {
+        font-size: 1.4rem;
+    }
+    .users {
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .atm-card {
+        padding: 15px;
+    }
+
+    .card-headers h3 {
+        font-size: 1.1rem;
+    }
+
+    .card-number {
+        font-size: 1.2rem;
+    }
+
+    .table th, .table td {
+        font-size: 0.8rem;
+    }
+
+    .modal .receipt-main {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 575px) {
+    .main-top h3 {
+        font-size: 1.2rem;
+    }
+
+    .atm-card {
+        padding: 10px;
+        max-width: 100%;
+    }
+
+    .card-headers h3 {
+        font-size: 1rem;
+    }
+
+    .card-number {
+        font-size: 1rem;
+    }
+
+    .table th, .table td {
+        font-size: 0.75rem;
+    }
+
+    .modal .receipt-main {
+        font-size: 0.8rem;
+    }
+
+    /* Adjustments for smaller screens to avoid overflow */
+    .table th, .table td {
+        white-space: normal;
+    }
+}
+#tb-head {
+    font-size: 14px;
+    padding: 18px 10px;
+    text-align: center;
+    font-weight: 600;
+    font-style: normal;
+    line-height: 23px;
+}
+.tb-body{
+  padding: 0 !important;
+    font-family: var(--rubik);
+    font-weight: 400;
+    font-style: normal;
+}
+.tb-body_sub{
+    padding:10px;
+  text-align: center;
+}
+
+</style>
+<nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">My Wallet</li>
+    </ol>
+  </nav>
+<dotlottie-player src="https://lottie.host/cda0696d-874e-40b2-935f-da67b9de2d02/JLL8HP0Vaw.json"
+  background="transparent" speed="1" style="width: 100%; height: 300px;" loop autoplay></dotlottie-player>
+  <section class="main pt-0">
+    <div class="main-top">
+      <h3>My Wallet</h3>
+    </div>
+  
+    <div class="users row d-flex justify-content-around flex-wrap">
+      <div class="atm-card">
+        <div class="card-headers">
+          <h3 class="bank-name">Total Balance</h3>
+        </div>
+        <div class="card-number">
+          <i class="fa-solid fa-coins fa-2x"></i>
+          <span>{{ request.user.wallet }}</span>
+        </div>
+      </div>
+      <div class="atm-card" style="background: linear-gradient(135deg, #8e9eab, #00dbde);">
+        <div class="card-headers">
+          <h3 class="bank-name">Total Purchase</h3>
+        </div>
+        <div class="card-number">
+          <i class="fa-solid fa-coins fa-2x"></i>
+          <span>{{ request.user.total_invest }}</span>
+        </div>
+      </div>
+      <div class="atm-card" style="background: linear-gradient(135deg, #136a8a, #267871);">
+        <div class="card-headers">
+          <h3 class="bank-name">Total Earnings</h3>
+        </div>
+        <div class="card-number">
+          <i class="fa-solid fa-coins fa-2x"></i>
+          <span>{{ total_income }}</span>
+        </div>
+      </div>
+    </div>
+  
+    <section class="mt-3">
+        <div>
+          <h3>Transactions</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr style="color: black;">
+                <th id="tb-head">Product Name</th>
+                <th id="tb-head">Quantity</th>
+                <th id="tb-head">Amount</th>
+                <th id="tb-head">Date & Time</th>
+                <th id="tb-head">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in transactions %}
+              <tr>
+                <td class="tb-body">
+                  <div class="tb-body_sub">
+                    {% if item.type == "ProduceBuy" %}
+                      {{ item.object.product_name }}
+                    {% else %}
+                      {{ item.product_name }}
+                    {% endif %}
+                  </div>
+                </td>
+                <td class="tb-body">
+                  <div class="tb-body_sub">
+                    {% if item.type == "ProduceBuy" %}
+                      {{ item.object.quantity_buyer_want }} {{ item.object.SI_units }}
+                    {% else %}
+                      {{ item.quantity }} {{ item.object.SI_units|default:"" }}
+                    {% endif %}
+                  </div>
+                </td>
+                <td class="tb-body">
+                  <div class="tb-body_sub {% if item.is_purchase %}text-danger{% else %}text-success{% endif %}">
+                    {% if item.is_purchase %}- {% else %}+ {% endif %}
+                    {% if item.type == "ProduceBuy" %}
+                      {{ item.object.ammount_based_on_quantity_buyer_want }}
+                    {% else %}
+                      {{ item.amount }}
+                    {% endif %}
+                  </div>
+                </td>
+                <td class="tb-body">
+                  <div class="tb-body_sub">{{ item.date|date:"F j, Y, g:i A" }}</div>
+                </td>
+                <td class="tb-body">
+                  <div class="tb-body_sub">
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#transactionModal{{ forloop.counter }}">View</button>
+                  </div>
+                </td>
+              </tr>
+             
+          
+  
+            <div class="modal fade" id="transactionModal{{ forloop.counter }}" tabindex="-1" role="dialog"
+              aria-labelledby="transactionModalLabel{{ forloop.counter }}" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content mainn">
+                  <div class="row">
+                    <div class="receipt-main col-xs-12 col-sm-12 col-md-12">
+                      <!-- Header -->
+                      <div class="row">
+                        <div class="receiptb-header d-flex justify-content-between">
+                          <div class="receipt-left">
+                            <img class="img-responsive" alt="user-avatar" src="{% static 'user_dashboard/img/g_logo2.png' %}"
+                              style="width: 100px; border-radius: 100px;">
+                          </div>
+                          <div class="receipt-right text-right">
+                            <h5>Company Name</h5>
+                            <p>+1 3649-6589 <i class="fa fa-phone"></i></p>
+                            <p>company@gmail.com <i class="fa fa-envelope-o"></i></p>
+                            <p>USA <i class="fa fa-location-arrow"></i></p>
+                          </div>
+                        </div>
+                      </div>
+  
+                    <!-- Customer and Seller Info -->
+                      <div class="row receiptb-header-mid">
+                        <div class="d-flex justify-content-between">
+                          <div class="receipt-right">
+                            <h5>Customer Name</h5>
+                            {% if item.type == "ProduceBuy" %}
+                              <p><b>Mobile:</b> +91-{{ item.object.buyer.contact }}</p>
+                              <p><b>Email:</b> {{ item.object.buyer.email }}</p>
+                              <p><b>Address:</b> {{ item.object.buyer.profile.city }}</p>
+                            {% else %}
+                              <p><b>Mobile:</b> +91-{{ item.object.customer.contact }}</p>
+                              <p><b>Email:</b> {{ item.object.customer.email }}</p>
+                              <p><b>Address:</b> {{ item.object.customer.city }}</p>
+                            {% endif %}
+                          </div>
+                          
+                          <div class="receipt-right">
+                            <h5>Seller Name</h5>
+                            {% if item.type == "ProduceBuy" %}
+                              <p><b>Mobile:</b> +91-{{ item.object.seller.contact|default:"N/A" }}</p>
+                              <p><b>Email:</b> {{ item.object.seller.email|default:"N/A" }}</p>
+                              <p><b>Address:</b> {{ item.object.seller.address|default:"N/A" }}</p>
+                            {% else %}
+                              <p><b>Mobile:</b> +91-{{ item.object.vendor.contact|default:"N/A" }}</p>
+                              <p><b>Email:</b> {{ item.object.vendor.email|default:"N/A" }}</p>
+                              <p><b>Address:</b> {{ item.object.vendor.address|default:"N/A" }}</p>
+                            {% endif %}
+                          </div>                        
+                        </div>
+                      </div>
+
+                      <!-- Order Status -->
+                      <div class="d-flex justify-content-center">
+                        {% if item.type == "ProduceBuy" %}
+                          <p><b>Order Status:</b> {{ item.object.buying_status|default:"N/A" }}</p>
+                        {% else %}
+                          <p><b>Order Status:</b> {{ item.object.order_status|default:"N/A" }}</p>
+                        {% endif %}
+                    </div>
+                    
+
+  
+                      <!-- Transaction Details -->
+                        <div class="invoice-wrapper row">
+                          <div class="col-xs-12 invoice-holder">
+                            <div class="invoice-item" style="padding: 10px 10px">
+                              <div class="d-flex justify-content-between bg-secondary px-2 py-2">
+                                <span class="title fs-4 text-white">Description</span>
+                                <span class="value fs-4 text-white">Amount</span>
+                              </div>
+                              <div class="d-flex justify-content-between border-bottom pb-2 px-3">
+                                <div class="mt-3">
+                                  <span class="title">
+                                    {% if item.type == "ProduceBuy" %}
+                                      {{ item.object.product_name }}
+                                    {% else %}
+                                      {{ item.product_name }}
+                                    {% endif %}
+                                  </span>
+                                  <span class="title mx-5">
+                                    {% if item.type == "ProduceBuy" %}
+                                      {{ item.object.quantity_buyer_want }} {{ item.object.SI_units }}
+                                    {% else %}
+                                      {{ item.quantity }} {{ item.SI_units|default:"" }}
+                                    {% endif %}
+                                  </span>
+                                </div>
+                                <div class="mt-3">
+                                  <span class="value">
+                                    {% if item.type == "ProduceBuy" %}
+                                      {{ item.object.ammount_based_on_quantity_buyer_want }} /-
+                                    {% else %}
+                                      {{ item.amount }} /-
+                                    {% endif %}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+  
+                      <!-- Footer -->
+                      <div class="row receipt-footer d-flex justify-content-between">
+                        <div class="col-xs-8 col-sm-8 col-md-8 text-left">
+                          <div class="receipt-right mt-3">
+                            <p><b>Date:</b> {{ item.object.date_time }}</p>
+                            <h5 style="color: rgb(140, 140, 140);" class="mt-1">Thanks for shopping!</h5>
+                          </div>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                          <div class="d-flex justify-content-end">
+                            <img class="img-responsive" alt="tree-stamp" src="{% static 'user_dashboard/img/g_logo1.png' %}"
+                              style="width: 100px; border-radius: 100px;">
+                          </div>
+                        </div>
+                      </div>
+  
+                      <!-- Download Button -->
+                      <div class="content-block" style="padding: 20px 0 20px; border-top:1px solid #dedede;">
+                        <button class="downloadButton" data-counter="{{ forloop.counter }}">Download Invoice</button>
+                        <p style="text-align: center;"><b>NOTE:</b> This is a computer-generated receipt and does not require a physical signature.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </section>
+{% endblock main_content %}
+{% block script %}
+<script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.downloadButton').forEach(button => {
+      button.addEventListener('click', function () {
+        const counter = this.getAttribute('data-counter');
+        console.log(counter)
+        const modalContent = document.querySelector(`#transactionModal${counter} .modal-content`);
+
+        if (!modalContent) {
+          console.error('Modal content not found for counter:', counter);
+          return;
+        }
+
+        this.style.display = 'none';
+
+        domtoimage.toPng(modalContent)
+          .then(function (dataUrl) {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            pdf.addImage(dataUrl, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+            pdf.save('invoice.pdf');
+
+            button.style.display = 'block';
+          })
+          .catch(function (error) {
+            console.error('Error generating PDF:', error);
+            button.style.display = 'block';
+          }.bind(this));
+      });
+    });
+  });
+</script>
+{% endblock script %}

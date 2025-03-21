@@ -1,0 +1,220 @@
+{% extends 'vendor_dashboard/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<style>
+    #tb-head {
+    font-size: 14px;
+    padding: 18px 10px;
+    text-align: center;
+    font-weight: 600;
+    font-style: normal;
+    line-height: 23px;
+}
+.tb-body{
+  padding: 0 !important;
+    font-family: var(--rubik);
+    font-size: 13px;
+    font-weight: 400;
+    font-style: normal;
+  
+}
+.tb-body_sub{
+padding: 18px 10px;
+  text-align: center;
+}
+    /* Star Rating Styles */
+    #starRating {
+        direction: rtl;
+        display: flex;
+        justify-content: center;
+        font-size: 2em;
+        user-select: none;
+    }
+
+    #starRating input[type="radio"] {
+        display: none;
+    }
+
+    #starRating label {
+        color: #ddd; /* Default star color */
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+    }
+
+    #starRating label::before {
+        content: '\2605'; /* Unicode character for a star */
+        font-size: 2em;
+    }
+
+    #starRating input[type="radio"]:checked ~ label {
+        color: #ffc107; /* Yellow color for selected stars */
+    }
+
+    #starRating input[type="radio"]:checked ~ label:hover,
+    #starRating input[type="radio"]:checked ~ label:hover ~ label {
+        color: #ffc107; /* Yellow color for stars on hover */
+    }
+
+    #starRating input[type="radio"]:checked ~ label:hover,
+    #starRating input[type="radio"]:checked ~ label:hover ~ label {
+        color: #ffc107; /* Yellow color for stars on hover */
+    }
+    /* Responsive button styling */
+/* Adjust status and rating columns for smaller screens */
+@media (max-width: 576px) {
+    .status-column, .rating-column {
+        min-width: 140px; /* Set a minimum width as per your requirement */
+        white-space: nowrap; /* Prevents line breaks within these cells */
+    }
+
+    /* Optional: Reduce padding and font size for buttons on small screens */
+    .rate-order-btn {
+        padding: 5px 10px;
+        font-size: 0.85em;
+    }
+}
+
+
+</style>
+<nav class="p-4 bg-light"
+style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
+aria-label="breadcrumb">
+<ol class="breadcrumb m-0">
+    <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">My Community-Orders</li>
+</ol>
+</nav>
+<div style="min-height: 100vh;">
+    <div class="page-wapper m-4">
+        {% include 'app_common/snippets/alert.html' %}
+        <div class="table-responsive">
+            <table class="table table-hover table-nowrap">
+                <thead class="table-light"> 
+                    <tr>
+                        <th id="tb-head" scope="col">Request-ID</th>
+                        <th id="tb-head" scope="col">Product Name</th>
+                        <th id="tb-head" scope="col">Quantity</th>
+                        <th id="tb-head" scope="col">Units</th>
+                        <th id="tb-head" scope="col">Amount</th>
+                        <th id="tb-head" scope="col">Status</th>
+                        <th id="tb-head" scope="col">Rating</th>
+                    </tr>
+                </thead>
+                <tbody id="test_table_tbody">
+                    {% for order in orders %}
+                    <tr>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ order.id }}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ order.product_name }}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ order.quantity_buyer_want }}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ order.SI_units }}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {{ order.ammount_based_on_quantity_buyer_want }}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {% if order.buying_status == "BuyCompleted" %}
+                                <span class="text-success">Completed</span>
+                            {% elif order.buying_status == "BuyRejected" %}
+                                <span class="text-danger">Rejected</span>
+                            {% else %}
+                                <span class="text-warning">In Progress</span>
+                            {% endif %}
+                            </div>
+                          </td>
+                        <td class="tb-body">
+                            <div class="tb-body_sub">
+                                {% if not order.rating_given and order.buying_status == "BuyCompleted" %}
+                                <a type="button" class="btn btn-primary rate-order-btn text-nowrap" data-bs-toggle="modal" data-bs-target="#rateOrderModal" data-order-id="{{ order.id }}">
+                                    Rate This
+                                </a>
+                            {% elif order.buying_status == "BuyInProgress" %}
+                                <a class="btn btn-secondary"  disabled>Not Done Yet</a>
+                            {% else %}
+                                <a class="btn btn-warning"  disabled>Rated</a>
+                            {% endif %}  
+                            </div>
+                          </td>
+                        <!-- <td>
+                            {% if not order.rating_given %}
+                                <a type="button" class="btn btn-primary rate-order-btn" data-toggle="modal" data-target="#rateOrderModal" data-order-id="{{ order.id }}">
+                                    Rate This
+                                </a>
+                            {% else %}
+                                <a class="btn btn-secondary" disabled>Rated</a>
+                            {% endif %}   
+                        </td> -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% include 'app_common/snippets/pagination.html' %}
+        </div>
+    </div>
+    <!-- Rate Order Modal -->
+    <div class="modal fade" id="rateOrderModal" tabindex="-1" role="dialog" aria-labelledby="rateOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rateOrderModalLabel">Rate Order</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="rateOrderForm" action="{% url 'vendor_dashboard:rate_order_from_community' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <input type="hidden" id="orderId" name="order_id">
+                        <div class="form-group">
+                            <label for="rating">Rating:</label>
+                            <div id="starRating">
+                                <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="5 stars"></label>
+                                <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="4 stars"></label>
+                                <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="3 stars"></label>
+                                <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="2 stars"></label>
+                                <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="1 star"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Submit Rating</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock main_content %}
+{% block script %}
+<script>
+    $(document).ready(function () {
+        // Handle rate order button click
+        $('.rate-order-btn').on('click', function () {
+            var orderId = $(this).data('order-id');
+            $('#orderId').val(orderId);
+        });
+    });
+</script>
+{% endblock script %}

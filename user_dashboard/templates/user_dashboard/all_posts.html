@@ -1,0 +1,239 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}All Posts{% endblock title %}
+{% block content %}
+<div class="min_height_div ">
+<div class="row d-flex justify-content-center ">
+<div class="col-md-12 col-12 ">
+<div id="content" class="content content-full-width ">
+<!-- begin profile-content -->
+<div class="profile-content ">
+<!-- begin tab-content -->
+<div class="tab-content p-0 ">
+    <!-- begin #profile-post tab -->
+    <div class="tab-pane fade active show " id="profile-post">
+        <!-- begin timeline -->
+        <ul class="timeline mx-0 px-0 my-0">
+            {% for post,like,like_count,cmnt_count in post_and_like %}
+            <li>
+                <div class="timeline-body px-0">
+                    <div class="timeline-header">
+                        <div class="post_prof">
+                            {% if post.user.user_image %}
+                        <span class="userimage"><img src="{{post.user.user_image.url}}" alt=""></span>
+                        {% else %}
+                        <span class="userimage"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyAAHN1IvkJW72SdHrwRz4RKspaXwVJB9isd0c3-GcNf8qtXGampzmHFc&s"></span>
+                        {% endif %}
+                        </div>
+                        <span class="username">{{post.user.full_name}} <small class="ms-2 post_time" >{{post.date_time}}</small></span>
+                    </div>
+                    <div class="timeline-content mx-3">
+                        <h5 class="text-black">{{post.activity_title}}</h5>
+                        <div class="product-image">
+                            <img class="pic-1" src="{{post.activity_image.url}}">
+                        </div>
+                        <p class="mt-2">
+                            {{post.activity_content}}
+                        </p>
+                    </div>
+                    <div class="timeline-likes mx-3">
+                        <div class="stats-right">
+                            <a class="btn text-black toggle-comments-btn"
+                                style="background-color: white;" data-post-id="{{ post.id }}">
+                                {{cmnt_count}} Comments
+                            </a>
+                        </div>
+                        <div class="stats ">
+                            <span class="fa-stack fa-fw stats-icon">
+                                <i class="fa fa-circle fa-stack-2x text-danger"></i>
+                                <i class="fa fa-heart fa-stack-1x fa-inverse t-plus-1"></i>
+                            </span>
+                            <span class="stats-total">{{like_count}}</span>
+                        </div>
+                    </div>
+                    <div class="timeline-footer mx-2">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="">
+                                    {% if like == 1 %}
+                                    <a aid='{{post.id}}' id="minus-like{{post.id}}"
+                                        class="m-r-15 text-inverse-lighter text-danger"
+                                        style="text-decoration: none; text-align: center;">
+                                        <i class="fa fa-heart fa-fw fa-lg m-r-3"></i>
+                                    </a>
+                                    {% else %}
+                                    <a aid='{{post.id}}' id="plus-like{{post.id}}"
+                                        class="m-r-15 text-inverse-lighter text-secondary"
+                                        style="text-decoration: none; text-align: center;">
+                                        <i class="fa fa-heart fa-fw fa-lg m-r-3"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <!-- Share Button -->
+                                    <button class="text-secondary mt-3" data-bs-toggle="modal" data-bs-target="#shareModal{{ post.id }}">
+                                        <i class="fa-solid fa-share-nodes"> </i> share
+                                    </button>
+                                
+                                    <!-- Share Modal -->
+                                    <div class="modal fade" id="shareModal{{ post.id }}" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="shareModalLabel">Share this Post</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Share this activity on:</p>
+                                                    <div class="share-buttons">
+                                                        <!-- Facebook Share -->
+                                                        <a href="https://www.facebook.com/dialog/share?app_id=YOUR_APP_ID&display=popup&href={{ request.build_absolute_uri|urlencode }}&quote={{ post.activity_title|urlencode }}" 
+                                                           target="_blank" class="btn btn-sm btn-primary">
+                                                            <i class="fa-brands fa-facebook-f"></i> Share on Facebook
+                                                        </a>
+                                
+                                                        <!-- Twitter Share -->
+                                                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri|urlencode }}&text={{ post.activity_title|urlencode }}" 
+                                                           target="_blank" class="btn btn-sm btn-info">
+                                                            <i class="fa-brands fa-twitter"></i> Share on Twitter
+                                                        </a>
+                                
+                                                        <!-- WhatsApp Share -->
+                                                        <a href="https://api.whatsapp.com/send?text={{ post.activity_title|urlencode }} - {{ post.activity_content|truncatechars:200|urlencode }}%0A{{ request.build_absolute_uri|urlencode }}" 
+                                                           target="_blank" class="btn btn-sm btn-success">
+                                                            <i class="fa-brands fa-whatsapp"></i> Share on WhatsApp
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div>
+                                                        
+                    <div class="timeline-comment-box">
+                        <!-- <div class="user  d-none d-md-block">
+                            {% if request.user.user_image %}
+                            <img src="{{request.user.user_image.url}}">
+                            {% else %}
+                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png">
+                            {% endif %}
+                        </div> -->
+                        <div class="input">
+                            <form action="{% url 'user_dashboard:give_comment' %}" method="post">
+                                {% csrf_token %}
+                                <div class="input-group">
+                                    <input type="hidden" value="{{post.id}}" name="post">
+                                    <input type="text" class="form-control rounded-corner"
+                                        placeholder="Write a comment..." name="comment" required>
+                                    <span class="input-group-btn p-l-10">
+                                        <button class="cmt_button f-s-12  mx-2"
+                                            type="submit">Comment</button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Comment list section -->
+                    <div class="comments-section mt-3" id="commentsSection{{ post.id }}"
+                        style="display: none;">
+                        <!-- Comments will be dynamically loaded here -->
+                    </div>
+                </div>
+                <!-- end timeline-body -->
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- end timeline -->
+</div>
+<!-- end #profile-post tab -->
+</div>
+<!-- end profile-content -->
+</div>
+</div>
+</div>
+</div>
+
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        // Event delegation for plus-like buttons
+        $(document).on('click', '[id^="plus-like"]', function () {
+            var id = $(this).attr("aid").toString();
+            console.log("like")
+            $.ajax({
+                type: "GET",
+                url: "{% url 'user_dashboard:like' %}",
+                data: {
+                    activity_id: id
+                },
+                success: function (data) {
+                    window.location.reload();
+                }
+            });
+        });
+
+        // Event delegation for minus-like buttons
+        $(document).on('click', '[id^="minus-like"]', function () {
+            var id = $(this).attr("aid").toString();
+            console.log("dislike")
+            $.ajax({
+                type: "GET",
+                url: "{% url 'user_dashboard:dislike' %}",
+                data: {
+                    activity_id: id
+                },
+                success: function (data) {
+                    window.location.reload();
+                }
+            });
+        });
+
+        $(document).on('click', '.toggle-comments-btn', function () {
+            var postId = $(this).data('post-id');
+            var commentsSection = $('#commentsSection' + postId);
+
+            if (commentsSection.is(':visible')) {
+                commentsSection.hide();
+            } else {
+                fetchComments(postId, commentsSection);
+            }
+        });
+
+        function fetchComments(postId, commentsSection) {
+            $.ajax({
+                type: 'GET',
+                url: '{% url "user_dashboard:get_all_comments" %}',
+                data: { 'post_id': postId },
+                success: function (response) {
+                    console.log(response);
+                    var commentsHtml = '';
+                    if (response.comments.length > 0) {
+                        for (var i = 0; i < response.comments.length; i++) {
+                            commentsHtml += '<div class="d-flex justify-content-between align-items-center">';
+                            commentsHtml += '<p><strong>' + response.comments[i].commenter + ':</strong> ' + response.comments[i].comment + '</p>';
+                            if (response.comments[i].is_commenter) {
+                                commentsHtml += ' <a href="/user_dashboard/delete_comment/' + postId + '/' + response.comments[i].id + '/" class="delete-comment-btn" data-comment-id="' + response.comments[i].id + '" data-post-id="' + postId + '"><i class="fa fa-trash text-danger"></i></a>';
+                            }
+                            commentsHtml += '</div>';
+                        }
+                    } else {
+                        commentsHtml = '<p>No comments yet !!!</p>';
+                    }
+                    commentsSection.html(commentsHtml).show();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching comments:', error);
+                }
+            });
+        }
+    });
+</script>
+{% endblock scripts %}

@@ -1,0 +1,113 @@
+{% extends 'user_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Blog List{% endblock title %}
+{% block content %}
+
+<div class="py-6 min_height_div">
+    <div >
+    <h4>All Blogs</h4>
+        <div class="vstack ">
+            <div class="d-lg-flex justify-content-between align-items-center mb-4">
+                <form class="my-3" action="{% url 'blogs:rtg_blog_search' %}" method="post">
+                    {% csrf_token %}
+                    <div class="hstack gap-2">
+                        <select  style="width: 6rem;" name="filter_by" class="form-select form-select1 form-control" aria-label="Default select example">
+                            <option value="all">All</option>
+                            <option value="id">ID</option>
+                            <option value="name">Name</option>
+                        </select>
+                        <span  class="input-group mb-4 ">
+                            <input type="text" name="query" placeholder="Search Here" class="form-control form-select1" required />
+                            <button type="submit" class="text-white input-group-text form-select1" id="input-group-text"><i class='fa fa-search' ></i></button>
+                        </span>
+                    </div>
+                </form>
+                <div class=" add_blog_btn">
+                    <a href="{% url 'blogs:rtg_blog_add' %}">
+                        <i class='fa fa-plus-square'></i> Create a New Blog
+                    </a>
+                </div>
+            </div>
+
+            <div class="tablecard ">
+                <div class="table-responsive">
+                    <table class="table table-hover table-nowrap">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="" id="t-Head" scope="col">Blog ID</th>
+                                <th class="" id="t-Head" scope="col">Blog Title</th>
+                                <th class="" id="t-Head" scope="col">Blog Author</th>
+                                <th class="" id="t-Head" scope="col">Action</th>
+                                <th class="" id="t-Head" scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        {% if blog_list %}
+                            <tbody id="test_table_tbody">
+                                {% for blog in blog_list %}
+                                <tr>
+                                    <td class="tb-body">
+                                        <a class="text-heading text-primary-hover font-semibold"
+                                                href="{% url 'blogs:rtg_blog_update' blog.id %}">
+                                                {{ blog.id }}
+                                            </a>
+                                    </td>
+                                    <td class="tb-body">{{ blog.title |truncatewords:8 }}</td>
+                                    <td class="tb-body">{{ blog.author }}</td>
+                                    <td class="tb-body">
+                                        <a href="{% url 'blogs:rtg_blog_update' blog.id %}"
+                                            class="me-2" id="table_BTN">
+                                            <i class="fa-solid fa-pen-to-square"></i>                                        
+                                        </a>
+                                        <a href="{% url 'blogs:rtg_blog_delete' blog.id %}"
+                                            class="" id="table_BTN2">
+                                            <i class="fa-solid fa-trash"></i>                                           
+                                        </a>
+                                    </td>
+                                    {% if blog.is_accepted == "approved" %}
+                                        <td class="tb-body text-success">Approved</td>
+                                    {% elif blog.is_accepted == "rejected" %}
+                                        <td class="tb-body text-danger">Rejected</td>
+                                    {% else %}
+                                        <td class="tb-body text-warning">Pending</td>
+                                    {% endif %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        {% else %}
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="text-center fw-bold text-secondary">
+                                        No Blogs Available.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+{% block js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    function delete_blog(element){
+        var blog_title = element.getAttribute('p_title');
+        var blog_id = element.getAttribute('p_id');
+        
+        var target = document.getElementById('blog_delete_title');
+        target.innerHTML = "<p>Blog Title : <b>"+blog_title+"</b> ("+blog_id+")</p>";
+
+        var delete_url = '/blog/rtg_blog_delete/'+blog_id+'';
+        document.getElementById('confirm_delete_btn').setAttribute('href', delete_url);
+
+        var myModal = new bootstrap.Modal(document.getElementById('blog_delete'));
+        myModal.show();
+    }
+</script>
+{% endblock js %}

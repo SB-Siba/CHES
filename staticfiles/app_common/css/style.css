@@ -1,0 +1,132 @@
+/* cerate test */
+.create_test form{
+    margin-top: 21px;
+    width: 56%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2rem;
+}
+
+@media(max-width:600px){
+    .create_test form{
+        margin-top: 21px;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3rem;
+        border: 2px solid;
+        border-radius: 3rem;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    }
+}
+
+
+/* product list page */
+.product_filter a{
+    margin: 1rem;
+}
+
+
+/* order list */
+
+.utility_order{
+    display: flex;
+    margin-left: auto;
+}
+
+.utility_order form{
+    display: flex;
+    border: 1px solid blue;
+    border-radius: 0.5rem;
+    margin: 4px;
+}
+
+#order_details thead{
+    border: 1px solid #00a5ff;
+}
+
+#order_details_data{
+    margin-left: 1rem;
+    margin-top: 1rem;
+    color: black;
+    border: 1px solid #00faff;
+    padding: 1rem;
+    width: 97%;
+}
+
+#order_details_data span{
+    font-weight: 700;
+}
+
+
+/* contact message */
+.contact_message_edit{
+    margin-top: 1rem;
+}
+.contact_message_edit h5{
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+
+
+/* order details */
+
+.order_details table{
+    border-radius: 1rem;
+    margin: 2rem;
+}
+.order_details img{
+    max-height: 150px;
+    max-width: 200px;
+}
+
+.order_info{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2rem;
+}
+.order_info h5{
+    font-size: 1.7rem;
+    margin-top: 0.7rem;
+    margin-bottom: 0.7rem;
+}
+
+#order_update_form{
+    width: 65%;
+    margin: auto;
+    border: 1px solid rgb(4, 255, 0);
+    border-radius: 5px;
+    padding: 1rem;
+}
+
+#order_filter div{
+    display: flex;
+    padding: 1rem;
+    justify-content: space-between;
+}
+#order_filter select{
+    width: 70%;
+}
+
+.file-input-container {
+    position: relative;
+}
+.file-input-container input[type="file"] {
+    display: none;
+}
+.file-input-container::before {
+    content: attr(data-placeholder);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    pointer-events: none;
+    color: #999;
+}

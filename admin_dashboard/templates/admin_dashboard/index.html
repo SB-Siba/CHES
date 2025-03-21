@@ -1,0 +1,757 @@
+{% extends 'admin_dashboard/starter.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard{% endblock title %}
+
+
+{% block content %}
+<style>
+    /* Leaderboard Container */
+    .leaderboard-container {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .leaderboard-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #343a40;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Leaderboard Rows */
+    .leaderboard-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        gap: 10px;
+    }
+
+    .leaderboard-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .leaderboard-item:hover {
+        transform: translateY(-5px);
+    }
+
+    /* User Image */
+    .user-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        object-fit: cover;
+    }
+
+    /* User Info */
+    .user-info {
+        text-align: center;
+    }
+
+    .user-name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 5px;
+    }
+
+    .user-coins {
+        font-size: 16px;
+        color: #6c757d;
+    }
+
+    /* Winner Styling */
+    .winner {
+        background-color: #ffd700;
+        border: 2px solid #ffc107;
+    }
+
+    .winner .user-name {
+        color: #343a40;
+    }
+
+    .winner .user-coins {
+        color: #343a40;
+    }
+
+</style>
+<!-- Content Row -->
+<div class="row">
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-4 col-md-4 mb-4">
+        <div class="card  shadow h-100 py-2 dash-card1">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="h5 mb-0 font-weight-bold text-white">{{total_rt_gardeners}}</div>
+                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                            Total Gardeners</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fa-solid fa-user fa-2x text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-4 col-md-4 mb-4">
+        <div class="card  shadow h-100 py-2 dash-card2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="h5 mb-0 font-weight-bold text-white">{{rtg_total_garden_area}} sq.ft</div>
+                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                            Total Gardening area
+                        </div>
+
+                    </div>
+                    <div class="col-auto">
+                        <i class="fa-solid fa-earth-americas fa-2x text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-4 col-md-4 mb-4">
+        <div class="card  shadow h-100 py-2 dash-card3">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="h5 mb-0 mr-3 font-weight-bold text-white">{{rtg_total_plants}}</div>
+                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                            Total Plants
+                        </div>
+
+                    </div>
+                    <div class="col-auto">
+                        <i class="fa-solid fa-earth-americas fa-2x text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Requests Card Example -->
+    <div class="col-xl-4 col-md-4 mb-4">
+        <div class="card  shadow h-100 py-2 dash-card4">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="h5 mb-0 font-weight-bold text-white">{{total_service_provider}}</div>
+                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                            Total Service Providers
+                        </div>
+
+                    </div>
+                    <div class="col-auto">
+                        <i class="fa-solid fa-layer-group fa-2x text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-4 col-md-4 mb-4">
+        <div class="card  shadow h-100 py-2 dash-card5">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="h5 mb-0 font-weight-bold text-white">{{total_vendors}}</div>
+                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                            Total Vendors
+                        </div>
+
+                    </div>
+                    <div class="col-auto">
+                        <i class="fa-solid fa-layer-group fa-2x text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-4 col-md-4 mb-4">
+        <div class="card  shadow h-100 py-2 dash-card6">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="h5 mb-0 font-weight-bold text-white">{{total_activities}}</div>
+                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                            Total Activity
+                        </div>
+
+                    </div>
+                    <div class="col-auto">
+                        <i class="fa-solid fa-tree fa-2x text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-4 col-md-4 mb-4">
+        <div class="card  shadow h-100 py-2 dash-card7">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="h5 mb-0 font-weight-bold text-white">
+                            7
+                        </div>
+                        <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                            ALL
+                        </div>
+                    </div>
+
+                    <div class="col-auto">
+                        <i class="fa-solid fa-tree fa-2x text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="row mb-4">
+        <!-- Pending Requests Card Example -->
+        <div class="col-xl-4 col-md-4 mb-4">
+            <a href="{% url 'admin_dashboard:city_detail_view' 'Bhubaneswar' %}" class="text-decoration-none">
+                <div class="card  shadow h-100 py-2 dash-card8">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="mb-0 font-weight-bold text-white">
+                                    <small>
+                                        <span>RTG : <b>{{bhubaneswar_rtg}}</b></span>
+                                        <span>VENDOR : <b>{{bhubaneswar_vendor}}</b></span>
+                                        <span>S.P. : <b>{{bhubaneswar_serviceprovider}}</b></span>
+                                    </small>
+                                </div>
+                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                    Bhubaneswar</div>
+        
+                            </div>
+                            <div class="col-auto">
+                                <!-- <i class="fa-solid fa-user fa-2x text-white"></i> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-xl-4 col-md-4 mb-4">
+            <a href="{% url 'admin_dashboard:city_detail_view' 'Cuttack' %}" class="text-decoration-none">
+                <div class="card  shadow h-100 py-2 dash-card9">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="mb-0 font-weight-bold text-white">
+                                    <small>
+                                        <span>RTG : <b>{{cuttack_rtg}}</b></span>
+                                        <span>VENDOR : <b>{{cuttack_vendor}}</b></span>
+                                        <span>S.P. : <b>{{cuttack_serviceprovider}}</b></span>
+                                    </small>
+                                </div>
+                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                    Cuttack</div>
+        
+                            </div>
+                            <div class="col-auto">
+                                <!-- <i class="fa-solid fa-user fa-2x text-white"></i> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-xl-4 col-md-4 mb-4">
+            <a href="{% url 'admin_dashboard:city_detail_view' 'Jaipur' %}" class="text-decoration-none">
+                <div class="card  shadow h-100 py-2 dash-card10">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="mb-0 font-weight-bold text-white">
+                                    <small>
+                                        <span>RTG : <b>{{jaipur_rtg}}</b></span>
+                                        <span>VENDOR : <b>{{jaipur_vendor}}</b></span>
+                                        <span>S.P. : <b>{{jaipur_serviceprovider}}</b></span>
+                                    </small>
+                                </div>
+                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                    Jeypore</div>
+        
+                            </div>
+                            <div class="col-auto">
+                                <!-- <i class="fa-solid fa-user fa-2x text-white"></i> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-xl-4 col-md-4 mb-4">
+            <a href="{% url 'admin_dashboard:city_detail_view' 'Berahmpur' %}" class="text-decoration-none">
+                <div class="card  shadow h-100 py-2 dash-card11">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="mb-0 font-weight-bold text-white">
+                                    <small>
+                                        <span>RTG : <b>{{brahmapur_rtg}}</b></span>
+                                        <span>VENDOR : <b>{{brahmapur_vendor}}</b></span>
+                                        <span>S.P. : <b>{{brahmapur_serviceprovider}}</b></span>
+                                    </small>
+                                </div>
+                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                    Berahmpur</div>
+        
+                            </div>
+                            <div class="col-auto">
+                                <!-- <i class="fa-solid fa-user fa-2x text-white"></i> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-xl-4 col-md-4 mb-4">
+            <a href="{% url 'admin_dashboard:city_detail_view' 'Sambalpur' %}" class="text-decoration-none">
+                <div class="card  shadow h-100 py-2 dash-card12">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="mb-0 font-weight-bold text-white">
+                                    <small>
+                                        <span>RTG : <b>{{sambalpur_rtg}}</b></span>
+                                        <span>VENDOR : <b>{{sambalpur_vendor}}</b></span>
+                                        <span>S.P. : <b>{{sambalpur_serviceprovider}}</b></span>
+                                    </small>
+                                </div>
+                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                    Sambalpur</div>
+        
+                            </div>
+                            <div class="col-auto">
+                                <!-- <i class="fa-solid fa-user fa-2x text-white"></i> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-xl-4 col-md-4 mb-4">
+            <a href="{% url 'admin_dashboard:city_detail_view' 'Other' %}" class="text-decoration-none">
+                <div class="card  shadow h-100 py-2 dash-card13">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="mb-0 font-weight-bold text-white">
+                                    <small>
+                                        <span>RTG : <b>{{other_cities_rtg}}</b></span>
+                                        <span>VENDOR : <b>{{other_cities_vendor}}</b></span>
+                                        <span>S.P. : <b>{{other_cities_serviceprovider}}</b></span>
+                                    </small>
+                                </div>
+                                <div class="text-xs font-weight-bold text-white text-uppercase mb-1 mt-3">
+                                    Other</div>
+        
+                            </div>
+                            <div class="col-auto">
+                                <!-- <i class="fa-solid fa-user fa-2x text-white"></i> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+</div>
+
+<!-- Content Row -->
+
+<div class="row mb-4">
+    <div class="col-xl-5 col-lg-5">
+        <div class="card Adm_das_card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Area Distribution</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                        aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header text-dark hover-blue">Dropdown Header:</div>
+                        <a class="dropdown-item text-dark hover-blue" href="#">Action</a>
+                        <a class="dropdown-item text-dark hover-blue" href="#">Another action</a>
+                        <div class="dropdown-divider text-dark hover-blue"></div>
+                        <a class="dropdown-item text-dark hover-blue" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="chart-pie pt-4 pb-2">
+                    <canvas id="myPieChart"></canvas>
+                </div>
+                <div class="mt-4 text-center small">
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-primary"></i> Bhubaneswar
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-success"></i> Cuttack
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-info"></i> Jeypore
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-warning"></i> Brahmapur
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-danger"></i> Sambalpur
+                    </span>
+                    <span class="mr-2">
+                        <i class="fas fa-circle text-danger"></i> Others
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Area Chart -->
+    <div class="col-xl-7 col-lg-7">
+
+        <div class="card Adm_das_card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Geographical Distribution</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                        aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Dropdown Header:</div>
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </div>
+            </div>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3834529.3457607706!2d84.43725674999999!3d20.18997855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a226aece9af3bfd%3A0x133625caa9cea81f!2sOdisha!5e0!3m2!1sen!2sin!4v1711127459222!5m2!1sen!2sin"
+                width="" height="400" style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+</div>
+
+<!-- Content Row -->
+<div class="row">
+
+    <!-- Content Column -->
+    <div class="col-lg-6 mb-4">
+
+        <!-- Project Card Example -->
+        <div class="card Adm_das_card mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary"> Activity Overview</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="allActivityChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card Adm_das_card mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary"> Green points Exchange</h6>
+            </div>
+            <div class="card-body d-flex justify-content-between">
+                <div class="title">
+                    <h3 class="text-xs font-weight-bold text-info text-uppercase mb-1">Green points Exchange</h3>
+                </div>
+                <div class="coin">
+                    <h3 class="h5 mb-0 font-weight-bold text-gray-800">Total Points</h3>
+                    <p class="d-flex align-items-center font-weight-bold text-warning"><img
+                            src="{% static 'admin_dashboard/images/coin.png' %}" style="margin-top:11px;"> {{ total_green_coins_turnover }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card Adm_das_card mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary"> Green orders</h6>
+            </div>
+            <div class="card-body">
+                <img src="{% static 'admin_dashboard/images/line-charts.png' %}" class="img-fluid">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4 ">
+        <div class="leaderboard-container">
+            <div class="leaderboard-title">Leaderboard</div>
+        
+            <!-- Winner -->
+            <div class="leaderboard-row">
+                <div class="leaderboard-item winner text-center">
+                    <div class="position-title">Winner</div>
+                    {% if leaderboard.winner %}
+                        {% if leaderboard.winner.user_image %}
+                            <img src="{{ leaderboard.winner.user_image.url }}" alt="{{ leaderboard.winner.full_name }}" class="user-image">
+                        {% else %}
+                            <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                        {% endif %}
+                        <div class="user-info">
+                            <p class="user-name">{{ leaderboard.winner.full_name }}</p>
+                            <p class="user-coins">{{ leaderboard.winner.coins }} points</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        
+            <!-- 1st Runner Up and 2nd Runner Up -->
+            <div class="leaderboard-row">
+                <div class="leaderboard-item">
+                    <div class="position-title">1st Runner Up</div>
+                    {% if leaderboard.first_runner_up %}
+                        {% if leaderboard.first_runner_up.user_image %}
+                            <img src="{{ leaderboard.first_runner_up.user_image.url }}" alt="{{ leaderboard.first_runner_up.full_name }}" class="user-image">
+                        {% else %}
+                            <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                        {% endif %}
+                        <div class="user-info">
+                            <p class="user-name">{{ leaderboard.first_runner_up.full_name }}</p>
+                            <p class="user-coins">{{ leaderboard.first_runner_up.coins }} points</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="leaderboard-item">
+                    <div class="position-title">2nd Runner Up</div>
+                    {% if leaderboard.second_runner_up %}
+                        {% if leaderboard.second_runner_up.user_image %}
+                            <img src="{{ leaderboard.second_runner_up.user_image.url }}" alt="{{ leaderboard.second_runner_up.full_name }}" class="user-image">
+                        {% else %}
+                            <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                        {% endif %}
+                        <div class="user-info">
+                            <p class="user-name">{{ leaderboard.second_runner_up.full_name }}</p>
+                            <p class="user-coins">{{ leaderboard.second_runner_up.coins }} points</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        
+            <!-- 3rd and 4th -->
+            <div class="leaderboard-row">
+                <div class="leaderboard-item">
+                    <div class="position-title">4th</div>
+                    {% if leaderboard.fourth %}
+                        {% if leaderboard.fourth.user_image %}
+                            <img src="{{ leaderboard.fourth.user_image.url }}" alt="{{ leaderboard.fourth.full_name }}" class="user-image">
+                        {% else %}
+                            <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                        {% endif %}
+                        <div class="user-info">
+                            <p class="user-name">{{ leaderboard.fourth.full_name }}</p>
+                            <p class="user-coins">{{ leaderboard.fourth.coins }} points</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="leaderboard-item">
+                    <div class="position-title">5th</div>
+                    {% if leaderboard.fifth %}
+                        {% if leaderboard.fifth.user_image %}
+                            <img src="{{ leaderboard.fifth.user_image.url }}" alt="{{ leaderboard.fifth.full_name }}" class="user-image">
+                        {% else %}
+                            <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                        {% endif %}
+                        <div class="user-info">
+                            <p class="user-name">{{ leaderboard.fifth.full_name }}</p>
+                            <p class="user-coins">{{ leaderboard.fifth.coins }} points</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        
+            <!-- 5th and 6th -->
+            <div class="leaderboard-row">
+                <div class="leaderboard-item">
+                    <div class="position-title">6th</div>
+                    {% if leaderboard.sixth %}
+                        {% if leaderboard.sixth.user_image %}
+                            <img src="{{ leaderboard.sixth.user_image.url }}" alt="{{ leaderboard.sixth.full_name }}" class="user-image">
+                        {% else %}
+                            <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                        {% endif %}
+                        <div class="user-info">
+                            <p class="user-name">{{ leaderboard.sixth.full_name }}</p>
+                            <p class="user-coins">{{ leaderboard.sixth.coins }} points</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="leaderboard-item">
+                    <div class="position-title">7th</div>
+                    {% if leaderboard.seventh %}
+                        {% if leaderboard.seventh.user_image %}
+                            <img src="{{ leaderboard.seventh.user_image.url }}" alt="{{ leaderboard.seventh.full_name }}" class="user-image">
+                        {% else %}
+                            <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                        {% endif %}
+                        <div class="user-info">
+                            <p class="user-name">{{ leaderboard.seventh.full_name }}</p>
+                            <p class="user-coins">{{ leaderboard.seventh.coins }} points</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        
+            <!-- 7th and 8th -->
+            <div class="leaderboard-row">
+                <div class="leaderboard-item">
+                    <div class="position-title">8th</div>
+                    {% if leaderboard.eighth %}
+                        {% if leaderboard.eighth.user_image %}
+                            <img src="{{ leaderboard.eighth.user_image.url }}" alt="{{ leaderboard.eighth.full_name }}" class="user-image">
+                        {% else %}
+                            <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                        {% endif %}
+                        <div class="user-info">
+                            <p class="user-name">{{ leaderboard.eighth.full_name }}</p>
+                            <p class="user-coins">{{ leaderboard.eighth.coins }} points</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="leaderboard-item">
+                    <div class="position-title">9th</div>
+                    {% if leaderboard.ninth %}
+                        {% if leaderboard.ninth.user_image %}
+                            <img src="{{ leaderboard.ninth.user_image.url }}" alt="{{ leaderboard.ninth.full_name }}" class="user-image">
+                        {% else %}
+                            <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                        {% endif %}
+                        <div class="user-info">
+                            <p class="user-name">{{ leaderboard.ninth.full_name }}</p>
+                            <p class="user-coins">{{ leaderboard.ninth.coins }} points</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        
+            <!-- 9th -->
+            <div class="leaderboard-row">
+                <div class="leaderboard-item">
+                    <div class="position-title">10th</div>
+                    {% if leaderboard.tenth %}
+                        {% if leaderboard.tenth.user_image %}
+                            <img src="{{ leaderboard.tenth.user_image.url }}" alt="{{ leaderboard.tenth.full_name }}" class="user-image">
+                        {% else %}
+                            <img src="{% static 'default-user.png' %}" alt="Default User" class="user-image">
+                        {% endif %}
+                        <div class="user-info">
+                            <p class="user-name">{{ leaderboard.tenth.full_name }}</p>
+                            <p class="user-coins">{{ leaderboard.tenth.coins }} points</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block js %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Get data from the Django context
+        var labels = {{ labels|safe }};
+        var data = {{ chart_data|safe }};
+
+        // Create the pie chart
+        var ctx = document.getElementById("myPieChart");
+        var myPieChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b', '#858796'],
+                    hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#dda20a', '#d93d3b', '#636363'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                },
+                legend: {
+                    display: false
+                },
+                cutoutPercentage: 80,
+            },
+        });
+
+        var activityLabel = {{ activity_label|safe }}
+        var activityData = {{ activity_data|safe }};
+    
+        // Activity Chart
+        var ctxActivity = document.getElementById('allActivityChart').getContext('2d');
+        var allActivityChart = new Chart(ctxActivity, {
+            type: 'line',
+            data: {
+                labels: activityLabel, // Dynamic labels
+                datasets: [{
+                    label: 'User Activity',
+                    data: activityData, // Dynamic data
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Users' },
+                        beginAtZero: true
+                    },
+                    y: {
+                        title: { display: true, text: 'Activity Count' },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script> 
+{% endblock js %}

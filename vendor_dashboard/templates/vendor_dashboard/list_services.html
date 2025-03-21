@@ -1,0 +1,116 @@
+{% extends 'vendor_dashboard/base.html' %}
+{% load static %}
+{% block title %}Service List{% endblock title %}
+
+{% block main_content %}
+<!-- Custom CSS -->
+<style>
+    .search-input {
+        border-radius: 25px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-btn {
+        border-radius: 25px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .category-card, .service-card {
+        border: none;
+        border-radius: 15px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        text-align: center;
+        padding: 15px;
+        background-color: #f8f9fa;
+        cursor: pointer;
+    }
+
+    .category-card:hover, .service-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .category-image {
+        height: 200px;
+        object-fit: cover;
+        margin-bottom: 15px;
+        width: 360px;
+    }
+    .service-image{
+        height: 150px;
+        object-fit: cover;
+        margin-bottom: 15px;
+    }
+</style>
+<nav class="p-4 bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item"><a href="{% url 'vendor_dashboard:vendor_dashboard' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="#">Services</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ selected_category.service_category }}</li>
+    </ol>
+  </nav>
+<div class="container my-2 " style="min-height: 100vh;">
+    <!-- If no category is selected, show the categories -->
+    {% if categories %}
+    <h4>Select a Category:</h4>
+    <div class="row mb-4 mt-4">
+        {% for category in categories %}
+        <div class="col-md-4 mb-4">
+            <a href="?category_id={{ category.id }}">
+                <div class="category-card  service-carD">
+                    <!-- Category Image -->
+                    {% if category.image %}
+                    <img src="{{ category.image.url }}" class="category-image" alt="{{ category.service_category }}">
+                    {% else %}
+                    <img src="{% static 'default-category-image.jpg' %}" class="category-image" alt="No Image Available">
+                    {% endif %}
+                    <h5 class="text-black">{{ category.service_category }}</h5>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- If a category is selected, show the services in that category -->
+    {% elif services %}
+    <h3 class="mb-3">Services in {{ selected_category.service_category }}</h3>
+    <div class="row" >
+        {% for service in services %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100  service-carD">
+                <!-- Service Image -->
+                {% if service.service_image %}
+                <img src="{{ service.service_image.url }}" class="card-img-top service-image" alt="{{ service.name }}">
+                {% else %}
+                <img src="{% static 'default-service-image.jpg' %}" class="card-img-top service-image" alt="No Image Available">
+                {% endif %}
+                
+                <div class="pb-4 px-2 ">
+                    <h6 class="card-title"><strong>Provider Name:</strong>{{ service.provider.full_name }}</h6>
+                    <h6 class="card-title"><strong>Service city:</strong>
+                        {% if service.sp_details and service.sp_details.service_area %}
+                            {% for city in service.sp_details.service_area %}
+                                {{ city }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Not available
+                        {% endif %}
+                    </h6>
+                    
+                    
+                    <p class="card-text"><strong>Price/hour:</strong> Rs. {{ service.price_per_hour }}</p>
+                    <a href="{% url 'vendor_dashboard:service_details' service.id %}" class="w-100 btn " style="background-color: green;color: white;" >Book Service</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- <a href="{% url 'vendor_dashboard:list_services' %}" class="btn btn-secondary mt-4">Back to Categories</a> -->
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        No services available for this category.
+    </div>
+    {% endif %}
+    
+</div>
+{% endblock main_content %}
